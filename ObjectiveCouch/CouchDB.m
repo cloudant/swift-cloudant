@@ -41,8 +41,17 @@
         _username = username;
         _password = password;
         _queue = [[NSOperationQueue alloc] init];
-        _session = [NSURLSession
-            sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+
+        NSURLSessionConfiguration *sessionConfiguration =
+            [NSURLSessionConfiguration defaultSessionConfiguration];
+        if (self.username && self.password) {
+            NSString *creds = [NSString stringWithFormat:@"%@:%@", self.username, self.password];
+            NSString *b64 =
+                [[creds dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0];
+            NSString *header = [NSString stringWithFormat:@"Basic %@", b64];
+            sessionConfiguration.HTTPAdditionalHeaders = @{ @"Authorization" : header };
+        }
+        _session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
     }
     return self;
 }

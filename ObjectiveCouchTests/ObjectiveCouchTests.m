@@ -12,6 +12,10 @@
 
 @interface ObjectiveCouchTests : XCTestCase
 
+@property (nonatomic, strong) NSString *url;
+@property (nonatomic, strong) NSString *username;
+@property (nonatomic, strong) NSString *password;
+
 @end
 
 @implementation ObjectiveCouchTests
@@ -21,6 +25,10 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the
     // class.
+
+    self.url = @"http://localhost:5984";
+    self.username = nil;
+    self.password = nil;
 }
 
 - (void)tearDown
@@ -32,30 +40,32 @@
 
 - (void)testCreateCloudantClient
 {
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:@"http://localhost:5984"]
-                                   username:nil
-                                   password:nil];
+    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
+                                   username:self.username
+                                   password:self.password];
 
-    XCTAssertEqualObjects(@"[url: http://localhost:5984]", [client description]);
+    NSString *expected = [NSString stringWithFormat:@"[url: %@]", self.url];
+    XCTAssertEqualObjects(expected, [client description]);
 }
 
 - (void)testGetDatabase
 {
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:@"http://localhost:5984"]
-                                   username:nil
-                                   password:nil];
+    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
+                                   username:self.username
+                                   password:self.password];
 
     Database *database = client[@"objectivecouch-test"];
 
-    XCTAssertEqualObjects(@"[database: objectivecouch-test; client: [url: http://localhost:5984]]",
-                          [database description]);
+    NSString *expected =
+        [NSString stringWithFormat:@"[database: objectivecouch-test; client: [url: %@]]", self.url];
+    XCTAssertEqualObjects(expected, [database description]);
 }
 
 - (void)testGetDocument
 {
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:@"http://localhost:5984"]
-                                   username:nil
-                                   password:nil];
+    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
+                                   username:self.username
+                                   password:self.password];
 
     Database *database = client[@"objectivecouch-test"];
 
@@ -70,9 +80,9 @@
 
 - (void)testGetDocumentWithEmptyOptions
 {
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:@"http://localhost:5984"]
-                                   username:nil
-                                   password:nil];
+    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
+                                   username:self.username
+                                   password:self.password];
 
     Database *database = client[@"objectivecouch-test"];
 
@@ -94,9 +104,9 @@
 
 - (void)testGetDocumentWithIncludeRevs
 {
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:@"http://localhost:5984"]
-                                   username:nil
-                                   password:nil];
+    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
+                                   username:self.username
+                                   password:self.password];
 
     Database *database = client[@"objectivecouch-test"];
 

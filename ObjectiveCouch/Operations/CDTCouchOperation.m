@@ -56,7 +56,6 @@
                             timeoutInterval:10.0];
 
     [request setHTTPMethod:method];
-    //    [request setAllHTTPHeaderFields:headers];
 
     NSURLSessionDataTask *task =
         [self.session dataTaskWithRequest:request
