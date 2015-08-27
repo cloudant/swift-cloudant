@@ -14,9 +14,8 @@ FOUNDATION_EXPORT double ObjectiveCouchVersionNumber;
 //! Project version string for ObjectiveCouch.
 FOUNDATION_EXPORT const unsigned char ObjectiveCouchVersionString[];
 
-// In this header, you should import all the public headers of your framework 
+// In this header, you should import all the public headers of your framework
 // using statements like #import <ObjectiveCouch/PublicHeader.h>
-
 
 #import <ObjectiveCouch/CouchDB.h>
 #import <ObjectiveCouch/Database.h>

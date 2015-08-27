@@ -10,7 +10,7 @@
 
 /**
  Base class for operations accessing Cloudant HTTP endpoints.
- 
+
  Centralises the HTTP connections made to Cloudant.
  */
 @interface CDTCouchOperation : NSOperation
@@ -20,28 +20,28 @@
  */
 - (void)buildAndValidate;
 
-@property (nonatomic,strong) NSString *username;
-@property (nonatomic,strong) NSString *password;
+@property (nonatomic, strong) NSString *username;
+@property (nonatomic, strong) NSString *password;
 
-@property (nonatomic,strong) NSArray/* NSURLQueryItem * */ *queryItems;
+@property (nonatomic, strong) NSArray /* NSURLQueryItem * */ *queryItems;
 
 /**
  Root URL for the CouchDB instance.
- 
+
  Must be set before a call can be successfully made.
  */
-@property (nonatomic,strong) NSURL *rootURL;
+@property (nonatomic, strong) NSURL *rootURL;
 
 /**
  Session used for HTTP requests.
- 
+
  Must be set before a call can be successfully made.
  */
-@property (nonatomic,strong) NSURLSession *session;
+@property (nonatomic, strong) NSURLSession *session;
 
-
-- (void)executeJSONRequestWithMethod:(NSString*)method
-                                path:(NSString*)path
-                   completionHandler:(void (^)(NSObject *result, NSURLResponse *res, NSError *error))completionHandler;
+- (void)executeJSONRequestWithMethod:(NSString *)method
+                                path:(NSString *)path
+                   completionHandler:(void (^)(NSObject *result, NSURLResponse *res,
+                                               NSError *error))completionHandler;
 
 @end

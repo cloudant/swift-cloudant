@@ -15,7 +15,7 @@
 
 /**
  The database that this operation will issue requests to.
- 
+
  Must be set before a call can be successfully made.
  */
 @property (nonatomic, strong) NSString *databaseName;
