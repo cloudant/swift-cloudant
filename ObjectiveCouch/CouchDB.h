@@ -17,11 +17,6 @@
 @interface CouchDB : NSObject
 
 /**
- Root URL for the CouchDB instance.
- */
-@property (nonatomic,strong) NSURL *rootURL;
-
-/**
  Create a client for a given CouchDB instance using username and password.
  
  @param url Root URL for CouchDB instance.
@@ -32,16 +27,17 @@
                  username:(NSString*)username 
                  password:(NSString*)password;
 
+/**
+ Retrieve a database object for this client.
+ */
 - (Database*)objectForKeyedSubscript:(NSString*)key;
 
 /**
- Adds necessary information to the request to allow it to connect to the
- server represented by this client:
- - NSURLSession to use.
- - rootURL
- - username/password
- - (interceptors?)
+ Add an operation to be executed within the context of this client object.
+ 
+ Internally this sets the CouchDB instance root URL and access credentials 
+ based on the settings this client was initialised with.
  */
-- (void)prepareOperation:(CDTCouchOperation*)operation;
+- (void)addOperation:(CDTCouchOperation*)operation;
 
 @end

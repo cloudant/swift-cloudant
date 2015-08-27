@@ -15,7 +15,6 @@
 
 @property (nonatomic,strong) CouchDB *client;
 @property (nonatomic,strong) NSString *databaseName;
-@property (nonatomic,strong) NSURL *databaseURL;
 
 @end
 
@@ -27,43 +26,48 @@
     if (self) {
         _client = client;
         _databaseName = name;
-        _databaseURL = [NSURL URLWithString:name relativeToURL:client.rootURL];
     }
     return self;
 }
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"[url: %@]", self.databaseURL.absoluteString];
+    return [NSString stringWithFormat:@"[database: %@; client: %@]", self.databaseName, self.client];
 }
+
+#pragma mark Operation management
+
+- (void)addOperation:(CDTCouchDatabaseOperation*)operation
+{
+    operation.databaseName = self.databaseName;
+    [self.client addOperation:operation];
+}
+
+#pragma mark Synchronous convenience accessors
 
 - (NSDictionary*)objectForKeyedSubscript:(NSString*)key
 {
-    return [self getDocumentWithOperation:^(CDTGetDocumentOperation *o) {
-        o.docId = key;
-    }];
-}
-
-- (NSDictionary*)getDocumentWithOperation:(void (^)(CDTGetDocumentOperation *b))callback
-{
     __block NSDictionary *result;
-    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
     
-    CDTGetDocumentOperation *b = [[CDTGetDocumentOperation alloc] init];
-    [self.client prepareOperation:b];
-    b.databaseName = self.databaseName;
-    if (callback) {
-        callback(b);
-    }
-    b.getDocumentCompletionBlock = ^(NSDictionary *doc, NSError *err) {
+    CDTGetDocumentOperation *op = [[CDTGetDocumentOperation alloc] init];
+    op.docId = key;
+    op.getDocumentCompletionBlock = ^(NSDictionary *doc, NSError *err) {
         result = doc;
-        dispatch_semaphore_signal(sema);
     };
-    [b start];
-    
-    dispatch_semaphore_wait(sema, dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC));
+    [self addOperation:op];
+    [op waitUntilFinished];
     
     return result;
+}
+
+#pragma mark Async convenience methods
+
+- (void)getDocumentWithId:(NSString*)documentId completionHandler:(void (^)(NSDictionary *document, NSError *error))completionHandler
+{
+    CDTGetDocumentOperation *op = [[CDTGetDocumentOperation alloc] init];
+    op.docId = documentId;
+    op.getDocumentCompletionBlock = completionHandler;
+    [self addOperation:op];
 }
 
 @end

@@ -17,6 +17,13 @@
 @property (nonatomic,strong) NSString *password;
 @property (nonatomic,strong) NSURLSession *session;
 
+@property (nonatomic, strong) NSOperationQueue *queue;
+
+/**
+ Root URL for the CouchDB instance.
+ */
+@property (nonatomic,strong) NSURL *rootURL;
+
 @end
 
 @implementation CouchDB
@@ -39,6 +46,7 @@
         _rootURL = url;
         _username = username;
         _password = password;
+        _queue = [[NSOperationQueue alloc] init];
         _session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     }
     return self;
@@ -54,12 +62,13 @@
     return [NSString stringWithFormat:@"[url: %@]", self.rootURL];
 }
 
-- (void)prepareOperation:(CDTCouchOperation*)operation
+- (void)addOperation:(CDTCouchOperation*)operation
 {
     operation.session = self.session;
     operation.rootURL = self.rootURL;
     operation.username = self.username;
     operation.password = self.password;
+    [self.queue addOperation:operation];
 }
 
 @end

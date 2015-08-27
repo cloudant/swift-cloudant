@@ -6,13 +6,18 @@
 //  Copyright © 2015 Small Text. All rights reserved.
 //
 
-#import "CDTCouchOperation.h"
+#import "CDTCouchDatabaseOperation.h"
 
-@interface CDTGetDocumentOperation : CDTCouchOperation
+@interface CDTGetDocumentOperation : CDTCouchDatabaseOperation
 
 @property (nonatomic) bool revs;
+
+/**
+ The document that this operation will access or modify.
+ 
+ Must be set before a call can be successfully made.
+ */
 @property (nonatomic, strong) NSString *docId;
-@property (nonatomic, strong) NSString *databaseName;
 
 @property(nonatomic, copy) void (^getDocumentCompletionBlock)( NSDictionary *document, NSError *operationError);
 

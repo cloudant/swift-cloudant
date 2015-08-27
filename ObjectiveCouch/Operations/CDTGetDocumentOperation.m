@@ -13,6 +13,7 @@
 - (void)buildAndValidate
 {
     [super buildAndValidate];
+    
     self.queryItems = @[[NSURLQueryItem queryItemWithName:@"revs" value:(self.revs ? @"true" : @"false")]];
 }
 

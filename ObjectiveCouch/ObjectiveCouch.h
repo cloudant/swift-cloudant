@@ -20,4 +20,6 @@ FOUNDATION_EXPORT const unsigned char ObjectiveCouchVersionString[];
 
 #import <ObjectiveCouch/CouchDB.h>
 #import <ObjectiveCouch/Database.h>
+#import <ObjectiveCouch/CDTCouchOperation.h>
+#import <ObjectiveCouch/CDTCouchDatabaseOperation.h>
 #import <ObjectiveCouch/CDTGetDocumentOperation.h>

@@ -11,6 +11,8 @@
 		270EDAED1B8F1627000B2B0A /* CDTCouchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 270EDAEB1B8F1627000B2B0A /* CDTCouchOperation.m */; settings = {ASSET_TAGS = (); }; };
 		270EDAF01B8F18A4000B2B0A /* CDTGetDocumentOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 270EDAEE1B8F18A4000B2B0A /* CDTGetDocumentOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		270EDAF11B8F18A4000B2B0A /* CDTGetDocumentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 270EDAEF1B8F18A4000B2B0A /* CDTGetDocumentOperation.m */; settings = {ASSET_TAGS = (); }; };
+		270EDAF41B8F545D000B2B0A /* CDTCouchDatabaseOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 270EDAF21B8F545D000B2B0A /* CDTCouchDatabaseOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		270EDAF51B8F545D000B2B0A /* CDTCouchDatabaseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 270EDAF31B8F545D000B2B0A /* CDTCouchDatabaseOperation.m */; settings = {ASSET_TAGS = (); }; };
 		279E8D2C1B7F905B001100D4 /* ObjectiveCouch.h in Headers */ = {isa = PBXBuildFile; fileRef = 279E8D2B1B7F905B001100D4 /* ObjectiveCouch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		279E8D331B7F905B001100D4 /* ObjectiveCouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 279E8D281B7F905B001100D4 /* ObjectiveCouch.framework */; };
 		279E8D381B7F905B001100D4 /* ObjectiveCouchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 279E8D371B7F905B001100D4 /* ObjectiveCouchTests.m */; };
@@ -35,6 +37,8 @@
 		270EDAEB1B8F1627000B2B0A /* CDTCouchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTCouchOperation.m; path = Operations/CDTCouchOperation.m; sourceTree = "<group>"; };
 		270EDAEE1B8F18A4000B2B0A /* CDTGetDocumentOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTGetDocumentOperation.h; path = Operations/CDTGetDocumentOperation.h; sourceTree = "<group>"; };
 		270EDAEF1B8F18A4000B2B0A /* CDTGetDocumentOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTGetDocumentOperation.m; path = Operations/CDTGetDocumentOperation.m; sourceTree = "<group>"; };
+		270EDAF21B8F545D000B2B0A /* CDTCouchDatabaseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTCouchDatabaseOperation.h; path = Operations/CDTCouchDatabaseOperation.h; sourceTree = "<group>"; };
+		270EDAF31B8F545D000B2B0A /* CDTCouchDatabaseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTCouchDatabaseOperation.m; path = Operations/CDTCouchDatabaseOperation.m; sourceTree = "<group>"; };
 		279E8D281B7F905B001100D4 /* ObjectiveCouch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjectiveCouch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		279E8D2B1B7F905B001100D4 /* ObjectiveCouch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectiveCouch.h; sourceTree = "<group>"; };
 		279E8D2D1B7F905B001100D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -71,6 +75,8 @@
 			children = (
 				270EDAEA1B8F1627000B2B0A /* CDTCouchOperation.h */,
 				270EDAEB1B8F1627000B2B0A /* CDTCouchOperation.m */,
+				270EDAF21B8F545D000B2B0A /* CDTCouchDatabaseOperation.h */,
+				270EDAF31B8F545D000B2B0A /* CDTCouchDatabaseOperation.m */,
 				270EDAEE1B8F18A4000B2B0A /* CDTGetDocumentOperation.h */,
 				270EDAEF1B8F18A4000B2B0A /* CDTGetDocumentOperation.m */,
 			);
@@ -127,6 +133,7 @@
 			files = (
 				279E8D441B7F9453001100D4 /* CouchDB.h in Headers */,
 				270EDAF01B8F18A4000B2B0A /* CDTGetDocumentOperation.h in Headers */,
+				270EDAF41B8F545D000B2B0A /* CDTCouchDatabaseOperation.h in Headers */,
 				279E8D481B7F9814001100D4 /* Database.h in Headers */,
 				270EDAEC1B8F1627000B2B0A /* CDTCouchOperation.h in Headers */,
 				279E8D2C1B7F905B001100D4 /* ObjectiveCouch.h in Headers */,
@@ -231,6 +238,7 @@
 			files = (
 				270EDAED1B8F1627000B2B0A /* CDTCouchOperation.m in Sources */,
 				270EDAF11B8F18A4000B2B0A /* CDTGetDocumentOperation.m in Sources */,
+				270EDAF51B8F545D000B2B0A /* CDTCouchDatabaseOperation.m in Sources */,
 				279E8D491B7F9814001100D4 /* Database.m in Sources */,
 				279E8D451B7F9453001100D4 /* CouchDB.m in Sources */,
 			);

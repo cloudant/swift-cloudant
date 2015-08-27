@@ -41,7 +41,7 @@
     
     Database *database = client[@"objectivecouch-test"];
     
-    XCTAssertEqualObjects(@"[url: http://localhost:5984/objectivecouch-test]", [database description]);
+    XCTAssertEqualObjects(@"[database: objectivecouch-test; client: [url: http://localhost:5984]]", [database description]);
     
 }
 
@@ -68,9 +68,13 @@
     
     Database *database = client[@"objectivecouch-test"];
     
-    NSDictionary *document = [database getDocumentWithOperation:^(CDTGetDocumentOperation *o) {
-        o.docId = @"aardvark";
+    __block NSDictionary *document;
+    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    [database getDocumentWithId:@"aardvark" completionHandler:^(NSDictionary *doc, NSError *err) {
+        document = doc;
+        dispatch_semaphore_signal(sema);
     }];
+    dispatch_semaphore_wait(sema, dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC));
     
     XCTAssertEqual(10, document.count);
     XCTAssertEqualObjects(@"aardvark", document[@"_id"]);
@@ -86,10 +90,16 @@
     
     Database *database = client[@"objectivecouch-test"];
     
-    NSDictionary *document = [database getDocumentWithOperation:^(CDTGetDocumentOperation *o) {
-        o.docId = @"aardvark";
-        o.revs = YES;
-    }];
+    __block NSDictionary *document;
+    
+    CDTGetDocumentOperation *op = [[CDTGetDocumentOperation alloc] init];
+    op.docId = @"aardvark";
+    op.revs = YES;
+    op.getDocumentCompletionBlock = ^(NSDictionary *doc, NSError *err) {
+        document = doc;
+    };
+    [database addOperation:op];
+    [op waitUntilFinished];
     
     XCTAssertEqual(11, document.count);
     XCTAssertEqualObjects(@"aardvark", document[@"_id"]);

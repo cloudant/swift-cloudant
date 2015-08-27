@@ -15,6 +15,9 @@
  */
 @interface CDTCouchOperation : NSOperation
 
+/**
+ An opportunity for subclasses to add items to headers, query string, POST body etc.
+ */
 - (void)buildAndValidate;
 
 @property (nonatomic,strong) NSString *username;
@@ -24,11 +27,15 @@
 
 /**
  Root URL for the CouchDB instance.
+ 
+ Must be set before a call can be successfully made.
  */
 @property (nonatomic,strong) NSURL *rootURL;
 
 /**
  Session used for HTTP requests.
+ 
+ Must be set before a call can be successfully made.
  */
 @property (nonatomic,strong) NSURLSession *session;
 
