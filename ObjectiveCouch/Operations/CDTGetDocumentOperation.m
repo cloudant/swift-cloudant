@@ -27,31 +27,31 @@
 
 #pragma mark Instance methods
 
-- (void)main
+- (void)dispatchAsyncHttpRequest
 {
-    [super main];
-
     NSString *path = [NSString stringWithFormat:@"/%@/%@", self.databaseName, self.docId];
 
-    __block NSDictionary *result;
-    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    __weak CDTGetDocumentOperation *weakSelf = self;
     [self executeJSONRequestWithMethod:@"GET"
                                   path:path
                      completionHandler:^(NSObject *json, NSURLResponse *res, NSError *err) {
-                         if (!err) {
+                         CDTGetDocumentOperation *self = weakSelf;
+                         NSDictionary *result = nil;
+
+                         if (!err && json) {
                              NSHTTPURLResponse *http = (NSHTTPURLResponse *)res;
                              if (http.statusCode == 200) {
-                                 // We know this will be a dict
+                                 // We know this will be a dict on 200 response
                                  result = (NSDictionary *)json;
                              }
                          }
-                         dispatch_semaphore_signal(sema);
-                     }];
-    dispatch_semaphore_wait(sema, dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC));
 
-    if (self.getDocumentCompletionBlock) {
-        self.getDocumentCompletionBlock(result, nil);
-    }
+                         if (self && self.getDocumentCompletionBlock) {
+                             self.getDocumentCompletionBlock(result, err);
+                         }
+
+                         [self completeOperation];
+                     }];
 }
 
 @end

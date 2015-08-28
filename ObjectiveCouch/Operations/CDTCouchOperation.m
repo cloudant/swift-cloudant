@@ -21,7 +21,56 @@
 
 - (void)buildAndValidate { return; }
 
-- (void)main { [self buildAndValidate]; }
+- (void)dispatchAsyncHttpRequest { return; }
+
+#pragma mark Concurrent operation NSOperation functions
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        executing = NO;
+        finished = NO;
+    }
+    return self;
+}
+
+- (BOOL)isConcurrent { return YES; }
+
+- (BOOL)isExecuting { return executing; }
+
+- (BOOL)isFinished { return finished; }
+
+- (void)start
+{
+    // Always check for cancellation before launching the task.
+    if ([self isCancelled]) {
+        // Must move the operation to the finished state if it is canceled.
+        [self willChangeValueForKey:@"isFinished"];
+        finished = YES;
+        [self didChangeValueForKey:@"isFinished"];
+        return;
+    }
+
+    // If the operation is not canceled, begin executing the task.
+    [self willChangeValueForKey:@"isExecuting"];
+    [self buildAndValidate];
+    [self dispatchAsyncHttpRequest];
+    executing = YES;
+    [self didChangeValueForKey:@"isExecuting"];
+}
+
+- (void)completeOperation
+{
+    [self willChangeValueForKey:@"isFinished"];
+    [self willChangeValueForKey:@"isExecuting"];
+
+    executing = NO;
+    finished = YES;
+
+    [self didChangeValueForKey:@"isExecuting"];
+    [self didChangeValueForKey:@"isFinished"];
+}
 
 #pragma mark HTTP methods
 

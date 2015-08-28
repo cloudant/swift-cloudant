@@ -20,7 +20,10 @@
 
  Centralises the HTTP connections made to Cloudant.
  */
-@interface CDTCouchOperation : NSOperation
+@interface CDTCouchOperation : NSOperation {
+    BOOL executing;
+    BOOL finished;
+}
 
 /**
  An opportunity for subclasses to add items to headers, query string, POST body etc.
@@ -45,10 +48,17 @@
  Must be set before a call can be successfully made.
  */
 @property (nonatomic, strong) NSURLSession *session;
+/**
+ Override point for sub-classes. Dispatch an async HTTP request. Call `completeOperation` when
+ complete.
+ */
+- (void)dispatchAsyncHttpRequest;
 
 - (void)executeJSONRequestWithMethod:(NSString *)method
                                 path:(NSString *)path
                    completionHandler:(void (^)(NSObject *result, NSURLResponse *res,
                                                NSError *error))completionHandler;
+
+- (void)completeOperation;
 
 @end
