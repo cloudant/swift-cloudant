@@ -17,6 +17,7 @@
 
 @interface CDTGetDocumentOperation : CDTCouchDatabaseOperation
 
+/** Set to YES to return revision information (revs=true) */
 @property (nonatomic) bool revs;
 
 /**
