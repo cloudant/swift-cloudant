@@ -15,8 +15,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import <ObjectiveCouch/Builder.h>
-
 @class Database;
 @class CDTCouchOperation;
 
