@@ -1,3 +1,6 @@
 language: objective-c
 xcode_project: ObjectiveCloudant.xcodeproj # path to your xcodeproj folder
 xcode_scheme: ObjectiveCloudant
+
+services:
+  - couchdb
