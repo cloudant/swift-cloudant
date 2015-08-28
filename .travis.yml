@@ -1,9 +1,7 @@
 language: objective-c
-xcode_project: ObjectiveCloudant.xcodeproj
-xcode_scheme: ObjectiveCloudant
 
 services:
   - couchdb
 
 script:
-  - xctool -project ObjectiveCloudant.xcodeproj -scheme ObjectiveCloudantTests -sdk iphonesimulator build test
+  - xcodebuild -project ObjectiveCloudant.xcodeproj/ -scheme ObjectiveCloudantTests -destination 'platform=iOS Simulator,OS=latest,name=iPhone 4S' build test
