@@ -8,19 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		274CF6731B9055B9008BBD50 /* CouchDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 274CF6661B9055B9008BBD50 /* CouchDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		274CF6741B9055B9008BBD50 /* CouchDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6671B9055B9008BBD50 /* CouchDB.m */; settings = {ASSET_TAGS = (); }; };
+		274CF6741B9055B9008BBD50 /* CouchDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6671B9055B9008BBD50 /* CouchDB.m */; };
 		274CF6751B9055B9008BBD50 /* Database.h in Headers */ = {isa = PBXBuildFile; fileRef = 274CF6681B9055B9008BBD50 /* Database.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		274CF6761B9055B9008BBD50 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6691B9055B9008BBD50 /* Database.m */; settings = {ASSET_TAGS = (); }; };
-		274CF6771B9055B9008BBD50 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 274CF66A1B9055B9008BBD50 /* Info.plist */; settings = {ASSET_TAGS = (); }; };
+		274CF6761B9055B9008BBD50 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6691B9055B9008BBD50 /* Database.m */; };
+		274CF6771B9055B9008BBD50 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 274CF66A1B9055B9008BBD50 /* Info.plist */; };
 		274CF6781B9055B9008BBD50 /* ObjectiveCloudant.h in Headers */ = {isa = PBXBuildFile; fileRef = 274CF66B1B9055B9008BBD50 /* ObjectiveCloudant.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		274CF6791B9055B9008BBD50 /* CDTCouchDatabaseOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 274CF66D1B9055B9008BBD50 /* CDTCouchDatabaseOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		274CF67A1B9055B9008BBD50 /* CDTCouchDatabaseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF66E1B9055B9008BBD50 /* CDTCouchDatabaseOperation.m */; settings = {ASSET_TAGS = (); }; };
+		274CF67A1B9055B9008BBD50 /* CDTCouchDatabaseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF66E1B9055B9008BBD50 /* CDTCouchDatabaseOperation.m */; };
 		274CF67B1B9055B9008BBD50 /* CDTCouchOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 274CF66F1B9055B9008BBD50 /* CDTCouchOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		274CF67C1B9055B9008BBD50 /* CDTCouchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6701B9055B9008BBD50 /* CDTCouchOperation.m */; settings = {ASSET_TAGS = (); }; };
+		274CF67C1B9055B9008BBD50 /* CDTCouchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6701B9055B9008BBD50 /* CDTCouchOperation.m */; };
 		274CF67D1B9055B9008BBD50 /* CDTGetDocumentOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 274CF6711B9055B9008BBD50 /* CDTGetDocumentOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		274CF67E1B9055B9008BBD50 /* CDTGetDocumentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6721B9055B9008BBD50 /* CDTGetDocumentOperation.m */; settings = {ASSET_TAGS = (); }; };
-		274CF6851B9055F6008BBD50 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 274CF6831B9055F6008BBD50 /* Info.plist */; settings = {ASSET_TAGS = (); }; };
-		274CF6861B9055F6008BBD50 /* ObjectiveCloudantTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6841B9055F6008BBD50 /* ObjectiveCloudantTests.m */; settings = {ASSET_TAGS = (); }; };
+		274CF67E1B9055B9008BBD50 /* CDTGetDocumentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6721B9055B9008BBD50 /* CDTGetDocumentOperation.m */; };
+		274CF6851B9055F6008BBD50 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 274CF6831B9055F6008BBD50 /* Info.plist */; };
+		274CF6861B9055F6008BBD50 /* ObjectiveCloudantTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6841B9055F6008BBD50 /* ObjectiveCloudantTests.m */; };
 		279E8D331B7F905B001100D4 /* ObjectiveCloudant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 279E8D281B7F905B001100D4 /* ObjectiveCloudant.framework */; };
 /* End PBXBuildFile section */
 
@@ -367,6 +367,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = ObjectiveCloudant/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.dx13.ObjectiveCloudant;
 				PRODUCT_NAME = ObjectiveCloudant;
@@ -383,6 +384,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = ObjectiveCloudant/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.dx13.ObjectiveCloudant;
 				PRODUCT_NAME = ObjectiveCloudant;
