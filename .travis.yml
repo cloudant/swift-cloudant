@@ -4,3 +4,6 @@ xcode_scheme: ObjectiveCloudant
 
 services:
   - couchdb
+
+script:
+  - xcodebuild -scheme ObjectiveCloudant build test -sdk iphonesimulator
