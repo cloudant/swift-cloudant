@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 
-#import <ObjectiveCouch/ObjectiveCouch.h>
+#import <ObjectiveCloudant/ObjectiveCloudant.h>
 
 @interface ObjectiveCouchTests : XCTestCase
 

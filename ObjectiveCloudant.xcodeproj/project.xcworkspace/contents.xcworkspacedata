@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:ObjectiveCouch.xcodeproj">
+      location = "self:/Users/mike/Code/mikerhodes/ObjectiveCouch/ObjectiveCloudant.xcodeproj">
    </FileRef>
 </Workspace>
