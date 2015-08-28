@@ -6,4 +6,4 @@ services:
   - couchdb
 
 script:
-  - xcodebuild -project ObjectiveCloudant.xcodeproj/ -scheme ObjectiveCloudant -destination 'platform=iOS Simulator,OS=latest,name=iPhone 4S' build test
+  - xcodebuild -project ObjectiveCloudant.xcodeproj/ -scheme ObjectiveCloudantTests -destination 'platform=iOS Simulator,OS=latest,name=iPhone 4S' build test
