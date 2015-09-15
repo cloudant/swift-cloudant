@@ -15,7 +15,7 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString *const CDTObjectiveCloudantErrorDomain;
+extern NSString *_Nonnull const CDTObjectiveCloudantErrorDomain;
 
 /**
  * Replication errors.
@@ -50,21 +50,21 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
 
  Must be set before a call can be successfully made.
  */
-@property (nonatomic, strong) NSURLSession *session;
+@property (nullable, nonatomic, strong) NSURLSession *session;
 
 /**
  Root URL for the CouchDB instance.
 
  Must be set before a call can be successfully made.
  */
-@property (nonatomic, strong) NSURL *rootURL;
+@property (nullable, nonatomic, strong) NSURL *rootURL;
 
 /// ---------------------------------
 /// @name Sub-class overrides
 /// ---------------------------------
 
 /** Extra query parameters to add to outgoing request. */
-@property (nonatomic, strong) NSArray /* NSURLQueryItem * */ *queryItems;
+@property (nullable, nonatomic, strong) NSArray<NSURLQueryItem *> *queryItems;
 
 /**
  An opportunity for subclasses to add items to headers, query string, POST body etc.

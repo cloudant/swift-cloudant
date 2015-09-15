@@ -27,12 +27,14 @@
  @param username Username to use. May be `nil`.
  @param password Password to use. May be `nil`.
  */
-+ (CouchDB *)clientForURL:(NSURL *)url username:(NSString *)username password:(NSString *)password;
++ (nullable CouchDB *)clientForURL:(nonnull NSURL *)url
+                          username:(nullable NSString *)username
+                          password:(nullable NSString *)password;
 
 /**
  Retrieve a database object for this client.
  */
-- (Database *)objectForKeyedSubscript:(NSString *)key;
+- (nullable Database *)objectForKeyedSubscript:(nonnull NSString *)key;
 
 /**
  Add an operation to be executed within the context of this client object.
@@ -40,6 +42,6 @@
  Internally this sets the CouchDB instance root URL and access credentials
  based on the settings this client was initialised with.
  */
-- (void)addOperation:(CDTCouchOperation *)operation;
+- (void)addOperation:(nonnull CDTCouchOperation *)operation;
 
 @end

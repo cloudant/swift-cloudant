@@ -25,6 +25,6 @@
 
  Must be set before a call can be successfully made.
  */
-@property (nonatomic, strong) NSString *databaseName;
+@property (nullable, nonatomic, strong) NSString *databaseName;
 
 @end

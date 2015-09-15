@@ -10,9 +10,9 @@
 
 @interface CDTCreateDatabaseOperation : CDTCouchOperation
 
-@property (strong, nonatomic) NSString *databaseName;
+@property (nullable, strong, nonatomic) NSString *databaseName;
 
-@property (nonatomic, copy) void (^createDatabaseCompletionBlock)
-    (NSInteger statusCode, NSError *operationError);
+@property (nonnull, nonatomic, copy) void (^createDatabaseCompletionBlock)
+    (NSInteger statusCode, NSError *_Nullable operationError);
 
 @end

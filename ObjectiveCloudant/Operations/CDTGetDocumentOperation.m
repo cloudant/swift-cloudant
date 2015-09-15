@@ -48,24 +48,26 @@
     [request setHTTPMethod:@"GET"];
 
     __weak CDTGetDocumentOperation *weakSelf = self;
-    NSURLSessionDataTask *task = [self.session
-        dataTaskWithRequest:request
-          completionHandler:^(NSData *data, NSURLResponse *res, NSError *error) {
-              CDTGetDocumentOperation *self = weakSelf;
-              NSDictionary *result = nil;
+    NSURLSessionDataTask *task =
+        [self.session dataTaskWithRequest:request
+                        completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
+                                            NSError *_Nullable error) {
+                          CDTGetDocumentOperation *self = weakSelf;
+                          NSDictionary *result = nil;
 
-              if (!error && data && ((NSHTTPURLResponse *)res).statusCode == 200) {
-                  // We know this will be a dict on 200 response
-                  result = (NSDictionary *)
-                      [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-              }
+                          if (!error && data && ((NSHTTPURLResponse *)res).statusCode == 200) {
+                              // We know this will be a dict on 200 response
+                              result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data
+                                                                                       options:0
+                                                                                         error:nil];
+                          }
 
-              if (self && self.getDocumentCompletionBlock) {
-                  self.getDocumentCompletionBlock(result, error);
-              }
+                          if (self && self.getDocumentCompletionBlock) {
+                              self.getDocumentCompletionBlock(result, error);
+                          }
 
-              [self completeOperation];
-          }];
+                          [self completeOperation];
+                        }];
     [task resume];
 }
 

@@ -15,17 +15,18 @@
 
  Must be set before a call can be successfully made.
  */
-@property (nonatomic, strong) NSString *docId;
+@property (nullable, nonatomic, strong) NSString *docId;
 
 /**
  If updating a document, set this value to the current revision ID.
  */
-@property (nonatomic, strong) NSString *revId;
+@property (nullable, nonatomic, strong) NSString *revId;
 
 /** Body of document. Must be serialisable with NSJSONSerialization */
-@property (nonatomic, strong) NSObject *body;
+@property (nullable, nonatomic, strong) NSObject *body;
 
-@property (nonatomic, copy) void (^putDocumentCompletionBlock)
-    (NSInteger statusCode, NSString *docId, NSString *revId, NSError *operationError);
+@property (nonnull, nonatomic, copy) void (^putDocumentCompletionBlock)
+    (NSInteger statusCode, NSString *_Nullable docId, NSString *_Nullable revId,
+     NSError *_Nullable operationError);
 
 @end

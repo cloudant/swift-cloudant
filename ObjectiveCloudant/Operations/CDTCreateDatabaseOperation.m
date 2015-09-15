@@ -37,39 +37,40 @@
     __weak CDTCreateDatabaseOperation *weakSelf = self;
     NSURLSessionDataTask *task = [self.session
         dataTaskWithRequest:request
-          completionHandler:^(NSData *data, NSURLResponse *res, NSError *error) {
-              CDTCreateDatabaseOperation *self = weakSelf;
+          completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
+                              NSError *_Nullable error) {
+            CDTCreateDatabaseOperation *self = weakSelf;
 
-              if (error) {
-                  if (self && self.createDatabaseCompletionBlock) {
-                      self.createDatabaseCompletionBlock(0, error);
-                  }
-              } else {
-                  NSInteger statusCode = ((NSHTTPURLResponse *)res).statusCode;
-                  if (statusCode == 201 || statusCode == 202) {
-                      // Success
-                      if (self && self.createDatabaseCompletionBlock) {
-                          self.createDatabaseCompletionBlock(statusCode, nil);
-                      }
-                  } else {
-                      NSString *json =
-                          [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                      NSString *msg =
-                          [NSString stringWithFormat:@"Database creation failed with %ld %@.",
-                                                     statusCode, json];
-                      NSDictionary *userInfo =
-                          @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
-                      NSError *error =
-                          [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
-                                              code:CDTObjectiveCloudantErrorCreateDatabaseFailed
-                                          userInfo:userInfo];
-                      if (self && self.createDatabaseCompletionBlock) {
-                          self.createDatabaseCompletionBlock(statusCode, error);
-                      }
-                  }
-              }
+            if (error) {
+                if (self && self.createDatabaseCompletionBlock) {
+                    self.createDatabaseCompletionBlock(0, error);
+                }
+            } else {
+                NSInteger statusCode = ((NSHTTPURLResponse *)res).statusCode;
+                if (statusCode == 201 || statusCode == 202) {
+                    // Success
+                    if (self && self.createDatabaseCompletionBlock) {
+                        self.createDatabaseCompletionBlock(statusCode, nil);
+                    }
+                } else {
+                    NSString *json =
+                        [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                    NSString *msg =
+                        [NSString stringWithFormat:@"Database creation failed with %ld %@.",
+                                                   statusCode, json];
+                    NSDictionary *userInfo =
+                        @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
+                    NSError *error =
+                        [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
+                                            code:CDTObjectiveCloudantErrorCreateDatabaseFailed
+                                        userInfo:userInfo];
+                    if (self && self.createDatabaseCompletionBlock) {
+                        self.createDatabaseCompletionBlock(statusCode, error);
+                    }
+                }
+            }
 
-              [self completeOperation];
+            [self completeOperation];
           }];
     [task resume];
 }

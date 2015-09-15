@@ -10,8 +10,9 @@
 
 @interface CDTDeleteDatabaseOperation : CDTCouchOperation
 
-@property (strong, nonatomic) NSString *databaseName;
+@property (nullable, strong, nonatomic) NSString *databaseName;
 
-@property (nonatomic, copy) void (^deleteDatabaseCompletionBlock)(NSError *operationError);
+@property (nonnull, nonatomic, copy) void (^deleteDatabaseCompletionBlock)
+    (NSError *_Nullable operationError);
 
 @end

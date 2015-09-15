@@ -20,14 +20,15 @@
 
 @interface Database ()
 
-@property (nonatomic, strong) CouchDB *client;
-@property (nonatomic, strong) NSString *databaseName;
+@property (nonnull, nonatomic, strong) CouchDB *client;
+@property (nonnull, nonatomic, strong) NSString *databaseName;
 
 @end
 
 @implementation Database
 
-- (instancetype)initWithClient:(CouchDB *)client databaseName:(NSString *)name
+- (nullable instancetype)initWithClient:(nonnull CouchDB *)client
+                           databaseName:(nonnull NSString *)name
 {
     self = [super init];
     if (self) {
@@ -37,7 +38,7 @@
     return self;
 }
 
-- (NSString *)description
+- (nonnull NSString *)description
 {
     return
         [NSString stringWithFormat:@"[database: %@; client: %@]", self.databaseName, self.client];
@@ -53,7 +54,7 @@
 
 #pragma mark Synchronous convenience accessors
 
-- (NSDictionary *)objectForKeyedSubscript:(NSString *)key
+- (nullable NSDictionary *)objectForKeyedSubscript:(nonnull NSString *)key
 {
     __block NSDictionary *result;
 
@@ -68,8 +69,9 @@
 
 #pragma mark Async convenience methods
 
-- (void)getDocumentWithId:(NSString *)documentId
-        completionHandler:(void (^)(NSDictionary *document, NSError *error))completionHandler
+- (void)getDocumentWithId:(nonnull NSString *)documentId
+        completionHandler:(void (^_Nonnull)(NSDictionary *_Nullable document,
+                                            NSError *_Nullable error))completionHandler
 {
     CDTGetDocumentOperation *op = [[CDTGetDocumentOperation alloc] init];
     op.docId = documentId;

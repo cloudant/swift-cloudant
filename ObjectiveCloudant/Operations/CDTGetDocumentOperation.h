@@ -25,9 +25,9 @@
 
  Must be set before a call can be successfully made.
  */
-@property (nonatomic, strong) NSString *docId;
+@property (nullable, nonatomic, strong) NSString *docId;
 
-@property (nonatomic, copy) void (^getDocumentCompletionBlock)
-    (NSDictionary *document, NSError *operationError);
+@property (nullable, nonatomic, copy) void (^getDocumentCompletionBlock)
+    (NSDictionary *_Nullable document, NSError *_Nullable operationError);
 
 @end

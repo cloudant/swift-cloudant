@@ -53,43 +53,46 @@
     __weak CDTPutDocumentOperation *weakSelf = self;
     NSURLSessionDataTask *task = [self.session
         dataTaskWithRequest:request
-          completionHandler:^(NSData *data, NSURLResponse *res, NSError *error) {
-              CDTPutDocumentOperation *self = weakSelf;
+          completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
+                              NSError *_Nullable error) {
+            CDTPutDocumentOperation *self = weakSelf;
 
-              if (error) {
-                  if (self && self.putDocumentCompletionBlock) {
-                      self.putDocumentCompletionBlock(0, nil, nil, error);
-                  }
-              } else {
-                  NSInteger statusCode = ((NSHTTPURLResponse *)res).statusCode;
-                  if (statusCode == 201 || statusCode == 202) {
-                      // Success
-                      NSDictionary *result = (NSDictionary *)
-                          [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-                      if (self && self.putDocumentCompletionBlock) {
-                          self.putDocumentCompletionBlock(statusCode, result[@"doc"],
-                                                          result[@"rev"], nil);
-                      }
-                  } else {
-                      NSString *json =
-                          [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                      NSString *msg =
-                          [NSString stringWithFormat:@"Database creation failed with %ld %@.",
-                                                     statusCode, json];
-                      NSDictionary *userInfo =
-                          @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
-                      NSError *error =
-                          [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
-                                              code:CDTObjectiveCloudantErrorCreateDatabaseFailed
-                                          userInfo:userInfo];
+            if (error) {
+                if (self && self.putDocumentCompletionBlock) {
+                    self.putDocumentCompletionBlock(0, nil, nil, error);
+                }
+            } else {
+                NSInteger statusCode = ((NSHTTPURLResponse *)res).statusCode;
+                if (statusCode == 201 || statusCode == 202) {
+                    // Success
+                    NSDictionary *result =
+                        (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data
+                                                                        options:0
+                                                                          error:nil];
+                    if (self && self.putDocumentCompletionBlock) {
+                        self.putDocumentCompletionBlock(statusCode, result[@"doc"], result[@"rev"],
+                                                        nil);
+                    }
+                } else {
+                    NSString *json =
+                        [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                    NSString *msg =
+                        [NSString stringWithFormat:@"Database creation failed with %ld %@.",
+                                                   statusCode, json];
+                    NSDictionary *userInfo =
+                        @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
+                    NSError *error =
+                        [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
+                                            code:CDTObjectiveCloudantErrorCreateDatabaseFailed
+                                        userInfo:userInfo];
 
-                      if (self && self.putDocumentCompletionBlock) {
-                          self.putDocumentCompletionBlock(statusCode, nil, nil, error);
-                      }
-                  }
-              }
+                    if (self && self.putDocumentCompletionBlock) {
+                        self.putDocumentCompletionBlock(statusCode, nil, nil, error);
+                    }
+                }
+            }
 
-              [self completeOperation];
+            [self completeOperation];
           }];
     [task resume];
 }

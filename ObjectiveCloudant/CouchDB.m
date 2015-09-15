@@ -20,27 +20,31 @@
 
 @interface CouchDB ()
 
-@property (nonatomic, strong) NSString *username;
-@property (nonatomic, strong) NSString *password;
-@property (nonatomic, strong) NSURLSession *session;
+@property (nullable, nonatomic, strong) NSString *username;
+@property (nullable, nonatomic, strong) NSString *password;
+@property (nullable, nonatomic, strong) NSURLSession *session;
 
-@property (nonatomic, strong) NSOperationQueue *queue;
+@property (nonnull, nonatomic, strong) NSOperationQueue *queue;
 
 /**
  Root URL for the CouchDB instance.
  */
-@property (nonatomic, strong) NSURL *rootURL;
+@property (nullable, nonatomic, strong) NSURL *rootURL;
 
 @end
 
 @implementation CouchDB
 
-+ (CouchDB *)clientForURL:(NSURL *)url username:(NSString *)username password:(NSString *)password
++ (nullable CouchDB *)clientForURL:(nonnull NSURL *)url
+                          username:(nullable NSString *)username
+                          password:(nullable NSString *)password
 {
     return [[CouchDB alloc] initForURL:url username:username password:password];
 }
 
-- (instancetype)initForURL:(NSURL *)url username:(NSString *)username password:(NSString *)password
+- (nullable instancetype)initForURL:(nullable NSURL *)url
+                           username:(nullable NSString *)username
+                           password:(nullable NSString *)password
 {
     self = [super init];
     if (self) {
@@ -63,14 +67,13 @@
     return self;
 }
 
-- (Database *)objectForKeyedSubscript:(NSString *)key
+- (nullable Database *)objectForKeyedSubscript:(nonnull NSString *)key
 {
     return [[Database alloc] initWithClient:self databaseName:key];
 }
 
-- (NSString *)description { return [NSString stringWithFormat:@"[url: %@]", self.rootURL]; }
-
-- (void)addOperation:(CDTCouchOperation *)operation
+- (nonnull NSString *)description { return [NSString stringWithFormat:@"[url: %@]", self.rootURL]; }
+- (void)addOperation:(nonnull CDTCouchOperation *)operation
 {
     operation.session = self.session;
     operation.rootURL = self.rootURL;

@@ -37,39 +37,40 @@
     __weak CDTDeleteDatabaseOperation *weakSelf = self;
     NSURLSessionDataTask *task = [self.session
         dataTaskWithRequest:request
-          completionHandler:^(NSData *data, NSURLResponse *res, NSError *error) {
-              CDTDeleteDatabaseOperation *self = weakSelf;
+          completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
+                              NSError *_Nullable error) {
+            CDTDeleteDatabaseOperation *self = weakSelf;
 
-              if (error) {
-                  if (self && self.deleteDatabaseCompletionBlock) {
-                      self.deleteDatabaseCompletionBlock(error);
-                  }
-              } else {
-                  NSInteger statusCode = ((NSHTTPURLResponse *)res).statusCode;
-                  if (statusCode == 200) {
-                      // Success
-                      if (self && self.deleteDatabaseCompletionBlock) {
-                          self.deleteDatabaseCompletionBlock(nil);
-                      }
-                  } else {
-                      NSString *json =
-                          [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                      NSString *msg =
-                          [NSString stringWithFormat:@"Database creation failed with %ld %@.",
-                                                     statusCode, json];
-                      NSDictionary *userInfo =
-                          @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
-                      NSError *error =
-                          [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
-                                              code:CDTObjectiveCloudantErrorDeleteDatabaseFailed
-                                          userInfo:userInfo];
-                      if (self && self.deleteDatabaseCompletionBlock) {
-                          self.deleteDatabaseCompletionBlock(error);
-                      }
-                  }
-              }
+            if (error) {
+                if (self && self.deleteDatabaseCompletionBlock) {
+                    self.deleteDatabaseCompletionBlock(error);
+                }
+            } else {
+                NSInteger statusCode = ((NSHTTPURLResponse *)res).statusCode;
+                if (statusCode == 200) {
+                    // Success
+                    if (self && self.deleteDatabaseCompletionBlock) {
+                        self.deleteDatabaseCompletionBlock(nil);
+                    }
+                } else {
+                    NSString *json =
+                        [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                    NSString *msg =
+                        [NSString stringWithFormat:@"Database creation failed with %ld %@.",
+                                                   statusCode, json];
+                    NSDictionary *userInfo =
+                        @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
+                    NSError *error =
+                        [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
+                                            code:CDTObjectiveCloudantErrorDeleteDatabaseFailed
+                                        userInfo:userInfo];
+                    if (self && self.deleteDatabaseCompletionBlock) {
+                        self.deleteDatabaseCompletionBlock(error);
+                    }
+                }
+            }
 
-              [self completeOperation];
+            [self completeOperation];
           }];
     [task resume];
 }
