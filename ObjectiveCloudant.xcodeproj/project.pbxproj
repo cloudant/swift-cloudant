@@ -21,6 +21,9 @@
 		274CF67E1B9055B9008BBD50 /* CDTGetDocumentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6721B9055B9008BBD50 /* CDTGetDocumentOperation.m */; };
 		274CF6851B9055F6008BBD50 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 274CF6831B9055F6008BBD50 /* Info.plist */; };
 		274CF6861B9055F6008BBD50 /* ObjectiveCloudantTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6841B9055F6008BBD50 /* ObjectiveCloudantTests.m */; };
+		275B9CCD1BA9D3540023CB63 /* CDTPutDocumentOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 275B9CCB1BA9D3540023CB63 /* CDTPutDocumentOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		275B9CCE1BA9D3540023CB63 /* CDTPutDocumentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 275B9CCC1BA9D3540023CB63 /* CDTPutDocumentOperation.m */; settings = {ASSET_TAGS = (); }; };
+		275B9CD01BA9D3770023CB63 /* PutDocumentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 275B9CCF1BA9D3770023CB63 /* PutDocumentTests.m */; settings = {ASSET_TAGS = (); }; };
 		279E8D331B7F905B001100D4 /* ObjectiveCloudant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 279E8D281B7F905B001100D4 /* ObjectiveCloudant.framework */; };
 		27F6B7211BA9C266000B523E /* TestHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F6B71E1BA9C243000B523E /* TestHelpers.m */; settings = {ASSET_TAGS = (); }; };
 		27F6B7241BA9C322000B523E /* CDTCreateDatabaseOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 27F6B7221BA9C322000B523E /* CDTCreateDatabaseOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -56,6 +59,9 @@
 		274CF6721B9055B9008BBD50 /* CDTGetDocumentOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTGetDocumentOperation.m; path = ObjectiveCloudant/Operations/CDTGetDocumentOperation.m; sourceTree = SOURCE_ROOT; };
 		274CF6831B9055F6008BBD50 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ObjectiveCloudantTests/Info.plist; sourceTree = SOURCE_ROOT; };
 		274CF6841B9055F6008BBD50 /* ObjectiveCloudantTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObjectiveCloudantTests.m; path = ObjectiveCloudantTests/ObjectiveCloudantTests.m; sourceTree = SOURCE_ROOT; };
+		275B9CCB1BA9D3540023CB63 /* CDTPutDocumentOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDTPutDocumentOperation.h; sourceTree = "<group>"; };
+		275B9CCC1BA9D3540023CB63 /* CDTPutDocumentOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDTPutDocumentOperation.m; sourceTree = "<group>"; };
+		275B9CCF1BA9D3770023CB63 /* PutDocumentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PutDocumentTests.m; path = ObjectiveCloudant/Operations/PutDocumentTests.m; sourceTree = SOURCE_ROOT; };
 		279E8D281B7F905B001100D4 /* ObjectiveCloudant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjectiveCloudant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		279E8D321B7F905B001100D4 /* ObjectiveCloudant.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ObjectiveCloudant.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		27F6B71D1BA9C243000B523E /* TestHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestHelpers.h; path = ObjectiveCloudantTests/TestHelpers.h; sourceTree = SOURCE_ROOT; };
@@ -94,6 +100,8 @@
 				274CF66E1B9055B9008BBD50 /* CDTCouchDatabaseOperation.m */,
 				274CF6711B9055B9008BBD50 /* CDTGetDocumentOperation.h */,
 				274CF6721B9055B9008BBD50 /* CDTGetDocumentOperation.m */,
+				275B9CCB1BA9D3540023CB63 /* CDTPutDocumentOperation.h */,
+				275B9CCC1BA9D3540023CB63 /* CDTPutDocumentOperation.m */,
 			);
 			name = "Operations - Database";
 			path = ObjectiveCloudant/Operations;
@@ -140,6 +148,7 @@
 				27F6B7261BA9C7A4000B523E /* CreateDatabaseTests.m */,
 				27F6B72C1BA9CA0F000B523E /* DeleteDatabaseTests.m */,
 				274CF6841B9055F6008BBD50 /* ObjectiveCloudantTests.m */,
+				275B9CCF1BA9D3770023CB63 /* PutDocumentTests.m */,
 				27F6B71D1BA9C243000B523E /* TestHelpers.h */,
 				27F6B71E1BA9C243000B523E /* TestHelpers.m */,
 			);
@@ -172,6 +181,7 @@
 				274CF6731B9055B9008BBD50 /* CouchDB.h in Headers */,
 				274CF67B1B9055B9008BBD50 /* CDTCouchOperation.h in Headers */,
 				274CF6781B9055B9008BBD50 /* ObjectiveCloudant.h in Headers */,
+				275B9CCD1BA9D3540023CB63 /* CDTPutDocumentOperation.h in Headers */,
 				274CF67D1B9055B9008BBD50 /* CDTGetDocumentOperation.h in Headers */,
 				274CF6751B9055B9008BBD50 /* Database.h in Headers */,
 				27F6B72A1BA9C98C000B523E /* CDTDeleteDatabaseOperation.h in Headers */,
@@ -277,6 +287,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				275B9CCE1BA9D3540023CB63 /* CDTPutDocumentOperation.m in Sources */,
 				274CF67C1B9055B9008BBD50 /* CDTCouchOperation.m in Sources */,
 				274CF67E1B9055B9008BBD50 /* CDTGetDocumentOperation.m in Sources */,
 				27F6B7251BA9C322000B523E /* CDTCreateDatabaseOperation.m in Sources */,
@@ -293,6 +304,7 @@
 			files = (
 				27F6B72D1BA9CA0F000B523E /* DeleteDatabaseTests.m in Sources */,
 				27F6B7271BA9C7A4000B523E /* CreateDatabaseTests.m in Sources */,
+				275B9CD01BA9D3770023CB63 /* PutDocumentTests.m in Sources */,
 				27F6B7211BA9C266000B523E /* TestHelpers.m in Sources */,
 				274CF6861B9055F6008BBD50 /* ObjectiveCloudantTests.m in Sources */,
 			);
