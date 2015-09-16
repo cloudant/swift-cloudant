@@ -47,15 +47,10 @@
                                    username:self.username
                                    password:self.password];
 
-    __block NSError *error;
-
     CDTDeleteDatabaseOperation *delete = [[CDTDeleteDatabaseOperation alloc] init];
     delete.databaseName = self.dbName;
-    delete.deleteDatabaseCompletionBlock = ^(NSError *err) { error = err; };
     [client addOperation:delete];
     [delete waitUntilFinished];
-
-    XCTAssertNil(error);
 
     [super tearDown];
 }
@@ -74,7 +69,7 @@
     [client addOperation:op];
     [op waitUntilFinished];
 
-    XCTAssertTrue((statusCode == 201 || statusCode == 202));
+    XCTAssertTrue((statusCode == 201 || statusCode == 202), @"status code was %lu", statusCode);
 }
 
 @end
