@@ -29,3 +29,5 @@ FOUNDATION_EXPORT const unsigned char ObjectiveCouchVersionString[];
 #import <ObjectiveCloudant/CDTCouchOperation.h>
 #import <ObjectiveCloudant/CDTCouchDatabaseOperation.h>
 #import <ObjectiveCloudant/CDTGetDocumentOperation.h>
+#import <ObjectiveCloudant/CDTCreateDatabaseOperation.h>
+#import <ObjectiveCloudant/CDTDeleteDatabaseOperation.h>

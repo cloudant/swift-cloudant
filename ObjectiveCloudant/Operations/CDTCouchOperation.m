@@ -15,6 +15,8 @@
 
 #import "CDTCouchOperation.h"
 
+NSString *const CDTObjectiveCloudantErrorDomain = @"CDTObjectiveCloudantErrorDomain";
+
 @implementation CDTCouchOperation
 
 #pragma mark Sub-class overrides

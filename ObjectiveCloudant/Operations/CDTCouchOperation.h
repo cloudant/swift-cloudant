@@ -15,6 +15,22 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString *const CDTObjectiveCloudantErrorDomain;
+
+/**
+ * Replication errors.
+ */
+typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
+    /**
+     Creating a database failed.
+     */
+    CDTObjectiveCloudantErrorCreateDatabaseFailed,
+    /**
+     Deleting a database failed.
+     */
+    CDTObjectiveCloudantErrorDeleteDatabaseFailed
+};
+
 /**
  Base class for operations accessing Cloudant HTTP endpoints.
 
@@ -77,17 +93,5 @@
  Executes necessary NSOperation completion KVO work. MUST be called by sub-classes when complete.
  */
 - (void)completeOperation;
-
-/// ---------------------------------
-/// @name Helper methods
-/// ---------------------------------
-
-/**
- Helper method to async execute a request returning JSON.
- */
-- (void)executeJSONRequestWithMethod:(NSString *)method
-                                path:(NSString *)path
-                   completionHandler:(void (^)(NSObject *result, NSURLResponse *res,
-                                               NSError *error))completionHandler;
 
 @end
