@@ -31,27 +31,42 @@
 {
     NSString *path = [NSString stringWithFormat:@"/%@/%@", self.databaseName, self.docId];
 
+    NSURLComponents *components =
+        [NSURLComponents componentsWithURL:self.rootURL resolvingAgainstBaseURL:NO];
+
+    components.path = path;
+    components.queryItems = components.queryItems ? components.queryItems : @[];
+    components.queryItems = [components.queryItems arrayByAddingObjectsFromArray:self.queryItems];
+
+    NSLog(@"%@", [[components URL] absoluteString]);
+
+    NSMutableURLRequest *request =
+        [NSMutableURLRequest requestWithURL:[components URL]
+                                cachePolicy:NSURLRequestUseProtocolCachePolicy
+                            timeoutInterval:10.0];
+
+    [request setHTTPMethod:@"GET"];
+
     __weak CDTGetDocumentOperation *weakSelf = self;
-    [self executeJSONRequestWithMethod:@"GET"
-                                  path:path
-                     completionHandler:^(NSObject *json, NSURLResponse *res, NSError *err) {
-                         CDTGetDocumentOperation *self = weakSelf;
-                         NSDictionary *result = nil;
+    NSURLSessionDataTask *task = [self.session
+        dataTaskWithRequest:request
+          completionHandler:^(NSData *data, NSURLResponse *res, NSError *error) {
+              CDTGetDocumentOperation *self = weakSelf;
+              NSDictionary *result = nil;
 
-                         if (!err && json) {
-                             NSHTTPURLResponse *http = (NSHTTPURLResponse *)res;
-                             if (http.statusCode == 200) {
-                                 // We know this will be a dict on 200 response
-                                 result = (NSDictionary *)json;
-                             }
-                         }
+              if (!error && data && ((NSHTTPURLResponse *)res).statusCode == 200) {
+                  // We know this will be a dict on 200 response
+                  result = (NSDictionary *)
+                      [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+              }
 
-                         if (self && self.getDocumentCompletionBlock) {
-                             self.getDocumentCompletionBlock(result, err);
-                         }
+              if (self && self.getDocumentCompletionBlock) {
+                  self.getDocumentCompletionBlock(result, error);
+              }
 
-                         [self completeOperation];
-                     }];
+              [self completeOperation];
+          }];
+    [task resume];
 }
 
 @end
