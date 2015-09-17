@@ -74,8 +74,6 @@
 {
     operation.session = self.session;
     operation.rootURL = self.rootURL;
-    operation.username = self.username;
-    operation.password = self.password;
     [self.queue addOperation:operation];
 }
 

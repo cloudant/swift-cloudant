@@ -45,12 +45,6 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
 /// @name Set up connection and server details
 /// ------------------------------------------
 
-/** Username to use during authentication. */
-@property (nonatomic, strong) NSString *username;
-
-/** Password to use during authentication. */
-@property (nonatomic, strong) NSString *password;
-
 /**
  Session used for HTTP requests.
 
