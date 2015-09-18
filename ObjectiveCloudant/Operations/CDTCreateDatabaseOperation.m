@@ -8,6 +8,12 @@
 
 #import "CDTCreateDatabaseOperation.h"
 
+@interface CDTCreateDatabaseOperation ()
+
+@property (nullable, nonatomic, strong) CDTURLSessionTask *task;
+
+@end
+
 @implementation CDTCreateDatabaseOperation
 
 - (void)buildAndValidate { [super buildAndValidate]; }
@@ -35,7 +41,7 @@
     [request setHTTPMethod:@"PUT"];
 
     __weak CDTCreateDatabaseOperation *weakSelf = self;
-    NSURLSessionDataTask *task = [self.session
+    self.task = [self.session
         dataTaskWithRequest:request
           completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
                               NSError *_Nullable error) {
@@ -72,7 +78,7 @@
 
             [self completeOperation];
           }];
-    [task resume];
+    [self.task resume];
 }
 
 @end

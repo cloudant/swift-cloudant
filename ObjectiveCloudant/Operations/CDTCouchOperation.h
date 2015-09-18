@@ -14,6 +14,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CDTInterceptableSession.h"
 
 extern NSString *_Nonnull const CDTObjectiveCloudantErrorDomain;
 
@@ -50,7 +51,7 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
 
  Must be set before a call can be successfully made.
  */
-@property (nullable, nonatomic, strong) NSURLSession *session;
+@property (nullable, nonatomic, strong) CDTInterceptableSession *session;
 
 /**
  Root URL for the CouchDB instance.

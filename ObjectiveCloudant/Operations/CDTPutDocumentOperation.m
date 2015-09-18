@@ -8,6 +8,12 @@
 
 #import "CDTPutDocumentOperation.h"
 
+@interface CDTPutDocumentOperation ()
+
+@property (nullable, nonatomic, strong) CDTURLSessionTask *task;
+
+@end
+
 @implementation CDTPutDocumentOperation
 
 - (void)buildAndValidate
@@ -51,7 +57,7 @@
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:self.body options:0 error:nil];
 
     __weak CDTPutDocumentOperation *weakSelf = self;
-    NSURLSessionDataTask *task = [self.session
+    self.task = [self.session
         dataTaskWithRequest:request
           completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
                               NSError *_Nullable error) {
@@ -94,6 +100,6 @@
 
             [self completeOperation];
           }];
-    [task resume];
+    [self.task resume];
 }
 @end

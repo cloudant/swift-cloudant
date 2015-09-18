@@ -15,6 +15,12 @@
 
 #import "CDTGetDocumentOperation.h"
 
+@interface CDTGetDocumentOperation ()
+
+@property (nullable, nonatomic, strong) CDTURLSessionTask *task;
+
+@end
+
 @implementation CDTGetDocumentOperation
 
 - (void)buildAndValidate
@@ -48,7 +54,7 @@
     [request setHTTPMethod:@"GET"];
 
     __weak CDTGetDocumentOperation *weakSelf = self;
-    NSURLSessionDataTask *task =
+    self.task =
         [self.session dataTaskWithRequest:request
                         completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
                                             NSError *_Nullable error) {
@@ -68,7 +74,7 @@
 
                           [self completeOperation];
                         }];
-    [task resume];
+    [self.task resume];
 }
 
 @end
