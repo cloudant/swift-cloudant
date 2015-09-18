@@ -15,6 +15,8 @@
 
 #import "CouchDB.h"
 #import "CDTCouchOperation.h"
+#import "CDTInterceptableSession.h"
+#import "CDTSessionCookieInterceptor.h"
 
 #import "Database.h"
 
@@ -22,7 +24,7 @@
 
 @property (nullable, nonatomic, strong) NSString *username;
 @property (nullable, nonatomic, strong) NSString *password;
-@property (nullable, nonatomic, strong) NSURLSession *session;
+@property (nullable, nonatomic, strong) CDTInterceptableSession *session;
 
 @property (nonnull, nonatomic, strong) NSOperationQueue *queue;
 
@@ -53,16 +55,15 @@
         _password = password;
         _queue = [[NSOperationQueue alloc] init];
 
-        NSURLSessionConfiguration *sessionConfiguration =
-            [NSURLSessionConfiguration defaultSessionConfiguration];
+        NSMutableArray *interceptors = [NSMutableArray array];
+
         if (self.username && self.password) {
-            NSString *creds = [NSString stringWithFormat:@"%@:%@", self.username, self.password];
-            NSString *b64 =
-                [[creds dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0];
-            NSString *header = [NSString stringWithFormat:@"Basic %@", b64];
-            sessionConfiguration.HTTPAdditionalHeaders = @{ @"Authorization" : header };
+            [interceptors
+                addObject:[[CDTSessionCookieInterceptor alloc] initWithUsername:username
+                                                                       password:password]];
         }
-        _session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+        _session =
+            [[CDTInterceptableSession alloc] initWithDelegate:nil requestInterceptors:interceptors];
     }
     return self;
 }
