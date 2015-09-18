@@ -23,15 +23,29 @@
 
 @implementation CDTGetDocumentOperation
 
-- (void)buildAndValidate
+- (BOOL)buildAndValidate
 {
-    [super buildAndValidate];
+    if ([super buildAndValidate]) {
+        if (self.docId) {
+            self.queryItems = @[
+                [NSURLQueryItem queryItemWithName:@"revs" value:(self.revs ? @"true" : @"false")]
+            ];
 
-    self.queryItems =
-        @[ [NSURLQueryItem queryItemWithName:@"revs" value:(self.revs ? @"true" : @"false")] ];
+            return YES;
+        }
+    }
+
+    return NO;
 }
 
 #pragma mark Instance methods
+
+- (void)callCompletionHandlerWithError:(NSError *)error
+{
+    if (self && self.getDocumentCompletionBlock) {
+        self.getDocumentCompletionBlock(nil, error);
+    }
+}
 
 - (void)dispatchAsyncHttpRequest
 {

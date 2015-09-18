@@ -23,7 +23,14 @@
 
 @implementation CDTCreateDatabaseOperation
 
-- (void)buildAndValidate { [super buildAndValidate]; }
+- (BOOL)buildAndValidate { return [super buildAndValidate]; }
+
+- (void)callCompletionHandlerWithError:(NSError *)error
+{
+    if (self && self.createDatabaseCompletionBlock) {
+        self.createDatabaseCompletionBlock(0, error);
+    }
+}
 
 #pragma mark Instance methods
 

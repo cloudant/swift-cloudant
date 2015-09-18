@@ -21,9 +21,11 @@ NSString *const CDTObjectiveCloudantErrorDomain = @"CDTObjectiveCloudantErrorDom
 
 #pragma mark Sub-class overrides
 
-- (void)buildAndValidate { return; }
+- (BOOL)buildAndValidate { return YES; }
 
 - (void)dispatchAsyncHttpRequest { return; }
+
+- (void)callCompletionHandlerWithError:(NSError *)error { return; }
 
 #pragma mark Concurrent operation NSOperation functions
 
@@ -54,9 +56,23 @@ NSString *const CDTObjectiveCloudantErrorDomain = @"CDTObjectiveCloudantErrorDom
         return;
     }
 
+    // Validate settings before starting execution
+    if (![self buildAndValidate]) {
+        NSString *msg = [NSString stringWithFormat:@"Validation of operation failed."];
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
+        NSError *error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
+                                             code:CDTObjectiveCloudantErrorValidationFailed
+                                         userInfo:userInfo];
+        [self callCompletionHandlerWithError:error];
+
+        [self willChangeValueForKey:@"isFinished"];
+        finished = YES;
+        [self didChangeValueForKey:@"isFinished"];
+        return;
+    }
+
     // If the operation is not canceled, begin executing the task.
     [self willChangeValueForKey:@"isExecuting"];
-    [self buildAndValidate];
     [self dispatchAsyncHttpRequest];
     executing = YES;
     [self didChangeValueForKey:@"isExecuting"];
