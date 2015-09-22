@@ -23,24 +23,32 @@
 
 @implementation CDTPutDocumentOperation
 
-- (void)buildAndValidate
+- (BOOL)buildAndValidate
 {
-    [super buildAndValidate];
+    if ([super buildAndValidate]) {
+        if (self.docId && self.body && [NSJSONSerialization isValidJSONObject:self.body]) {
+            NSMutableArray *tmp = [NSMutableArray array];
 
-    NSAssert(self.docId, @"docId was nil");
-    NSAssert(self.body, @"body was nil");
-    NSAssert([NSJSONSerialization isValidJSONObject:self.body], @"body was invalid JSON");
+            if (self.revId) {
+                [tmp addObject:[NSURLQueryItem queryItemWithName:@"rev" value:self.revId]];
+            }
 
-    NSMutableArray *tmp = [NSMutableArray array];
+            self.queryItems = [NSArray arrayWithArray:tmp];
 
-    if (self.revId) {
-        [tmp addObject:[NSURLQueryItem queryItemWithName:@"rev" value:self.revId]];
+            return YES;
+        }
     }
-
-    self.queryItems = [NSArray arrayWithArray:tmp];
+    return NO;
 }
 
 #pragma mark Instance methods
+
+- (void)callCompletionHandlerWithError:(NSError *)error
+{
+    if (self && self.putDocumentCompletionBlock) {
+        self.putDocumentCompletionBlock(0, nil, nil, error);
+    }
+}
 
 - (void)dispatchAsyncHttpRequest
 {

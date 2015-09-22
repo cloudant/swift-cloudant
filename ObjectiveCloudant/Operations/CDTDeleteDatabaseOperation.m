@@ -23,9 +23,16 @@
 
 @implementation CDTDeleteDatabaseOperation
 
-- (void)buildAndValidate { [super buildAndValidate]; }
+- (BOOL)buildAndValidate { return [super buildAndValidate]; }
 
 #pragma mark Instance methods
+
+- (void)callCompletionHandlerWithError:(NSError *)error
+{
+    if (self && self.deleteDatabaseCompletionBlock) {
+        self.deleteDatabaseCompletionBlock(error);
+    }
+}
 
 - (void)dispatchAsyncHttpRequest
 {

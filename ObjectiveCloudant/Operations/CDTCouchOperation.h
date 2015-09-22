@@ -29,7 +29,11 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
     /**
      Deleting a database failed.
      */
-    CDTObjectiveCloudantErrorDeleteDatabaseFailed
+    CDTObjectiveCloudantErrorDeleteDatabaseFailed,
+    /**
+     Validation of operation settings failed.
+     */
+    CDTObjectiveCloudantErrorValidationFailed
 };
 
 /**
@@ -72,13 +76,24 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
 
  Typically an operation would add to queryItems here.
  */
-- (void)buildAndValidate;
+- (BOOL)buildAndValidate;
 
 /**
  Override point for sub-classes. Dispatch an async HTTP request. Call `completeOperation` when
  complete.
  */
 - (void)dispatchAsyncHttpRequest;
+
+/**
+ CDTCouchOperation will call this method if it encounters an error. Usually this will
+ happen if `-buildAndValidate:` returns `NO`. Sub-classes must override this to call their
+ completion handler with the provided error.
+
+ This will never be called after `-dispatchAsyncHttpRequest`.
+
+ Overrides should NOT call `completeOperation`.
+ */
+- (void)callCompletionHandlerWithError:(NSError *)error;
 
 /// ---------------------------------
 /// @name Life-cycle management
