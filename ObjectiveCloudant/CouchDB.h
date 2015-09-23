@@ -35,7 +35,7 @@
 /**
  Retrieve a database object for this client.
  */
-- (nullable Database *)objectForKeyedSubscript:(nonnull NSString *)key;
+- (nullable CDTDatabase *)objectForKeyedSubscript:(nonnull NSString *)key;
 
 /**
  Add an operation to be executed within the context of this client object.
