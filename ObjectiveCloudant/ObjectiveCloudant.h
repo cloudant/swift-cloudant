@@ -26,7 +26,7 @@ FOUNDATION_EXPORT const unsigned char ObjectiveCouchVersionString[];
 // using statements like #import <ObjectiveCouch/PublicHeader.h>
 
 #import <ObjectiveCloudant/CouchDB.h>
-#import <ObjectiveCloudant/Database.h>
+#import <ObjectiveCloudant/CDTDatabase.h>
 #import <ObjectiveCloudant/CDTCouchOperation.h>
 #import <ObjectiveCloudant/CDTCouchDatabaseOperation.h>
 #import <ObjectiveCloudant/CDTGetDocumentOperation.h>

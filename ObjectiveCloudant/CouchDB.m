@@ -19,7 +19,7 @@
 #import "CDTInterceptableSession.h"
 #import "CDTSessionCookieInterceptor.h"
 
-#import "Database.h"
+#import "CDTDatabase.h"
 
 @interface CouchDB ()
 
@@ -69,9 +69,9 @@
     return self;
 }
 
-- (nullable Database *)objectForKeyedSubscript:(nonnull NSString *)key
+- (nullable CDTDatabase *)objectForKeyedSubscript:(nonnull NSString *)key
 {
-    return [[Database alloc] initWithClient:self databaseName:key];
+    return [[CDTDatabase alloc] initWithClient:self databaseName:key];
 }
 
 - (nonnull NSString *)description { return [NSString stringWithFormat:@"[url: %@]", self.rootURL]; }

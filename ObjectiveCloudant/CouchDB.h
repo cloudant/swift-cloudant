@@ -16,7 +16,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class Database;
+@class CDTDatabase;
 @class CDTCouchOperation;
 
 @interface CouchDB : NSObject

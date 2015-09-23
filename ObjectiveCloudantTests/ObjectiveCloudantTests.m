@@ -61,7 +61,7 @@
                                    username:self.username
                                    password:self.password];
 
-    Database *database = client[@"objectivecouch-test"];
+    CDTDatabase *database = client[@"objectivecouch-test"];
 
     NSString *expected =
         [NSString stringWithFormat:@"[database: objectivecouch-test; client: [url: %@]]", self.url];
@@ -74,7 +74,7 @@
                                    username:self.username
                                    password:self.password];
 
-    Database *database = client[@"objectivecouch-test"];
+    CDTDatabase *database = client[@"objectivecouch-test"];
 
     NSDictionary *document = database[@"aardvark"];
 
@@ -91,7 +91,7 @@
                                    username:self.username
                                    password:self.password];
 
-    Database *database = client[@"objectivecouch-test"];
+    CDTDatabase *database = client[@"objectivecouch-test"];
 
     __block NSDictionary *document;
     dispatch_semaphore_t sema = dispatch_semaphore_create(0);
@@ -115,7 +115,7 @@
                                    username:self.username
                                    password:self.password];
 
-    Database *database = client[@"objectivecouch-test"];
+    CDTDatabase *database = client[@"objectivecouch-test"];
 
     __block NSDictionary *document;
 

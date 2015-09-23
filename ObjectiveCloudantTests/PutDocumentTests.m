@@ -80,7 +80,7 @@
 
     NSString *docId = @"doc-testPutDocument";
 
-    Database *database = client[self.dbName];
+    CDTDatabase *database = client[self.dbName];
 
     CDTPutDocumentOperation *put = [[CDTPutDocumentOperation alloc] init];
     put.docId = docId;
@@ -110,7 +110,7 @@
 
     NSString *docId = @"doc-testPutDocument";
 
-    Database *database = client[self.dbName];
+    CDTDatabase *database = client[self.dbName];
 
     __block NSString *createdRevId;
 

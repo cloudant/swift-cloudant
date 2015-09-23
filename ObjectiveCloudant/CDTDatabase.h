@@ -20,7 +20,7 @@
 @class CDTGetDocumentOperation;
 @class CDTCouchDatabaseOperation;
 
-@interface Database : NSObject
+@interface CDTDatabase : NSObject
 
 /**
  Initialises a new database object with a CouchDB client and database name.
