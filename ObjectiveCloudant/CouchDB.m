@@ -69,7 +69,7 @@
     return self;
 }
 
-- (nullable Database *)objectForKeyedSubscript:(nonnull NSString *)key
+- (nullable CDTDatabase *)objectForKeyedSubscript:(nonnull NSString *)key
 {
     return [[CDTDatabase alloc] initWithClient:self databaseName:key];
 }
