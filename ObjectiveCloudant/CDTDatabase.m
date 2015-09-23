@@ -14,19 +14,19 @@
 //  and limitations under the License.
 //
 
-#import "Database.h"
+#import "CDTDatabase.h"
 
 #import "CouchDB.h"
 #import "CDTGetDocumentOperation.h"
 
-@interface Database ()
+@interface CDTDatabase ()
 
 @property (nonnull, nonatomic, strong) CouchDB *client;
 @property (nonnull, nonatomic, strong) NSString *databaseName;
 
 @end
 
-@implementation Database
+@implementation CDTDatabase
 
 - (nullable instancetype)initWithClient:(nonnull CouchDB *)client
                            databaseName:(nonnull NSString *)name
@@ -61,7 +61,9 @@
 
     CDTGetDocumentOperation *op = [[CDTGetDocumentOperation alloc] init];
     op.docId = key;
-    op.getDocumentCompletionBlock = ^(NSDictionary *doc, NSError *err) { result = doc; };
+    op.getDocumentCompletionBlock = ^(NSDictionary *doc, NSError *err) {
+      result = doc;
+    };
     [self addOperation:op];
     [op waitUntilFinished];
 
