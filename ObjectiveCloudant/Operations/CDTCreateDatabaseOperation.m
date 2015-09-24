@@ -59,18 +59,18 @@
         dataTaskWithRequest:request
           completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
                               NSError *_Nullable error) {
-            CDTCreateDatabaseOperation *self = weakSelf;
+            CDTCreateDatabaseOperation *strongSelf = weakSelf;
 
             if (error) {
-                if (self && self.createDatabaseCompletionBlock) {
-                    self.createDatabaseCompletionBlock(0, error);
+                if (strongSelf && strongSelf.createDatabaseCompletionBlock) {
+                    strongSelf.createDatabaseCompletionBlock(0, error);
                 }
             } else {
                 NSInteger statusCode = ((NSHTTPURLResponse *)res).statusCode;
                 if (statusCode == 201 || statusCode == 202) {
                     // Success
-                    if (self && self.createDatabaseCompletionBlock) {
-                        self.createDatabaseCompletionBlock(statusCode, nil);
+                    if (strongSelf && strongSelf.createDatabaseCompletionBlock) {
+                        strongSelf.createDatabaseCompletionBlock(statusCode, nil);
                     }
                 } else {
                     NSString *json =
@@ -84,13 +84,13 @@
                         [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
                                             code:CDTObjectiveCloudantErrorCreateDatabaseFailed
                                         userInfo:userInfo];
-                    if (self && self.createDatabaseCompletionBlock) {
-                        self.createDatabaseCompletionBlock(statusCode, error);
+                    if (strongSelf && strongSelf.createDatabaseCompletionBlock) {
+                        strongSelf.createDatabaseCompletionBlock(statusCode, error);
                     }
                 }
             }
 
-            [self completeOperation];
+            [strongSelf completeOperation];
           }];
     [self.task resume];
 }
