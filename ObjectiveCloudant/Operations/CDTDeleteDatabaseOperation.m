@@ -14,12 +14,7 @@
 //  and limitations under the License.
 
 #import "CDTDeleteDatabaseOperation.h"
-
-@interface CDTDeleteDatabaseOperation ()
-
-@property (nullable, nonatomic, strong) CDTURLSessionTask *task;
-
-@end
+#import "CDTCouchOperation+internal.h"
 
 @implementation CDTDeleteDatabaseOperation
 
@@ -60,6 +55,11 @@
           completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
                               NSError *_Nullable error) {
             CDTDeleteDatabaseOperation *self = weakSelf;
+
+            if ([self isCancelled]) {
+                [strongSelf completeOperation];
+                return;
+            }
 
             if (error) {
                 if (self && self.deleteDatabaseCompletionBlock) {

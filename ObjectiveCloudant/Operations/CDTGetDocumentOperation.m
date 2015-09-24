@@ -15,12 +15,7 @@
 //
 
 #import "CDTGetDocumentOperation.h"
-
-@interface CDTGetDocumentOperation ()
-
-@property (nullable, nonatomic, strong) CDTURLSessionTask *task;
-
-@end
+#import "CDTCouchOperation+internal.h"
 
 @implementation CDTGetDocumentOperation
 
@@ -74,6 +69,12 @@
                         completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
                                             NSError *_Nullable error) {
                           CDTGetDocumentOperation *self = weakSelf;
+
+                          if ([self isCancelled]) {
+                              [strongSelf completeOperation];
+                              return;
+                          }
+
                           NSDictionary *result = nil;
 
                           if (!error && data && ((NSHTTPURLResponse *)res).statusCode == 200) {

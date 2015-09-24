@@ -70,6 +70,11 @@
           completionHandler:^(NSData *_Nullable data, NSURLResponse *response, NSError *error) {
             CDTDeleteDocumentOperation *strongSelf = weakSelf;
 
+            if ([strongSelf isCancelled]) {
+                [strongSelf completeOperation];
+                return;
+            }
+
             if (strongSelf && strongSelf.deleteDocumentCompletionBlock) {
                 if (error) {
                     strongSelf.deleteDocumentCompletionBlock(kCDTNoHTTPStatus, error);

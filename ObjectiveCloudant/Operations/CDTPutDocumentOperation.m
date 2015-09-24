@@ -14,12 +14,7 @@
 //  and limitations under the License.
 
 #import "CDTPutDocumentOperation.h"
-
-@interface CDTPutDocumentOperation ()
-
-@property (nullable, nonatomic, strong) CDTURLSessionTask *task;
-
-@end
+#import "CDTCouchOperation+internal.h"
 
 @implementation CDTPutDocumentOperation
 
@@ -77,6 +72,11 @@
           completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
                               NSError *_Nullable error) {
             CDTPutDocumentOperation *self = weakSelf;
+
+            if ([self isCancelled]) {
+                [strongSelf completeOperation];
+                return;
+            }
 
             if (error) {
                 if (self && self.putDocumentCompletionBlock) {

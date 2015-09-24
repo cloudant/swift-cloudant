@@ -47,6 +47,8 @@
 		984AA65B1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 984AA6591BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		984AA65C1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 984AA65A1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.m */; settings = {ASSET_TAGS = (); }; };
 		984AA65E1BB00B8C003D4DCA /* DeleteDocumentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 984AA65D1BB00B8C003D4DCA /* DeleteDocumentTests.m */; settings = {ASSET_TAGS = (); }; };
+		98629D671BB40EF900E7F5E8 /* CDTCouchOperation+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 98629D651BB40EF900E7F5E8 /* CDTCouchOperation+internal.h */; settings = {ASSET_TAGS = (); }; };
+		98629D681BB40EF900E7F5E8 /* CDTCouchOperation+internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */; settings = {ASSET_TAGS = (); }; };
 		AF09BD7CDDCA1320E802F047 /* Pods_ObjectiveCloudantTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84D0A0BCF45916FACA3CDB5 /* Pods_ObjectiveCloudantTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -105,6 +107,8 @@
 		984AA6591BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDTDeleteDocumentOperation.h; sourceTree = "<group>"; };
 		984AA65A1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDTDeleteDocumentOperation.m; sourceTree = "<group>"; };
 		984AA65D1BB00B8C003D4DCA /* DeleteDocumentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DeleteDocumentTests.m; path = ObjectiveCloudantTests/DeleteDocumentTests.m; sourceTree = SOURCE_ROOT; };
+		98629D651BB40EF900E7F5E8 /* CDTCouchOperation+internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CDTCouchOperation+internal.h"; path = "ObjectiveCloudant/Operations/CDTCouchOperation+internal.h"; sourceTree = SOURCE_ROOT; };
+		98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CDTCouchOperation+internal.m"; path = "ObjectiveCloudant/Operations/CDTCouchOperation+internal.m"; sourceTree = SOURCE_ROOT; };
 		D84D0A0BCF45916FACA3CDB5 /* Pods_ObjectiveCloudantTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectiveCloudantTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -201,6 +205,8 @@
 		27F6B72E1BA9CFED000B523E /* Operations - Instance */ = {
 			isa = PBXGroup;
 			children = (
+				98629D651BB40EF900E7F5E8 /* CDTCouchOperation+internal.h */,
+				98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */,
 				274CF66F1B9055B9008BBD50 /* CDTCouchOperation.h */,
 				274CF6701B9055B9008BBD50 /* CDTCouchOperation.m */,
 				27F6B7221BA9C322000B523E /* CDTCreateDatabaseOperation.h */,
@@ -264,6 +270,7 @@
 			files = (
 				274CF6791B9055B9008BBD50 /* CDTCouchDatabaseOperation.h in Headers */,
 				274CF6731B9055B9008BBD50 /* CouchDB.h in Headers */,
+				98629D671BB40EF900E7F5E8 /* CDTCouchOperation+internal.h in Headers */,
 				274CF67B1B9055B9008BBD50 /* CDTCouchOperation.h in Headers */,
 				274CF6781B9055B9008BBD50 /* ObjectiveCloudant.h in Headers */,
 				275B9CCD1BA9D3540023CB63 /* CDTPutDocumentOperation.h in Headers */,
@@ -440,6 +447,7 @@
 				27F6B72B1BA9C98C000B523E /* CDTDeleteDatabaseOperation.m in Sources */,
 				274CF6761B9055B9008BBD50 /* CDTDatabase.m in Sources */,
 				984AA65C1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.m in Sources */,
+				98629D681BB40EF900E7F5E8 /* CDTCouchOperation+internal.m in Sources */,
 				274CF6741B9055B9008BBD50 /* CouchDB.m in Sources */,
 				274CF67A1B9055B9008BBD50 /* CDTCouchDatabaseOperation.m in Sources */,
 			);
