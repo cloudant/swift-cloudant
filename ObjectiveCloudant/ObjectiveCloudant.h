@@ -1,6 +1,6 @@
 //
-//  ObjectiveCouch.h
-//  ObjectiveCouch
+//  ObjectiveCloudant.h
+//  ObjectiveCloudant
 //
 //  Created by Michael Rhodes on 15/08/2015.
 //  Copyright (c) 2015 IBM Corp.
@@ -16,14 +16,14 @@
 
 #import <UIKit/UIKit.h>
 
-//! Project version number for ObjectiveCouch.
-FOUNDATION_EXPORT double ObjectiveCouchVersionNumber;
+//! Project version number for ObjectiveCloudant.
+FOUNDATION_EXPORT double ObjectiveCloudantVersionNumber;
 
 //! Project version string for ObjectiveCouch.
-FOUNDATION_EXPORT const unsigned char ObjectiveCouchVersionString[];
+FOUNDATION_EXPORT const unsigned char ObjectiveCloudantVersionString[];
 
 // In this header, you should import all the public headers of your framework
-// using statements like #import <ObjectiveCouch/PublicHeader.h>
+// using statements like #import <ObjectiveCloudant/PublicHeader.h>
 
 #import <ObjectiveCloudant/CouchDB.h>
 #import <ObjectiveCloudant/CDTDatabase.h>
