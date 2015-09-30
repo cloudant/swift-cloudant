@@ -13,6 +13,7 @@
 //  and limitations under the License.
 
 #import "CDTInterceptableSession.h"
+#import "ObjectiveCloudant.h"
 
 @interface CDTInterceptableSession ()
 
@@ -23,6 +24,26 @@
 
 @implementation CDTInterceptableSession
 
++ (NSString *)userAgent
+{
+    NSProcessInfo *pInfo = [NSProcessInfo processInfo];
+    NSString *osVersion = [pInfo operatingSystemVersionString];
+    NSString *platform = @"Unknown";
+#if TARGET_OS_IPHONE
+    platform = @"iOS";
+#elif TARGET_OS_MAC
+    platform = @"Mac OS X";
+#endif
+
+    NSBundle *frameworkBundle = [NSBundle bundleForClass:[CDTInterceptableSession class]];
+    NSString *bundleDisplayName = [frameworkBundle objectForInfoDictionaryKey:@"CFBundleName"];
+    NSString *bundleVersionString =
+        [frameworkBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+
+    return [NSString stringWithFormat:@"%@/%@, (%@, %@)", bundleDisplayName, bundleVersionString,
+                                      platform, osVersion];
+}
+
 - (instancetype)init { return [self initWithDelegate:nil requestInterceptors:@[]]; }
 - (instancetype)initWithDelegate:(NSObject<NSURLSessionDelegate> *)delegate
              requestInterceptors:(NSArray *)requestInterceptors;
@@ -32,6 +53,7 @@
         _interceptors = [NSArray arrayWithArray:requestInterceptors];
 
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+        config.HTTPAdditionalHeaders = @{@"User-Agent" : [CDTInterceptableSession userAgent]};
         _session =
             [NSURLSession sessionWithConfiguration:config delegate:delegate delegateQueue:nil];
     }
