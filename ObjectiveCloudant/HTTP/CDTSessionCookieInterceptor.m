@@ -15,6 +15,7 @@
 //
 
 #import "CDTSessionCookieInterceptor.h"
+#import "CDTInterceptableSession.h"
 
 /** Number of seconds to wait for _session to respond. */
 static const NSInteger CDTSessionCookieRequestTimeout = 600;
@@ -31,7 +32,7 @@ static const NSInteger CDTSessionCookieRequestTimeout = 600;
 @property (nullable, strong, nonatomic) NSString *cookie;
 
 /** NSURLSession to make calls to _session using (shouldn't be same one we're intercepting). */
-@property (nonnull, nonatomic, strong) NSURLSession *urlSession;
+@property (nonnull, nonatomic, strong) CDTInterceptableSession *urlSession;
 
 @end
 
@@ -41,18 +42,15 @@ static const NSInteger CDTSessionCookieRequestTimeout = 600;
 {
     self = [super init];
     if (self) {
-        NSURLSessionConfiguration *config =
-            [NSURLSessionConfiguration ephemeralSessionConfiguration];
 
         // The _session endpoint requires a form-encoded username/password combination.
         // We might as well set that up now.
-        config.HTTPAdditionalHeaders = @{ @"Content-Type" : @"application/x-www-form-urlencoded" };
         _sessionRequestBody =
             [[NSString stringWithFormat:@"name=%@&password=%@", username, password]
                 dataUsingEncoding:NSUTF8StringEncoding];
 
         _shouldMakeSessionRequest = YES;
-        _urlSession = [NSURLSession sessionWithConfiguration:config];
+        _urlSession = [[CDTInterceptableSession alloc] init];
     }
     return self;
 }
@@ -106,11 +104,13 @@ static const NSInteger CDTSessionCookieRequestTimeout = 600;
     components.path = @"/_session";
 
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:components.URL];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    request.HTTPMethod = @"POST";
     request.HTTPBody = self.sessionRequestBody;
 
     dispatch_semaphore_t sema = dispatch_semaphore_create(0);
     __block NSString *cookie = nil;
-    NSURLSessionDataTask *task = [self.urlSession
+    CDTURLSessionTask *task = [self.urlSession
         dataTaskWithRequest:request
           completionHandler:^(NSData *__nullable data, NSURLResponse *__nullable response,
                               NSError *__nullable error) {
@@ -167,5 +167,4 @@ static const NSInteger CDTSessionCookieRequestTimeout = 600;
     return [[jsonResponse objectForKey:@"ok"] boolValue];
 }
 
-- (void)dealloc { [self.urlSession invalidateAndCancel]; }
 @end

@@ -48,18 +48,23 @@ static const NSString *testCookieHeaderValue =
       return [[request.URL host] isEqualToString:@"username.cloudant.com"];
     }
         withStubResponse:^OHHTTPStubsResponse *__nonnull(NSURLRequest *__nonnull request) {
-          return [OHHTTPStubsResponse
-              responseWithJSONObject:@{
-                  @"ok" : @(YES),
-                  @"name" : @"username",
-                  @"roles" : @[ @"_admin" ]
-              }
-                          statusCode:200
-                             headers:@{
-                                 @"Set-Cookie" :
-                                     [NSString stringWithFormat:@"%@; Version=1; Path=/; HttpOnly",
-                                                                testCookieHeaderValue]
-                             }];
+
+          if ([request.HTTPMethod isEqualToString:@"POST"]) {
+              return [OHHTTPStubsResponse
+                  responseWithJSONObject:@{
+                      @"ok" : @(YES),
+                      @"name" : @"username",
+                      @"roles" : @[ @"_admin" ]
+                  }
+                              statusCode:200
+                                 headers:@{
+                                     @"Set-Cookie" : [NSString
+                                         stringWithFormat:@"%@; Version=1; Path=/; HttpOnly",
+                                                          testCookieHeaderValue]
+                                 }];
+          } else {
+              return [OHHTTPStubsResponse responseWithJSONObject:@{} statusCode:200 headers:@{}];
+          }
         }];
 }
 
