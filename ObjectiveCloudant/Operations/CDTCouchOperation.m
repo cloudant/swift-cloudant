@@ -16,6 +16,7 @@
 #import "CDTCouchOperation.h"
 
 NSString *const CDTObjectiveCloudantErrorDomain = @"CDTObjectiveCloudantErrorDomain";
+NSInteger const kCDTNoHTTPStatus = 0;
 
 @implementation CDTCouchOperation
 

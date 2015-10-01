@@ -17,7 +17,7 @@
 #import "CDTInterceptableSession.h"
 
 extern NSString *_Nonnull const CDTObjectiveCloudantErrorDomain;
-
+extern NSInteger const kCDTNoHTTPStatus;
 /**
  * Replication errors.
  */
