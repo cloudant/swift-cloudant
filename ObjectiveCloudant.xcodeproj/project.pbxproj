@@ -44,6 +44,9 @@
 		984AA6551BAC5CA0003D4DCA /* CDTSessionCookieInterceptorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 984AA6521BAC5CA0003D4DCA /* CDTSessionCookieInterceptorTests.m */; settings = {ASSET_TAGS = (); }; };
 		984AA6561BAC5CA0003D4DCA /* CDTURLSessionTaskTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 984AA6531BAC5CA0003D4DCA /* CDTURLSessionTaskTests.m */; settings = {ASSET_TAGS = (); }; };
 		984AA6571BAC5CA0003D4DCA /* CDTURLSessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 984AA6541BAC5CA0003D4DCA /* CDTURLSessionTests.m */; settings = {ASSET_TAGS = (); }; };
+		984AA65B1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 984AA6591BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		984AA65C1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 984AA65A1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.m */; settings = {ASSET_TAGS = (); }; };
+		984AA65E1BB00B8C003D4DCA /* DeleteDocumentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 984AA65D1BB00B8C003D4DCA /* DeleteDocumentTests.m */; settings = {ASSET_TAGS = (); }; };
 		AF09BD7CDDCA1320E802F047 /* Pods_ObjectiveCloudantTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84D0A0BCF45916FACA3CDB5 /* Pods_ObjectiveCloudantTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -99,6 +102,9 @@
 		984AA6521BAC5CA0003D4DCA /* CDTSessionCookieInterceptorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTSessionCookieInterceptorTests.m; path = ObjectiveCloudantTests/HTTP/CDTSessionCookieInterceptorTests.m; sourceTree = SOURCE_ROOT; };
 		984AA6531BAC5CA0003D4DCA /* CDTURLSessionTaskTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTURLSessionTaskTests.m; path = ObjectiveCloudantTests/HTTP/CDTURLSessionTaskTests.m; sourceTree = SOURCE_ROOT; };
 		984AA6541BAC5CA0003D4DCA /* CDTURLSessionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTURLSessionTests.m; path = ObjectiveCloudantTests/HTTP/CDTURLSessionTests.m; sourceTree = SOURCE_ROOT; };
+		984AA6591BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDTDeleteDocumentOperation.h; sourceTree = "<group>"; };
+		984AA65A1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDTDeleteDocumentOperation.m; sourceTree = "<group>"; };
+		984AA65D1BB00B8C003D4DCA /* DeleteDocumentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DeleteDocumentTests.m; path = ObjectiveCloudantTests/DeleteDocumentTests.m; sourceTree = SOURCE_ROOT; };
 		D84D0A0BCF45916FACA3CDB5 /* Pods_ObjectiveCloudantTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectiveCloudantTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -131,6 +137,8 @@
 				274CF6721B9055B9008BBD50 /* CDTGetDocumentOperation.m */,
 				275B9CCB1BA9D3540023CB63 /* CDTPutDocumentOperation.h */,
 				275B9CCC1BA9D3540023CB63 /* CDTPutDocumentOperation.m */,
+				984AA6591BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.h */,
+				984AA65A1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.m */,
 			);
 			name = "Operations - Database";
 			path = ObjectiveCloudant/Operations;
@@ -184,6 +192,7 @@
 				275B9CCF1BA9D3770023CB63 /* PutDocumentTests.m */,
 				27F6B71D1BA9C243000B523E /* TestHelpers.h */,
 				27F6B71E1BA9C243000B523E /* TestHelpers.m */,
+				984AA65D1BB00B8C003D4DCA /* DeleteDocumentTests.m */,
 			);
 			name = ObjectiveCloudantTests;
 			path = ObjectiveCouchTests;
@@ -263,6 +272,7 @@
 				984AA6341BAAFA08003D4DCA /* CDTHTTPInterceptorContext.h in Headers */,
 				984AA6331BAAFA08003D4DCA /* CDTHTTPInterceptor.h in Headers */,
 				984AA63D1BAAFA08003D4DCA /* CDTURLSessionTask.h in Headers */,
+				984AA65B1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.h in Headers */,
 				274CF67D1B9055B9008BBD50 /* CDTGetDocumentOperation.h in Headers */,
 				274CF6751B9055B9008BBD50 /* CDTDatabase.h in Headers */,
 				27F6B72A1BA9C98C000B523E /* CDTDeleteDatabaseOperation.h in Headers */,
@@ -429,6 +439,7 @@
 				27F6B7251BA9C322000B523E /* CDTCreateDatabaseOperation.m in Sources */,
 				27F6B72B1BA9C98C000B523E /* CDTDeleteDatabaseOperation.m in Sources */,
 				274CF6761B9055B9008BBD50 /* CDTDatabase.m in Sources */,
+				984AA65C1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.m in Sources */,
 				274CF6741B9055B9008BBD50 /* CouchDB.m in Sources */,
 				274CF67A1B9055B9008BBD50 /* CDTCouchDatabaseOperation.m in Sources */,
 			);
@@ -442,6 +453,7 @@
 				27F6B72D1BA9CA0F000B523E /* DeleteDatabaseTests.m in Sources */,
 				984AA6551BAC5CA0003D4DCA /* CDTSessionCookieInterceptorTests.m in Sources */,
 				27F6B7271BA9C7A4000B523E /* CreateDatabaseTests.m in Sources */,
+				984AA65E1BB00B8C003D4DCA /* DeleteDocumentTests.m in Sources */,
 				984AA6571BAC5CA0003D4DCA /* CDTURLSessionTests.m in Sources */,
 				275B9CD01BA9D3770023CB63 /* PutDocumentTests.m in Sources */,
 				984AA6561BAC5CA0003D4DCA /* CDTURLSessionTaskTests.m in Sources */,

@@ -84,6 +84,17 @@
     [self addOperation:op];
 }
 
+- (void)deleteDocumentWithId:(NSString *)documentId
+                  revisionId:(NSString *)revId
+         completetionHandler:(void (^)(NSInteger statusCode, NSError *_Nullable))completionHandler
+{
+    CDTDeleteDocumentOperation *op = [[CDTDeleteDocumentOperation alloc] init];
+    op.docId = documentId;
+    op.revId = revId;
+    op.deleteDocumentCompletionBlock = completionHandler;
+    [self addOperation:op];
+}
+
 - (void)putDocumentWithId:(NSString *)documentId
                      body:(NSDictionary *)body
         completionHandler:(void (^)(NSInteger, NSString *_Nullable, NSString *_Nullable,

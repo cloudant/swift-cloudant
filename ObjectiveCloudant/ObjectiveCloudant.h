@@ -37,3 +37,4 @@ FOUNDATION_EXPORT const unsigned char ObjectiveCouchVersionString[];
 #import <ObjectiveCloudant/CDTHTTPInterceptorContext.h>
 #import <ObjectiveCloudant/CDTInterceptableSession.h>
 #import <ObjectiveCloudant/CDTSessionCookieInterceptor.h>
+#import <ObjectiveCloudant/CDTDeleteDocumentOperation.h>

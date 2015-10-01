@@ -52,6 +52,20 @@
                                             NSError *_Nullable error))completionHandler;
 
 /**
+ Convenience method of deleting documents from the database
+
+ Use a CDTDeleteDoucmentOperation for greater control.
+
+ @param documentId the id of the document to delete
+ @param revId the revision of the document to delete
+ @param completionHandler a block of code to call when the operation has been completed
+ */
+- (void)deleteDocumentWithId:(nonnull NSString *)documentId
+                  revisionId:(nonnull NSString *)revId
+         completetionHandler:
+             (void (^_Nonnull)(NSInteger statusCode, NSError *_Nullable error))completionHandler;
+
+/**
  Convenience method for creating a document
 
  Use a CDTPutDocumentOperation for greater control.
