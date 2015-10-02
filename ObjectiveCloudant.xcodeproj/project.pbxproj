@@ -55,6 +55,7 @@
 		98629D671BB40EF900E7F5E8 /* CDTCouchOperation+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 98629D651BB40EF900E7F5E8 /* CDTCouchOperation+internal.h */; settings = {ASSET_TAGS = (); }; };
 		98629D681BB40EF900E7F5E8 /* CDTCouchOperation+internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */; settings = {ASSET_TAGS = (); }; };
 		9896FE801BB57DAD00856BD7 /* CreateIndexTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */; settings = {ASSET_TAGS = (); }; };
+		988D313C1BBE9B4400EFB290 /* CouchDBTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 988D313B1BBE9B4400EFB290 /* CouchDBTests.m */; settings = {ASSET_TAGS = (); }; };
 		AF09BD7CDDCA1320E802F047 /* Pods_ObjectiveCloudantTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84D0A0BCF45916FACA3CDB5 /* Pods_ObjectiveCloudantTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -121,6 +122,7 @@
 		98629D651BB40EF900E7F5E8 /* CDTCouchOperation+internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CDTCouchOperation+internal.h"; path = "ObjectiveCloudant/Operations/CDTCouchOperation+internal.h"; sourceTree = SOURCE_ROOT; };
 		98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CDTCouchOperation+internal.m"; path = "ObjectiveCloudant/Operations/CDTCouchOperation+internal.m"; sourceTree = SOURCE_ROOT; };
 		9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateIndexTests.m; path = ObjectiveCloudantTests/CreateIndexTests.m; sourceTree = SOURCE_ROOT; };
+		988D313B1BBE9B4400EFB290 /* CouchDBTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CouchDBTests.m; path = ObjectiveCloudantTests/CouchDBTests.m; sourceTree = SOURCE_ROOT; };
 		D84D0A0BCF45916FACA3CDB5 /* Pods_ObjectiveCloudantTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectiveCloudantTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -207,6 +209,7 @@
 				984AA6581BAC5CA7003D4DCA /* HTTP */,
 				274CF6831B9055F6008BBD50 /* Info.plist */,
 				27F6B7261BA9C7A4000B523E /* CreateDatabaseTests.m */,
+				988D313B1BBE9B4400EFB290 /* CouchDBTests.m */,
 				27F6B72C1BA9CA0F000B523E /* DeleteDatabaseTests.m */,
 				274CF6841B9055F6008BBD50 /* ObjectiveCloudantTests.m */,
 				9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */,
@@ -489,6 +492,7 @@
 				275B9CD01BA9D3770023CB63 /* PutDocumentTests.m in Sources */,
 				9896FE801BB57DAD00856BD7 /* CreateIndexTests.m in Sources */,
 				984AA6561BAC5CA0003D4DCA /* CDTURLSessionTaskTests.m in Sources */,
+				988D313C1BBE9B4400EFB290 /* CouchDBTests.m in Sources */,
 				27F6B7211BA9C266000B523E /* TestHelpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

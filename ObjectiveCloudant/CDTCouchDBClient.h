@@ -24,6 +24,9 @@
 /**
  Create a client for a given CouchDB instance using username and password.
 
+ _Note_ if you pass a url with user info, the user info will override
+ the username and password paramaters.
+
  @param url Root URL for CouchDB instance.
  @param username Username to use. May be `nil`.
  @param password Password to use. May be `nil`.
