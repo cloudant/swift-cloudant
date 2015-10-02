@@ -25,7 +25,7 @@ FOUNDATION_EXPORT const unsigned char ObjectiveCloudantVersionString[];
 // In this header, you should import all the public headers of your framework
 // using statements like #import <ObjectiveCloudant/PublicHeader.h>
 
-#import <ObjectiveCloudant/CouchDB.h>
+#import <ObjectiveCloudant/CDTCouchDBClient.h>
 #import <ObjectiveCloudant/CDTDatabase.h>
 #import <ObjectiveCloudant/CDTCouchOperation.h>
 #import <ObjectiveCloudant/CDTCouchDatabaseOperation.h>

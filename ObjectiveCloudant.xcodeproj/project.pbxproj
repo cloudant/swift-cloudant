@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		274CF6731B9055B9008BBD50 /* CouchDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 274CF6661B9055B9008BBD50 /* CouchDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		274CF6741B9055B9008BBD50 /* CouchDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6671B9055B9008BBD50 /* CouchDB.m */; };
+		274CF6731B9055B9008BBD50 /* CDTCouchDBClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 274CF6661B9055B9008BBD50 /* CDTCouchDBClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		274CF6741B9055B9008BBD50 /* CDTCouchDBClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6671B9055B9008BBD50 /* CDTCouchDBClient.m */; };
 		274CF6751B9055B9008BBD50 /* CDTDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 274CF6681B9055B9008BBD50 /* CDTDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		274CF6761B9055B9008BBD50 /* CDTDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6691B9055B9008BBD50 /* CDTDatabase.m */; };
 		274CF6771B9055B9008BBD50 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 274CF66A1B9055B9008BBD50 /* Info.plist */; };
@@ -67,8 +67,8 @@
 
 /* Begin PBXFileReference section */
 		2475D3C3038B0291D094C46B /* Pods-ObjectiveCloudantTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCloudantTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ObjectiveCloudantTests/Pods-ObjectiveCloudantTests.release.xcconfig"; sourceTree = "<group>"; };
-		274CF6661B9055B9008BBD50 /* CouchDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CouchDB.h; path = ObjectiveCloudant/CouchDB.h; sourceTree = SOURCE_ROOT; };
-		274CF6671B9055B9008BBD50 /* CouchDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CouchDB.m; path = ObjectiveCloudant/CouchDB.m; sourceTree = SOURCE_ROOT; };
+		274CF6661B9055B9008BBD50 /* CDTCouchDBClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTCouchDBClient.h; path = ObjectiveCloudant/CDTCouchDBClient.h; sourceTree = SOURCE_ROOT; };
+		274CF6671B9055B9008BBD50 /* CDTCouchDBClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTCouchDBClient.m; path = ObjectiveCloudant/CDTCouchDBClient.m; sourceTree = SOURCE_ROOT; };
 		274CF6681B9055B9008BBD50 /* CDTDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTDatabase.h; path = ObjectiveCloudant/CDTDatabase.h; sourceTree = SOURCE_ROOT; };
 		274CF6691B9055B9008BBD50 /* CDTDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTDatabase.m; path = ObjectiveCloudant/CDTDatabase.m; sourceTree = SOURCE_ROOT; };
 		274CF66A1B9055B9008BBD50 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ObjectiveCloudant/Info.plist; sourceTree = SOURCE_ROOT; };
@@ -182,8 +182,8 @@
 				984AA6131BAAF99E003D4DCA /* HTTP */,
 				27F6B72E1BA9CFED000B523E /* Operations - Instance */,
 				274CF66C1B9055B9008BBD50 /* Operations - Database */,
-				274CF6661B9055B9008BBD50 /* CouchDB.h */,
-				274CF6671B9055B9008BBD50 /* CouchDB.m */,
+				274CF6661B9055B9008BBD50 /* CDTCouchDBClient.h */,
+				274CF6671B9055B9008BBD50 /* CDTCouchDBClient.m */,
 				274CF6681B9055B9008BBD50 /* CDTDatabase.h */,
 				274CF6691B9055B9008BBD50 /* CDTDatabase.m */,
 				274CF66A1B9055B9008BBD50 /* Info.plist */,
@@ -278,8 +278,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				274CF6791B9055B9008BBD50 /* CDTCouchDatabaseOperation.h in Headers */,
-				274CF6731B9055B9008BBD50 /* CouchDB.h in Headers */,
 				98629D671BB40EF900E7F5E8 /* CDTCouchOperation+internal.h in Headers */,
+				274CF6731B9055B9008BBD50 /* CDTCouchDBClient.h in Headers */,
 				274CF67B1B9055B9008BBD50 /* CDTCouchOperation.h in Headers */,
 				274CF6781B9055B9008BBD50 /* ObjectiveCloudant.h in Headers */,
 				275B9CCD1BA9D3540023CB63 /* CDTPutDocumentOperation.h in Headers */,
@@ -459,7 +459,7 @@
 				274CF6761B9055B9008BBD50 /* CDTDatabase.m in Sources */,
 				984AA65C1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.m in Sources */,
 				98629D681BB40EF900E7F5E8 /* CDTCouchOperation+internal.m in Sources */,
-				274CF6741B9055B9008BBD50 /* CouchDB.m in Sources */,
+				274CF6741B9055B9008BBD50 /* CDTCouchDBClient.m in Sources */,
 				274CF67A1B9055B9008BBD50 /* CDTCouchDatabaseOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

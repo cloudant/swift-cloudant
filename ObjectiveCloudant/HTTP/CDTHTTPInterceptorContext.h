@@ -1,5 +1,5 @@
 //
-//  CDTURLSessionFilterContext.h
+//  CDTHTTPInterceptorContext.h
 //
 //
 //  Created by Rhys Short on 17/08/2015.
