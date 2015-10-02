@@ -17,7 +17,7 @@
 #import "CDTInterceptableSession.h"
 
 extern NSString *_Nonnull const CDTObjectiveCloudantErrorDomain;
-
+extern NSInteger const kCDTNoHTTPStatus;
 /**
  * Replication errors.
  */
@@ -93,7 +93,7 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
 
  Overrides should NOT call `completeOperation`.
  */
-- (void)callCompletionHandlerWithError:(NSError *)error;
+- (void)callCompletionHandlerWithError:(nonnull NSError *)error;
 
 /// ---------------------------------
 /// @name Life-cycle management

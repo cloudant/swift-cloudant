@@ -18,6 +18,8 @@
 
 #import "CouchDB.h"
 #import "CDTGetDocumentOperation.h"
+#import "CDTDeleteDocumentOperation.h"
+#import "CDTPutDocumentOperation.h"
 
 @interface CDTDatabase ()
 
@@ -79,6 +81,43 @@
     CDTGetDocumentOperation *op = [[CDTGetDocumentOperation alloc] init];
     op.docId = documentId;
     op.getDocumentCompletionBlock = completionHandler;
+    [self addOperation:op];
+}
+
+- (void)deleteDocumentWithId:(NSString *)documentId
+                  revisionId:(NSString *)revId
+         completetionHandler:(void (^)(NSInteger statusCode, NSError *_Nullable))completionHandler
+{
+    CDTDeleteDocumentOperation *op = [[CDTDeleteDocumentOperation alloc] init];
+    op.docId = documentId;
+    op.revId = revId;
+    op.deleteDocumentCompletionBlock = completionHandler;
+    [self addOperation:op];
+}
+
+- (void)putDocumentWithId:(NSString *)documentId
+                     body:(NSDictionary *)body
+        completionHandler:(void (^)(NSInteger, NSString *_Nullable, NSString *_Nullable,
+                                    NSError *_Nullable))completionHandler
+{
+    CDTPutDocumentOperation *op = [[CDTPutDocumentOperation alloc] init];
+    op.docId = documentId;
+    op.body = body;
+    op.putDocumentCompletionBlock = completionHandler;
+    [self addOperation:op];
+}
+
+- (void)putDocumentWithId:(NSString *)documentId
+               revisionId:(NSString *)revId
+                     body:(NSDictionary *)body
+        completionHandler:(void (^)(NSInteger, NSString *_Nullable, NSString *_Nullable,
+                                    NSError *_Nullable))completionHandler
+{
+    CDTPutDocumentOperation *op = [[CDTPutDocumentOperation alloc] init];
+    op.docId = documentId;
+    op.revId = revId;
+    op.body = body;
+    op.putDocumentCompletionBlock = completionHandler;
     [self addOperation:op];
 }
 
