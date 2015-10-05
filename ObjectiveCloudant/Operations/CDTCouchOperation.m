@@ -14,9 +14,16 @@
 //
 
 #import "CDTCouchOperation.h"
+#import "CDTCouchOperation+internal.h"
 
 NSString *const CDTObjectiveCloudantErrorDomain = @"CDTObjectiveCloudantErrorDomain";
 NSInteger const kCDTNoHTTPStatus = 0;
+
+@interface CDTCouchOperation ()
+
+@property (nullable, nonatomic, strong) CDTURLSessionTask *task;
+
+@end
 
 @implementation CDTCouchOperation
 
@@ -45,6 +52,11 @@ NSInteger const kCDTNoHTTPStatus = 0;
 - (BOOL)isExecuting { return executing; }
 
 - (BOOL)isFinished { return finished; }
+- (void)cancel
+{
+    [super cancel];
+    [self.task cancel];
+}
 
 - (void)start
 {

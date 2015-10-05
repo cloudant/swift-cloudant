@@ -14,12 +14,7 @@
 //  and limitations under the License.
 
 #import "CDTCreateDatabaseOperation.h"
-
-@interface CDTCreateDatabaseOperation ()
-
-@property (nullable, nonatomic, strong) CDTURLSessionTask *task;
-
-@end
+#import "CDTCouchOperation+internal.h"
 
 @implementation CDTCreateDatabaseOperation
 
@@ -60,6 +55,11 @@
           completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
                               NSError *_Nullable error) {
             CDTCreateDatabaseOperation *strongSelf = weakSelf;
+
+            if ([strongSelf isCancelled]) {
+                [strongSelf completeOperation];
+                return;
+            }
 
             if (error) {
                 if (strongSelf && strongSelf.createDatabaseCompletionBlock) {
