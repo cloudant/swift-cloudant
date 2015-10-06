@@ -71,7 +71,7 @@
                           CDTGetDocumentOperation *self = weakSelf;
 
                           if ([self isCancelled]) {
-                              [strongSelf completeOperation];
+                              [self completeOperation];
                               return;
                           }
 
