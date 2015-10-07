@@ -1,5 +1,5 @@
 //
-//  Cloudant.h
+//  CDTCouchDBClient.h
 //  ObjectiveCouch
 //
 //  Created by Michael Rhodes on 15/08/2015.
@@ -19,7 +19,7 @@
 @class CDTDatabase;
 @class CDTCouchOperation;
 
-@interface CouchDB : NSObject
+@interface CDTCouchDBClient : NSObject
 
 /**
  Create a client for a given CouchDB instance using username and password.
@@ -28,9 +28,9 @@
  @param username Username to use. May be `nil`.
  @param password Password to use. May be `nil`.
  */
-+ (nullable CouchDB *)clientForURL:(nonnull NSURL *)url
-                          username:(nullable NSString *)username
-                          password:(nullable NSString *)password;
++ (nullable CDTCouchDBClient *)clientForURL:(nonnull NSURL *)url
+                                   username:(nullable NSString *)username
+                                   password:(nullable NSString *)password;
 
 /**
  Retrieve a database object for this client.

@@ -54,9 +54,9 @@
 
 - (void)testDeleteDatabase
 {
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
-                                   username:self.username
-                                   password:self.password];
+    CDTCouchDBClient *client = [CDTCouchDBClient clientForURL:[NSURL URLWithString:self.url]
+                                                     username:self.username
+                                                     password:self.password];
 
     CDTCreateDatabaseOperation *create = [[CDTCreateDatabaseOperation alloc] init];
     create.databaseName = self.dbName;

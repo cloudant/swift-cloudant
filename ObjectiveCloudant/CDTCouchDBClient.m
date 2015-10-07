@@ -1,5 +1,5 @@
 //
-//  Cloudant.m
+//  CDTCouchDBClient.m
 //  ObjectiveCouch
 //
 //  Created by Michael Rhodes on 15/08/2015.
@@ -14,14 +14,14 @@
 //  and limitations under the License.
 //
 
-#import "CouchDB.h"
+#import "CDTCouchDBClient.h"
 #import "CDTCouchOperation.h"
 #import "CDTInterceptableSession.h"
 #import "CDTSessionCookieInterceptor.h"
 
 #import "CDTDatabase.h"
 
-@interface CouchDB ()
+@interface CDTCouchDBClient ()
 
 @property (nullable, nonatomic, strong) NSString *username;
 @property (nullable, nonatomic, strong) NSString *password;
@@ -36,13 +36,13 @@
 
 @end
 
-@implementation CouchDB
+@implementation CDTCouchDBClient
 
-+ (nullable CouchDB *)clientForURL:(nonnull NSURL *)url
-                          username:(nullable NSString *)username
-                          password:(nullable NSString *)password
++ (nullable CDTCouchDBClient *)clientForURL:(nonnull NSURL *)url
+                                   username:(nullable NSString *)username
+                                   password:(nullable NSString *)password
 {
-    return [[CouchDB alloc] initForURL:url username:username password:password];
+    return [[CDTCouchDBClient alloc] initForURL:url username:username password:password];
 }
 
 - (nullable instancetype)initForURL:(nullable NSURL *)url

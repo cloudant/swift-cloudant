@@ -50,9 +50,9 @@
     // Put teardown code here. This method is called after the invocation of each test method in the
     // class.
 
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
-                                   username:self.username
-                                   password:self.password];
+    CDTCouchDBClient *client = [CDTCouchDBClient clientForURL:[NSURL URLWithString:self.url]
+                                                     username:self.username
+                                                     password:self.password];
 
     CDTDeleteDatabaseOperation *delete = [[CDTDeleteDatabaseOperation alloc] init];
     delete.databaseName = self.dbName;
@@ -64,9 +64,9 @@
 
 - (void)testCreateUsingPut
 {
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
-                                   username:self.username
-                                   password:self.password];
+    CDTCouchDBClient *client = [CDTCouchDBClient clientForURL:[NSURL URLWithString:self.url]
+                                                     username:self.username
+                                                     password:self.password];
 
     __block NSInteger statusCode;
 

@@ -1,5 +1,5 @@
 //
-//  CDTURLSessionInterceptor.h
+//  CDTHTTPInterceptor.h
 //
 //
 //  Created by Rhys Short on 24/08/2015.

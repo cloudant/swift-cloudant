@@ -1,5 +1,5 @@
 //
-//  Database.m
+//  CDTDatabase.m
 //  ObjectiveCouch
 //
 //  Created by Michael Rhodes on 15/08/2015.
@@ -16,21 +16,21 @@
 
 #import "CDTDatabase.h"
 
-#import "CouchDB.h"
+#import "CDTCouchDBClient.h"
 #import "CDTGetDocumentOperation.h"
 #import "CDTDeleteDocumentOperation.h"
 #import "CDTPutDocumentOperation.h"
 
 @interface CDTDatabase ()
 
-@property (nonnull, nonatomic, strong) CouchDB *client;
+@property (nonnull, nonatomic, strong) CDTCouchDBClient *client;
 @property (nonnull, nonatomic, strong) NSString *databaseName;
 
 @end
 
 @implementation CDTDatabase
 
-- (nullable instancetype)initWithClient:(nonnull CouchDB *)client
+- (nullable instancetype)initWithClient:(nonnull CDTCouchDBClient *)client
                            databaseName:(nonnull NSString *)name
 {
     self = [super init];

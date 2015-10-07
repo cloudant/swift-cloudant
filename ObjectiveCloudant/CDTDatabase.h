@@ -1,5 +1,5 @@
 //
-//  Database.h
+//  CDTDatabase.h
 //  ObjectiveCouch
 //
 //  Created by Michael Rhodes on 15/08/2015.
@@ -16,7 +16,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class CouchDB;
+@class CDTCouchDBClient;
 @class CDTGetDocumentOperation;
 @class CDTCouchDatabaseOperation;
 
@@ -25,7 +25,7 @@
 /**
  Initialises a new database object with a CouchDB client and database name.
  */
-- (nullable instancetype)initWithClient:(nonnull CouchDB *)client
+- (nullable instancetype)initWithClient:(nonnull CDTCouchDBClient *)client
                            databaseName:(nonnull NSString *)name;
 
 /**

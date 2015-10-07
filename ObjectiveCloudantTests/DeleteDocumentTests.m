@@ -16,7 +16,7 @@
 @property NSString *username;
 @property NSString *password;
 @property NSString *dbName;
-@property CouchDB *client;
+@property CDTCouchDBClient *client;
 @property CDTDatabase *db;
 
 @end
@@ -38,9 +38,9 @@
     self.dbName = [NSString stringWithFormat:@"%@-test-database-%@", REMOTE_DB_PREFIX,
                                              [TestHelpers generateRandomString:5]];
 
-    self.client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
-                               username:self.username
-                               password:self.password];
+    self.client = [CDTCouchDBClient clientForURL:[NSURL URLWithString:self.url]
+                                        username:self.username
+                                        password:self.password];
 
     CDTCreateDatabaseOperation *createDB = [[CDTCreateDatabaseOperation alloc] init];
     createDB.databaseName = self.dbName;
@@ -52,9 +52,9 @@
 
 - (void)tearDown
 {
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
-                                   username:self.username
-                                   password:self.password];
+    CDTCouchDBClient *client = [CDTCouchDBClient clientForURL:[NSURL URLWithString:self.url]
+                                                     username:self.username
+                                                     password:self.password];
 
     CDTDeleteDatabaseOperation *delete = [[CDTDeleteDatabaseOperation alloc] init];
     delete.databaseName = self.dbName;

@@ -47,9 +47,9 @@
 
 - (void)testCreateCloudantClient
 {
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
-                                   username:self.username
-                                   password:self.password];
+    CDTCouchDBClient *client = [CDTCouchDBClient clientForURL:[NSURL URLWithString:self.url]
+                                                     username:self.username
+                                                     password:self.password];
 
     NSString *expected = [NSString stringWithFormat:@"[url: %@]", self.url];
     XCTAssertEqualObjects(expected, [client description]);
@@ -57,9 +57,9 @@
 
 - (void)testGetDatabase
 {
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
-                                   username:self.username
-                                   password:self.password];
+    CDTCouchDBClient *client = [CDTCouchDBClient clientForURL:[NSURL URLWithString:self.url]
+                                                     username:self.username
+                                                     password:self.password];
 
     CDTDatabase *database = client[@"objectivecouch-test"];
 
@@ -70,9 +70,9 @@
 
 - (void)testGetDocument
 {
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
-                                   username:self.username
-                                   password:self.password];
+    CDTCouchDBClient *client = [CDTCouchDBClient clientForURL:[NSURL URLWithString:self.url]
+                                                     username:self.username
+                                                     password:self.password];
 
     CDTDatabase *database = client[@"objectivecouch-test"];
 
@@ -87,9 +87,9 @@
 
 - (void)testGetDocumentWithEmptyOptions
 {
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
-                                   username:self.username
-                                   password:self.password];
+    CDTCouchDBClient *client = [CDTCouchDBClient clientForURL:[NSURL URLWithString:self.url]
+                                                     username:self.username
+                                                     password:self.password];
 
     CDTDatabase *database = client[@"objectivecouch-test"];
 
@@ -111,9 +111,9 @@
 
 - (void)testGetDocumentWithIncludeRevs
 {
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
-                                   username:self.username
-                                   password:self.password];
+    CDTCouchDBClient *client = [CDTCouchDBClient clientForURL:[NSURL URLWithString:self.url]
+                                                     username:self.username
+                                                     password:self.password];
 
     CDTDatabase *database = client[@"objectivecouch-test"];
 
