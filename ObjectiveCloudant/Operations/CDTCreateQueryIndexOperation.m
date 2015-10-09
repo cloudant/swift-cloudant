@@ -14,13 +14,14 @@
 //  and limitations under the License.
 
 #import "CDTCreateQueryIndexOperation.h"
+#import "CDTSortSyntaxValidator.h"
+#import "CDTCouchOperation+internal.h"
 
 // Testing this class will need to mock the entire query back end,
 // XCTest doesn't provide a way to skip tests based on conditions
 @interface CDTCreateQueryIndexOperation ()
 
 @property (nullable, nonatomic, strong) NSData *jsonBody;
-@property (nullable, nonatomic, strong) CDTURLSessionTask *task;
 @property NSURLRequest *request;
 
 @end
@@ -46,33 +47,8 @@
     if ((!self.fields) || self.fields.count == 0) {
         return NO;
     } else {
-        // check the fields are either string or 2 element dict of strings
-        for (NSObject *item in self.fields) {
-            if ([item isKindOfClass:[NSString class]]) {
-                continue;
-            } else if ([item isKindOfClass:[NSDictionary class]]) {
-                // must be only one key, both strings.
-                NSDictionary *sort = (NSDictionary *)item;
-                if (sort.count != 1) {
-                    return NO;
-                }
-
-                if (![sort.allKeys[0] isKindOfClass:[NSString class]]) {
-                    return NO;
-                }
-
-                NSString *key = sort.allKeys[0];
-
-                if (![sort[key] isKindOfClass:[NSString class]]) {
-                    return NO;
-                } else if (![sort[key] isEqualToString:@"asc"] &&
-                           ![sort[key] isEqualToString:@"desc"]) {
-                    return NO;
-                }
-
-            } else {
-                return NO;
-            }
+        if (![CDTSortSyntaxValidator validateSortSyntaxInArray:self.fields]) {
+            return NO;
         }
     }
 
