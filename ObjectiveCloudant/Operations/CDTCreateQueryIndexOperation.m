@@ -144,7 +144,7 @@
                     stringWithFormat:@"Index creation failed with %ld %@.", statusCode, json];
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
                 error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
-                                            code:CDTObjectiveCloudantErrorCreateDatabaseFailed
+                                            code:CDTObjectiveCloudantErrorCreateQueryIndexFailed
                                         userInfo:userInfo];
                 strongSelf.createIndexCompletionBlock(statusCode, error);
             }

@@ -45,3 +45,4 @@ typedef NS_ENUM(NSUInteger, CDTQueryIndexType) { CDTQueryIndexTypeJson };
 #import <ObjectiveCloudant/CDTSessionCookieInterceptor.h>
 #import <ObjectiveCloudant/CDTDeleteDocumentOperation.h>
 #import <ObjectiveCloudant/CDTCreateQueryIndexOperation.h>
+#import <ObjectiveCloudant/CDTDeleteQueryIndexOperation.h>
