@@ -31,7 +31,7 @@
 {
     self = [super init];
     if (self) {
-        _indexType = CDTQIndexTypeJson;
+        _indexType = CDTQueryIndexTypeJson;
     }
     return self;
 }

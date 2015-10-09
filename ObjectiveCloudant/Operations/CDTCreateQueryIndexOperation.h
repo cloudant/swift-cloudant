@@ -15,12 +15,6 @@
 
 #import <ObjectiveCloudant/ObjectiveCloudant.h>
 
-/**
- * The types of index that can be used with
- * Cloudant Query.
- */
-typedef NS_ENUM(NSUInteger, CDTQIndexType) { CDTQIndexTypeJson };
-
 @interface CDTCreateQueryIndexOperation : CDTCouchDatabaseOperation
 
 /**
@@ -39,7 +33,7 @@ typedef NS_ENUM(NSUInteger, CDTQIndexType) { CDTQIndexTypeJson };
 /**
  * The index type to use, deafults to json.
  **/
-@property (nonatomic) CDTQIndexType indexType;
+@property (nonatomic) CDTQueryIndexType indexType;
 
 /**
  * The name of the design doc this index should be included with
@@ -52,7 +46,8 @@ typedef NS_ENUM(NSUInteger, CDTQIndexType) { CDTQIndexTypeJson };
  * Completion block to run when the operation completes
  *
  * status - the status code from the HTTP request, 0 if HTTP request hasn't been made
- * operationError - and error with the operation
+ * operationError - a pointer to an error object containing information about an error executing
+ * this operation.
  **/
 @property (nullable, nonatomic, strong) void (^createIndexCompletionBlock)
     (NSInteger status, NSError* _Nullable operationError);
