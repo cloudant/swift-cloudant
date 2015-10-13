@@ -22,6 +22,12 @@ FOUNDATION_EXPORT double ObjectiveCloudantVersionNumber;
 //! Project version string for ObjectiveCouch.
 FOUNDATION_EXPORT const unsigned char ObjectiveCloudantVersionString[];
 
+/**
+ * The types of index that can be used with
+ * Cloudant Query.
+ */
+typedef NS_ENUM(NSUInteger, CDTQueryIndexType) { CDTQueryIndexTypeJson };
+
 // In this header, you should import all the public headers of your framework
 // using statements like #import <ObjectiveCloudant/PublicHeader.h>
 
@@ -39,3 +45,4 @@ FOUNDATION_EXPORT const unsigned char ObjectiveCloudantVersionString[];
 #import <ObjectiveCloudant/CDTSessionCookieInterceptor.h>
 #import <ObjectiveCloudant/CDTDeleteDocumentOperation.h>
 #import <ObjectiveCloudant/CDTCreateQueryIndexOperation.h>
+#import <ObjectiveCloudant/CDTDeleteQueryIndexOperation.h>

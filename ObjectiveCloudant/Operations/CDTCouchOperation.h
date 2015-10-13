@@ -33,7 +33,16 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
     /**
      Validation of operation settings failed.
      */
-    CDTObjectiveCloudantErrorValidationFailed
+    CDTObjectiveCloudantErrorValidationFailed,
+    /**
+     Deleting a Query index failed.
+     */
+    CDTObjectiveCloudantErrorDeleteQueryIndexFailed,
+    /**
+     Creating a Query index failed.
+     */
+    CDTObjectiveCloudantErrorCreateQueryIndexFailed
+
 };
 
 /**
