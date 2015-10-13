@@ -323,4 +323,271 @@
                                  }];
 }
 
+- (void)testIndexCreationFailsUsingTextParamsWithJson
+{
+    CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
+    index.fields = @[ @"foo", @"bar" ];
+    index.selector = @{ @"foo" : @"bar" };
+    index.defaultFieldAnalyzer = @"spanish";
+    index.defaultFieldEnabled = YES;
+    index.indexType = CDTQueryIndexTypeJson;
+    XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
+    index.createIndexCompletionBlock = ^(NSError *error) {
+      [create fulfill];
+      XCTAssertNotNil(error);
+
+    };
+
+    [self.database addOperation:index];
+
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed create index");
+                                 }];
+}
+
+- (void)testIndexCreationFailsUsingSortSyntaxFields
+{
+    CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
+    index.fields = @[ @"foo", @"bar" ];
+    index.selector = @{ @"foo" : @"bar" };
+    index.defaultFieldAnalyzer = @"spanish";
+    index.defaultFieldEnabled = YES;
+    index.indexType = CDTQueryIndexTypeText;
+    XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
+    index.createIndexCompletionBlock = ^(NSError *error) {
+      [create fulfill];
+      XCTAssertNotNil(error);
+
+    };
+
+    [self.database addOperation:index];
+
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed create index");
+                                 }];
+}
+
+- (void)testIndexCreationPassesWithNilfieldsTextIndex
+{
+    CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
+    index.fields = nil;
+    index.selector = @{ @"foo" : @"bar" };
+    index.defaultFieldAnalyzer = @"spanish";
+    index.defaultFieldEnabled = YES;
+    index.indexType = CDTQueryIndexTypeText;
+    XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
+    index.createIndexCompletionBlock = ^(NSError *error) {
+      [create fulfill];
+      XCTAssertNil(error);
+
+    };
+
+    [self.database addOperation:index];
+
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed create index");
+                                 }];
+}
+
+- (void)testIndexCreationPassesWithDefaultFieldDisabled
+{
+    CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
+    index.fields = nil;
+    index.selector = @{ @"foo" : @"bar" };
+    index.defaultFieldEnabled = NO;
+    index.indexType = CDTQueryIndexTypeText;
+    XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
+    index.createIndexCompletionBlock = ^(NSError *error) {
+      [create fulfill];
+      XCTAssertNil(error);
+
+    };
+
+    [self.database addOperation:index];
+
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed create index");
+                                 }];
+}
+
+- (void)testIndexCreationPassesWithTextFieldSpecifiedTypeString
+{
+    CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
+    index.fields = @[ @{ @"name" : @"day", @"type" : @"string" } ];
+    index.selector = @{ @"foo" : @"bar" };
+    index.defaultFieldEnabled = NO;
+    index.indexType = CDTQueryIndexTypeText;
+    XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
+    index.createIndexCompletionBlock = ^(NSError *error) {
+      [create fulfill];
+      XCTAssertNil(error);
+
+    };
+
+    [self.database addOperation:index];
+
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed create index");
+                                 }];
+}
+
+- (void)testIndexCreationPassesWithTextFieldSpecifiedTypeBoolean
+{
+    CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
+    index.fields = @[ @{ @"name" : @"completed", @"type" : @"boolean" } ];
+    index.selector = @{ @"foo" : @"bar" };
+    index.defaultFieldEnabled = NO;
+    index.indexType = CDTQueryIndexTypeText;
+    XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
+    index.createIndexCompletionBlock = ^(NSError *error) {
+      [create fulfill];
+      XCTAssertNil(error);
+
+    };
+
+    [self.database addOperation:index];
+
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed create index");
+                                 }];
+}
+
+- (void)testIndexCreationPassesWithTextFieldSpecifiedTypeNumber
+{
+    CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
+    index.fields = @[ @{ @"name" : @"year", @"type" : @"number" } ];
+    index.selector = @{ @"foo" : @"bar" };
+    index.defaultFieldEnabled = NO;
+    index.indexType = CDTQueryIndexTypeText;
+    XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
+    index.createIndexCompletionBlock = ^(NSError *error) {
+      [create fulfill];
+      XCTAssertNil(error);
+
+    };
+
+    [self.database addOperation:index];
+
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed create index");
+                                 }];
+}
+
+- (void)testIndexCreationFailsWithTextFieldSpecifiedTypeText
+{
+    CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
+    index.fields = @[ @{ @"name" : @"day", @"type" : @"text" } ];
+    index.selector = @{ @"foo" : @"bar" };
+    index.defaultFieldEnabled = NO;
+    index.indexType = CDTQueryIndexTypeText;
+    XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
+    index.createIndexCompletionBlock = ^(NSError *error) {
+      [create fulfill];
+      XCTAssertNotNil(error);
+
+    };
+
+    [self.database addOperation:index];
+
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed create index");
+                                 }];
+}
+
+- (void)testIndexCreationFailsWithTextFieldSpecifiedInSortSyntax
+{
+    CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
+    index.fields = @[ @{ @"day" : @"asc" } ];
+    index.selector = @{ @"foo" : @"bar" };
+    index.defaultFieldEnabled = NO;
+    index.indexType = CDTQueryIndexTypeText;
+    XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
+    index.createIndexCompletionBlock = ^(NSError *error) {
+      [create fulfill];
+      XCTAssertNotNil(error);
+
+    };
+
+    [self.database addOperation:index];
+
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed create index");
+                                 }];
+}
+
+- (void)testIndexCreationFailsWithJSONFieldSpecifiedInTextSyntax
+{
+    CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
+    index.fields = @[ @{ @"name" : @"day", @"type" : @"boolean" } ];
+    index.selector = @{ @"foo" : @"bar" };
+    index.defaultFieldEnabled = NO;
+    index.indexType = CDTQueryIndexTypeJson;
+    XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
+    index.createIndexCompletionBlock = ^(NSError *error) {
+      [create fulfill];
+      XCTAssertNotNil(error);
+
+    };
+
+    [self.database addOperation:index];
+
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed create index");
+                                 }];
+}
+
+- (void)testIndexCreationFailsWithTextFieldSpecifiedWithTooManyKeys
+{
+    CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
+    index.fields = @[ @{ @"name" : @"day", @"type" : @"boolean", @"oneTooMany" : @(YES) } ];
+    index.selector = @{ @"foo" : @"bar" };
+    index.defaultFieldEnabled = NO;
+    index.indexType = CDTQueryIndexTypeText;
+    XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
+    index.createIndexCompletionBlock = ^(NSError *error) {
+      [create fulfill];
+      XCTAssertNotNil(error);
+
+    };
+
+    [self.database addOperation:index];
+
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed create index");
+                                 }];
+}
+
+- (void)testIndexCreationFailsWithTextFieldSpecifiedWithTooFewKeys
+{
+    CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
+    index.fields = @[ @{ @"name" : @"day" } ];
+    index.selector = @{ @"foo" : @"bar" };
+    index.defaultFieldEnabled = NO;
+    index.indexType = CDTQueryIndexTypeText;
+    XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
+    index.createIndexCompletionBlock = ^(NSError *error) {
+      [create fulfill];
+      XCTAssertNotNil(error);
+
+    };
+
+    [self.database addOperation:index];
+
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed create index");
+                                 }];
+}
+
 @end
