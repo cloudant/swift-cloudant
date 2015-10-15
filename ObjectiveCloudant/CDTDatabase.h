@@ -51,6 +51,12 @@
         completionHandler:(void (^_Nonnull)(NSDictionary *_Nullable document,
                                             NSError *_Nullable error))completionHandler;
 
+- (void)getDocumentWithId:(nonnull NSString *)documentId
+               revisionId:(nonnull NSString *)revId
+        completionHandler:
+            (void (^_Nonnull)(NSDictionary<NSString *, NSObject *> *_Nullable document,
+                              NSError *_Nullable operationError))completionHandler;
+
 /**
  Convenience method of deleting documents from the database
 

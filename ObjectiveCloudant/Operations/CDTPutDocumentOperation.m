@@ -98,7 +98,7 @@
                     NSString *json =
                         [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     NSString *msg =
-                        [NSString stringWithFormat:@"Database creation failed with %ld %@.",
+                        [NSString stringWithFormat:@"Document operation failed with %ld %@.",
                                                    statusCode, json];
                     NSDictionary *userInfo =
                         @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};

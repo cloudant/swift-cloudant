@@ -22,6 +22,13 @@
 @property (nonatomic) bool revs;
 
 /**
+ *  The revision at which you want the document.
+ *  Optional: If ommited CouchDB will return the
+ *  document it determines is the current winning revision
+ */
+@property (nullable, nonatomic, strong) NSString *revId;
+
+/**
  The document that this operation will access or modify.
 
  Must be set before a call can be successfully made.
