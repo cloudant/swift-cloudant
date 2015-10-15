@@ -76,7 +76,7 @@
     __block NSString *revId = nil;
 
     put.putDocumentCompletionBlock =
-        ^(NSInteger statusCode, NSString *docId, NSString *revid, NSError *erorr) {
+        ^(NSString *docId, NSString *revid, NSInteger statusCode, NSError *erorr) {
           revId = revid;
         };
     [self.db addOperation:put];
@@ -121,7 +121,7 @@
     __block NSString *revId = nil;
 
     put.putDocumentCompletionBlock =
-        ^(NSInteger statusCode, NSString *docId, NSString *revid, NSError *error) {
+        ^(NSString *docId, NSString *revid, NSInteger statusCode, NSError *error) {
           revId = revid;
         };
 
@@ -249,7 +249,7 @@
     __block NSString *revId = nil;
 
     put.putDocumentCompletionBlock =
-        ^(NSInteger statusCode, NSString *docId, NSString *revid, NSError *error) {
+        ^(NSString *docId, NSString *revid, NSInteger statusCode, NSError *error) {
           revId = revid;
         };
 

@@ -41,7 +41,7 @@
 - (void)callCompletionHandlerWithError:(NSError *)error
 {
     if (self && self.putDocumentCompletionBlock) {
-        self.putDocumentCompletionBlock(0, nil, nil, error);
+        self.putDocumentCompletionBlock(nil, nil, kCDTNoHTTPStatus, error);
     }
 }
 
@@ -80,7 +80,7 @@
 
             if (error) {
                 if (self && self.putDocumentCompletionBlock) {
-                    self.putDocumentCompletionBlock(0, nil, nil, error);
+                    self.putDocumentCompletionBlock(nil, nil, kCDTNoHTTPStatus, error);
                 }
             } else {
                 NSInteger statusCode = ((NSHTTPURLResponse *)res).statusCode;
@@ -91,8 +91,8 @@
                                                                         options:0
                                                                           error:nil];
                     if (self && self.putDocumentCompletionBlock) {
-                        self.putDocumentCompletionBlock(statusCode, result[@"doc"], result[@"rev"],
-                                                        nil);
+                        self.putDocumentCompletionBlock(result[@"doc"], result[@"rev"],
+                                                        kCDTNoHTTPStatus, nil);
                     }
                 } else {
                     NSString *json =
@@ -108,7 +108,7 @@
                                         userInfo:userInfo];
 
                     if (self && self.putDocumentCompletionBlock) {
-                        self.putDocumentCompletionBlock(statusCode, nil, nil, error);
+                        self.putDocumentCompletionBlock(nil, nil, kCDTNoHTTPStatus, error);
                     }
                 }
             }

@@ -117,8 +117,10 @@
     CDTPutDocumentOperation *put = [[CDTPutDocumentOperation alloc] init];
     put.docId = docId;
     put.body = @{ @"hello" : @"world" };
-    put.putDocumentCompletionBlock = ^(NSInteger statusCode, NSString *docId, NSString *revId,
-                                       NSError *err) { createdRevId = revId; };
+    put.putDocumentCompletionBlock =
+        ^(NSString *docId, NSString *revId, NSInteger statusCode, NSError *err) {
+          createdRevId = revId;
+        };
     [database addOperation:put];
     [put waitUntilFinished];
 

@@ -75,9 +75,9 @@
 #pragma mark Async convenience methods
 
 - (void)getDocumentWithId:(nonnull NSString *)documentId
-        completionHandler:(void (^_Nonnull)(NSDictionary *_Nullable document,
-                                            NSError *_Nullable error))completionHandler
+        completionHandler:
             (void (^_Nonnull)(NSDictionary<NSString *, NSObject *> *_Nullable document,
+                              NSError *_Nullable error))completionHandler
 {
     CDTGetDocumentOperation *op = [[CDTGetDocumentOperation alloc] init];
     op.docId = documentId;
@@ -110,7 +110,7 @@
 
 - (void)putDocumentWithId:(NSString *)documentId
                      body:(NSDictionary *)body
-        completionHandler:(void (^)(NSInteger, NSString *_Nullable, NSString *_Nullable,
+        completionHandler:(void (^)(NSString *_Nullable, NSString *_Nullable, NSInteger,
                                     NSError *_Nullable))completionHandler
 {
     CDTPutDocumentOperation *op = [[CDTPutDocumentOperation alloc] init];
@@ -123,7 +123,7 @@
 - (void)putDocumentWithId:(NSString *)documentId
                revisionId:(NSString *)revId
                      body:(NSDictionary *)body
-        completionHandler:(void (^)(NSInteger, NSString *_Nullable, NSString *_Nullable,
+        completionHandler:(void (^)(NSString *_Nullable, NSString *_Nullable, NSInteger,
                                     NSError *_Nullable))completionHandler
 {
     CDTPutDocumentOperation *op = [[CDTPutDocumentOperation alloc] init];

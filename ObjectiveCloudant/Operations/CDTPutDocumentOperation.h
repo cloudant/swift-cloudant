@@ -33,7 +33,7 @@
 @property (nullable, nonatomic, strong) NSObject *body;
 
 @property (nonnull, nonatomic, copy) void (^putDocumentCompletionBlock)
-    (NSInteger statusCode, NSString *_Nullable docId, NSString *_Nullable revId,
+    (NSString *_Nullable docId, NSString *_Nullable revId, NSInteger statusCode,
      NSError *_Nullable operationError);
 
 @end

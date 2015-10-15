@@ -72,10 +72,9 @@
     index.fields = @[ @"foo", @"bar" ];
     index.indexName = @"foobarIndex";
     XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
-    index.createIndexCompletionBlock = ^(NSInteger status, NSError *error) {
+    index.createIndexCompletionBlock = ^(NSError *error) {
       [create fulfill];
       XCTAssertNil(error);
-      XCTAssertEqual(200, status);
     };
 
     [self.database addOperation:index];
@@ -92,10 +91,9 @@
     index.fields = @[ @{ @"foo" : @"asc" } ];
     index.indexName = @"foobarIndex";
     XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
-    index.createIndexCompletionBlock = ^(NSInteger status, NSError *error) {
+    index.createIndexCompletionBlock = ^(NSError *error) {
       [create fulfill];
       XCTAssertNil(error);
-      XCTAssertEqual(200, status);
     };
 
     [self.database addOperation:index];
@@ -112,10 +110,9 @@
     index.fields = @[ @{ @"foo" : @"desc" } ];
     index.indexName = @"foobarIndex";
     XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
-    index.createIndexCompletionBlock = ^(NSInteger status, NSError *error) {
+    index.createIndexCompletionBlock = ^(NSError *error) {
       [create fulfill];
       XCTAssertNil(error);
-      XCTAssertEqual(200, status);
     };
 
     [self.database addOperation:index];
@@ -132,10 +129,9 @@
     index.fields = @[ @{ @"foo" : @"desc" }, @{ @"bar" : @"asc" } ];
     index.indexName = @"foobarIndex";
     XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
-    index.createIndexCompletionBlock = ^(NSInteger status, NSError *error) {
+    index.createIndexCompletionBlock = ^(NSError *error) {
       [create fulfill];
       XCTAssertNil(error);
-      XCTAssertEqual(200, status);
     };
 
     [self.database addOperation:index];
@@ -152,10 +148,9 @@
     index.fields = @[ @{ @"foo" : @"asc" }, @{ @"bar" : @"desc" }, @"hello" ];
     index.indexName = @"foobarIndex";
     XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
-    index.createIndexCompletionBlock = ^(NSInteger status, NSError *error) {
+    index.createIndexCompletionBlock = ^(NSError *error) {
       [create fulfill];
       XCTAssertNil(error);
-      XCTAssertEqual(200, status);
     };
 
     [self.database addOperation:index];
@@ -171,10 +166,9 @@
     CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
     index.indexName = @"foobarIndex";
     XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
-    index.createIndexCompletionBlock = ^(NSInteger status, NSError *error) {
+    index.createIndexCompletionBlock = ^(NSError *error) {
       [create fulfill];
       XCTAssertNotNil(error);
-      XCTAssertEqual(0, status);
     };
 
     [self.database addOperation:index];
@@ -190,10 +184,9 @@
     CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
     index.fields = @[ @"foo", @"bar" ];
     XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
-    index.createIndexCompletionBlock = ^(NSInteger status, NSError *error) {
+    index.createIndexCompletionBlock = ^(NSError *error) {
       [create fulfill];
       XCTAssertNil(error);
-      XCTAssertEqual(200, status);
     };
 
     [self.database addOperation:index];
@@ -209,10 +202,9 @@
     CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
     index.fields = @[];
     XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
-    index.createIndexCompletionBlock = ^(NSInteger status, NSError *error) {
+    index.createIndexCompletionBlock = ^(NSError *error) {
       [create fulfill];
       XCTAssertNotNil(error);
-      XCTAssertEqual(0, status);
     };
 
     [self.database addOperation:index];
@@ -228,10 +220,9 @@
     CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
     index.fields = @[ @{} ];
     XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
-    index.createIndexCompletionBlock = ^(NSInteger status, NSError *error) {
+    index.createIndexCompletionBlock = ^(NSError *error) {
       [create fulfill];
       XCTAssertNotNil(error);
-      XCTAssertEqual(0, status);
     };
 
     [self.database addOperation:index];
@@ -247,10 +238,9 @@
     CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
     index.fields = @[ @{ @(100) : @"World" } ];
     XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
-    index.createIndexCompletionBlock = ^(NSInteger status, NSError *error) {
+    index.createIndexCompletionBlock = ^(NSError *error) {
       [create fulfill];
       XCTAssertNotNil(error);
-      XCTAssertEqual(0, status);
     };
 
     [self.database addOperation:index];
@@ -266,10 +256,9 @@
     CDTCreateQueryIndexOperation *index = [[CDTCreateQueryIndexOperation alloc] init];
     index.fields = @[ @{ @"Hello" : @"World" } ];
     XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
-    index.createIndexCompletionBlock = ^(NSInteger status, NSError *error) {
+    index.createIndexCompletionBlock = ^(NSError *error) {
       [create fulfill];
       XCTAssertNotNil(error);
-      XCTAssertEqual(0, status);
     };
 
     [self.database addOperation:index];
@@ -294,10 +283,9 @@
     index.fields = @[ @"foo", @"bar" ];
     index.indexName = @"foobarIndex";
     XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
-    index.createIndexCompletionBlock = ^(NSInteger status, NSError *error) {
+    index.createIndexCompletionBlock = ^(NSError *error) {
       [create fulfill];
       XCTAssertNotNil(error);
-      XCTAssertEqual(500, status);
     };
 
     [self.database addOperation:index];
@@ -322,10 +310,9 @@
     index.fields = @[ @"foo", @"bar" ];
     index.indexName = @"foobarIndex";
     XCTestExpectation *create = [self expectationWithDescription:@"Create index test"];
-    index.createIndexCompletionBlock = ^(NSInteger status, NSError *error) {
+    index.createIndexCompletionBlock = ^(NSError *error) {
       [create fulfill];
       XCTAssertNotNil(error);
-      XCTAssertEqual(400, status);
     };
 
     [self.database addOperation:index];

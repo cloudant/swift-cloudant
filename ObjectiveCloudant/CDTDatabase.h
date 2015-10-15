@@ -82,10 +82,9 @@
  @param completionHandler a block of code to call when the operation has been completed
  */
 - (void)putDocumentWithId:(nonnull NSString *)documentId
-                     body:(nonnull NSDictionary *)body
-        completionHandler:(void (^_Nonnull)(NSInteger statusCode, NSString *_Nullable docId,
-                                            NSString *_Nullable revId,
                      body:(nonnull NSDictionary<NSString *, NSObject *> *)body
+        completionHandler:(void (^_Nonnull)(NSString *_Nullable docId, NSString *_Nullable revId,
+                                            NSInteger statusCode,
                                             NSError *_Nullable operationError))completionHandler;
 /**
  Convenience method for updating a document
@@ -99,9 +98,9 @@
  */
 - (void)putDocumentWithId:(nonnull NSString *)documentId
                revisionId:(nonnull NSString *)revId
-                     body:(nonnull NSDictionary *)body
-        completionHandler:(void (^_Nonnull)(NSInteger, NSString *_Nullable, NSString *_Nullable,
                      body:(nonnull NSDictionary<NSString *, NSObject *> *)body
+        completionHandler:(void (^_Nonnull)(NSString *_Nullable, NSString *_Nullable,
+                                            NSInteger statusCode,
                                             NSError *_Nullable))completionHandler;
 
 @end
