@@ -48,8 +48,9 @@
  Use a CDTGetDocumentOperation for greater control.
  */
 - (void)getDocumentWithId:(nonnull NSString *)documentId
-        completionHandler:(void (^_Nonnull)(NSDictionary *_Nullable document,
-                                            NSError *_Nullable error))completionHandler;
+        completionHandler:
+            (void (^_Nonnull)(NSDictionary<NSString *, NSObject *> *_Nullable document,
+                              NSError *_Nullable error))completionHandler;
 
 - (void)getDocumentWithId:(nonnull NSString *)documentId
                revisionId:(nonnull NSString *)revId
@@ -84,6 +85,7 @@
                      body:(nonnull NSDictionary *)body
         completionHandler:(void (^_Nonnull)(NSInteger statusCode, NSString *_Nullable docId,
                                             NSString *_Nullable revId,
+                     body:(nonnull NSDictionary<NSString *, NSObject *> *)body
                                             NSError *_Nullable operationError))completionHandler;
 /**
  Convenience method for updating a document
@@ -99,6 +101,7 @@
                revisionId:(nonnull NSString *)revId
                      body:(nonnull NSDictionary *)body
         completionHandler:(void (^_Nonnull)(NSInteger, NSString *_Nullable, NSString *_Nullable,
+                     body:(nonnull NSDictionary<NSString *, NSObject *> *)body
                                             NSError *_Nullable))completionHandler;
 
 @end

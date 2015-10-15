@@ -77,6 +77,7 @@
 - (void)getDocumentWithId:(nonnull NSString *)documentId
         completionHandler:(void (^_Nonnull)(NSDictionary *_Nullable document,
                                             NSError *_Nullable error))completionHandler
+            (void (^_Nonnull)(NSDictionary<NSString *, NSObject *> *_Nullable document,
 {
     CDTGetDocumentOperation *op = [[CDTGetDocumentOperation alloc] init];
     op.docId = documentId;
