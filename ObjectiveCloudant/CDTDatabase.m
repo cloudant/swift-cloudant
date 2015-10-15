@@ -110,7 +110,7 @@
 
 - (void)putDocumentWithId:(NSString *)documentId
                      body:(NSDictionary *)body
-        completionHandler:(void (^)(NSString *_Nullable, NSString *_Nullable, NSInteger,
+        completionHandler:(void (^)(NSString *_Nullable docId, NSString *_Nullable revId, NSInteger,
                                     NSError *_Nullable))completionHandler
 {
     CDTPutDocumentOperation *op = [[CDTPutDocumentOperation alloc] init];
@@ -123,8 +123,9 @@
 - (void)putDocumentWithId:(NSString *)documentId
                revisionId:(NSString *)revId
                      body:(NSDictionary *)body
-        completionHandler:(void (^)(NSString *_Nullable, NSString *_Nullable, NSInteger,
-                                    NSError *_Nullable))completionHandler
+        completionHandler:(void (^)(NSString *_Nullable docId, NSString *_Nullable revId,
+                                    NSInteger statusCode,
+                                    NSError *_Nullable operationError))completionHandler
 {
     CDTPutDocumentOperation *op = [[CDTPutDocumentOperation alloc] init];
     op.docId = documentId;

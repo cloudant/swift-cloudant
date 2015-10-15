@@ -99,8 +99,8 @@
 - (void)putDocumentWithId:(nonnull NSString *)documentId
                revisionId:(nonnull NSString *)revId
                      body:(nonnull NSDictionary<NSString *, NSObject *> *)body
-        completionHandler:(void (^_Nonnull)(NSString *_Nullable, NSString *_Nullable,
+        completionHandler:(void (^_Nonnull)(NSString *_Nullable docId, NSString *_Nullable revId,
                                             NSInteger statusCode,
-                                            NSError *_Nullable))completionHandler;
+                                            NSError *_Nullable operationError))completionHandler;
 
 @end
