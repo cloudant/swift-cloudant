@@ -51,17 +51,34 @@
 {
     self = [super init];
     if (self) {
-        _rootURL = url;
-        _username = username;
-        _password = password;
+        // If the URL contains a user info portion, strip them from the URL and enter into
+        // the username and password class properties.
+        if (url.user && url.password) {
+            if (username || password) {
+            NSLog(@"WARNING: Username and password provided in url, overriding username and "
+                  @"password parameters");
+            }
+            NSURLComponents *components =
+                [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+            _username = components.user;
+            components.user = nil;
+            _password = components.password;
+            components.password = nil;
+            _rootURL = components.URL;
+
+        } else {
+            _rootURL = url;
+            _username = username;
+            _password = password;
+        }
         _queue = [[NSOperationQueue alloc] init];
 
         NSMutableArray *interceptors = [NSMutableArray array];
 
         if (self.username && self.password) {
             [interceptors
-                addObject:[[CDTSessionCookieInterceptor alloc] initWithUsername:username
-                                                                       password:password]];
+                addObject:[[CDTSessionCookieInterceptor alloc] initWithUsername:self.username
+                                                                       password:self.password]];
         }
         _session =
             [[CDTInterceptableSession alloc] initWithDelegate:nil requestInterceptors:interceptors];
