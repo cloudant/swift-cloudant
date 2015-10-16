@@ -86,6 +86,18 @@
                               result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data
                                                                                        options:0
                                                                                          error:nil];
+                          } else {
+                              NSString *json = [[NSString alloc] initWithData:data
+                                                                     encoding:NSUTF8StringEncoding];
+                              NSString *msg = [NSString
+                                  stringWithFormat:@"Get document failed with %ld %@.",
+                                                   ((NSHTTPURLResponse *)res).statusCode, json];
+                              NSDictionary *userInfo =
+                                  @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
+                              NSError *error = [NSError
+                                  errorWithDomain:CDTObjectiveCloudantErrorDomain
+                                             code:CDTObjectiveCloudantErrorGetDocumentFailed
+                                         userInfo:userInfo];
                           }
 
                           if (self && self.getDocumentCompletionBlock) {

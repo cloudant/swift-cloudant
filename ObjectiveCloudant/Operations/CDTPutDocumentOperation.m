@@ -98,13 +98,13 @@
                     NSString *json =
                         [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     NSString *msg =
-                        [NSString stringWithFormat:@"Document operation failed with %ld %@.",
+                        [NSString stringWithFormat:@"Document create or update failed with %ld %@.",
                                                    statusCode, json];
                     NSDictionary *userInfo =
                         @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
                     NSError *error =
                         [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
-                                            code:CDTObjectiveCloudantErrorCreateDatabaseFailed
+                                            code:CDTObjectiveCloudantErrorCreateUpdateDocumentFailed
                                         userInfo:userInfo];
 
                     if (self && self.putDocumentCompletionBlock) {
