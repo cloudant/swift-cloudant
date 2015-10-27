@@ -23,10 +23,14 @@
 {
     if ([super buildAndValidate]) {
         if (self.docId) {
-            self.queryItems = @[
-                [NSURLQueryItem queryItemWithName:@"revs" value:(self.revs ? @"true" : @"false")]
-            ];
-
+            NSMutableArray *queryItems = [NSMutableArray array];
+            [queryItems
+                addObject:[NSURLQueryItem queryItemWithName:@"revs"
+                                                      value:(self.revs ? @"true" : @"false")]];
+            if (self.revId) {
+                [queryItems addObject:[NSURLQueryItem queryItemWithName:@"rev" value:self.revId]];
+            }
+            self.queryItems = [queryItems copy];
             return YES;
         }
     }

@@ -18,8 +18,7 @@
 
 @implementation CDTCreateDatabaseOperation
 
-- (BOOL)buildAndValidate { return [super buildAndValidate]; }
-
+- (BOOL)buildAndValidate { return [super buildAndValidate] && self.databaseName; }
 - (void)callCompletionHandlerWithError:(NSError *)error
 {
     if (self && self.createDatabaseCompletionBlock) {

@@ -42,9 +42,9 @@
     self.dbName = [NSString stringWithFormat:@"%@-test-database-%@", REMOTE_DB_PREFIX,
                                              [TestHelpers generateRandomString:5]];
 
-    CouchDB *client = [CouchDB clientForURL:[NSURL URLWithString:self.url]
-                                   username:self.username
-                                   password:self.password];
+    CDTCouchDBClient *client = [CDTCouchDBClient clientForURL:[NSURL URLWithString:self.url]
+                                                     username:self.username
+                                                     password:self.password];
     self.database = client[self.dbName];
 }
 
@@ -81,7 +81,7 @@
     XCTestExpectation *deleteIndex = [self expectationWithDescription:@"delete index"];
     CDTDeleteQueryIndexOperation *op = [[CDTDeleteQueryIndexOperation alloc] init];
     op.desginDocName = @"foo";
-    op.indexType = CDTQIndexTypeJson;
+    op.indexType = CDTQueryIndexTypeJson;
     op.deleteIndexCompletionBlock = ^(NSInteger statusCode, NSError *error) {
       [deleteIndex fulfill];
       XCTAssertEqual(kCDTNoHTTPStatus, statusCode);
@@ -110,7 +110,7 @@
     CDTDeleteQueryIndexOperation *op = [[CDTDeleteQueryIndexOperation alloc] init];
     op.desginDocName = @"foo";
     op.indexName = @"bar";
-    op.indexType = CDTQIndexTypeJson;
+    op.indexType = CDTQueryIndexTypeJson;
     op.deleteIndexCompletionBlock = ^(NSInteger statusCode, NSError *error) {
       [deleteIndex fulfill];
       XCTAssertEqual(4, statusCode / 100);
@@ -139,7 +139,7 @@
     CDTDeleteQueryIndexOperation *op = [[CDTDeleteQueryIndexOperation alloc] init];
     op.desginDocName = @"foo";
     op.indexName = @"bar";
-    op.indexType = CDTQIndexTypeJson;
+    op.indexType = CDTQueryIndexTypeJson;
     op.deleteIndexCompletionBlock = ^(NSInteger statusCode, NSError *error) {
       [deleteIndex fulfill];
       XCTAssertEqual(5, statusCode / 100);
@@ -177,7 +177,7 @@
     CDTDeleteQueryIndexOperation *op = [[CDTDeleteQueryIndexOperation alloc] init];
     op.desginDocName = @"foo";
     op.indexName = @"bar";
-    op.indexType = CDTQIndexTypeJson;
+    op.indexType = CDTQueryIndexTypeJson;
     op.deleteIndexCompletionBlock = ^(NSInteger statusCode, NSError *error) {
       [deleteIndex fulfill];
       XCTAssertEqual(200, statusCode);

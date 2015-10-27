@@ -16,6 +16,7 @@
 #import <XCTest/XCTest.h>
 
 #import <ObjectiveCloudant/ObjectiveCloudant.h>
+#import "TestHelpers.h"
 
 @interface ObjectiveCouchTests : XCTestCase
 
@@ -132,6 +133,89 @@
     XCTAssertNotNil(document[@"_revisions"]);
 
     NSLog(@"document: %@", document);
+}
+
+- (void)testGetDocumentAtSpecifiedRevision
+{
+    CDTCouchDBClient *client = [CDTCouchDBClient clientForURL:[NSURL URLWithString:self.url]
+                                                     username:self.username
+                                                     password:self.password];
+
+    XCTestExpectation *createDB = [self expectationWithDescription:@"create db"];
+
+    __block NSString *revision;
+    CDTCreateDatabaseOperation *dbOp = [[CDTCreateDatabaseOperation alloc] init];
+    dbOp.databaseName =
+        [NSString stringWithFormat:@"objective-cloudant-%@", [TestHelpers generateRandomString:5]];
+    dbOp.createDatabaseCompletionBlock =
+        ^(NSInteger statusCode, NSError *_Nullable operationError) {
+          [createDB fulfill];
+          XCTAssertNil(operationError);
+        };
+    [client addOperation:dbOp];
+
+    [self waitForExpectationsWithTimeout:10.0f
+                                 handler:^(NSError *_Nullable error) {
+                                   if (error) NSLog(@"Failed to create DB");
+                                 }];
+
+    XCTestExpectation *firstRevCreate = [self expectationWithDescription:@"Create inital revision"];
+
+    CDTDatabase *database = client[dbOp.databaseName];
+
+    [database putDocumentWithId:@"doc1"
+                           body:@{
+                               @"Hello" : @"World"
+                           }
+              completionHandler:^(NSInteger statusCode, NSString *_Nullable docId,
+                                  NSString *_Nullable revId, NSError *_Nullable operationError) {
+                [firstRevCreate fulfill];
+                XCTAssertNil(operationError);
+                revision = revId;
+              }];
+
+    [self waitForExpectationsWithTimeout:10.0f
+                                 handler:^(NSError *_Nullable error) {
+                                   if (error) NSLog(@"Failed to create document");
+                                 }];
+
+    XCTestExpectation *secondRevCreate =
+        [self expectationWithDescription:@"Create second revision"];
+
+    [database putDocumentWithId:@"doc1"
+                     revisionId:revision
+                           body:@{
+                               @"Hello" : @"World",
+                               @"Updated" : @(YES)
+                           }
+              completionHandler:^(NSInteger statusCode, NSString *_Nullable docId,
+                                  NSString *_Nullable revId, NSError *_Nullable operationError) {
+                [secondRevCreate fulfill];
+                XCTAssertNil(operationError);
+              }];
+
+    [self waitForExpectationsWithTimeout:10.0f
+                                 handler:^(NSError *_Nullable error) {
+                                   if (error) NSLog(@"Failed to update document");
+                                 }];
+
+    XCTestExpectation *getRevWithRevId = [self expectationWithDescription:@"Get inital revision"];
+
+    [database getDocumentWithId:@"doc1"
+                     revisionId:revision
+              completionHandler:^(NSDictionary<NSString *, NSObject *> *_Nullable document,
+                                  NSError *_Nullable operationError) {
+                [getRevWithRevId fulfill];
+                XCTAssertNil(operationError);
+                XCTAssertNil(document[@"Updated"]);
+                XCTAssertEqualObjects(revision, document[@"_rev"]);
+              }];
+
+    [self waitForExpectationsWithTimeout:10.0f
+                                 handler:^(NSError *_Nullable error) {
+                                   if (error)
+                                       NSLog(@"Failed to get document with specified revision");
+                                 }];
 }
 
 @end
