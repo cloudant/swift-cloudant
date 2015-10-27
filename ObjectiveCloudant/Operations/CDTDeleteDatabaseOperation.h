@@ -20,6 +20,6 @@
 @property (nullable, strong, nonatomic) NSString *databaseName;
 
 @property (nonnull, nonatomic, copy) void (^deleteDatabaseCompletionBlock)
-    (NSError *_Nullable operationError);
+    (NSInteger statusCode, NSError *_Nullable operationError);
 
 @end

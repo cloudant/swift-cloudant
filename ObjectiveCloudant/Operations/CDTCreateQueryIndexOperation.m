@@ -72,7 +72,7 @@
 - (void)callCompletionHandlerWithError:(NSError *)error
 {
     if (self.createIndexCompletionBlock) {
-        self.createIndexCompletionBlock(kCDTNoHTTPStatus, error);
+        self.createIndexCompletionBlock(error);
     }
 }
 
@@ -110,10 +110,9 @@
 
             NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
             if (!error && data && statusCode / 100 == 2) {
-                strongSelf.createIndexCompletionBlock(((NSHTTPURLResponse *)response).statusCode,
-                                                      nil);
+                strongSelf.createIndexCompletionBlock(nil);
             } else if (error) {
-                strongSelf.createIndexCompletionBlock(kCDTNoHTTPStatus, error);
+                strongSelf.createIndexCompletionBlock(error);
             } else {
                 NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                 NSString *msg = [NSString
@@ -122,7 +121,7 @@
                 error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
                                             code:CDTObjectiveCloudantErrorCreateQueryIndexFailed
                                         userInfo:userInfo];
-                strongSelf.createIndexCompletionBlock(statusCode, error);
+                strongSelf.createIndexCompletionBlock(error);
             }
 
             [strongSelf completeOperation];

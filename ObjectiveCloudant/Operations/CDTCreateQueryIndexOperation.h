@@ -45,11 +45,10 @@
 /**
  * Completion block to run when the operation completes
  *
- * status - the status code from the HTTP request, 0 if HTTP request hasn't been made
  * operationError - a pointer to an error object containing information about an error executing
  * this operation.
  **/
 @property (nullable, nonatomic, strong) void (^createIndexCompletionBlock)
-    (NSInteger status, NSError* _Nullable operationError);
+    (NSError* _Nullable operationError);
 
 @end

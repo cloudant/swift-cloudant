@@ -25,7 +25,7 @@
 - (void)callCompletionHandlerWithError:(NSError *)error
 {
     if (self && self.deleteDatabaseCompletionBlock) {
-        self.deleteDatabaseCompletionBlock(error);
+        self.deleteDatabaseCompletionBlock(kCDTNoHTTPStatus, error);
     }
 }
 
@@ -63,14 +63,14 @@
 
             if (error) {
                 if (self && self.deleteDatabaseCompletionBlock) {
-                    self.deleteDatabaseCompletionBlock(error);
+                    self.deleteDatabaseCompletionBlock(kCDTNoHTTPStatus, error);
                 }
             } else {
                 NSInteger statusCode = ((NSHTTPURLResponse *)res).statusCode;
                 if (statusCode == 200) {
                     // Success
                     if (self && self.deleteDatabaseCompletionBlock) {
-                        self.deleteDatabaseCompletionBlock(nil);
+                        self.deleteDatabaseCompletionBlock(statusCode, nil);
                     }
                 } else {
                     NSString *json =
@@ -85,7 +85,7 @@
                                             code:CDTObjectiveCloudantErrorDeleteDatabaseFailed
                                         userInfo:userInfo];
                     if (self && self.deleteDatabaseCompletionBlock) {
-                        self.deleteDatabaseCompletionBlock(error);
+                        self.deleteDatabaseCompletionBlock(statusCode, error);
                     }
                 }
             }

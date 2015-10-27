@@ -63,15 +63,22 @@
     [client addOperation:create];
     [create waitUntilFinished];
 
-    __block NSError *error;
+    XCTestExpectation *deleteDB = [self expectationWithDescription:@"delete database"];
 
     CDTDeleteDatabaseOperation *delete = [[CDTDeleteDatabaseOperation alloc] init];
     delete.databaseName = self.dbName;
-    delete.deleteDatabaseCompletionBlock = ^(NSError *err) { error = err; };
+    delete.deleteDatabaseCompletionBlock = ^(NSInteger statusCode, NSError *err) {
+      [deleteDB fulfill];
+      XCTAssertNil(err);
+      XCTAssertEqual(2, statusCode / 100);
+    };
     [client addOperation:delete];
     [delete waitUntilFinished];
 
-    XCTAssertNil(error);
+    [self waitForExpectationsWithTimeout:10.0f
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Expectations failed to complete");
+                                 }];
 }
 
 @end

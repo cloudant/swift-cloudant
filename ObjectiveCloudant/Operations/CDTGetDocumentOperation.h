@@ -36,6 +36,6 @@
 @property (nullable, nonatomic, strong) NSString *docId;
 
 @property (nullable, nonatomic, copy) void (^getDocumentCompletionBlock)
-    (NSDictionary *_Nullable document, NSError *_Nullable operationError);
+    (NSDictionary<NSString *, NSObject *> *_Nullable document, NSError *_Nullable operationError);
 
 @end
