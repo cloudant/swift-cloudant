@@ -94,7 +94,7 @@
                     NSDictionary *userInfo =
                         @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
                     error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
-                                                code:CDTObjectiveCloudantErrorCreateDatabaseFailed
+                                                code:CDTObjectiveCloudantErrorDeleteDocumentFailed
                                             userInfo:userInfo];
                 }
 

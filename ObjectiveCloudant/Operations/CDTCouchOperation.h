@@ -42,6 +42,18 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
      Creating a Query index failed.
      */
     CDTObjectiveCloudantErrorCreateQueryIndexFailed,
+    /**
+     Getting a document failed.
+     */
+    CDTObjectiveCloudantErrorGetDocumentFailed,
+    /**
+     Creating or updating a document failed.
+     */
+    CDTObjectiveCloudantErrorCreateUpdateDocumentFailed,
+    /**
+     Deleting a document failed.
+     */
+    CDTObjectiveCloudantErrorDeleteDocumentFailed
 
      /*
      Finding documents failed.
