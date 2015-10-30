@@ -9,7 +9,7 @@
 #import <XCTest/XCTest.h>
 #import <ObjectiveCloudant/ObjectiveCloudant.h>
 
-@interface CouchDB ()
+@interface CDTCouchDBClient ()
 
 @property NSString* username;
 @property NSString* password;
@@ -34,7 +34,8 @@
     components.user = username;
     components.password = password;
 
-    CouchDB* client = [CouchDB clientForURL:components.URL username:nil password:nil];
+    CDTCouchDBClient* client =
+        [CDTCouchDBClient clientForURL:components.URL username:nil password:nil];
 
     XCTAssertEqualObjects(username, client.username);
     XCTAssertEqualObjects(password, client.password);

@@ -167,8 +167,8 @@
                            body:@{
                                @"Hello" : @"World"
                            }
-              completionHandler:^(NSInteger statusCode, NSString *_Nullable docId,
-                                  NSString *_Nullable revId, NSError *_Nullable operationError) {
+              completionHandler:^(NSString *_Nullable docId, NSString *_Nullable revId,
+                                  NSInteger statusCode, NSError *_Nullable operationError) {
                 [firstRevCreate fulfill];
                 XCTAssertNil(operationError);
                 revision = revId;
@@ -188,8 +188,8 @@
                                @"Hello" : @"World",
                                @"Updated" : @(YES)
                            }
-              completionHandler:^(NSInteger statusCode, NSString *_Nullable docId,
-                                  NSString *_Nullable revId, NSError *_Nullable operationError) {
+              completionHandler:^(NSString *_Nullable docId, NSString *_Nullable revId,
+                                  NSInteger statusCode, NSError *_Nullable operationError) {
                 [secondRevCreate fulfill];
                 XCTAssertNil(operationError);
               }];

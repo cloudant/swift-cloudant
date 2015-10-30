@@ -26,7 +26,17 @@ FOUNDATION_EXPORT const unsigned char ObjectiveCloudantVersionString[];
  * The types of index that can be used with
  * Cloudant Query.
  */
-typedef NS_ENUM(NSUInteger, CDTQueryIndexType) { CDTQueryIndexTypeJson };
+typedef NS_ENUM(NSUInteger, CDTQueryIndexType) {
+    /**
+        JSON index type.
+     */
+    CDTQueryIndexTypeJson,
+
+    /**
+        Text index type.
+     */
+    CDTQueryIndexTypeText
+};
 
 // In this header, you should import all the public headers of your framework
 // using statements like #import <ObjectiveCloudant/PublicHeader.h>
