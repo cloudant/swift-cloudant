@@ -88,7 +88,7 @@
             } else {
                 NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                 NSString *msg = [NSString
-                    stringWithFormat:@"Index deletion failed with %ld %@.", statusCode, json];
+                    stringWithFormat:@"Index deletion failed with %ld %@.", (long)statusCode, json];
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
                 error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
                                             code:CDTObjectiveCloudantErrorDeleteQueryIndexFailed

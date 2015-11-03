@@ -148,7 +148,7 @@ NSInteger const kCDTDefaultOperationIntegerValue = -1;
             } else {
                 NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                 NSString *msg = [NSString
-                    stringWithFormat:@"Find documents failed with %ld %@.", statusCode, json];
+                    stringWithFormat:@"Find documents failed with %ld %@.", (long)statusCode, json];
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
                 error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
                                             code:CDTObjectiveCloudantErrorCreateDatabaseFailed
