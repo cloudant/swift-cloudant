@@ -53,11 +53,11 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
     /**
      Deleting a document failed.
      */
-    CDTObjectiveCloudantErrorDeleteDocumentFailed
+    CDTObjectiveCloudantErrorDeleteDocumentFailed,
 
-     /*
-     Finding documents failed.
-     */
+    /*
+    Finding documents failed.
+    */
     CDTObjectiveCloudantErrorFindDocumentsFailed
 };
 

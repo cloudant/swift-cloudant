@@ -76,7 +76,7 @@
                         [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     NSString *msg =
                         [NSString stringWithFormat:@"Database creation failed with %ld %@.",
-                                                   statusCode, json];
+                                                   (long)statusCode, json];
                     NSDictionary *userInfo =
                         @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
                     NSError *error =

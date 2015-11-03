@@ -91,13 +91,17 @@
                                                                      encoding:NSUTF8StringEncoding];
                               NSString *msg = [NSString
                                   stringWithFormat:@"Get document failed with %ld %@.",
-                                                   ((NSHTTPURLResponse *)res).statusCode, json];
+                                                   (long)((NSHTTPURLResponse *)res).statusCode,
+                                                   json];
                               NSDictionary *userInfo =
                                   @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
                               NSError *error = [NSError
                                   errorWithDomain:CDTObjectiveCloudantErrorDomain
                                              code:CDTObjectiveCloudantErrorGetDocumentFailed
                                          userInfo:userInfo];
+                              if (self && self.getDocumentCompletionBlock) {
+                                  self.getDocumentCompletionBlock(result, error);
+                              }
                           }
 
                           if (self && self.getDocumentCompletionBlock) {

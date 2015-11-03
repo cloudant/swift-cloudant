@@ -201,7 +201,7 @@
             } else {
                 NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                 NSString *msg = [NSString
-                    stringWithFormat:@"Index creation failed with %ld %@.", statusCode, json];
+                    stringWithFormat:@"Index creation failed with %ld %@.", (long)statusCode, json];
                 NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
                 error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
                                             code:CDTObjectiveCloudantErrorCreateQueryIndexFailed
