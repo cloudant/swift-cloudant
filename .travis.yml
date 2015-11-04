@@ -1,7 +1,11 @@
 language: objective-c
+osx_image: xcode7.1
 
-services:
-  - couchdb
+before_script:
+  - brew install couchdb
+  - couchdb &
 
 script:
-  - xcodebuild -project ObjectiveCloudant.xcodeproj/ -scheme ObjectiveCloudantTests -destination 'platform=iOS Simulator,OS=latest,name=iPhone 4S' build test
+  - ./setup.rb
+  - xcodebuild -workspace ObjectiveCloudant.xcworkspace/ -scheme ObjectiveCloudantTests -destination 'platform=iOS Simulator,OS=latest,name=iPhone 4S' build test |  xcpretty; exit ${PIPESTATUS[0]}
+  - pod lib lint
