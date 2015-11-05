@@ -16,8 +16,14 @@
 #import <Foundation/Foundation.h>
 #import "CDTCouchOperation.h"
 
+/*
+ Internal category to expose properties on CDTCouchOperation.
+ */
 @interface CDTCouchOperation (internal)
 
+/**
+ The HTTP session to use when making requests.
+ */
 @property (nullable, nonatomic, strong) CDTURLSessionTask* task;
 
 @end

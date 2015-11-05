@@ -19,6 +19,13 @@
 @class CDTDatabase;
 @class CDTCouchOperation;
 
+/**
+ A client for a given CouchDB instance.
+
+ Use CDTCouchDBClient to obtain CDTDatabase instances.
+
+ For more details, see README.md
+ */
 @interface CDTCouchDBClient : NSObject
 
 /**
@@ -37,6 +44,8 @@
 
 /**
  Retrieve a database object for this client.
+
+ @param key The database name.
  */
 - (nullable CDTDatabase *)objectForKeyedSubscript:(nonnull NSString *)key;
 
@@ -45,6 +54,8 @@
 
  Internally this sets the CouchDB instance root URL and access credentials
  based on the settings this client was initialised with.
+
+ @param operation The operation to perform.
  */
 - (void)addOperation:(nonnull CDTCouchOperation *)operation;
 

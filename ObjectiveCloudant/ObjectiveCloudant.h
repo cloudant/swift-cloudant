@@ -27,14 +27,14 @@ FOUNDATION_EXPORT const unsigned char ObjectiveCloudantVersionString[];
  * Cloudant Query.
  */
 typedef NS_ENUM(NSUInteger, CDTQueryIndexType) {
-    /**
-        JSON index type.
-     */
+/**
+ JSON index type.
+ */
     CDTQueryIndexTypeJson,
 
-    /**
-        Text index type.
-     */
+/**
+ Text index type.
+ */
     CDTQueryIndexTypeText
 };
 

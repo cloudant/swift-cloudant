@@ -20,10 +20,27 @@
 @class CDTGetDocumentOperation;
 @class CDTCouchDatabaseOperation;
 
+/**
+ A object which represents a database on the remote server.
+
+ Note: the database this object represents is assumed to be created,
+ use CDTCreateDatabaseOperation to create a database if it doesn't already
+ exist.
+ */
 @interface CDTDatabase : NSObject
 
 /**
  Initialises a new database object with a CouchDB client and database name.
+
+ Note that you are strongly encouraged to obtain a CDTDatabase object from
+ CDTCouchDBClient as follows:
+
+     CDTCouchDBClient *client...
+     CDTDatabase *database = client["databaseName"];
+
+
+ @param client The client for the CouchDB instance where this database exists.
+ @param name The database name.
  */
 - (nullable instancetype)initWithClient:(nonnull CDTCouchDBClient *)client
                            databaseName:(nonnull NSString *)name;
@@ -34,24 +51,46 @@
  Internally this sets the database URL and access credentials based on the
  database this object represents and the client it uses to access the remote
  database.
+
+ @param operation The operation to perform.
  */
 - (void)addOperation:(nonnull CDTCouchDatabaseOperation *)operation;
 
 /**
- Synchronously access a document in this database.
+ Synchronously retrieve the latest revision of a document.
+
+ To retrieve a specific revision of a document, use 
+ getDocumentWithId:revisionId:completionHandler:
+
+ @param key The document id.
  */
 - (nullable NSDictionary *)objectForKeyedSubscript:(nonnull NSString *)key;
 
 /**
- Convenience method for retrieving the latest version of a document.
+ Convenience method for retrieving the latest revision of a document.
+
+ To retrieve a specific revision of a document, use 
+ getDocumentWithId:revisionId:completionHandler:
 
  Use a CDTGetDocumentOperation for greater control.
+
+ @param documentId The id of the document to retrieve from the database
+ @param completionHandler A block of code to call when the operation has completed
  */
 - (void)getDocumentWithId:(nonnull NSString *)documentId
         completionHandler:
             (void (^_Nonnull)(NSDictionary<NSString *, NSObject *> *_Nullable document,
                               NSError *_Nullable error))completionHandler;
 
+/**
+ Convenience method for retrieving a document at a specified revision.
+
+ Use a CDTGetDocumentOperation for greater control.
+
+ @param documentId The id of the document to retrieve from the database
+ @param revId The revision of the document to retrieve
+ @param completionHandler A block of code to call when the operation has completed
+ */
 - (void)getDocumentWithId:(nonnull NSString *)documentId
                revisionId:(nonnull NSString *)revId
         completionHandler:
@@ -59,13 +98,13 @@
                               NSError *_Nullable operationError))completionHandler;
 
 /**
- Convenience method of deleting documents from the database
+ Convenience method for deleting a document from the database
 
- Use a CDTDeleteDoucmentOperation for greater control.
+ Use a CDTDeleteDocumentOperation for greater control.
 
- @param documentId the id of the document to delete
- @param revId the revision of the document to delete
- @param completionHandler a block of code to call when the operation has been completed
+ @param documentId The id of the document to delete
+ @param revId The revision of the document to delete
+ @param completionHandler A block of code to call when the operation has been completed
  */
 - (void)deleteDocumentWithId:(nonnull NSString *)documentId
                   revisionId:(nonnull NSString *)revId
@@ -77,9 +116,9 @@
 
  Use a CDTPutDocumentOperation for greater control.
 
- @param documentId the id of the document to create.
- @param body the body of the document to create
- @param completionHandler a block of code to call when the operation has been completed
+ @param documentId The id of the document to create.
+ @param body The body of the document to create
+ @param completionHandler A block of code to call when the operation has been completed
  */
 - (void)putDocumentWithId:(nonnull NSString *)documentId
                      body:(nonnull NSDictionary<NSString *, NSObject *> *)body
@@ -91,10 +130,10 @@
 
  Use a CDTPutDocumentOperation for greater control.
 
- @param documentId the id of the document to update.
- @param revId the revision id of the document that is being update
- @param body the body of the document to update
- @param completionHandler a block of code to call when the operation has been completed
+ @param documentId The id of the document to update.
+ @param revId The revision id of the document that is being update
+ @param body The body of the document to update
+ @param completionHandler A block of code to call when the operation has been completed
  */
 - (void)putDocumentWithId:(nonnull NSString *)documentId
                revisionId:(nonnull NSString *)revId

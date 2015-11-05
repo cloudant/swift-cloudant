@@ -17,48 +17,55 @@
 #import <Foundation/Foundation.h>
 #import "CDTInterceptableSession.h"
 
+/**
+ The CDTObjectiveCloudantErrorDomain String
+ */
 extern NSString *_Nonnull const CDTObjectiveCloudantErrorDomain;
+
+/**
+ Constant that defines a status code to return when
+ a HTTP status code is unavailable
+ */
 extern NSInteger const kCDTNoHTTPStatus;
 /**
  * Replication errors.
  */
 typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
-    /**
-     Creating a database failed.
-     */
+/**
+ Creating a database failed.
+ */
     CDTObjectiveCloudantErrorCreateDatabaseFailed,
-    /**
-     Deleting a database failed.
-     */
+/**
+ Deleting a database failed.
+ */
     CDTObjectiveCloudantErrorDeleteDatabaseFailed,
-    /**
-     Validation of operation settings failed.
-     */
+/**
+ Validation of operation settings failed.
+*/
     CDTObjectiveCloudantErrorValidationFailed,
-    /**
-     Deleting a Query index failed.
-     */
+/**
+ Deleting a Query index failed.
+ */
     CDTObjectiveCloudantErrorDeleteQueryIndexFailed,
-    /**
-     Creating a Query index failed.
-     */
+/**
+ Creating a Query index failed.
+ */
     CDTObjectiveCloudantErrorCreateQueryIndexFailed,
-    /**
-     Getting a document failed.
-     */
+/**
+ Getting a document failed.
+ */
     CDTObjectiveCloudantErrorGetDocumentFailed,
-    /**
-     Creating or updating a document failed.
-     */
+/**
+ Creating or updating a document failed.
+ */
     CDTObjectiveCloudantErrorCreateUpdateDocumentFailed,
-    /**
-     Deleting a document failed.
-     */
+/**
+ Deleting a document failed.
+ */
     CDTObjectiveCloudantErrorDeleteDocumentFailed,
-
-    /*
-    Finding documents failed.
-    */
+/**
+ Finding documents failed.
+ */
     CDTObjectiveCloudantErrorFindDocumentsFailed
 };
 
@@ -112,7 +119,7 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
 
 /**
  CDTCouchOperation will call this method if it encounters an error. Usually this will
- happen if `-buildAndValidate:` returns `NO`. Sub-classes must override this to call their
+ happen if `-buildAndValidate` returns `NO`. Sub-classes must override this to call their
  completion handler with the provided error.
 
  This will never be called after `-dispatchAsyncHttpRequest`.

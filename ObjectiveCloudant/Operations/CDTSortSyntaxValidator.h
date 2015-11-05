@@ -14,8 +14,15 @@
 //  and limitations under the License.
 #import <Foundation/Foundation.h>
 
+/**
+ A class which validates sort syntax
+ */
 @interface CDTSortSyntaxValidator : NSObject
 
+/**
+ Returns true if an array conforms to sort syntax
+ @param sort the array to validate
+ */
 + (BOOL)validateSortSyntaxInArray:(NSArray*)sort;
 
 @end

@@ -17,10 +17,22 @@
 #import <Foundation/Foundation.h>
 #import "CDTHTTPInterceptor.h"
 
+/**
+ An HTTP interceptor which handles creating and renewing session
+ cookies from the `_session` HTTP endpoint.
+ */
 @interface CDTSessionCookieInterceptor : NSObject <CDTHTTPInterceptor>
 
+/**
+ Unavailable: use -initWithUsername:password: instead
+ */
 - (nullable instancetype)init NS_UNAVAILABLE;
 
+/**
+ Initialises an instance of CDTSessionCookieInterceptor
+ @param username the username to use for authentication
+ @param password the password to use for authentication
+ */
 - (nullable instancetype)initWithUsername:(nonnull NSString*)username
                                  password:(nonnull NSString*)password NS_DESIGNATED_INITIALIZER;
 

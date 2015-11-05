@@ -17,7 +17,7 @@
 #import "CDTCouchOperation.h"
 
 /**
- Root class for operations that make requests to databases.
+ Base class for operations that make requests to databases.
  */
 @interface CDTCouchDatabaseOperation : CDTCouchOperation
 

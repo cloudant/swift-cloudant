@@ -15,6 +15,9 @@
 
 #import <ObjectiveCloudant/ObjectiveCloudant.h>
 
+/**
+ An operation to create a Query index in a database
+ */
 @interface CDTCreateQueryIndexOperation : CDTCouchDatabaseOperation
 
 /**
@@ -40,7 +43,7 @@
  *  Required: fields are required for *JSON Indexes*
  *  Optional: fields are optional for *Text Indexes*
  *
- * @see https://docs.cloudant.com/cloudant_query.html#creating-an-index
+ * @see [Creating an Index](https://docs.cloudant.com/cloudant_query.html#creating-an-index)
  **/
 @property (nullable, nonatomic, strong) NSArray<NSObject*>* fields;
 
@@ -65,7 +68,7 @@
 
 /**
  * A selector to limit the documents in the index.
- * Optional: If ommited all documents will be included in the index
+ * Optional: If omitted all documents will be included in the index
  * Note: text indexes only.
  **/
 @property (nullable, nonatomic, strong) NSDictionary* selector;
@@ -77,17 +80,18 @@
 
 /**
  * The name of the design doc this index should be included with
+ *
  * Optional: CouchDB will automatically generate a deisgn doc
  * for this index.
  **/
 @property (nullable, nonatomic, strong) NSString* designDocName;
 
 /**
- * Completion block to run when the operation completes
- *
- * operationError - a pointer to an error object containing information about an error executing
- * this operation.
- **/
+ Completion block to run when the operation completes
+
+ - operationError - a pointer to an error object containing
+ information about an error executing the operation
+ */
 @property (nullable, nonatomic, strong) void (^createIndexCompletionBlock)
     (NSError* _Nullable operationError);
 

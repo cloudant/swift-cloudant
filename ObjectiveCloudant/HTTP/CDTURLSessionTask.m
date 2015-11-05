@@ -135,6 +135,8 @@
 
  We do this once during `-init...`. This checks for responding to `interceptRequestInContext:`
  as we're creating a request interceptor array, not a response one.
+
+ @param proposedRequestInterceptors Array containing interceptors to be filtered
  */
 - (nonnull NSArray *)filterRequestInterceptors:(nonnull NSArray *)proposedRequestInterceptors
 {
@@ -154,6 +156,8 @@
 
  We do this once during `-init...`. This checks for responding to `interceptResponseInContext:`
  as we're creating a response interceptor array, not a request one.
+
+ @param proposedResponseInterceptors Array containing interceptors to be filtered
  */
 - (nonnull NSArray *)filterResponseInterceptors:(nonnull NSArray *)proposedResponseInterceptors
 {

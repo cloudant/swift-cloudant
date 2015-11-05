@@ -16,6 +16,9 @@
 
 #import "CDTCouchDatabaseOperation.h"
 
+/**
+ Operation to get a document from a database
+ */
 @interface CDTGetDocumentOperation : CDTCouchDatabaseOperation
 
 /** Set to YES to return revision information (revs=true) */
@@ -23,7 +26,8 @@
 
 /**
  *  The revision at which you want the document.
- *  Optional: If ommited CouchDB will return the
+ *
+ *  Optional: If omitted CouchDB will return the
  *  document it determines is the current winning revision
  */
 @property (nullable, nonatomic, strong) NSString *revId;
@@ -35,6 +39,14 @@
  */
 @property (nullable, nonatomic, strong) NSString *docId;
 
+/**
+ Completion block to run when the operation completes.
+
+ - document - The document read from the server
+
+ - operationError - a pointer to an error object containing
+ information about an error executing the operation
+ */
 @property (nullable, nonatomic, copy) void (^getDocumentCompletionBlock)
     (NSDictionary<NSString *, NSObject *> *_Nullable document, NSError *_Nullable operationError);
 

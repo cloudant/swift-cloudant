@@ -58,7 +58,9 @@ static const NSInteger CDTSessionCookieRequestTimeout = 600;
 /**
  The interceptor adds a session cookie to every request, unless we've encountered an error
  retrieving a cookie that doesn't look recoverable. If we don't yet have a session cookie,
- this method handles making a request to _session to retrieve one.
+ this method handles making a request to the `_session` endpoint to retrieve one.
+
+ @param context The context representing the current request state
  */
 - (nonnull CDTHTTPInterceptorContext *)interceptRequestInContext:
     (nonnull CDTHTTPInterceptorContext *)context
@@ -78,6 +80,8 @@ static const NSInteger CDTSessionCookieRequestTimeout = 600;
  We assume a 401 means that the cookie we applied at request time was rejected. Therefore
  clear it and tell the HTTP mechanism to retry the request. For all other responses, there's
  nothing for this interceptor to do.
+
+ @param context The context representing the current request and response state
  */
 - (nonnull CDTHTTPInterceptorContext *)interceptResponseInContext:
     (nonnull CDTHTTPInterceptorContext *)context
@@ -96,6 +100,8 @@ static const NSInteger CDTSessionCookieRequestTimeout = 600;
 
  If the request fails, this method will also set the `shouldMakeSessionRequest` property
  to `NO` if the error didn't look transient.
+
+ @param url The base URL used to obtain a new session
  */
 - (nullable NSString *)startNewSessionAtURL:(NSURL *)url
 {
@@ -157,6 +163,8 @@ static const NSInteger CDTSessionCookieRequestTimeout = 600;
 
 /**
  Check the content of a response to make sure the reply indicates we're really logged in.
+
+ @param data The response data returned after requesting a new session
  */
 - (BOOL)hasSessionStarted:(nonnull NSData *)data
 {

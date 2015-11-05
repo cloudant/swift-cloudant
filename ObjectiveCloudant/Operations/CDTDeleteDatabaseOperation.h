@@ -15,10 +15,26 @@
 
 #import <ObjectiveCloudant/ObjectiveCloudant.h>
 
+/**
+ An operation to delete a database.
+ */
 @interface CDTDeleteDatabaseOperation : CDTCouchOperation
 
+/**
+ The name of the database to delete
+
+ Required: This needs to be set before the operation can successfully run.
+ */
 @property (nullable, strong, nonatomic) NSString *databaseName;
 
+/**
+ Completion block to run when the operation completes.
+
+ - statusCode - The status code of HTTP response, if the request
+ hasn't been successfully made this will equal kCDTNoHTTPStatus
+ - operationError - a pointer to an error object containing
+ information about an error executing the operation
+ */
 @property (nonnull, nonatomic, copy) void (^deleteDatabaseCompletionBlock)
     (NSInteger statusCode, NSError *_Nullable operationError);
 
