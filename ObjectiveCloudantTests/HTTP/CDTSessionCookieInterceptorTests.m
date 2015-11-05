@@ -17,6 +17,7 @@
 #import <XCTest/XCTest.h>
 #import <ObjectiveCloudant/ObjectiveCloudant.h>
 #import <OHHTTPStubs/OHHTTPStubs.h>
+#import <OHHTTPStubs/OHHTTPStubsResponse+JSON.h>
 // expose properties so we can look at them
 @interface CDTSessionCookieInterceptor ()
 

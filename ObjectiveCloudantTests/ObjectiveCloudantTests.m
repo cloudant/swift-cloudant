@@ -77,13 +77,21 @@
 
     CDTDatabase *database = client[@"objectivecouch-test"];
 
-    NSDictionary *document = database[@"aardvark"];
+    XCTestExpectation *getDocument = [self expectationWithDescription:@"get aardvark from db"];
+    [database getDocumentWithId:@"aardvark"
+              completionHandler:^(NSDictionary<NSString *, NSObject *> *_Nullable document,
+                                  NSError *_Nullable error) {
+                [getDocument fulfill];
+                XCTAssertNil(error);
+                XCTAssertEqual(10, document.count);
+                XCTAssertEqualObjects(@"aardvark", document[@"_id"]);
+                XCTAssertEqualObjects(@1, document[@"min_length"]);
+              }];
 
-    XCTAssertEqual(10, document.count);
-    XCTAssertEqualObjects(@"aardvark", document[@"_id"]);
-    XCTAssertEqualObjects(@1, document[@"min_length"]);
-
-    NSLog(@"document: %@", document);
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed to get document aardvark");
+                                 }];
 }
 
 - (void)testGetDocumentWithEmptyOptions
@@ -94,20 +102,20 @@
 
     CDTDatabase *database = client[@"objectivecouch-test"];
 
-    __block NSDictionary *document;
-    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    XCTestExpectation *getDocument =
+        [self expectationWithDescription:@"get aardvark with empty options"];
     [database getDocumentWithId:@"aardvark"
-              completionHandler:^(NSDictionary *doc, NSError *err) {
-                  document = doc;
-                  dispatch_semaphore_signal(sema);
+              completionHandler:^(NSDictionary *document, NSError *err) {
+                [getDocument fulfill];
+                XCTAssertEqual(10, document.count);
+                XCTAssertEqualObjects(@"aardvark", document[@"_id"]);
+                XCTAssertEqualObjects(@1, document[@"min_length"]);
               }];
-    dispatch_semaphore_wait(sema, dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC));
 
-    XCTAssertEqual(10, document.count);
-    XCTAssertEqualObjects(@"aardvark", document[@"_id"]);
-    XCTAssertEqualObjects(@1, document[@"min_length"]);
-
-    NSLog(@"document: %@", document);
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed to get document from db");
+                                 }];
 }
 
 - (void)testGetDocumentWithIncludeRevs
@@ -118,21 +126,24 @@
 
     CDTDatabase *database = client[@"objectivecouch-test"];
 
-    __block NSDictionary *document;
+    XCTestExpectation *getDocument = [self expectationWithDescription:@"getDocumentWithRevs"];
 
     CDTGetDocumentOperation *op = [[CDTGetDocumentOperation alloc] init];
     op.docId = @"aardvark";
     op.revs = YES;
-    op.getDocumentCompletionBlock = ^(NSDictionary *doc, NSError *err) { document = doc; };
+    op.getDocumentCompletionBlock = ^(NSDictionary *document, NSError *err) {
+      [getDocument fulfill];
+      XCTAssertEqual(11, document.count);
+      XCTAssertEqualObjects(@"aardvark", document[@"_id"]);
+      XCTAssertEqualObjects(@1, document[@"min_length"]);
+      XCTAssertNotNil(document[@"_revisions"]);
+    };
     [database addOperation:op];
-    [op waitUntilFinished];
 
-    XCTAssertEqual(11, document.count);
-    XCTAssertEqualObjects(@"aardvark", document[@"_id"]);
-    XCTAssertEqualObjects(@1, document[@"min_length"]);
-    XCTAssertNotNil(document[@"_revisions"]);
-
-    NSLog(@"document: %@", document);
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed to get document from db");
+                                 }];
 }
 
 - (void)testGetDocumentAtSpecifiedRevision

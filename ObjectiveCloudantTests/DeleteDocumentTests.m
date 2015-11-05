@@ -122,6 +122,8 @@
 {
     NSString *docId = @"deleteDocumentTest";
 
+    XCTestExpectation *putDocument = [self expectationWithDescription:@"Put document to DB"];
+
     CDTPutDocumentOperation *put = [[CDTPutDocumentOperation alloc] init];
     put.docId = docId;
     put.body = @{ @"Hello" : @"World" };
@@ -130,11 +132,16 @@
 
     put.putDocumentCompletionBlock =
         ^(NSString *docId, NSString *revid, NSInteger statusCode, NSError *error) {
+          [putDocument fulfill];
           revId = revid;
         };
 
     [self.db addOperation:put];
-    [put waitUntilFinished];
+
+    [self waitForExpectationsWithTimeout:10
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed to put document to db");
+                                 }];
 
     XCTestExpectation *deleteExpectation =
         [self expectationWithDescription:@"Delete Document from DB"];
@@ -155,7 +162,7 @@
                          completionHandler:^(NSDictionary *_Nullable document,
                                              NSError *_Nullable error) {
                            XCTAssertNil(document);
-                           XCTAssertNil(error);
+                           XCTAssertNotNil(error);
                            [getDeletedDocument fulfill];
                          }];
 

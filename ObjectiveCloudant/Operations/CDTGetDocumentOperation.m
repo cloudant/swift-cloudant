@@ -73,7 +73,9 @@
                         completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
                                             NSError *_Nullable error) {
                           CDTGetDocumentOperation *self = weakSelf;
-
+                          if (!self || !self.getDocumentCompletionBlock) {
+                              return;
+                          }
                           if ([self isCancelled]) {
                               [self completeOperation];
                               return;
@@ -81,11 +83,13 @@
 
                           NSDictionary *result = nil;
 
-                          if (!error && data && ((NSHTTPURLResponse *)res).statusCode == 200) {
+                          if (data && ((NSHTTPURLResponse *)res).statusCode == 200) {
                               // We know this will be a dict on 200 response
                               result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data
                                                                                        options:0
                                                                                          error:nil];
+                              self.getDocumentCompletionBlock(result, error);
+
                           } else {
                               NSString *json = [[NSString alloc] initWithData:data
                                                                      encoding:NSUTF8StringEncoding];
@@ -99,13 +103,7 @@
                                   errorWithDomain:CDTObjectiveCloudantErrorDomain
                                              code:CDTObjectiveCloudantErrorGetDocumentFailed
                                          userInfo:userInfo];
-                              if (self && self.getDocumentCompletionBlock) {
-                                  self.getDocumentCompletionBlock(result, error);
-                              }
-                          }
-
-                          if (self && self.getDocumentCompletionBlock) {
-                              self.getDocumentCompletionBlock(result, error);
+                              self.getDocumentCompletionBlock(nil, error);
                           }
 
                           [self completeOperation];

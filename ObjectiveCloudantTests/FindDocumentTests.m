@@ -16,6 +16,7 @@
 #import <XCTest/XCTest.h>
 #import <OHHTTPStubs/OHHTTPStubs.h>
 #import <ObjectiveCloudant/ObjectiveCloudant.h>
+#import <OHHTTPStubs/OHHTTPStubsResponse+JSON.h>
 #import "TestHelpers.h"
 
 @interface FindDocumentTests : XCTestCase

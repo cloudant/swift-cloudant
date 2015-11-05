@@ -15,6 +15,7 @@
 
 #import <XCTest/XCTest.h>
 #import <OHHTTPStubs/OHHTTPStubs.h>
+#import <OHHTTPStubs/OHHTTPStubsResponse+JSON.h>
 #import <ObjectiveCloudant/ObjectiveCloudant.h>
 #import "TestHelpers.h"
 
