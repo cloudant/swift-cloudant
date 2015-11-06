@@ -16,8 +16,15 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ A façade class for NSURLSessionClass, this enables HTTP tasks to be retired without the
+ caller needing to know that it is happening.
+ */
 @interface CDTURLSessionTask : NSObject
 
+/**
+ Completion handler to call when the task has been completed.
+ */
 @property (nullable, nonatomic, copy) void (^completionHandler)
     (NSData *__nullable data, NSURLResponse *__nullable response, NSError *__nullable error);
 

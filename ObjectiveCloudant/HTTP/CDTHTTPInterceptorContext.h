@@ -17,24 +17,43 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ The filter context represents the input or output state of a request
+ or response filter
+ */
 @interface CDTHTTPInterceptorContext : NSObject
 
+/**
+ The HTTP request that is going to be executed.
+ */
 @property (nonnull, readwrite, nonatomic, strong) NSMutableURLRequest *request;
+
+/**
+ Should the request be retried.
+ 
+ @discussion in a response filter, set this property to `YES` to tell
+ the HTTP layer to retry the request, including re-running any
+ interceptors.
+ */
 @property (nonatomic) BOOL shouldRetry;
+
+/**
+ The HTTP Response received from the server
+ */
 @property (nullable, readwrite, nonatomic, strong) NSHTTPURLResponse *response;
 
 /**
- *  Unavaiable, use -initWithRequest
+ * Unavaiable, use -initWithRequest
  *
- *  Calling this method from your code will result in
- *  an exception being thrown.
+ * Calling this method from your code will result in
+ * an exception being thrown.
  **/
 - (nullable instancetype)init UNAVAILABLE_ATTRIBUTE;
 
 /**
- *  Initalizes a CDTURLSessionInterceptorContext
+ * Initalizes a CDTURLSessionInterceptorContext
  *
- *  @param request the request this context should represent
+ * @param request the request this context should represent
  **/
 - (nullable instancetype)initWithRequest:(nonnull NSMutableURLRequest *)request
     NS_DESIGNATED_INITIALIZER;

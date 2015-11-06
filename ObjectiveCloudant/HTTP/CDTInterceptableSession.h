@@ -18,21 +18,21 @@
 @class CDTHTTPInterceptorContext;
 
 /**
- Façade class to NSURLSession, enabling reuqests and responses to be modified.
+ Façade class to NSURLSession, enabling requests and responses to be modified.
  */
 
 @interface CDTInterceptableSession : NSObject
 
 /**
- * Initalises a CDTInterceptableSession without a delegate and an empty array of interceptors.
+ * Initalises A CDTInterceptableSession without a delegate and an empty array of interceptors.
  **/
 - (instancetype)init;
 
 /**
  * Initalise a CDTInterceptableSession.
  *
- * @param delegate an object that implements NSURLSessionDelegate protocol
- * @param reuqestInterceptors array of interceptors that should be run before each request is made.
+ * @param delegate An object that implements NSURLSessionDelegate protocol
+ * @param requestInterceptors Array of interceptors that should be run before each request is made.
  **/
 - (instancetype)initWithDelegate:(NSObject<NSURLSessionDelegate> *)delegate
              requestInterceptors:(NSArray *)requestInterceptors NS_DESIGNATED_INITIALIZER;

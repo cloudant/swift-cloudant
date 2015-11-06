@@ -43,7 +43,7 @@
     if (!self.indexName) {
         return NO;
     }
-    if (!self.desginDocName) {
+    if (!self.designDocName) {
         return NO;
     }
 
@@ -56,7 +56,7 @@
     NSString *indexType = @"json";
 
     NSString *path = [NSString stringWithFormat:@"/%@/_index/%@/%@/%@", self.databaseName,
-                                                self.desginDocName, indexType, self.indexName];
+                                                self.designDocName, indexType, self.indexName];
 
     NSURLComponents *components =
         [NSURLComponents componentsWithURL:self.rootURL resolvingAgainstBaseURL:NO];

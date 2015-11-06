@@ -14,6 +14,9 @@
 
 #import <ObjectiveCloudant/ObjectiveCloudant.h>
 
+/**
+ An operation to delete documents from the database.
+ */
 @interface CDTDeleteDocumentOperation : CDTCouchDatabaseOperation
 
 /**
@@ -31,11 +34,13 @@
 @property (nullable, nonatomic, strong) NSString *revId;
 
 /**
- A block to call when the operation is completed.
- statusCode will be the HTTP status code returned from the server.
- In the event that a HTTP request errored, (eg a request was not made due
- to connection refused) status code will be equal to kCDTNoHTTPStatus.
- */
+ * Completion block to run when the operation completes.
+ *
+ * status - the status code from the HTTP request, if a request hasn't been made
+ * it will be set to the value of kCDTNoHTTPStatus
+ * operationError - a pointer to an error object containing information about an error executing
+ * this operation.
+ **/
 @property (nullable, nonatomic, copy) void (^deleteDocumentCompletionBlock)
     (NSInteger statusCode, NSError *_Nullable operationError);
 

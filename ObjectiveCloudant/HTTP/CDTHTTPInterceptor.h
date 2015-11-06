@@ -15,25 +15,28 @@
 
 #import "CDTHTTPInterceptorContext.h"
 
+/**
+ An interface for intercepting and modifying HTTP Requests and Responses.
+ */
 @protocol CDTHTTPInterceptor <NSObject>
 
 @optional
 /**
- *  Intercepts a request before it is made
+ * Intercepts a request before it is made
  *
- *  @param context the context for this interception
+ * @param context the context for this interception
  *
- *  @return the context for this interception
+ * @return the context for this interception
  **/
 - (nonnull CDTHTTPInterceptorContext*)interceptRequestInContext:
     (nonnull CDTHTTPInterceptorContext*)context;
 
 /**
- *  Intercepts a response before it is returned to the request initiator
+ * Intercepts a response before it is returned to the request initiator
  *
- *  @param context the context for this interception
+ * @param context the context for this interception
  *
- *  @return the context for this interception
+ * @return the context for this interception
  **/
 - (nonnull CDTHTTPInterceptorContext*)interceptResponseInContext:
     (nonnull CDTHTTPInterceptorContext*)context;

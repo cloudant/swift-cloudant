@@ -15,6 +15,9 @@
 
 #import <ObjectiveCloudant/ObjectiveCloudant.h>
 
+/**
+ An operation to create or update a document in a database.
+ */
 @interface CDTPutDocumentOperation : CDTCouchDatabaseOperation
 
 /**
@@ -32,6 +35,14 @@
 /** Body of document. Must be serialisable with NSJSONSerialization */
 @property (nullable, nonatomic, strong) NSObject *body;
 
+/**
+ Completion block to run when the operation completes.
+
+ - docId - the id of the document written to the database
+ - revId - the revision of the document written to the database
+ - operationError - a pointer to an error object containing
+ information about an error executing the operation
+ */
 @property (nonnull, nonatomic, copy) void (^putDocumentCompletionBlock)
     (NSString *_Nullable docId, NSString *_Nullable revId, NSInteger statusCode,
      NSError *_Nullable operationError);

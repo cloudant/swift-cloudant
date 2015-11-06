@@ -15,34 +15,39 @@
 
 #import <ObjectiveCloudant/ObjectiveCloudant.h>
 
+/**
+ An Operation to delete query indexes from a database.
+ */
 @interface CDTDeleteQueryIndexOperation : CDTCouchDatabaseOperation
 
 /**
  * The name of the design doc that contains the index to be deleted
+ *
  * Required: Needs to be set before an operation is executed.
  **/
-@property (nullable, nonatomic, strong) NSString* desginDocName;
+@property (nullable, nonatomic, strong) NSString* designDocName;
 
 /**
- * The type of index that is to be deleted, defaults to json
+ * The type of index that is to be deleted, defaults to CDTQueryIndexTypeJson
  **/
 @property (nonatomic) CDTQueryIndexType indexType;
 
 /**
  * The name of the index to be deleted
+ *
  * Required: Needs to be set before an operation is executed.
  **/
 @property (nullable, nonatomic, strong) NSString* indexName;
 
 /**
- * Completion block to run when the operation completes.
- *
- * status - the status code from the HTTP request, if a request hasn't been made
- * it will be set to the value of kCDTNoHTTPStatus
- * operationError - a pointer to an error object containing information about an error executing
- * this operation.
- **/
+ Completion block to run when the operation completes.
+
+ - statusCode - The status code of HTTP response, if the request
+ hasn't been successfully made this will equal kCDTNoHTTPStatus
+ - operationError - a pointer to an error object containing
+ information about an error executing the operation
+ */
 @property (nullable, nonatomic, copy) void (^deleteIndexCompletionBlock)
-    (NSInteger status, NSError* _Nullable operationError);
+    (NSInteger statusCode, NSError* _Nullable operationError);
 
 @end
