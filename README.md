@@ -13,6 +13,16 @@ Objective-Cloudant is an [Apache CouchDB&trade;][acdb] client. It is built by
 [ap2]: https://github.com/cloudant/sync-android/blob/master/LICENSE
 [acdb]: http://couchdb.apache.org/
 
+## Early-Release
+
+This is an early-release version of the library, with support for the following operations:
+
+- Getting documents by doc ID.
+- Updating and deleting documents.
+- Creating Cloudant Query indexes (both JSON and text indexes).
+- Finding documents via Cloudant Query.
+
+We will be rounding out the feature set in upcoming releases.
 
 ## Using in your project
 
