@@ -16,7 +16,7 @@ objective-cloudant is available through [CocoaPods](http://cocoapods.org), to in
 it add the following line to your Podfile:
 
 ```ruby
-pod
+pod ObjectiveCloudant
 ```
 
 ## <a name="overview"></a>Overview of the library
