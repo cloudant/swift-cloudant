@@ -2,7 +2,7 @@
 
 [![Version](http://cocoapod-badges.herokuapp.com/v/ObjectiveCloudant/badge.png)](http://cocoadocs.org/docsets/ObjectiveCloudant)
 [![Platform](http://cocoapod-badges.herokuapp.com/p/ObjectiveCloudant/badge.png)](http://cocoadocs.org/docsets/ObjectiveCloudant)
-[![Build Status](https://magnum.travis-ci.com/cloudant/objective-cloudant.svg?token=JqTgbSzbRU1us7BgZSid&branch=master)](https://magnum.travis-ci.com/cloudant/objective-cloudant)
+[![Build Status](https://travis-ci.org/cloudant/objective-cloudant.svg?branch=master)](https://travis-ci.org/cloudant/objective-cloudant)
 
 **Applications use objective-cloudant to store, index and query remote
 JSON data on Cloudant or CouchDB.**
