@@ -81,7 +81,7 @@
 {
     XCTestExpectation *deleteIndex = [self expectationWithDescription:@"delete index"];
     CDTDeleteQueryIndexOperation *op = [[CDTDeleteQueryIndexOperation alloc] init];
-    op.desginDocName = @"foo";
+    op.designDocName = @"foo";
     op.indexType = CDTQueryIndexTypeJson;
     op.deleteIndexCompletionBlock = ^(NSInteger statusCode, NSError *error) {
       [deleteIndex fulfill];
@@ -109,7 +109,7 @@
 
     XCTestExpectation *deleteIndex = [self expectationWithDescription:@"delete index"];
     CDTDeleteQueryIndexOperation *op = [[CDTDeleteQueryIndexOperation alloc] init];
-    op.desginDocName = @"foo";
+    op.designDocName = @"foo";
     op.indexName = @"bar";
     op.indexType = CDTQueryIndexTypeJson;
     op.deleteIndexCompletionBlock = ^(NSInteger statusCode, NSError *error) {
@@ -138,7 +138,7 @@
 
     XCTestExpectation *deleteIndex = [self expectationWithDescription:@"delete index"];
     CDTDeleteQueryIndexOperation *op = [[CDTDeleteQueryIndexOperation alloc] init];
-    op.desginDocName = @"foo";
+    op.designDocName = @"foo";
     op.indexName = @"bar";
     op.indexType = CDTQueryIndexTypeJson;
     op.deleteIndexCompletionBlock = ^(NSInteger statusCode, NSError *error) {
@@ -176,7 +176,7 @@
 
     XCTestExpectation *deleteIndex = [self expectationWithDescription:@"delete index"];
     CDTDeleteQueryIndexOperation *op = [[CDTDeleteQueryIndexOperation alloc] init];
-    op.desginDocName = @"foo";
+    op.designDocName = @"foo";
     op.indexName = @"bar";
     op.indexType = CDTQueryIndexTypeJson;
     op.deleteIndexCompletionBlock = ^(NSInteger statusCode, NSError *error) {
