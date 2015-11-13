@@ -82,24 +82,38 @@
 
     CDTDatabase *database = client[self.dbName];
 
+    XCTestExpectation *putDocument = [self expectationWithDescription:@"putDocument in database"];
+    XCTestExpectation *getDocument = [self expectationWithDescription:@"getDocument from db"];
+
     CDTPutDocumentOperation *put = [[CDTPutDocumentOperation alloc] init];
     put.docId = docId;
     put.body = @{ @"hello" : @"world" };
+    put.putDocumentCompletionBlock = ^(NSString *_Nullable savedDocId, NSString *_Nullable revId,
+                                       NSInteger statusCode, NSError *_Nullable operationError) {
+      [putDocument fulfill];
+      XCTAssertEqualObjects(docId, savedDocId);
+      XCTAssertNotNil(revId);
+      XCTAssertEqual(2, statusCode / 100);
+      XCTAssertNil(operationError);
+
+      CDTGetDocumentOperation *get = [[CDTGetDocumentOperation alloc] init];
+      get.docId = docId;
+      get.getDocumentCompletionBlock = ^(NSDictionary *doc, NSError *err) {
+        [getDocument fulfill];
+        XCTAssertEqual(3, doc.count);
+        XCTAssertEqualObjects(docId, doc[@"_id"]);
+        XCTAssertEqualObjects(@"world", doc[@"hello"]);
+
+      };
+      [database addOperation:get];
+    };
+
     [database addOperation:put];
-    [put waitUntilFinished];
 
-    __block NSDictionary *retrievedDoc;
-    CDTGetDocumentOperation *get = [[CDTGetDocumentOperation alloc] init];
-    get.docId = docId;
-    get.getDocumentCompletionBlock = ^(NSDictionary *doc, NSError *err) { retrievedDoc = doc; };
-    [database addOperation:get];
-    [get waitUntilFinished];
-
-    XCTAssertEqual(3, retrievedDoc.count);
-    XCTAssertEqualObjects(docId, retrievedDoc[@"_id"]);
-    XCTAssertEqualObjects(@"world", retrievedDoc[@"hello"]);
-
-    NSLog(@"document: %@", retrievedDoc);
+    [self waitForExpectationsWithTimeout:10.0f
+                                 handler:^(NSError *_Nullable error) {
+                                   NSLog(@"Failed to create or read document");
+                                 }];
 }
 
 - (void)testPutDocumentUpdate

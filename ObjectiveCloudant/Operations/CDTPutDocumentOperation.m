@@ -91,8 +91,8 @@
                                                                         options:0
                                                                           error:nil];
                     if (self && self.putDocumentCompletionBlock) {
-                        self.putDocumentCompletionBlock(result[@"doc"], result[@"rev"],
-                                                        kCDTNoHTTPStatus, nil);
+                        self.putDocumentCompletionBlock(result[@"id"], result[@"rev"], statusCode,
+                                                        nil);
                     }
                 } else {
                     NSString *json =
