@@ -16,6 +16,7 @@
 
 #import "CDTGetDocumentOperation.h"
 #import "CDTCouchOperation+internal.h"
+#import "CDTOperationRequestBuilder.h"
 
 @implementation CDTGetDocumentOperation
 
@@ -38,6 +39,13 @@
     return NO;
 }
 
+- (NSString *)httpPath
+{
+    return [NSString stringWithFormat:@"/%@/%@", self.databaseName, self.docId];
+}
+
+- (NSString *)httpMethod { return @"GET"; }
+
 #pragma mark Instance methods
 
 - (void)callCompletionHandlerWithError:(NSError *)error
@@ -49,23 +57,8 @@
 
 - (void)dispatchAsyncHttpRequest
 {
-    NSString *path = [NSString stringWithFormat:@"/%@/%@", self.databaseName, self.docId];
-
-    NSURLComponents *components =
-        [NSURLComponents componentsWithURL:self.rootURL resolvingAgainstBaseURL:NO];
-
-    components.path = path;
-    components.queryItems = components.queryItems ? components.queryItems : @[];
-    components.queryItems = [components.queryItems arrayByAddingObjectsFromArray:self.queryItems];
-
-    NSLog(@"%@", [[components URL] absoluteString]);
-
-    NSMutableURLRequest *request =
-        [NSMutableURLRequest requestWithURL:[components URL]
-                                cachePolicy:NSURLRequestUseProtocolCachePolicy
-                            timeoutInterval:10.0];
-
-    [request setHTTPMethod:@"GET"];
+    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
+    NSURLRequest *request = [b buildRequest];
 
     __weak CDTGetDocumentOperation *weakSelf = self;
     self.task =

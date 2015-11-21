@@ -16,6 +16,7 @@
 #import "CDTQueryFindDocumentsOperation.h"
 #import "CDTSortSyntaxValidator.h"
 #import "CDTCouchOperation+internal.h"
+#import "CDTOperationRequestBuilder.h"
 
 /**
  * Value that indicates no value is set for an integer parameter
@@ -102,17 +103,16 @@ NSInteger const kCDTDefaultOperationIntegerValue = -1;
     return YES;
 }
 
+- (NSString *)httpPath { return [NSString stringWithFormat:@"/%@/_find", self.databaseName]; }
+
+- (NSString *)httpMethod { return @"POST"; }
+
+- (NSData *)httpRequestBody { return self.jsonBody; }
+
 - (void)dispatchAsyncHttpRequest
 {
-    NSString *path = [NSString stringWithFormat:@"/%@/_find", self.databaseName];
-
-    NSURLComponents *components =
-        [NSURLComponents componentsWithURL:self.rootURL resolvingAgainstBaseURL:NO];
-    components.path = path;
-
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:components.URL];
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = self.jsonBody;
+    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
+    NSURLRequest *request = [b buildRequest];
 
     __weak CDTQueryFindDocumentsOperation *weakSelf = self;
 
