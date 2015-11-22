@@ -28,6 +28,12 @@
 
 @end
 
+// expose the internals so we can inspect the json generated.
+@interface CDTCreateQueryIndexOperation (internals)
+@property (nullable, nonatomic, strong) NSData *jsonBody;
+
+@end
+
 @implementation CreateIndexTests
 
 - (void)setUp
@@ -589,6 +595,49 @@
                                  handler:^(NSError *_Nullable error) {
                                    NSLog(@"Failed create index");
                                  }];
+}
+
+- (void)testAllJSONFieldsAddedToBody
+{
+    NSArray<NSDictionary<NSString *, NSObject *> *> *fields = @[
+        @{ @"name" : @"foo",
+           @"type" : @"string" }
+    ];
+
+    CDTCreateQueryIndexOperation *op = [[CDTCreateQueryIndexOperation alloc] init];
+    op.indexName = @"myIndex";
+    op.fields = fields;
+    op.defaultFieldAnalyzer = @"english";
+    op.defaultFieldEnabled = YES;
+    op.selector = @{ @"foo" : @"bar" };
+    op.indexType = CDTQueryIndexTypeText;
+    op.designDocName = @"ddoc";
+
+    XCTAssertTrue([op buildAndValidate]);
+
+    NSError *error;
+    // check the body property
+    NSDictionary<NSString *, NSObject *> *jsonBody =
+        [NSJSONSerialization JSONObjectWithData:op.jsonBody options:0 error:&error];
+    XCTAssertNil(error);
+
+    // check that it contains all the keys
+    XCTAssertEqualObjects(jsonBody[@"type"], @"text");
+    XCTAssertEqualObjects(jsonBody[@"name"], @"myIndex");
+    XCTAssertEqualObjects(jsonBody[@"ddoc"], @"ddoc");
+    XCTAssertNotNil(jsonBody[@"index"]);
+    NSDictionary<NSString *, NSObject *> *index =
+        (NSDictionary<NSString *, NSObject *> *)jsonBody[@"index"];
+
+    XCTAssertNotNil(index[@"default_field"]);
+
+    NSDictionary<NSString *, NSObject *> *defualtField =
+        (NSDictionary<NSString *, NSObject *> *)index[@"default_field"];
+    XCTAssertEqualObjects(defualtField[@"enabled"], @(YES));
+    XCTAssertEqualObjects(defualtField[@"analyzer"], @"english");
+
+    XCTAssertEqualObjects(index[@"selector"], @{ @"foo" : @"bar" });
+    XCTAssertEqualObjects(index[@"fields"], fields);
 }
 
 @end

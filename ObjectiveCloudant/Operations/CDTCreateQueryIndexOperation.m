@@ -125,7 +125,7 @@
     NSMutableDictionary *body = [NSMutableDictionary dictionary];
     body[@"index"] = [NSMutableDictionary dictionary];
     if (self.fields) {
-        body[@"fields"] = self.fields;
+        body[@"index"][@"fields"] = self.fields;
     }
     body[@"type"] = @"text";
     if (self.defaultFieldEnabled) {
@@ -145,6 +145,10 @@
     }
     if (self.designDocName) {
         body[@"ddoc"] = self.designDocName;
+    }
+    
+    if(self.selector){
+        body[@"index"][@"selector"] = self.selector;
     }
 
     NSError *error = nil;
