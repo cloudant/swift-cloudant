@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
 
                    DESC
 
-  s.homepage = "https://cloudant.com"
+  s.homepage = "https://github.com/cloudant/objective-cloudant"
 
   s.license = { :type => "Apache License, Version 2.0", :file => "LICENSE" }
 
