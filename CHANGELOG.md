@@ -1,3 +1,10 @@
+# 0.2.2 (2015-11-24)
+
+- [FIX] Fixed issue where `selector` wasn't put into the POST body for text index
+  creation
+- [FIX] Fixed issue where `fields` wasn't nested in the `index` field for text
+   index creation.
+
 # 0.2.1 (2015-11-13)
 
 - [FIX] Fixed issue where the document id would be null
