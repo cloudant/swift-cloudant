@@ -96,7 +96,7 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
 
  Must be set before a call can be successfully made.
  */
-@property (nullable, nonatomic, strong) NSURL *rootURL;
+@property (nonnull, nonatomic, strong) NSURL *rootURL;
 
 /// ---------------------------------
 /// @name Sub-class overrides

@@ -45,7 +45,7 @@
     return [[CDTCouchDBClient alloc] initForURL:url username:username password:password];
 }
 
-- (nullable instancetype)initForURL:(nullable NSURL *)url
+- (nullable instancetype)initForURL:(nonnull NSURL *)url
                            username:(nullable NSString *)username
                            password:(nullable NSString *)password
 {

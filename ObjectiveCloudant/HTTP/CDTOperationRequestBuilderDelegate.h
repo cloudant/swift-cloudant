@@ -24,28 +24,28 @@
 /**
  Base URL for this operation.
  */
-- (NSURL *)rootURL;
+- (nonnull NSURL *)rootURL;
 
 /**
  URL path for this operation.
  */
-- (NSString *)httpPath;
+- (nonnull NSString *)httpPath;
 
 /**
  HTTP method for this operation.
  */
-- (NSString *)httpMethod;
+- (nonnull NSString *)httpMethod;
 
 @optional
 
 /**
  Query items for this operation.
  */
-- (NSArray<NSURLQueryItem *> *)queryItems;
+- (nonnull NSArray<NSURLQueryItem *> *)queryItems;
 
 /**
  Request body for this operation; return `nil` if no body (e.g., for GET).
  */
-- (NSData *)httpRequestBody;
+- (nonnull NSData *)httpRequestBody;
 
 @end

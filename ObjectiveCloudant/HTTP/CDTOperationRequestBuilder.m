@@ -31,7 +31,8 @@
 
 @implementation CDTOperationRequestBuilder
 
-- (instancetype)initWithOperation:(NSOperation<CDTOperationRequestBuilderDelegate> *)operation;
+- (nullable instancetype)initWithOperation:
+    (nonnull NSOperation<CDTOperationRequestBuilderDelegate> *)operation;
 {
     self = [super init];
     if (self) {
@@ -51,7 +52,7 @@
     return self;
 }
 
-- (NSURLRequest *)buildRequest;
+- (nonnull NSURLRequest *)buildRequest;
 {
     NSURLComponents *components =
         [NSURLComponents componentsWithURL:self.rootURL resolvingAgainstBaseURL:NO];

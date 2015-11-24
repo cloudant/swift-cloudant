@@ -21,8 +21,9 @@
 
 @interface CDTOperationRequestBuilder : NSObject
 
-- (instancetype)initWithOperation:(NSOperation<CDTOperationRequestBuilderDelegate> *)operation;
+- (nullable instancetype)initWithOperation:
+    (nonnull NSOperation<CDTOperationRequestBuilderDelegate> *)operation;
 
-- (NSURLRequest *)buildRequest;
+- (nonnull NSURLRequest *)buildRequest;
 
 @end
