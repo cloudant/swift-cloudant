@@ -24,19 +24,22 @@
 {
     if ([super buildAndValidate]) {
         if (self.docId) {
-            NSMutableArray *queryItems = [NSMutableArray array];
-            [queryItems
-                addObject:[NSURLQueryItem queryItemWithName:@"revs"
-                                                      value:(self.revs ? @"true" : @"false")]];
-            if (self.revId) {
-                [queryItems addObject:[NSURLQueryItem queryItemWithName:@"rev" value:self.revId]];
-            }
-            self.queryItems = [queryItems copy];
             return YES;
         }
     }
 
     return NO;
+}
+
+- (NSArray<NSURLQueryItem *> *)queryItems
+{
+    NSMutableArray *queryItems = [NSMutableArray array];
+    [queryItems addObject:[NSURLQueryItem queryItemWithName:@"revs"
+                                                      value:(self.revs ? @"true" : @"false")]];
+    if (self.revId) {
+        [queryItems addObject:[NSURLQueryItem queryItemWithName:@"rev" value:self.revId]];
+    }
+    return [NSArray arrayWithArray:queryItems];
 }
 
 - (NSString *)httpPath

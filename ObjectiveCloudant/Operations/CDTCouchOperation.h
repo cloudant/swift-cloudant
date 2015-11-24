@@ -102,9 +102,6 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
 /// @name Sub-class overrides
 /// ---------------------------------
 
-/** Extra query parameters to add to outgoing request. */
-@property (nullable, nonatomic, strong) NSArray<NSURLQueryItem *> *queryItems;
-
 /**
  An opportunity for subclasses to add items to headers, query string, POST body etc.
 

@@ -30,12 +30,16 @@
 {
     if ([super buildAndValidate]) {
         if (self.revId && self.docId) {
-            self.queryItems = @[ [NSURLQueryItem queryItemWithName:@"rev" value:self.revId] ];
             return YES;
         }
     }
 
     return NO;
+}
+
+- (NSArray<NSURLQueryItem *> *)queryItems
+{
+    return @[ [NSURLQueryItem queryItemWithName:@"rev" value:self.revId] ];
 }
 
 - (void)callCompletionHandlerWithError:(NSError *)error

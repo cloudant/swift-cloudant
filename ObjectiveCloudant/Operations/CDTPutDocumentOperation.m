@@ -23,18 +23,21 @@
 {
     if ([super buildAndValidate]) {
         if (self.docId && self.body && [NSJSONSerialization isValidJSONObject:self.body]) {
-            NSMutableArray *tmp = [NSMutableArray array];
-
-            if (self.revId) {
-                [tmp addObject:[NSURLQueryItem queryItemWithName:@"rev" value:self.revId]];
-            }
-
-            self.queryItems = [NSArray arrayWithArray:tmp];
-
             return YES;
         }
     }
     return NO;
+}
+
+- (NSArray<NSURLQueryItem *> *)queryItems
+{
+    NSMutableArray *tmp = [NSMutableArray array];
+
+    if (self.revId) {
+        [tmp addObject:[NSURLQueryItem queryItemWithName:@"rev" value:self.revId]];
+    }
+
+    return [NSArray arrayWithArray:tmp];
 }
 
 - (NSString *)httpPath
