@@ -15,12 +15,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CDTOperationRequestBuilderDelegate.h"
 
 @class CDTCouchOperation;
 
 @interface CDTOperationRequestBuilder : NSObject
 
-- (instancetype)initWithOperation:(CDTCouchOperation *)operation;
+- (instancetype)initWithOperation:(NSOperation<CDTOperationRequestBuilderDelegate> *)operation;
 
 - (NSURLRequest *)buildRequest;
 

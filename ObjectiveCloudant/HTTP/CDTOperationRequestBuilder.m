@@ -17,6 +17,7 @@
 #import "CDTOperationRequestBuilder.h"
 
 #import "CDTCouchOperation.h"
+#import "CDTOperationRequestBuilderDelegate.h"
 
 @interface CDTOperationRequestBuilder ()
 
@@ -30,15 +31,22 @@
 
 @implementation CDTOperationRequestBuilder
 
-- (instancetype)initWithOperation:(CDTCouchOperation *)operation;
+- (instancetype)initWithOperation:(NSOperation<CDTOperationRequestBuilderDelegate> *)operation;
 {
     self = [super init];
     if (self) {
+        // Required parts of CDTOperationRequestBuilderDelegate
+        _method = operation.httpMethod;
         _rootURL = operation.rootURL;
         _path = operation.httpPath;
-        _method = operation.httpMethod;
-        _queryItems = operation.queryItems;
-        _body = operation.httpRequestBody;
+
+        // Optional parts of CDTOperationRequestBuilderDelegate
+        if ([operation respondsToSelector:@selector(queryItems)]) {
+            _queryItems = operation.queryItems;
+        }
+        if ([operation respondsToSelector:@selector(httpRequestBody)]) {
+            _body = operation.httpRequestBody;
+        }
     }
     return self;
 }
