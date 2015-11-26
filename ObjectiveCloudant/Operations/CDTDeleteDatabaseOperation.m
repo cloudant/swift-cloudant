@@ -34,55 +34,34 @@
 
 - (NSString *)httpMethod { return @"DELETE"; }
 
-- (void)dispatchAsyncHttpRequest
+- (void)processResponseWithData:(NSData *)responseData
+                     statusCode:(NSInteger)statusCode
+                          error:(NSError *)error
 {
-    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
-    NSURLRequest *request = [b buildRequest];
-
-    __weak CDTDeleteDatabaseOperation *weakSelf = self;
-    self.task = [self.session
-        dataTaskWithRequest:request
-          completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
-                              NSError *_Nullable error) {
-            CDTDeleteDatabaseOperation *self = weakSelf;
-
-            if ([self isCancelled]) {
-                [self completeOperation];
-                return;
+    if (error) {
+        if (self && self.deleteDatabaseCompletionBlock) {
+            self.deleteDatabaseCompletionBlock(kCDTNoHTTPStatus, error);
+        }
+    } else {
+        if (statusCode == 200) {
+            // Success
+            if (self && self.deleteDatabaseCompletionBlock) {
+                self.deleteDatabaseCompletionBlock(statusCode, nil);
             }
-
-            if (error) {
-                if (self && self.deleteDatabaseCompletionBlock) {
-                    self.deleteDatabaseCompletionBlock(kCDTNoHTTPStatus, error);
-                }
-            } else {
-                NSInteger statusCode = ((NSHTTPURLResponse *)res).statusCode;
-                if (statusCode == 200) {
-                    // Success
-                    if (self && self.deleteDatabaseCompletionBlock) {
-                        self.deleteDatabaseCompletionBlock(statusCode, nil);
-                    }
-                } else {
-                    NSString *json =
-                        [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                    NSString *msg =
-                        [NSString stringWithFormat:@"Database creation failed with %ld %@.",
-                                                   (long)statusCode, json];
-                    NSDictionary *userInfo =
-                        @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
-                    NSError *error =
-                        [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
-                                            code:CDTObjectiveCloudantErrorDeleteDatabaseFailed
-                                        userInfo:userInfo];
-                    if (self && self.deleteDatabaseCompletionBlock) {
-                        self.deleteDatabaseCompletionBlock(statusCode, error);
-                    }
-                }
+        } else {
+            NSString *json =
+            [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            NSString *msg = [NSString
+                             stringWithFormat:@"Database creation failed with %ld %@.", (long)statusCode, json];
+            NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
+            NSError *error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
+                                                 code:CDTObjectiveCloudantErrorDeleteDatabaseFailed
+                                             userInfo:userInfo];
+            if (self && self.deleteDatabaseCompletionBlock) {
+                self.deleteDatabaseCompletionBlock(statusCode, error);
             }
-
-            [self completeOperation];
-          }];
-    [self.task resume];
+        }
+    }
 }
 
 @end

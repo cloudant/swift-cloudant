@@ -16,7 +16,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CDTInterceptableSession.h"
-#import "CDTOperationRequestBuilderDelegate.h"
+#import "CDTOperationRequestExecutorDelegate.h"
 
 /**
  The CDTObjectiveCloudantErrorDomain String
@@ -75,7 +75,7 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
 
  Centralises the HTTP connections made to Cloudant.
  */
-@interface CDTCouchOperation : NSOperation <CDTOperationRequestBuilderDelegate> {
+@interface CDTCouchOperation : NSOperation <CDTOperationRequestExecutorDelegate> {
     BOOL executing;
     BOOL finished;
 }

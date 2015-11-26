@@ -33,55 +33,34 @@
 
 #pragma mark Instance methods
 
-- (void)dispatchAsyncHttpRequest
+- (void)processResponseWithData:(NSData *)responseData
+                     statusCode:(NSInteger)statusCode
+                          error:(NSError *)error
 {
-    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
-    NSURLRequest *request = [b buildRequest];
-
-    __weak CDTCreateDatabaseOperation *weakSelf = self;
-    self.task = [self.session
-        dataTaskWithRequest:request
-          completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
-                              NSError *_Nullable error) {
-            CDTCreateDatabaseOperation *strongSelf = weakSelf;
-
-            if ([strongSelf isCancelled]) {
-                [strongSelf completeOperation];
-                return;
+    if (error) {
+        if (self.createDatabaseCompletionBlock) {
+            self.createDatabaseCompletionBlock(0, error);
+        }
+    } else {
+        if (statusCode == 201 || statusCode == 202) {
+            // Success
+            if (self.createDatabaseCompletionBlock) {
+                self.createDatabaseCompletionBlock(statusCode, nil);
             }
-
-            if (error) {
-                if (strongSelf && strongSelf.createDatabaseCompletionBlock) {
-                    strongSelf.createDatabaseCompletionBlock(0, error);
-                }
-            } else {
-                NSInteger statusCode = ((NSHTTPURLResponse *)res).statusCode;
-                if (statusCode == 201 || statusCode == 202) {
-                    // Success
-                    if (strongSelf && strongSelf.createDatabaseCompletionBlock) {
-                        strongSelf.createDatabaseCompletionBlock(statusCode, nil);
-                    }
-                } else {
-                    NSString *json =
-                        [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                    NSString *msg =
-                        [NSString stringWithFormat:@"Database creation failed with %ld %@.",
-                                                   (long)statusCode, json];
-                    NSDictionary *userInfo =
-                        @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
-                    NSError *error =
-                        [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
-                                            code:CDTObjectiveCloudantErrorCreateDatabaseFailed
-                                        userInfo:userInfo];
-                    if (strongSelf && strongSelf.createDatabaseCompletionBlock) {
-                        strongSelf.createDatabaseCompletionBlock(statusCode, error);
-                    }
-                }
+        } else {
+            NSString *json =
+            [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            NSString *msg = [NSString
+                             stringWithFormat:@"Database creation failed with %ld %@.", (long)statusCode, json];
+            NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
+            NSError *error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
+                                                 code:CDTObjectiveCloudantErrorCreateDatabaseFailed
+                                             userInfo:userInfo];
+            if (self.createDatabaseCompletionBlock) {
+                self.createDatabaseCompletionBlock(statusCode, error);
             }
-
-            [strongSelf completeOperation];
-          }];
-    [self.task resume];
+        }
+    }
 }
 
 @end

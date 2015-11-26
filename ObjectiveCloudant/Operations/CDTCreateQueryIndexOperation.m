@@ -172,45 +172,26 @@
     }
 }
 
-- (void)dispatchAsyncHttpRequest
+
+
+- (void)processResponseWithData:(NSData *)responseData
+                     statusCode:(NSInteger)statusCode
+                          error:(NSError *)error
 {
-    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
-    NSURLRequest *request = [b buildRequest];
-    self.request = request;
-
-    __weak CDTCreateQueryIndexOperation *weakSelf = self;
-    self.task = [self.session
-        dataTaskWithRequest:request
-          completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            CDTCreateQueryIndexOperation *strongSelf = weakSelf;
-
-            // mark operation as complete and return if strongSelf is `nil`, OR
-            // completionBlock is `nil` OR  the operation has been cancelled.
-            if (!strongSelf || !strongSelf.createIndexCompletionBlock || [self isCancelled]) {
-                [strongSelf completeOperation];
-                return;
-            }
-
-            NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
-            if (!error && data && statusCode / 100 == 2) {
-                strongSelf.createIndexCompletionBlock(nil);
-            } else if (error) {
-                strongSelf.createIndexCompletionBlock(error);
-            } else {
-                NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSString *msg = [NSString
-                    stringWithFormat:@"Index creation failed with %ld %@.", (long)statusCode, json];
-                NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
-                error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
-                                            code:CDTObjectiveCloudantErrorCreateQueryIndexFailed
-                                        userInfo:userInfo];
-                strongSelf.createIndexCompletionBlock(error);
-            }
-
-            [strongSelf completeOperation];
-
-          }];
-    [self.task resume];
+    if (!error && responseData && statusCode / 100 == 2) {
+        self.createIndexCompletionBlock(nil);
+    } else if (error) {
+        self.createIndexCompletionBlock(error);
+    } else {
+        NSString *json = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        NSString *msg = [NSString
+                         stringWithFormat:@"Index creation failed with %ld %@.", (long)statusCode, json];
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
+        error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
+                                    code:CDTObjectiveCloudantErrorCreateQueryIndexFailed
+                                userInfo:userInfo];
+        self.createIndexCompletionBlock(error);
+    }
 }
 
 @end

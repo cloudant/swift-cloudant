@@ -61,45 +61,27 @@
 
 - (NSString *)httpMethod { return @"DELETE"; }
 
-- (void)dispatchAsyncHttpRequest
+- (void)processResponseWithData:(NSData *)responseData
+                     statusCode:(NSInteger)statusCode
+                          error:(NSError *)error
 {
-    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
-    NSURLRequest *request = [b buildRequest];
-
-    __weak CDTDeleteQueryIndexOperation *weakSelf = self;
-    self.task = [self.session
-        dataTaskWithRequest:request
-          completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            CDTDeleteQueryIndexOperation *self = weakSelf;
-
-            if (!self || !self.deleteIndexCompletionBlock || self.isCancelled) {
-                [self completeOperation];
-                return;
-            }
-
-            if (error) {
-                self.deleteIndexCompletionBlock(kCDTNoHTTPStatus, error);
-            }
-
-            NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
-
-            if (statusCode / 100 == 2) {
-                // okay
-                self.deleteIndexCompletionBlock(statusCode, nil);
-            } else {
-                NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSString *msg = [NSString
-                    stringWithFormat:@"Index deletion failed with %ld %@.", (long)statusCode, json];
-                NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
-                error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
-                                            code:CDTObjectiveCloudantErrorDeleteQueryIndexFailed
-                                        userInfo:userInfo];
-                self.deleteIndexCompletionBlock(statusCode, error);
-            }
-
-            [self completeOperation];
-          }];
-    [self.task resume];
+    if (error) {
+        self.deleteIndexCompletionBlock(kCDTNoHTTPStatus, error);
+    }
+    
+    if (statusCode / 100 == 2) {
+        // okay
+        self.deleteIndexCompletionBlock(statusCode, nil);
+    } else {
+        NSString *json = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        NSString *msg = [NSString
+                         stringWithFormat:@"Index deletion failed with %ld %@.", (long)statusCode, json];
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
+        error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
+                                    code:CDTObjectiveCloudantErrorDeleteQueryIndexFailed
+                                userInfo:userInfo];
+        self.deleteIndexCompletionBlock(statusCode, error);
+    }
 }
 
 @end

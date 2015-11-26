@@ -16,6 +16,7 @@
 
 #import "CDTCouchOperation.h"
 #import "CDTCouchOperation+internal.h"
+#import "CDTOperationRequestExecutor.h"
 
 NSString *const CDTObjectiveCloudantErrorDomain = @"CDTObjectiveCloudantErrorDomain";
 NSInteger const kCDTNoHTTPStatus = 0;
@@ -91,7 +92,10 @@ NSInteger const kCDTNoHTTPStatus = 0;
 
     // If the operation is not canceled, begin executing the task.
     [self willChangeValueForKey:@"isExecuting"];
-    [self dispatchAsyncHttpRequest];
+    //    [self dispatchAsyncHttpRequest];
+    CDTOperationRequestExecutor *executor =
+    [[CDTOperationRequestExecutor alloc] initWithOperation:self];
+    [executor executeRequest];
     executing = YES;
     [self didChangeValueForKey:@"isExecuting"];
 }
