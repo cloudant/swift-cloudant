@@ -92,7 +92,6 @@ NSInteger const kCDTNoHTTPStatus = 0;
 
     // If the operation is not canceled, begin executing the task.
     [self willChangeValueForKey:@"isExecuting"];
-    //    [self dispatchAsyncHttpRequest];
     CDTOperationRequestExecutor *executor =
     [[CDTOperationRequestExecutor alloc] initWithOperation:self];
     [executor executeRequest];
