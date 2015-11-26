@@ -15,6 +15,7 @@
 
 #import "CDTPutDocumentOperation.h"
 #import "CDTCouchOperation+internal.h"
+#import "CDTOperationRequestBuilder.h"
 
 @implementation CDTPutDocumentOperation
 
@@ -36,6 +37,18 @@
     return NO;
 }
 
+- (NSString *)httpPath
+{
+    return [NSString stringWithFormat:@"/%@/%@", self.databaseName, self.docId];
+}
+
+- (NSString *)httpMethod { return @"PUT"; }
+
+- (NSData *)httpRequestBody
+{
+    return [NSJSONSerialization dataWithJSONObject:self.body options:0 error:nil];
+}
+
 #pragma mark Instance methods
 
 - (void)callCompletionHandlerWithError:(NSError *)error
@@ -47,24 +60,8 @@
 
 - (void)dispatchAsyncHttpRequest
 {
-    NSString *path = [NSString stringWithFormat:@"/%@/%@", self.databaseName, self.docId];
-
-    NSURLComponents *components =
-        [NSURLComponents componentsWithURL:self.rootURL resolvingAgainstBaseURL:NO];
-
-    components.path = path;
-    components.queryItems = components.queryItems ? components.queryItems : @[];
-    components.queryItems = [components.queryItems arrayByAddingObjectsFromArray:self.queryItems];
-
-    NSLog(@"%@", [[components URL] absoluteString]);
-
-    NSMutableURLRequest *request =
-        [NSMutableURLRequest requestWithURL:[components URL]
-                                cachePolicy:NSURLRequestUseProtocolCachePolicy
-                            timeoutInterval:10.0];
-
-    [request setHTTPMethod:@"PUT"];
-    request.HTTPBody = [NSJSONSerialization dataWithJSONObject:self.body options:0 error:nil];
+    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
+    NSURLRequest *request = [b buildRequest];
 
     __weak CDTPutDocumentOperation *weakSelf = self;
     self.task = [self.session

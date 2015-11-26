@@ -128,6 +128,27 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
  */
 - (void)callCompletionHandlerWithError:(nonnull NSError *)error;
 
+/**
+ URL path for this operation.
+
+ Should be overridden by subclasses to create appropriate path.
+ */
+@property (nonnull, nonatomic, readonly) NSString *httpPath;
+
+/**
+ HTTP method for this operation.
+
+ Should be overridden by subclasses to provide appropriate method.
+ */
+@property (nonnull, nonatomic, readonly) NSString *httpMethod;
+
+/**
+ Request body for this operation; return `nil` if no body (e.g., for GET).
+
+ Should be overridden by subclasses to provide request body data.
+ */
+@property (nullable, nonatomic, readonly) NSData *httpRequestBody;
+
 /// ---------------------------------
 /// @name Life-cycle management
 /// ---------------------------------
