@@ -16,6 +16,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CDTInterceptableSession.h"
+#import "CDTOperationRequestBuilderDelegate.h"
 
 /**
  The CDTObjectiveCloudantErrorDomain String
@@ -74,7 +75,7 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
 
  Centralises the HTTP connections made to Cloudant.
  */
-@interface CDTCouchOperation : NSOperation {
+@interface CDTCouchOperation : NSOperation <CDTOperationRequestBuilderDelegate> {
     BOOL executing;
     BOOL finished;
 }
@@ -95,14 +96,11 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
 
  Must be set before a call can be successfully made.
  */
-@property (nullable, nonatomic, strong) NSURL *rootURL;
+@property (nonnull, nonatomic, strong) NSURL *rootURL;
 
 /// ---------------------------------
 /// @name Sub-class overrides
 /// ---------------------------------
-
-/** Extra query parameters to add to outgoing request. */
-@property (nullable, nonatomic, strong) NSArray<NSURLQueryItem *> *queryItems;
 
 /**
  An opportunity for subclasses to add items to headers, query string, POST body etc.

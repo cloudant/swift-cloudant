@@ -16,6 +16,7 @@
 //
 
 #import "CDTDeleteDocumentOperation.h"
+#import "CDTOperationRequestBuilder.h"
 
 @interface CDTDeleteDocumentOperation ()
 
@@ -29,12 +30,16 @@
 {
     if ([super buildAndValidate]) {
         if (self.revId && self.docId) {
-            self.queryItems = @[ [NSURLQueryItem queryItemWithName:@"rev" value:self.revId] ];
             return YES;
         }
     }
 
     return NO;
+}
+
+- (NSArray<NSURLQueryItem *> *)queryItems
+{
+    return @[ [NSURLQueryItem queryItemWithName:@"rev" value:self.revId] ];
 }
 
 - (void)callCompletionHandlerWithError:(NSError *)error
@@ -44,25 +49,19 @@
     }
 }
 
+- (NSString *)httpPath
+{
+    return [NSString stringWithFormat:@"/%@/%@", self.databaseName, self.docId];
+}
+
+- (NSString *)httpMethod { return @"DELETE"; }
+
 #pragma mark Instance methods
 
 - (void)dispatchAsyncHttpRequest
 {
-    NSString *path = [NSString stringWithFormat:@"/%@/%@", self.databaseName, self.docId];
-
-    NSURLComponents *components =
-        [NSURLComponents componentsWithURL:self.rootURL resolvingAgainstBaseURL:NO];
-
-    components.path = path;
-    components.queryItems = components.queryItems ? components.queryItems : @[];
-    components.queryItems = [components.queryItems arrayByAddingObjectsFromArray:self.queryItems];
-
-    NSMutableURLRequest *request =
-        [NSMutableURLRequest requestWithURL:components.URL
-                                cachePolicy:NSURLRequestUseProtocolCachePolicy
-                            timeoutInterval:10.0];
-
-    [request setHTTPMethod:@"DELETE"];
+    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
+    NSURLRequest *request = [b buildRequest];
 
     __weak CDTDeleteDocumentOperation *weakSelf = self;
     self.task = [self.session

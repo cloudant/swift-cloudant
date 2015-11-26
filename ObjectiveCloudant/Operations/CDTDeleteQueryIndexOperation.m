@@ -15,6 +15,7 @@
 
 #import "CDTDeleteQueryIndexOperation.h"
 #import "CDTCouchOperation+internal.h"
+#import "CDTOperationRequestBuilder.h"
 
 @implementation CDTDeleteQueryIndexOperation
 
@@ -50,20 +51,20 @@
     return YES;
 }
 
-- (void)dispatchAsyncHttpRequest
+- (NSString *)httpPath
 {
     // currently the only supported type.
     NSString *indexType = @"json";
+    return [NSString stringWithFormat:@"/%@/_index/%@/%@/%@", self.databaseName, self.designDocName,
+                                      indexType, self.indexName];
+}
 
-    NSString *path = [NSString stringWithFormat:@"/%@/_index/%@/%@/%@", self.databaseName,
-                                                self.designDocName, indexType, self.indexName];
+- (NSString *)httpMethod { return @"DELETE"; }
 
-    NSURLComponents *components =
-        [NSURLComponents componentsWithURL:self.rootURL resolvingAgainstBaseURL:NO];
-    components.path = path;
-
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:components.URL];
-    request.HTTPMethod = @"DELETE";
+- (void)dispatchAsyncHttpRequest
+{
+    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
+    NSURLRequest *request = [b buildRequest];
 
     __weak CDTDeleteQueryIndexOperation *weakSelf = self;
     self.task = [self.session

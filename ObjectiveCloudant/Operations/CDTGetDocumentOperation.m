@@ -16,6 +16,7 @@
 
 #import "CDTGetDocumentOperation.h"
 #import "CDTCouchOperation+internal.h"
+#import "CDTOperationRequestBuilder.h"
 
 @implementation CDTGetDocumentOperation
 
@@ -23,20 +24,30 @@
 {
     if ([super buildAndValidate]) {
         if (self.docId) {
-            NSMutableArray *queryItems = [NSMutableArray array];
-            [queryItems
-                addObject:[NSURLQueryItem queryItemWithName:@"revs"
-                                                      value:(self.revs ? @"true" : @"false")]];
-            if (self.revId) {
-                [queryItems addObject:[NSURLQueryItem queryItemWithName:@"rev" value:self.revId]];
-            }
-            self.queryItems = [queryItems copy];
             return YES;
         }
     }
 
     return NO;
 }
+
+- (NSArray<NSURLQueryItem *> *)queryItems
+{
+    NSMutableArray *queryItems = [NSMutableArray array];
+    [queryItems addObject:[NSURLQueryItem queryItemWithName:@"revs"
+                                                      value:(self.revs ? @"true" : @"false")]];
+    if (self.revId) {
+        [queryItems addObject:[NSURLQueryItem queryItemWithName:@"rev" value:self.revId]];
+    }
+    return [NSArray arrayWithArray:queryItems];
+}
+
+- (NSString *)httpPath
+{
+    return [NSString stringWithFormat:@"/%@/%@", self.databaseName, self.docId];
+}
+
+- (NSString *)httpMethod { return @"GET"; }
 
 #pragma mark Instance methods
 
@@ -49,23 +60,8 @@
 
 - (void)dispatchAsyncHttpRequest
 {
-    NSString *path = [NSString stringWithFormat:@"/%@/%@", self.databaseName, self.docId];
-
-    NSURLComponents *components =
-        [NSURLComponents componentsWithURL:self.rootURL resolvingAgainstBaseURL:NO];
-
-    components.path = path;
-    components.queryItems = components.queryItems ? components.queryItems : @[];
-    components.queryItems = [components.queryItems arrayByAddingObjectsFromArray:self.queryItems];
-
-    NSLog(@"%@", [[components URL] absoluteString]);
-
-    NSMutableURLRequest *request =
-        [NSMutableURLRequest requestWithURL:[components URL]
-                                cachePolicy:NSURLRequestUseProtocolCachePolicy
-                            timeoutInterval:10.0];
-
-    [request setHTTPMethod:@"GET"];
+    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
+    NSURLRequest *request = [b buildRequest];
 
     __weak CDTGetDocumentOperation *weakSelf = self;
     self.task =

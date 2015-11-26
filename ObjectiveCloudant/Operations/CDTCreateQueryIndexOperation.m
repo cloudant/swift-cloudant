@@ -16,6 +16,7 @@
 #import "CDTCreateQueryIndexOperation.h"
 #import "CDTSortSyntaxValidator.h"
 #import "CDTCouchOperation+internal.h"
+#import "CDTOperationRequestBuilder.h"
 
 // Testing this class will need to mock the entire query back end,
 // XCTest doesn't provide a way to skip tests based on conditions
@@ -158,6 +159,12 @@
     return (self.jsonBody != nil);
 }
 
+- (NSString *)httpPath { return [NSString stringWithFormat:@"/%@/_index", self.databaseName]; }
+
+- (NSString *)httpMethod { return @"POST"; }
+
+- (NSData *)httpRequestBody { return self.jsonBody; }
+
 - (void)callCompletionHandlerWithError:(NSError *)error
 {
     if (self.createIndexCompletionBlock) {
@@ -167,21 +174,8 @@
 
 - (void)dispatchAsyncHttpRequest
 {
-    NSString *path = [NSString stringWithFormat:@"/%@/_index", self.databaseName];
-
-    NSURLComponents *components =
-        [NSURLComponents componentsWithURL:self.rootURL resolvingAgainstBaseURL:NO];
-    components.path = path;
-
-    NSLog(@"%@", [[components URL] absoluteString]);
-
-    NSMutableURLRequest *request =
-        [NSMutableURLRequest requestWithURL:components.URL
-                                cachePolicy:NSURLRequestUseProtocolCachePolicy
-                            timeoutInterval:10.0];
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = self.jsonBody;
-
+    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
+    NSURLRequest *request = [b buildRequest];
     self.request = request;
 
     __weak CDTCreateQueryIndexOperation *weakSelf = self;

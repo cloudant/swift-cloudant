@@ -15,6 +15,7 @@
 
 #import "CDTDeleteDatabaseOperation.h"
 #import "CDTCouchOperation+internal.h"
+#import "CDTOperationRequestBuilder.h"
 
 @implementation CDTDeleteDatabaseOperation
 
@@ -29,25 +30,14 @@
     }
 }
 
+- (NSString *)httpPath { return [NSString stringWithFormat:@"/%@", self.databaseName]; }
+
+- (NSString *)httpMethod { return @"DELETE"; }
+
 - (void)dispatchAsyncHttpRequest
 {
-    NSString *path = [NSString stringWithFormat:@"/%@", self.databaseName];
-
-    NSURLComponents *components =
-        [NSURLComponents componentsWithURL:self.rootURL resolvingAgainstBaseURL:NO];
-
-    components.path = path;
-    components.queryItems = components.queryItems ? components.queryItems : @[];
-    components.queryItems = [components.queryItems arrayByAddingObjectsFromArray:self.queryItems];
-
-    NSLog(@"%@", [[components URL] absoluteString]);
-
-    NSMutableURLRequest *request =
-        [NSMutableURLRequest requestWithURL:[components URL]
-                                cachePolicy:NSURLRequestUseProtocolCachePolicy
-                            timeoutInterval:10.0];
-
-    [request setHTTPMethod:@"DELETE"];
+    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
+    NSURLRequest *request = [b buildRequest];
 
     __weak CDTDeleteDatabaseOperation *weakSelf = self;
     self.task = [self.session

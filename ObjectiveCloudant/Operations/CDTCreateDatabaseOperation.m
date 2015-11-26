@@ -15,6 +15,7 @@
 
 #import "CDTCreateDatabaseOperation.h"
 #import "CDTCouchOperation+internal.h"
+#import "CDTOperationRequestBuilder.h"
 
 @implementation CDTCreateDatabaseOperation
 
@@ -26,27 +27,16 @@
     }
 }
 
+- (NSString *)httpPath { return [NSString stringWithFormat:@"/%@", self.databaseName]; }
+
+- (NSString *)httpMethod { return @"PUT"; }
+
 #pragma mark Instance methods
 
 - (void)dispatchAsyncHttpRequest
 {
-    NSString *path = [NSString stringWithFormat:@"/%@", self.databaseName];
-
-    NSURLComponents *components =
-        [NSURLComponents componentsWithURL:self.rootURL resolvingAgainstBaseURL:NO];
-
-    components.path = path;
-    components.queryItems = components.queryItems ? components.queryItems : @[];
-    components.queryItems = [components.queryItems arrayByAddingObjectsFromArray:self.queryItems];
-
-    NSLog(@"%@", [[components URL] absoluteString]);
-
-    NSMutableURLRequest *request =
-        [NSMutableURLRequest requestWithURL:[components URL]
-                                cachePolicy:NSURLRequestUseProtocolCachePolicy
-                            timeoutInterval:10.0];
-
-    [request setHTTPMethod:@"PUT"];
+    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
+    NSURLRequest *request = [b buildRequest];
 
     __weak CDTCreateDatabaseOperation *weakSelf = self;
     self.task = [self.session

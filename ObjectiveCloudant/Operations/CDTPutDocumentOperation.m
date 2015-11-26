@@ -15,6 +15,7 @@
 
 #import "CDTPutDocumentOperation.h"
 #import "CDTCouchOperation+internal.h"
+#import "CDTOperationRequestBuilder.h"
 
 @implementation CDTPutDocumentOperation
 
@@ -22,18 +23,33 @@
 {
     if ([super buildAndValidate]) {
         if (self.docId && self.body && [NSJSONSerialization isValidJSONObject:self.body]) {
-            NSMutableArray *tmp = [NSMutableArray array];
-
-            if (self.revId) {
-                [tmp addObject:[NSURLQueryItem queryItemWithName:@"rev" value:self.revId]];
-            }
-
-            self.queryItems = [NSArray arrayWithArray:tmp];
-
             return YES;
         }
     }
     return NO;
+}
+
+- (NSArray<NSURLQueryItem *> *)queryItems
+{
+    NSMutableArray *tmp = [NSMutableArray array];
+
+    if (self.revId) {
+        [tmp addObject:[NSURLQueryItem queryItemWithName:@"rev" value:self.revId]];
+    }
+
+    return [NSArray arrayWithArray:tmp];
+}
+
+- (NSString *)httpPath
+{
+    return [NSString stringWithFormat:@"/%@/%@", self.databaseName, self.docId];
+}
+
+- (NSString *)httpMethod { return @"PUT"; }
+
+- (NSData *)httpRequestBody
+{
+    return [NSJSONSerialization dataWithJSONObject:self.body options:0 error:nil];
 }
 
 #pragma mark Instance methods
@@ -47,24 +63,8 @@
 
 - (void)dispatchAsyncHttpRequest
 {
-    NSString *path = [NSString stringWithFormat:@"/%@/%@", self.databaseName, self.docId];
-
-    NSURLComponents *components =
-        [NSURLComponents componentsWithURL:self.rootURL resolvingAgainstBaseURL:NO];
-
-    components.path = path;
-    components.queryItems = components.queryItems ? components.queryItems : @[];
-    components.queryItems = [components.queryItems arrayByAddingObjectsFromArray:self.queryItems];
-
-    NSLog(@"%@", [[components URL] absoluteString]);
-
-    NSMutableURLRequest *request =
-        [NSMutableURLRequest requestWithURL:[components URL]
-                                cachePolicy:NSURLRequestUseProtocolCachePolicy
-                            timeoutInterval:10.0];
-
-    [request setHTTPMethod:@"PUT"];
-    request.HTTPBody = [NSJSONSerialization dataWithJSONObject:self.body options:0 error:nil];
+    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
+    NSURLRequest *request = [b buildRequest];
 
     __weak CDTPutDocumentOperation *weakSelf = self;
     self.task = [self.session

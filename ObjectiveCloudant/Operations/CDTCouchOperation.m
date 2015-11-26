@@ -36,6 +36,10 @@ NSInteger const kCDTNoHTTPStatus = 0;
 
 - (void)callCompletionHandlerWithError:(NSError *)error { return; }
 
+- (NSString *)httpPath { return @"/"; }
+
+- (NSString *)httpMethod { return @"GET"; }
+
 #pragma mark Concurrent operation NSOperation functions
 
 - (id)init
