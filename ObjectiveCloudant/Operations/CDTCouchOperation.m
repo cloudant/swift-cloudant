@@ -62,8 +62,10 @@ NSInteger const kCDTNoHTTPStatus = 0;
 - (void)cancel
 {
     [super cancel];
-    if (self.requestExecutor) {
-        [self.requestExecutor cancel];
+    
+    CDTOperationRequestExecutor *requestExecutor = self.requestExecutor;
+    if (requestExecutor) {
+        [requestExecutor cancel];
     }
 }
 

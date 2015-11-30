@@ -79,8 +79,9 @@
 
 - (void)cancel
 {
-    if (self.task) {
-        [self.task cancel];
+    CDTURLSessionTask *task = self.task;
+    if (task) {
+        [task cancel];
     }
 }
 
