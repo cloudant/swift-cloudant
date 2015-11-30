@@ -18,6 +18,8 @@
 #import "CDTInterceptableSession.h"
 #import "CDTOperationRequestExecutorDelegate.h"
 
+@class CDTOperationRequestExecutor;
+
 /**
  The CDTObjectiveCloudantErrorDomain String
  */

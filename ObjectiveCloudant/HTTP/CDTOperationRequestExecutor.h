@@ -54,4 +54,12 @@
  */
 - (void)executeRequest;
 
+/**
+ Cancel an ongoing request.
+ 
+ This will just call cancel on the underlying request, if the request completes, callbacks
+ will still be fired.
+ */
+- (void)cancel;
+
 @end

@@ -77,4 +77,11 @@
     [self.task resume];
 }
 
+- (void)cancel
+{
+    if (self.task) {
+        [self.task cancel];
+    }
+}
+
 @end

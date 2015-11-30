@@ -23,7 +23,7 @@ NSInteger const kCDTNoHTTPStatus = 0;
 
 @interface CDTCouchOperation ()
 
-@property (nullable, nonatomic, strong) CDTURLSessionTask *task;
+@property (nullable, nonatomic, weak) CDTOperationRequestExecutor* requestExecutor;
 
 @end
 
@@ -58,10 +58,13 @@ NSInteger const kCDTNoHTTPStatus = 0;
 - (BOOL)isExecuting { return executing; }
 
 - (BOOL)isFinished { return finished; }
+
 - (void)cancel
 {
     [super cancel];
-    [self.task cancel];
+    if (self.requestExecutor) {
+        [self.requestExecutor cancel];
+    }
 }
 
 - (void)start
@@ -95,6 +98,7 @@ NSInteger const kCDTNoHTTPStatus = 0;
     CDTOperationRequestExecutor *executor =
     [[CDTOperationRequestExecutor alloc] initWithOperation:self];
     [executor executeRequest];
+    self.requestExecutor = executor;
     executing = YES;
     [self didChangeValueForKey:@"isExecuting"];
 }
