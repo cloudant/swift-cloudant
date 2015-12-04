@@ -24,6 +24,6 @@
 @interface CDTCouchOperation (internal)
 
 /** Executor which handles issuing the request to Couch or Cloudant. */
-@property (nullable, nonatomic, weak) CDTOperationRequestExecutor* requestExecutor;
+@property (nullable, nonatomic, strong) CDTOperationRequestExecutor* requestExecutor;
 
 @end

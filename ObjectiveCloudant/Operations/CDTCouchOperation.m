@@ -23,7 +23,7 @@ NSInteger const kCDTNoHTTPStatus = 0;
 
 @interface CDTCouchOperation ()
 
-@property (nullable, nonatomic, weak) CDTOperationRequestExecutor* requestExecutor;
+@property (nullable, nonatomic, strong) CDTOperationRequestExecutor* requestExecutor;
 
 @end
 

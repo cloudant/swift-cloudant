@@ -21,7 +21,7 @@
 
 @interface CDTOperationRequestExecutor ()
 
-@property (nonatomic, strong) NSOperation<CDTOperationRequestExecutorDelegate> *operation;
+@property (nonatomic, weak) NSOperation<CDTOperationRequestExecutorDelegate> *operation;
 
 /** Task is retained so the executor isn't deallocated before it's completed. */
 @property (nullable, nonatomic, strong) CDTURLSessionTask *task;
