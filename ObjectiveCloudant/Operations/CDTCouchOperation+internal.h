@@ -16,14 +16,14 @@
 #import <Foundation/Foundation.h>
 #import "CDTCouchOperation.h"
 
+@class CDTOperationRequestExecutor;
+
 /*
  Internal category to expose properties on CDTCouchOperation.
  */
 @interface CDTCouchOperation (internal)
 
-/**
- The HTTP session to use when making requests.
- */
-@property (nullable, nonatomic, strong) CDTURLSessionTask* task;
+/** Executor which handles issuing the request to Couch or Cloudant. */
+@property (nullable, nonatomic, strong) CDTOperationRequestExecutor* requestExecutor;
 
 @end

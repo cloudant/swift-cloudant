@@ -58,51 +58,30 @@
 
 #pragma mark Instance methods
 
-- (void)dispatchAsyncHttpRequest
+- (void)processResponseWithData:(NSData *)responseData
+                     statusCode:(NSInteger)statusCode
+                          error:(NSError *)error
 {
-    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
-    NSURLRequest *request = [b buildRequest];
-
-    __weak CDTDeleteDocumentOperation *weakSelf = self;
-    self.task = [self.session
-        dataTaskWithRequest:request
-          completionHandler:^(NSData *_Nullable data, NSURLResponse *response, NSError *error) {
-            CDTDeleteDocumentOperation *strongSelf = weakSelf;
-
-            if ([strongSelf isCancelled]) {
-                [strongSelf completeOperation];
-                return;
-            }
-
-            if (strongSelf && strongSelf.deleteDocumentCompletionBlock) {
-                if (error) {
-                    strongSelf.deleteDocumentCompletionBlock(kCDTNoHTTPStatus, error);
-                }
-
-                NSError *error = nil;
-
-                // pass the response back to the complete handler.
-                NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
-
-                if (statusCode / 100 != 2) {
-                    NSString *json =
-                        [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                    NSString *msg =
-                        [NSString stringWithFormat:@"Document deletion failed with %ld %@.",
-                                                   (long)statusCode, json];
-                    NSDictionary *userInfo =
-                        @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
-                    error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
-                                                code:CDTObjectiveCloudantErrorDeleteDocumentFailed
-                                            userInfo:userInfo];
-                }
-
-                strongSelf.deleteDocumentCompletionBlock(statusCode, error);
-            }
-
-            [strongSelf completeOperation];
-          }];
-    [self.task resume];
+    if (self.deleteDocumentCompletionBlock) {
+        if (error) {
+            self.deleteDocumentCompletionBlock(kCDTNoHTTPStatus, error);
+        }
+        
+        NSError *error = nil;
+        
+        if (statusCode / 100 != 2) {
+            NSString *json =
+            [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            NSString *msg = [NSString
+                             stringWithFormat:@"Document deletion failed with %ld %@.", (long)statusCode, json];
+            NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
+            error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
+                                        code:CDTObjectiveCloudantErrorDeleteDocumentFailed
+                                    userInfo:userInfo];
+        }
+        
+        self.deleteDocumentCompletionBlock(statusCode, error);
+    }
 }
 
 @end

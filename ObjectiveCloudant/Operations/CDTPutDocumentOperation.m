@@ -61,60 +61,39 @@
     }
 }
 
-- (void)dispatchAsyncHttpRequest
+- (void)processResponseWithData:(NSData *)responseData
+                     statusCode:(NSInteger)statusCode
+                          error:(NSError *)error
 {
-    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
-    NSURLRequest *request = [b buildRequest];
-
-    __weak CDTPutDocumentOperation *weakSelf = self;
-    self.task = [self.session
-        dataTaskWithRequest:request
-          completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
-                              NSError *_Nullable error) {
-            CDTPutDocumentOperation *self = weakSelf;
-
-            if ([self isCancelled]) {
-                [self completeOperation];
-                return;
+    if (error) {
+        if (self && self.putDocumentCompletionBlock) {
+            self.putDocumentCompletionBlock(nil, nil, kCDTNoHTTPStatus, error);
+        }
+    } else {
+        if (statusCode == 201 || statusCode == 202) {
+            // Success
+            NSDictionary *result = (NSDictionary *)
+            [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
+            if (self && self.putDocumentCompletionBlock) {
+                self.putDocumentCompletionBlock(result[@"id"], result[@"rev"], statusCode, nil);
             }
-
-            if (error) {
-                if (self && self.putDocumentCompletionBlock) {
-                    self.putDocumentCompletionBlock(nil, nil, kCDTNoHTTPStatus, error);
-                }
-            } else {
-                NSInteger statusCode = ((NSHTTPURLResponse *)res).statusCode;
-                if (statusCode == 201 || statusCode == 202) {
-                    // Success
-                    NSDictionary *result =
-                        (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data
-                                                                        options:0
-                                                                          error:nil];
-                    if (self && self.putDocumentCompletionBlock) {
-                        self.putDocumentCompletionBlock(result[@"id"], result[@"rev"], statusCode,
-                                                        nil);
-                    }
-                } else {
-                    NSString *json =
-                        [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                    NSString *msg =
-                        [NSString stringWithFormat:@"Document create or update failed with %ld %@.",
-                                                   (long)statusCode, json];
-                    NSDictionary *userInfo =
-                        @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
-                    NSError *error =
-                        [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
-                                            code:CDTObjectiveCloudantErrorCreateUpdateDocumentFailed
-                                        userInfo:userInfo];
-
-                    if (self && self.putDocumentCompletionBlock) {
-                        self.putDocumentCompletionBlock(nil, nil, kCDTNoHTTPStatus, error);
-                    }
-                }
+        } else {
+            NSString *json =
+            [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            NSString *msg =
+            [NSString stringWithFormat:@"Document create or update failed with %ld %@.",
+             (long)statusCode, json];
+            NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
+            NSError *error =
+            [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
+                                code:CDTObjectiveCloudantErrorCreateUpdateDocumentFailed
+                            userInfo:userInfo];
+            
+            if (self && self.putDocumentCompletionBlock) {
+                self.putDocumentCompletionBlock(nil, nil, kCDTNoHTTPStatus, error);
             }
-
-            [self completeOperation];
-          }];
-    [self.task resume];
+        }
+    }
 }
+
 @end

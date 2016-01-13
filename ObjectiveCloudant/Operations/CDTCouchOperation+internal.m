@@ -16,6 +16,6 @@
 
 @implementation CDTCouchOperation (internal)
 
-@dynamic task;
+@dynamic requestExecutor;
 
 @end

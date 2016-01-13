@@ -58,53 +58,28 @@
     }
 }
 
-- (void)dispatchAsyncHttpRequest
+- (void)processResponseWithData:(NSData *)responseData
+                     statusCode:(NSInteger)statusCode
+                          error:(NSError *)error
 {
-    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
-    NSURLRequest *request = [b buildRequest];
-
-    __weak CDTGetDocumentOperation *weakSelf = self;
-    self.task =
-        [self.session dataTaskWithRequest:request
-                        completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable res,
-                                            NSError *_Nullable error) {
-                          CDTGetDocumentOperation *self = weakSelf;
-                          if (!self || !self.getDocumentCompletionBlock) {
-                              return;
-                          }
-                          if ([self isCancelled]) {
-                              [self completeOperation];
-                              return;
-                          }
-
-                          NSDictionary *result = nil;
-
-                          if (data && ((NSHTTPURLResponse *)res).statusCode == 200) {
-                              // We know this will be a dict on 200 response
-                              result = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data
-                                                                                       options:0
-                                                                                         error:nil];
-                              self.getDocumentCompletionBlock(result, error);
-
-                          } else {
-                              NSString *json = [[NSString alloc] initWithData:data
-                                                                     encoding:NSUTF8StringEncoding];
-                              NSString *msg = [NSString
-                                  stringWithFormat:@"Get document failed with %ld %@.",
-                                                   (long)((NSHTTPURLResponse *)res).statusCode,
-                                                   json];
-                              NSDictionary *userInfo =
-                                  @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
-                              NSError *error = [NSError
-                                  errorWithDomain:CDTObjectiveCloudantErrorDomain
+    NSDictionary *result = nil;
+    
+    if (responseData && (statusCode == 200)) {
+        // We know this will be a dict on 200 response
+        result = (NSDictionary *)
+        [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
+        self.getDocumentCompletionBlock(result, error);
+        
+    } else {
+        NSString *json = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        NSString *msg =
+        [NSString stringWithFormat:@"Get document failed with %ld %@.", (long)statusCode, json];
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
+        NSError *error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
                                              code:CDTObjectiveCloudantErrorGetDocumentFailed
                                          userInfo:userInfo];
-                              self.getDocumentCompletionBlock(nil, error);
-                          }
-
-                          [self completeOperation];
-                        }];
-    [self.task resume];
+        self.getDocumentCompletionBlock(nil, error);
+    }
 }
 
 @end

@@ -16,13 +16,14 @@
 
 #import "CDTCouchOperation.h"
 #import "CDTCouchOperation+internal.h"
+#import "CDTOperationRequestExecutor.h"
 
 NSString *const CDTObjectiveCloudantErrorDomain = @"CDTObjectiveCloudantErrorDomain";
 NSInteger const kCDTNoHTTPStatus = 0;
 
 @interface CDTCouchOperation ()
 
-@property (nullable, nonatomic, strong) CDTURLSessionTask *task;
+@property (nullable, nonatomic, strong) CDTOperationRequestExecutor* requestExecutor;
 
 @end
 
@@ -57,10 +58,15 @@ NSInteger const kCDTNoHTTPStatus = 0;
 - (BOOL)isExecuting { return executing; }
 
 - (BOOL)isFinished { return finished; }
+
 - (void)cancel
 {
     [super cancel];
-    [self.task cancel];
+    
+    CDTOperationRequestExecutor *requestExecutor = self.requestExecutor;
+    if (requestExecutor) {
+        [requestExecutor cancel];
+    }
 }
 
 - (void)start
@@ -91,7 +97,10 @@ NSInteger const kCDTNoHTTPStatus = 0;
 
     // If the operation is not canceled, begin executing the task.
     [self willChangeValueForKey:@"isExecuting"];
-    [self dispatchAsyncHttpRequest];
+    CDTOperationRequestExecutor *executor =
+    [[CDTOperationRequestExecutor alloc] initWithOperation:self];
+    [executor executeRequest];
+    self.requestExecutor = executor;
     executing = YES;
     [self didChangeValueForKey:@"isExecuting"];
 }

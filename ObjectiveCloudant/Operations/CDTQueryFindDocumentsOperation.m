@@ -109,54 +109,39 @@ NSInteger const kCDTDefaultOperationIntegerValue = -1;
 
 - (NSData *)httpRequestBody { return self.jsonBody; }
 
-- (void)dispatchAsyncHttpRequest
+- (void)processResponseWithData:(NSData *)responseData
+                     statusCode:(NSInteger)statusCode
+                          error:(NSError *)error
 {
-    CDTOperationRequestBuilder *b = [[CDTOperationRequestBuilder alloc] initWithOperation:self];
-    NSURLRequest *request = [b buildRequest];
-
-    __weak CDTQueryFindDocumentsOperation *weakSelf = self;
-
-    self.task = [self.session
-        dataTaskWithRequest:request
-          completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            CDTQueryFindDocumentsOperation *self = weakSelf;
-            if (!self || [self isCancelled]) {
-                [self completeOperation];
-                return;
-            }
-
-            NSInteger statusCode = ((NSHTTPURLResponse *)response).statusCode;
-            if (error) {
-                self.findDocumentsCompletionBlock(nil, error);
-            } else if (statusCode / 100 == 2) {
-                NSError *jsonError;
-                NSDictionary *responseDict =
-                    [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
-                if (!responseDict) {
-                    self.findDocumentsCompletionBlock(nil, jsonError);
-                } else {
-                    if (self.documentFoundBlock) {
-                        for (NSDictionary *doc in responseDict[@"docs"]) {
-                            self.documentFoundBlock(doc);
-                        }
-                    }
-
-                    if (self.findDocumentsCompletionBlock) {
-                        self.findDocumentsCompletionBlock(nil, nil);
-                    }
+    if (error) {
+        self.findDocumentsCompletionBlock(nil, error);
+    } else if (statusCode / 100 == 2) {
+        NSError *jsonError;
+        NSDictionary *responseDict =
+        [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&jsonError];
+        if (!responseDict) {
+            self.findDocumentsCompletionBlock(nil, jsonError);
+        } else {
+            if (self.documentFoundBlock) {
+                for (NSDictionary *doc in responseDict[@"docs"]) {
+                    self.documentFoundBlock(doc);
                 }
-            } else {
-                NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSString *msg = [NSString
-                    stringWithFormat:@"Find documents failed with %ld %@.", (long)statusCode, json];
-                NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
-                error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
-                                            code:CDTObjectiveCloudantErrorCreateDatabaseFailed
-                                        userInfo:userInfo];
-                self.findDocumentsCompletionBlock(nil, error);
             }
-          }];
-    [self.task resume];
+            
+            if (self.findDocumentsCompletionBlock) {
+                self.findDocumentsCompletionBlock(nil, nil);
+            }
+        }
+    } else {
+        NSString *json = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        NSString *msg = [NSString
+                         stringWithFormat:@"Find documents failed with %ld %@.", (long)statusCode, json];
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(msg, nil)};
+        error = [NSError errorWithDomain:CDTObjectiveCloudantErrorDomain
+                                    code:CDTObjectiveCloudantErrorCreateDatabaseFailed
+                                userInfo:userInfo];
+        self.findDocumentsCompletionBlock(nil, error);
+    }
 }
 
 @end

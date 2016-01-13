@@ -27,6 +27,9 @@
 		275B9CD01BA9D3770023CB63 /* PutDocumentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 275B9CCF1BA9D3770023CB63 /* PutDocumentTests.m */; };
 		279E8D331B7F905B001100D4 /* ObjectiveCloudant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 279E8D281B7F905B001100D4 /* ObjectiveCloudant.framework */; };
 		27BC070B1C0459E4009C6440 /* CDTOperationRequestBuilderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 27BC070A1C04588D009C6440 /* CDTOperationRequestBuilderDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		27BC070E1C07366E009C6440 /* CDTOperationRequestExecutor.h in Headers */ = {isa = PBXBuildFile; fileRef = 27BC070C1C07366E009C6440 /* CDTOperationRequestExecutor.h */; settings = {ASSET_TAGS = (); }; };
+		27BC070F1C07366E009C6440 /* CDTOperationRequestExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BC070D1C07366E009C6440 /* CDTOperationRequestExecutor.m */; settings = {ASSET_TAGS = (); }; };
+		27BC07111C073717009C6440 /* CDTOperationRequestExecutorDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 27BC07101C073717009C6440 /* CDTOperationRequestExecutorDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27F6B7211BA9C266000B523E /* TestHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F6B71E1BA9C243000B523E /* TestHelpers.m */; };
 		27F6B7241BA9C322000B523E /* CDTCreateDatabaseOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 27F6B7221BA9C322000B523E /* CDTCreateDatabaseOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27F6B7251BA9C322000B523E /* CDTCreateDatabaseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F6B7231BA9C322000B523E /* CDTCreateDatabaseOperation.m */; };
@@ -101,6 +104,9 @@
 		279E8D281B7F905B001100D4 /* ObjectiveCloudant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjectiveCloudant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		279E8D321B7F905B001100D4 /* ObjectiveCloudant.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ObjectiveCloudant.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		27BC070A1C04588D009C6440 /* CDTOperationRequestBuilderDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestBuilderDelegate.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestBuilderDelegate.h; sourceTree = SOURCE_ROOT; };
+		27BC070C1C07366E009C6440 /* CDTOperationRequestExecutor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestExecutor.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestExecutor.h; sourceTree = SOURCE_ROOT; };
+		27BC070D1C07366E009C6440 /* CDTOperationRequestExecutor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTOperationRequestExecutor.m; path = ObjectiveCloudant/HTTP/CDTOperationRequestExecutor.m; sourceTree = SOURCE_ROOT; };
+		27BC07101C073717009C6440 /* CDTOperationRequestExecutorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDTOperationRequestExecutorDelegate.h; sourceTree = SOURCE_ROOT; };
 		27F6B71D1BA9C243000B523E /* TestHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestHelpers.h; path = ObjectiveCloudantTests/TestHelpers.h; sourceTree = SOURCE_ROOT; };
 		27F6B71E1BA9C243000B523E /* TestHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestHelpers.m; path = ObjectiveCloudantTests/TestHelpers.m; sourceTree = SOURCE_ROOT; };
 		27F6B7221BA9C322000B523E /* CDTCreateDatabaseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTCreateDatabaseOperation.h; path = ObjectiveCloudant/Operations/CDTCreateDatabaseOperation.h; sourceTree = SOURCE_ROOT; };
@@ -167,9 +173,9 @@
 			children = (
 				274CF66D1B9055B9008BBD50 /* CDTCouchDatabaseOperation.h */,
 				274CF66E1B9055B9008BBD50 /* CDTCouchDatabaseOperation.m */,
-				274CF6711B9055B9008BBD50 /* CDTGetDocumentOperation.h */,
 				9851D1761BC57C2700145176 /* CDTQueryFindDocumentsOperation.h */,
 				9851D1771BC57C2700145176 /* CDTQueryFindDocumentsOperation.m */,
+				274CF6711B9055B9008BBD50 /* CDTGetDocumentOperation.h */,
 				274CF6721B9055B9008BBD50 /* CDTGetDocumentOperation.m */,
 				275B9CCB1BA9D3540023CB63 /* CDTPutDocumentOperation.h */,
 				275B9CCC1BA9D3540023CB63 /* CDTPutDocumentOperation.m */,
@@ -292,6 +298,9 @@
 				273EF55D1C00B870009A09E3 /* CDTOperationRequestBuilder.h */,
 				273EF55E1C00B870009A09E3 /* CDTOperationRequestBuilder.m */,
 				27BC070A1C04588D009C6440 /* CDTOperationRequestBuilderDelegate.h */,
+				27BC07101C073717009C6440 /* CDTOperationRequestExecutorDelegate.h */,
+				27BC070C1C07366E009C6440 /* CDTOperationRequestExecutor.h */,
+				27BC070D1C07366E009C6440 /* CDTOperationRequestExecutor.m */,
 			);
 			name = HTTP;
 			sourceTree = "<group>";
@@ -315,6 +324,7 @@
 			files = (
 				274CF6791B9055B9008BBD50 /* CDTCouchDatabaseOperation.h in Headers */,
 				274CF6731B9055B9008BBD50 /* CDTCouchDBClient.h in Headers */,
+				27BC07111C073717009C6440 /* CDTOperationRequestExecutorDelegate.h in Headers */,
 				274CF67B1B9055B9008BBD50 /* CDTCouchOperation.h in Headers */,
 				273EF55F1C00B870009A09E3 /* CDTOperationRequestBuilder.h in Headers */,
 				274CF6781B9055B9008BBD50 /* ObjectiveCloudant.h in Headers */,
@@ -331,6 +341,7 @@
 				9851D1781BC57C2700145176 /* CDTQueryFindDocumentsOperation.h in Headers */,
 				274CF6751B9055B9008BBD50 /* CDTDatabase.h in Headers */,
 				98629D671BB40EF900E7F5E8 /* CDTCouchOperation+internal.h in Headers */,
+				27BC070E1C07366E009C6440 /* CDTOperationRequestExecutor.h in Headers */,
 				9851D1801BC666C000145176 /* CDTSortSyntaxValidator.h in Headers */,
 				984AA6611BB17E9E003D4DCA /* CDTCreateQueryIndexOperation.h in Headers */,
 				27F6B72A1BA9C98C000B523E /* CDTDeleteDatabaseOperation.h in Headers */,
@@ -503,6 +514,7 @@
 				273EF5601C00B870009A09E3 /* CDTOperationRequestBuilder.m in Sources */,
 				984AA65C1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.m in Sources */,
 				980B2BF81BC27CC800CD40F8 /* CDTDeleteQueryIndexOperation.m in Sources */,
+				27BC070F1C07366E009C6440 /* CDTOperationRequestExecutor.m in Sources */,
 				98629D681BB40EF900E7F5E8 /* CDTCouchOperation+internal.m in Sources */,
 				274CF6741B9055B9008BBD50 /* CDTCouchDBClient.m in Sources */,
 				274CF67A1B9055B9008BBD50 /* CDTCouchDatabaseOperation.m in Sources */,
