@@ -91,7 +91,7 @@ typedef NS_ENUM(NSInteger, CDTObjectiveCloudantErrors) {
 
  Must be set before a call can be successfully made.
  */
-@property (nullable, nonatomic, strong) CDTInterceptableSession *session;
+@property (nonnull, nonatomic, strong) CDTInterceptableSession *session;
 
 /**
  Root URL for the CouchDB instance.
