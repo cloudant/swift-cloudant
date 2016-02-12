@@ -40,7 +40,7 @@
 /**
  This callback should do operation-specific processing of the
  request content. It need not worry about NSOperation lifecycle.
- 
+
  It doesn't need to check whether the operation was cancelled, or
  call the CDTCouchOperation completion handler, that's handled
  by the caller of this method.
@@ -48,6 +48,5 @@
 - (void)processResponseWithData:(nullable NSData *)responseData
                      statusCode:(NSInteger)statusCode
                           error:(nullable NSError *)error;
-
 
 @end

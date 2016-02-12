@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		273EF55F1C00B870009A09E3 /* CDTOperationRequestBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 273EF55D1C00B870009A09E3 /* CDTOperationRequestBuilder.h */; settings = {ASSET_TAGS = (); }; };
-		273EF5601C00B870009A09E3 /* CDTOperationRequestBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 273EF55E1C00B870009A09E3 /* CDTOperationRequestBuilder.m */; settings = {ASSET_TAGS = (); }; };
+		273EF55F1C00B870009A09E3 /* CDTOperationRequestBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 273EF55D1C00B870009A09E3 /* CDTOperationRequestBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		273EF5601C00B870009A09E3 /* CDTOperationRequestBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 273EF55E1C00B870009A09E3 /* CDTOperationRequestBuilder.m */; };
 		274CF6731B9055B9008BBD50 /* CDTCouchDBClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 274CF6661B9055B9008BBD50 /* CDTCouchDBClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		274CF6741B9055B9008BBD50 /* CDTCouchDBClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 274CF6671B9055B9008BBD50 /* CDTCouchDBClient.m */; };
 		274CF6751B9055B9008BBD50 /* CDTDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 274CF6681B9055B9008BBD50 /* CDTDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -26,10 +26,8 @@
 		275B9CCE1BA9D3540023CB63 /* CDTPutDocumentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 275B9CCC1BA9D3540023CB63 /* CDTPutDocumentOperation.m */; };
 		275B9CD01BA9D3770023CB63 /* PutDocumentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 275B9CCF1BA9D3770023CB63 /* PutDocumentTests.m */; };
 		279E8D331B7F905B001100D4 /* ObjectiveCloudant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 279E8D281B7F905B001100D4 /* ObjectiveCloudant.framework */; };
-		27BC070B1C0459E4009C6440 /* CDTOperationRequestBuilderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 27BC070A1C04588D009C6440 /* CDTOperationRequestBuilderDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		27BC070E1C07366E009C6440 /* CDTOperationRequestExecutor.h in Headers */ = {isa = PBXBuildFile; fileRef = 27BC070C1C07366E009C6440 /* CDTOperationRequestExecutor.h */; settings = {ASSET_TAGS = (); }; };
-		27BC070F1C07366E009C6440 /* CDTOperationRequestExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BC070D1C07366E009C6440 /* CDTOperationRequestExecutor.m */; settings = {ASSET_TAGS = (); }; };
-		27BC07111C073717009C6440 /* CDTOperationRequestExecutorDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 27BC07101C073717009C6440 /* CDTOperationRequestExecutorDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		27BC070E1C07366E009C6440 /* CDTOperationRequestExecutor.h in Headers */ = {isa = PBXBuildFile; fileRef = 27BC070C1C07366E009C6440 /* CDTOperationRequestExecutor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		27BC070F1C07366E009C6440 /* CDTOperationRequestExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BC070D1C07366E009C6440 /* CDTOperationRequestExecutor.m */; };
 		27F6B7211BA9C266000B523E /* TestHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F6B71E1BA9C243000B523E /* TestHelpers.m */; };
 		27F6B7241BA9C322000B523E /* CDTCreateDatabaseOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 27F6B7221BA9C322000B523E /* CDTCreateDatabaseOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27F6B7251BA9C322000B523E /* CDTCreateDatabaseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F6B7231BA9C322000B523E /* CDTCreateDatabaseOperation.m */; };
@@ -37,6 +35,7 @@
 		27F6B72A1BA9C98C000B523E /* CDTDeleteDatabaseOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 27F6B7281BA9C98C000B523E /* CDTDeleteDatabaseOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27F6B72B1BA9C98C000B523E /* CDTDeleteDatabaseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F6B7291BA9C98C000B523E /* CDTDeleteDatabaseOperation.m */; };
 		27F6B72D1BA9CA0F000B523E /* DeleteDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F6B72C1BA9CA0F000B523E /* DeleteDatabaseTests.m */; };
+		8E21AC0ABF2F579F13F9A8F8 /* Pods_ObjectiveCloudantTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF088291BC169B0422274EC2 /* Pods_ObjectiveCloudantTests.framework */; };
 		980B2BF71BC27CC800CD40F8 /* CDTDeleteQueryIndexOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 980B2BF51BC27CC800CD40F8 /* CDTDeleteQueryIndexOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		980B2BF81BC27CC800CD40F8 /* CDTDeleteQueryIndexOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 980B2BF61BC27CC800CD40F8 /* CDTDeleteQueryIndexOperation.m */; };
 		984AA6331BAAFA08003D4DCA /* CDTHTTPInterceptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 984AA62A1BAAFA08003D4DCA /* CDTHTTPInterceptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -67,7 +66,8 @@
 		98629D681BB40EF900E7F5E8 /* CDTCouchOperation+internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */; };
 		988D313C1BBE9B4400EFB290 /* CouchDBTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 988D313B1BBE9B4400EFB290 /* CouchDBTests.m */; };
 		9896FE801BB57DAD00856BD7 /* CreateIndexTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */; };
-		AF09BD7CDDCA1320E802F047 /* Pods_ObjectiveCloudantTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84D0A0BCF45916FACA3CDB5 /* Pods_ObjectiveCloudantTests.framework */; };
+		98A87EE21C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		98A87EE31C6E31DA00D8B0E1 /* CDTOperationRequestExecutorDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A87EE11C6E31DA00D8B0E1 /* CDTOperationRequestExecutorDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,7 +81,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2475D3C3038B0291D094C46B /* Pods-ObjectiveCloudantTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCloudantTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ObjectiveCloudantTests/Pods-ObjectiveCloudantTests.release.xcconfig"; sourceTree = "<group>"; };
 		273EF55D1C00B870009A09E3 /* CDTOperationRequestBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestBuilder.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestBuilder.h; sourceTree = SOURCE_ROOT; };
 		273EF55E1C00B870009A09E3 /* CDTOperationRequestBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTOperationRequestBuilder.m; path = ObjectiveCloudant/HTTP/CDTOperationRequestBuilder.m; sourceTree = SOURCE_ROOT; };
 		274CF6661B9055B9008BBD50 /* CDTCouchDBClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTCouchDBClient.h; path = ObjectiveCloudant/CDTCouchDBClient.h; sourceTree = SOURCE_ROOT; };
@@ -103,10 +102,8 @@
 		275B9CCF1BA9D3770023CB63 /* PutDocumentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PutDocumentTests.m; path = ObjectiveCloudantTests/PutDocumentTests.m; sourceTree = SOURCE_ROOT; };
 		279E8D281B7F905B001100D4 /* ObjectiveCloudant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjectiveCloudant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		279E8D321B7F905B001100D4 /* ObjectiveCloudant.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ObjectiveCloudant.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		27BC070A1C04588D009C6440 /* CDTOperationRequestBuilderDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestBuilderDelegate.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestBuilderDelegate.h; sourceTree = SOURCE_ROOT; };
 		27BC070C1C07366E009C6440 /* CDTOperationRequestExecutor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestExecutor.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestExecutor.h; sourceTree = SOURCE_ROOT; };
 		27BC070D1C07366E009C6440 /* CDTOperationRequestExecutor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTOperationRequestExecutor.m; path = ObjectiveCloudant/HTTP/CDTOperationRequestExecutor.m; sourceTree = SOURCE_ROOT; };
-		27BC07101C073717009C6440 /* CDTOperationRequestExecutorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDTOperationRequestExecutorDelegate.h; sourceTree = SOURCE_ROOT; };
 		27F6B71D1BA9C243000B523E /* TestHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestHelpers.h; path = ObjectiveCloudantTests/TestHelpers.h; sourceTree = SOURCE_ROOT; };
 		27F6B71E1BA9C243000B523E /* TestHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestHelpers.m; path = ObjectiveCloudantTests/TestHelpers.m; sourceTree = SOURCE_ROOT; };
 		27F6B7221BA9C322000B523E /* CDTCreateDatabaseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTCreateDatabaseOperation.h; path = ObjectiveCloudant/Operations/CDTCreateDatabaseOperation.h; sourceTree = SOURCE_ROOT; };
@@ -115,7 +112,7 @@
 		27F6B7281BA9C98C000B523E /* CDTDeleteDatabaseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTDeleteDatabaseOperation.h; path = ObjectiveCloudant/Operations/CDTDeleteDatabaseOperation.h; sourceTree = SOURCE_ROOT; };
 		27F6B7291BA9C98C000B523E /* CDTDeleteDatabaseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTDeleteDatabaseOperation.m; path = ObjectiveCloudant/Operations/CDTDeleteDatabaseOperation.m; sourceTree = SOURCE_ROOT; };
 		27F6B72C1BA9CA0F000B523E /* DeleteDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DeleteDatabaseTests.m; path = ObjectiveCloudantTests/DeleteDatabaseTests.m; sourceTree = SOURCE_ROOT; };
-		424A2712EF3C26DBF04FF868 /* Pods-ObjectiveCloudantTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCloudantTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ObjectiveCloudantTests/Pods-ObjectiveCloudantTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6CBCA455EE3CE18541E67E8E /* Pods-ObjectiveCloudantTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCloudantTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ObjectiveCloudantTests/Pods-ObjectiveCloudantTests.release.xcconfig"; sourceTree = "<group>"; };
 		980B2BF51BC27CC800CD40F8 /* CDTDeleteQueryIndexOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDTDeleteQueryIndexOperation.h; sourceTree = "<group>"; };
 		980B2BF61BC27CC800CD40F8 /* CDTDeleteQueryIndexOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDTDeleteQueryIndexOperation.m; sourceTree = "<group>"; };
 		984AA62A1BAAFA08003D4DCA /* CDTHTTPInterceptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTHTTPInterceptor.h; path = ObjectiveCloudant/HTTP/CDTHTTPInterceptor.h; sourceTree = SOURCE_ROOT; };
@@ -145,7 +142,10 @@
 		98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CDTCouchOperation+internal.m"; path = "ObjectiveCloudant/Operations/CDTCouchOperation+internal.m"; sourceTree = SOURCE_ROOT; };
 		988D313B1BBE9B4400EFB290 /* CouchDBTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CouchDBTests.m; path = ObjectiveCloudantTests/CouchDBTests.m; sourceTree = SOURCE_ROOT; };
 		9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateIndexTests.m; path = ObjectiveCloudantTests/CreateIndexTests.m; sourceTree = SOURCE_ROOT; };
-		D84D0A0BCF45916FACA3CDB5 /* Pods_ObjectiveCloudantTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectiveCloudantTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestBuilderDelegate.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestBuilderDelegate.h; sourceTree = SOURCE_ROOT; };
+		98A87EE11C6E31DA00D8B0E1 /* CDTOperationRequestExecutorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestExecutorDelegate.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestExecutorDelegate.h; sourceTree = SOURCE_ROOT; };
+		9BE38C8FC08AD2F7D5DE29A0 /* Pods-ObjectiveCloudantTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCloudantTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ObjectiveCloudantTests/Pods-ObjectiveCloudantTests.debug.xcconfig"; sourceTree = "<group>"; };
+		EF088291BC169B0422274EC2 /* Pods_ObjectiveCloudantTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectiveCloudantTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,13 +161,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				279E8D331B7F905B001100D4 /* ObjectiveCloudant.framework in Frameworks */,
-				AF09BD7CDDCA1320E802F047 /* Pods_ObjectiveCloudantTests.framework in Frameworks */,
+				8E21AC0ABF2F579F13F9A8F8 /* Pods_ObjectiveCloudantTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01B3C4E019321DFF406A309C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EF088291BC169B0422274EC2 /* Pods_ObjectiveCloudantTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		274CF66C1B9055B9008BBD50 /* Operations - Database */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,8 +206,8 @@
 				279E8D2A1B7F905B001100D4 /* ObjectiveCloudant */,
 				279E8D361B7F905B001100D4 /* ObjectiveCloudantTests */,
 				279E8D291B7F905B001100D4 /* Products */,
-				4597E2A536CC098B1267B0A0 /* Pods */,
-				28F2AEE19CF799EA68B2629C /* Frameworks */,
+				8C2261730DCBB948225861E0 /* Pods */,
+				01B3C4E019321DFF406A309C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -266,19 +274,11 @@
 			path = ../ObjectiveCloudant/Operations;
 			sourceTree = "<group>";
 		};
-		28F2AEE19CF799EA68B2629C /* Frameworks */ = {
+		8C2261730DCBB948225861E0 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D84D0A0BCF45916FACA3CDB5 /* Pods_ObjectiveCloudantTests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		4597E2A536CC098B1267B0A0 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				424A2712EF3C26DBF04FF868 /* Pods-ObjectiveCloudantTests.debug.xcconfig */,
-				2475D3C3038B0291D094C46B /* Pods-ObjectiveCloudantTests.release.xcconfig */,
+				9BE38C8FC08AD2F7D5DE29A0 /* Pods-ObjectiveCloudantTests.debug.xcconfig */,
+				6CBCA455EE3CE18541E67E8E /* Pods-ObjectiveCloudantTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -286,6 +286,8 @@
 		984AA6131BAAF99E003D4DCA /* HTTP */ = {
 			isa = PBXGroup;
 			children = (
+				98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */,
+				98A87EE11C6E31DA00D8B0E1 /* CDTOperationRequestExecutorDelegate.h */,
 				984AA62A1BAAFA08003D4DCA /* CDTHTTPInterceptor.h */,
 				984AA62B1BAAFA08003D4DCA /* CDTHTTPInterceptorContext.h */,
 				984AA62C1BAAFA08003D4DCA /* CDTHTTPInterceptorContext.m */,
@@ -297,8 +299,6 @@
 				984AA6321BAAFA08003D4DCA /* CDTURLSessionTask.m */,
 				273EF55D1C00B870009A09E3 /* CDTOperationRequestBuilder.h */,
 				273EF55E1C00B870009A09E3 /* CDTOperationRequestBuilder.m */,
-				27BC070A1C04588D009C6440 /* CDTOperationRequestBuilderDelegate.h */,
-				27BC07101C073717009C6440 /* CDTOperationRequestExecutorDelegate.h */,
 				27BC070C1C07366E009C6440 /* CDTOperationRequestExecutor.h */,
 				27BC070D1C07366E009C6440 /* CDTOperationRequestExecutor.m */,
 			);
@@ -324,23 +324,23 @@
 			files = (
 				274CF6791B9055B9008BBD50 /* CDTCouchDatabaseOperation.h in Headers */,
 				274CF6731B9055B9008BBD50 /* CDTCouchDBClient.h in Headers */,
-				27BC07111C073717009C6440 /* CDTOperationRequestExecutorDelegate.h in Headers */,
+				98A87EE31C6E31DA00D8B0E1 /* CDTOperationRequestExecutorDelegate.h in Headers */,
 				274CF67B1B9055B9008BBD50 /* CDTCouchOperation.h in Headers */,
-				273EF55F1C00B870009A09E3 /* CDTOperationRequestBuilder.h in Headers */,
 				274CF6781B9055B9008BBD50 /* ObjectiveCloudant.h in Headers */,
 				275B9CCD1BA9D3540023CB63 /* CDTPutDocumentOperation.h in Headers */,
 				984AA6371BAAFA08003D4DCA /* CDTSessionCookieInterceptor.h in Headers */,
+				98A87EE21C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h in Headers */,
 				984AA63A1BAAFA08003D4DCA /* CDTInterceptableSession.h in Headers */,
 				984AA6341BAAFA08003D4DCA /* CDTHTTPInterceptorContext.h in Headers */,
 				980B2BF71BC27CC800CD40F8 /* CDTDeleteQueryIndexOperation.h in Headers */,
 				984AA6331BAAFA08003D4DCA /* CDTHTTPInterceptor.h in Headers */,
 				984AA63D1BAAFA08003D4DCA /* CDTURLSessionTask.h in Headers */,
 				984AA65B1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.h in Headers */,
-				27BC070B1C0459E4009C6440 /* CDTOperationRequestBuilderDelegate.h in Headers */,
 				274CF67D1B9055B9008BBD50 /* CDTGetDocumentOperation.h in Headers */,
 				9851D1781BC57C2700145176 /* CDTQueryFindDocumentsOperation.h in Headers */,
 				274CF6751B9055B9008BBD50 /* CDTDatabase.h in Headers */,
 				98629D671BB40EF900E7F5E8 /* CDTCouchOperation+internal.h in Headers */,
+				273EF55F1C00B870009A09E3 /* CDTOperationRequestBuilder.h in Headers */,
 				27BC070E1C07366E009C6440 /* CDTOperationRequestExecutor.h in Headers */,
 				9851D1801BC666C000145176 /* CDTSortSyntaxValidator.h in Headers */,
 				984AA6611BB17E9E003D4DCA /* CDTCreateQueryIndexOperation.h in Headers */,
@@ -374,12 +374,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 279E8D3F1B7F905B001100D4 /* Build configuration list for PBXNativeTarget "ObjectiveCloudantTests" */;
 			buildPhases = (
-				FB433568FF37C0C27F697A9B /* Check Pods Manifest.lock */,
+				EE6351C1CF79C9FAFAE266A0 /* Check Pods Manifest.lock */,
 				279E8D2E1B7F905B001100D4 /* Sources */,
 				279E8D2F1B7F905B001100D4 /* Frameworks */,
 				279E8D301B7F905B001100D4 /* Resources */,
-				CE77872FBAB8B73D67FA8B13 /* Copy Pods Resources */,
-				808889DEDC9162998CFDFD36 /* Embed Pods Frameworks */,
+				009BF4B24129705A7261945C /* Embed Pods Frameworks */,
+				6168766FB28B8168D8126BDA /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -446,7 +446,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		808889DEDC9162998CFDFD36 /* Embed Pods Frameworks */ = {
+		009BF4B24129705A7261945C /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -461,7 +461,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ObjectiveCloudantTests/Pods-ObjectiveCloudantTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CE77872FBAB8B73D67FA8B13 /* Copy Pods Resources */ = {
+		6168766FB28B8168D8126BDA /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -476,7 +476,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ObjectiveCloudantTests/Pods-ObjectiveCloudantTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FB433568FF37C0C27F697A9B /* Check Pods Manifest.lock */ = {
+		EE6351C1CF79C9FAFAE266A0 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -676,7 +676,7 @@
 		};
 		279E8D401B7F905B001100D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 424A2712EF3C26DBF04FF868 /* Pods-ObjectiveCloudantTests.debug.xcconfig */;
+			baseConfigurationReference = 9BE38C8FC08AD2F7D5DE29A0 /* Pods-ObjectiveCloudantTests.debug.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = ObjectiveCloudantTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -688,7 +688,7 @@
 		};
 		279E8D411B7F905B001100D4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2475D3C3038B0291D094C46B /* Pods-ObjectiveCloudantTests.release.xcconfig */;
+			baseConfigurationReference = 6CBCA455EE3CE18541E67E8E /* Pods-ObjectiveCloudantTests.release.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = ObjectiveCloudantTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
