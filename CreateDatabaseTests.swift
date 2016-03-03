@@ -49,6 +49,11 @@ class CreateDatabaseTests : XCTestCase {
             }
             XCTAssertNil(error)
         }
+        
+        client.addOperation(create)
+        
+        self.waitForExpectationsWithTimeout(10.0, handler: nil)
     }
+
     
 }
