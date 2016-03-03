@@ -279,10 +279,6 @@
 			children = (
 				98734A081C88E99300E79C5B /* Ported */,
 				98734A071C88E96300E79C5B /* Swift */,
-				98629D651BB40EF900E7F5E8 /* CDTCouchOperation+internal.h */,
-				98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */,
-				274CF66F1B9055B9008BBD50 /* CDTCouchOperation.h */,
-				274CF6701B9055B9008BBD50 /* CDTCouchOperation.m */,
 				27F6B7221BA9C322000B523E /* CDTCreateDatabaseOperation.h */,
 				27F6B7231BA9C322000B523E /* CDTCreateDatabaseOperation.m */,
 				27F6B7281BA9C98C000B523E /* CDTDeleteDatabaseOperation.h */,
@@ -380,6 +376,10 @@
 		98734A081C88E99300E79C5B /* Ported */ = {
 			isa = PBXGroup;
 			children = (
+				98629D651BB40EF900E7F5E8 /* CDTCouchOperation+internal.h */,
+				98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */,
+				274CF66F1B9055B9008BBD50 /* CDTCouchOperation.h */,
+				274CF6701B9055B9008BBD50 /* CDTCouchOperation.m */,
 			);
 			name = Ported;
 			sourceTree = "<group>";

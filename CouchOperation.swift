@@ -99,39 +99,54 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
     //return nil if there is no body
     var httpRequestBody:NSData? = nil
     
+    private var executor:OperationRequestExecutor? = nil
+    
     init(httpSession:InterceptableSession) {
         self.session = httpSession
         super.init()
     }
+
     
-    
-    func completeOpetation(){
-        self.willChangeValueForKey("isFinished")
-        self.willChangeValueForKey("isExecuting")
-        
-        self.executing = false
-        self.finished = true
-        
-        self.didChangeValueForKey("isExecuting")
-        self.didChangeValueForKey("isFinished")
-    }
-    
+    // subclasses should override
     func processResponse(data:NSData?, statusCode:Int, error:ErrorType?){
         
     }
     
     func callCompletionHandler(error:ErrorType){
+        return
+    }
+    
+    func validate() -> Bool {
+        return true
+    }
+    
+    final override public func start() {
+        // Always check for cancellation before launching the task
+        if cancelled {
+            finished = true
+            return
+        }
         
+        if !self.validate() {
+            self.callCompletionHandler(Errors.ValidationFailed)
+            finished = true
+            return
+        }
+        
+        // start the operation
+        executing = true
+        executor = OperationRequestExecutor(operation: self)
+        executor?.executeRequest()
     }
     
-    override public func start() {
-        super.start()
-        // TODO implement start function.
+    final func completeOpetation(){
+        self.executing = false
+        self.finished = true
     }
     
-    override public func cancel() {
+    final override public func cancel() {
         super.cancel()
-        // TODO cancel the request
+        self.executor?.cancel()
     }
     
     
