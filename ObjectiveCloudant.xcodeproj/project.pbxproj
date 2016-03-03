@@ -66,6 +66,8 @@
 		98629D681BB40EF900E7F5E8 /* CDTCouchOperation+internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */; };
 		987349F61C834A1800E79C5B /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987349F51C834A1800E79C5B /* URLSession.swift */; };
 		987349F81C8363B400E79C5B /* SessionCookieInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987349F71C8363B400E79C5B /* SessionCookieInterceptor.swift */; };
+		987349FC1C88D76700E79C5B /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987349FB1C88D76700E79C5B /* RequestBuilder.swift */; };
+		987349FE1C88DE6A00E79C5B /* RequestExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987349FD1C88DE6A00E79C5B /* RequestExecutor.swift */; };
 		988D313C1BBE9B4400EFB290 /* CouchDBTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 988D313B1BBE9B4400EFB290 /* CouchDBTests.m */; };
 		9896FE801BB57DAD00856BD7 /* CreateIndexTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */; };
 		98A87EE21C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -144,6 +146,8 @@
 		98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CDTCouchOperation+internal.m"; path = "ObjectiveCloudant/Operations/CDTCouchOperation+internal.m"; sourceTree = SOURCE_ROOT; };
 		987349F51C834A1800E79C5B /* URLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLSession.swift; path = ObjectiveCloudant/HTTP/URLSession.swift; sourceTree = SOURCE_ROOT; };
 		987349F71C8363B400E79C5B /* SessionCookieInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionCookieInterceptor.swift; sourceTree = SOURCE_ROOT; };
+		987349FB1C88D76700E79C5B /* RequestBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestBuilder.swift; sourceTree = SOURCE_ROOT; };
+		987349FD1C88DE6A00E79C5B /* RequestExecutor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestExecutor.swift; sourceTree = SOURCE_ROOT; };
 		988D313B1BBE9B4400EFB290 /* CouchDBTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CouchDBTests.m; path = ObjectiveCloudantTests/CouchDBTests.m; sourceTree = SOURCE_ROOT; };
 		9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateIndexTests.m; path = ObjectiveCloudantTests/CreateIndexTests.m; sourceTree = SOURCE_ROOT; };
 		98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestBuilderDelegate.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestBuilderDelegate.h; sourceTree = SOURCE_ROOT; };
@@ -227,6 +231,8 @@
 		279E8D2A1B7F905B001100D4 /* ObjectiveCloudant */ = {
 			isa = PBXGroup;
 			children = (
+				98734A001C88E64900E79C5B /* Ported */,
+				987349FF1C88E64300E79C5B /* Swift */,
 				984AA6131BAAF99E003D4DCA /* HTTP */,
 				27F6B72E1BA9CFED000B523E /* Operations - Instance */,
 				274CF66C1B9055B9008BBD50 /* Operations - Database */,
@@ -290,23 +296,8 @@
 		984AA6131BAAF99E003D4DCA /* HTTP */ = {
 			isa = PBXGroup;
 			children = (
-				98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */,
-				98A87EE11C6E31DA00D8B0E1 /* CDTOperationRequestExecutorDelegate.h */,
-				984AA62A1BAAFA08003D4DCA /* CDTHTTPInterceptor.h */,
-				984AA62B1BAAFA08003D4DCA /* CDTHTTPInterceptorContext.h */,
-				984AA62C1BAAFA08003D4DCA /* CDTHTTPInterceptorContext.m */,
-				984AA62D1BAAFA08003D4DCA /* CDTSessionCookieInterceptor.h */,
-				984AA62E1BAAFA08003D4DCA /* CDTSessionCookieInterceptor.m */,
-				984AA62F1BAAFA08003D4DCA /* CDTInterceptableSession.h */,
-				984AA6301BAAFA08003D4DCA /* CDTInterceptableSession.m */,
-				984AA6311BAAFA08003D4DCA /* CDTURLSessionTask.h */,
-				984AA6321BAAFA08003D4DCA /* CDTURLSessionTask.m */,
-				273EF55D1C00B870009A09E3 /* CDTOperationRequestBuilder.h */,
-				273EF55E1C00B870009A09E3 /* CDTOperationRequestBuilder.m */,
-				27BC070C1C07366E009C6440 /* CDTOperationRequestExecutor.h */,
-				27BC070D1C07366E009C6440 /* CDTOperationRequestExecutor.m */,
-				987349F51C834A1800E79C5B /* URLSession.swift */,
-				987349F71C8363B400E79C5B /* SessionCookieInterceptor.swift */,
+				987349FA1C88D73900E79C5B /* Ported */,
+				987349F91C88D72C00E79C5B /* Swift */,
 			);
 			name = HTTP;
 			sourceTree = "<group>";
@@ -319,6 +310,53 @@
 				984AA6541BAC5CA0003D4DCA /* CDTURLSessionTests.m */,
 			);
 			name = HTTP;
+			sourceTree = "<group>";
+		};
+		987349F91C88D72C00E79C5B /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				987349F51C834A1800E79C5B /* URLSession.swift */,
+				987349F71C8363B400E79C5B /* SessionCookieInterceptor.swift */,
+				987349FB1C88D76700E79C5B /* RequestBuilder.swift */,
+				987349FD1C88DE6A00E79C5B /* RequestExecutor.swift */,
+			);
+			name = Swift;
+			sourceTree = "<group>";
+		};
+		987349FA1C88D73900E79C5B /* Ported */ = {
+			isa = PBXGroup;
+			children = (
+				98A87EE11C6E31DA00D8B0E1 /* CDTOperationRequestExecutorDelegate.h */,
+				27BC070C1C07366E009C6440 /* CDTOperationRequestExecutor.h */,
+				27BC070D1C07366E009C6440 /* CDTOperationRequestExecutor.m */,
+				98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */,
+				273EF55D1C00B870009A09E3 /* CDTOperationRequestBuilder.h */,
+				273EF55E1C00B870009A09E3 /* CDTOperationRequestBuilder.m */,
+				984AA62A1BAAFA08003D4DCA /* CDTHTTPInterceptor.h */,
+				984AA62B1BAAFA08003D4DCA /* CDTHTTPInterceptorContext.h */,
+				984AA62C1BAAFA08003D4DCA /* CDTHTTPInterceptorContext.m */,
+				984AA62D1BAAFA08003D4DCA /* CDTSessionCookieInterceptor.h */,
+				984AA62E1BAAFA08003D4DCA /* CDTSessionCookieInterceptor.m */,
+				984AA62F1BAAFA08003D4DCA /* CDTInterceptableSession.h */,
+				984AA6301BAAFA08003D4DCA /* CDTInterceptableSession.m */,
+				984AA6311BAAFA08003D4DCA /* CDTURLSessionTask.h */,
+				984AA6321BAAFA08003D4DCA /* CDTURLSessionTask.m */,
+			);
+			name = Ported;
+			sourceTree = "<group>";
+		};
+		987349FF1C88E64300E79C5B /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Swift;
+			sourceTree = "<group>";
+		};
+		98734A001C88E64900E79C5B /* Ported */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Ported;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -505,6 +543,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				987349FE1C88DE6A00E79C5B /* RequestExecutor.swift in Sources */,
 				9851D1791BC57C2700145176 /* CDTQueryFindDocumentsOperation.m in Sources */,
 				275B9CCE1BA9D3540023CB63 /* CDTPutDocumentOperation.m in Sources */,
 				984AA6621BB17E9E003D4DCA /* CDTCreateQueryIndexOperation.m in Sources */,
@@ -520,6 +559,7 @@
 				27F6B72B1BA9C98C000B523E /* CDTDeleteDatabaseOperation.m in Sources */,
 				274CF6761B9055B9008BBD50 /* CDTDatabase.m in Sources */,
 				273EF5601C00B870009A09E3 /* CDTOperationRequestBuilder.m in Sources */,
+				987349FC1C88D76700E79C5B /* RequestBuilder.swift in Sources */,
 				984AA65C1BAFF8C4003D4DCA /* CDTDeleteDocumentOperation.m in Sources */,
 				980B2BF81BC27CC800CD40F8 /* CDTDeleteQueryIndexOperation.m in Sources */,
 				27BC070F1C07366E009C6440 /* CDTOperationRequestExecutor.m in Sources */,
