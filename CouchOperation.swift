@@ -50,7 +50,7 @@ enum Errors : ErrorType {
 public class CouchOperation : NSOperation, HTTPRequestOperation
 {
     
-    // NS operation overrides
+    // NS operation property overrides
     
     private var mExecuting: Bool = false
     override public var executing: Bool {
@@ -106,7 +106,14 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
     
     
     func completeOpetation(){
-
+        self.willChangeValueForKey("isFinished")
+        self.willChangeValueForKey("isExecuting")
+        
+        self.executing = false
+        self.finished = true
+        
+        self.didChangeValueForKey("isExecuting")
+        self.didChangeValueForKey("isFinished")
     }
     
     func processResponse(data:NSData?, statusCode:Int, error:ErrorType?){
@@ -116,6 +123,18 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
     func callCompletionHandler(error:ErrorType){
         
     }
+    
+    override public func start() {
+        super.start()
+        // TODO implement start function.
+    }
+    
+    override public func cancel() {
+        super.cancel()
+        // TODO cancel the request
+    }
+    
+    
     
     
 }
