@@ -21,6 +21,34 @@ class CreateDatabaseTests : XCTestCase {
     
     override func tearDown() {
         let client = CouchDBClient(url:NSURL(string: url)!,username:username,password:password)
+        
+        let delete = DeleteDatabaseOperation(httpSession: client.session)
+        delete.databaseName = self.dbName
+        client.addOperation(delete)
+        delete.waitUntilFinished()
+        
+        super.tearDown()
+        
+        
+    }
+    
+    
+    func testCreateUsingPut() {
+        
+        let createExpectation = self.expectationWithDescription("create database")
+        
+        let client = CouchDBClient(url:NSURL(string: url)!,username:username,password:password)
+        
+        let create = CreateDatabaseOperation(httpSession: client.session)
+        create.databaseName = self.dbName
+        create.createDatabaseCompletionBlock = {( statusCode, error) in
+            createExpectation.fulfill()
+            XCTAssertNotNil(statusCode)
+            if let statusCode = statusCode {
+                XCTAssertTrue(statusCode / 100 == 2)
+            }
+            XCTAssertNil(error)
+        }
     }
     
 }

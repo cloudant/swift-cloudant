@@ -116,6 +116,7 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
     
     private var executor:OperationRequestExecutor? = nil
     
+    // TODO we need to fix this. This is an aweful user exeperience.
     init(httpSession:InterceptableSession) {
         self.session = httpSession
         super.init()
