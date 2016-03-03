@@ -1,8 +1,8 @@
 # objective-cloudant
 
-[![Version](http://cocoapod-badges.herokuapp.com/v/ObjectiveCloudant/badge.png)](http://cocoadocs.org/docsets/ObjectiveCloudant)
-[![Platform](http://cocoapod-badges.herokuapp.com/p/ObjectiveCloudant/badge.png)](http://cocoadocs.org/docsets/ObjectiveCloudant)
-[![Build Status](https://travis-ci.org/cloudant/objective-cloudant.svg?branch=master)](https://travis-ci.org/cloudant/objective-cloudant)
+
+** This is an experimental port of objective-cloudant into Swift. It is not supported,
+it is not tested, it may not even work.**
 
 **Applications use objective-cloudant to store, index and query remote
 JSON data on Cloudant or CouchDB.**
