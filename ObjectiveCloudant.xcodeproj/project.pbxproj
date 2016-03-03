@@ -68,6 +68,9 @@
 		987349F81C8363B400E79C5B /* SessionCookieInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987349F71C8363B400E79C5B /* SessionCookieInterceptor.swift */; };
 		987349FC1C88D76700E79C5B /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987349FB1C88D76700E79C5B /* RequestBuilder.swift */; };
 		987349FE1C88DE6A00E79C5B /* RequestExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987349FD1C88DE6A00E79C5B /* RequestExecutor.swift */; };
+		98734A021C88E69200E79C5B /* CouchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A011C88E69200E79C5B /* CouchClient.swift */; };
+		98734A061C88E80200E79C5B /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A051C88E80200E79C5B /* Database.swift */; };
+		98734A0A1C88E9AE00E79C5B /* CouchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A091C88E9AE00E79C5B /* CouchOperation.swift */; };
 		988D313C1BBE9B4400EFB290 /* CouchDBTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 988D313B1BBE9B4400EFB290 /* CouchDBTests.m */; };
 		9896FE801BB57DAD00856BD7 /* CreateIndexTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */; };
 		98A87EE21C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -148,6 +151,9 @@
 		987349F71C8363B400E79C5B /* SessionCookieInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionCookieInterceptor.swift; sourceTree = SOURCE_ROOT; };
 		987349FB1C88D76700E79C5B /* RequestBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestBuilder.swift; sourceTree = SOURCE_ROOT; };
 		987349FD1C88DE6A00E79C5B /* RequestExecutor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestExecutor.swift; sourceTree = SOURCE_ROOT; };
+		98734A011C88E69200E79C5B /* CouchClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CouchClient.swift; sourceTree = SOURCE_ROOT; };
+		98734A051C88E80200E79C5B /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Database.swift; path = ObjectiveCloudant/Database.swift; sourceTree = SOURCE_ROOT; };
+		98734A091C88E9AE00E79C5B /* CouchOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CouchOperation.swift; sourceTree = SOURCE_ROOT; };
 		988D313B1BBE9B4400EFB290 /* CouchDBTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CouchDBTests.m; path = ObjectiveCloudantTests/CouchDBTests.m; sourceTree = SOURCE_ROOT; };
 		9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateIndexTests.m; path = ObjectiveCloudantTests/CreateIndexTests.m; sourceTree = SOURCE_ROOT; };
 		98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestBuilderDelegate.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestBuilderDelegate.h; sourceTree = SOURCE_ROOT; };
@@ -271,6 +277,8 @@
 		27F6B72E1BA9CFED000B523E /* Operations - Instance */ = {
 			isa = PBXGroup;
 			children = (
+				98734A081C88E99300E79C5B /* Ported */,
+				98734A071C88E96300E79C5B /* Swift */,
 				98629D651BB40EF900E7F5E8 /* CDTCouchOperation+internal.h */,
 				98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */,
 				274CF66F1B9055B9008BBD50 /* CDTCouchOperation.h */,
@@ -348,11 +356,28 @@
 		987349FF1C88E64300E79C5B /* Swift */ = {
 			isa = PBXGroup;
 			children = (
+				98734A051C88E80200E79C5B /* Database.swift */,
+				98734A011C88E69200E79C5B /* CouchClient.swift */,
 			);
 			name = Swift;
 			sourceTree = "<group>";
 		};
 		98734A001C88E64900E79C5B /* Ported */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Ported;
+			sourceTree = "<group>";
+		};
+		98734A071C88E96300E79C5B /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				98734A091C88E9AE00E79C5B /* CouchOperation.swift */,
+			);
+			name = Swift;
+			sourceTree = "<group>";
+		};
+		98734A081C88E99300E79C5B /* Ported */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -544,6 +569,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				987349FE1C88DE6A00E79C5B /* RequestExecutor.swift in Sources */,
+				98734A0A1C88E9AE00E79C5B /* CouchOperation.swift in Sources */,
 				9851D1791BC57C2700145176 /* CDTQueryFindDocumentsOperation.m in Sources */,
 				275B9CCE1BA9D3540023CB63 /* CDTPutDocumentOperation.m in Sources */,
 				984AA6621BB17E9E003D4DCA /* CDTCreateQueryIndexOperation.m in Sources */,
@@ -555,6 +581,7 @@
 				274CF67E1B9055B9008BBD50 /* CDTGetDocumentOperation.m in Sources */,
 				984AA6351BAAFA08003D4DCA /* CDTHTTPInterceptorContext.m in Sources */,
 				984AA6381BAAFA08003D4DCA /* CDTSessionCookieInterceptor.m in Sources */,
+				98734A021C88E69200E79C5B /* CouchClient.swift in Sources */,
 				27F6B7251BA9C322000B523E /* CDTCreateDatabaseOperation.m in Sources */,
 				27F6B72B1BA9C98C000B523E /* CDTDeleteDatabaseOperation.m in Sources */,
 				274CF6761B9055B9008BBD50 /* CDTDatabase.m in Sources */,
@@ -566,6 +593,7 @@
 				98629D681BB40EF900E7F5E8 /* CDTCouchOperation+internal.m in Sources */,
 				274CF6741B9055B9008BBD50 /* CDTCouchDBClient.m in Sources */,
 				987349F61C834A1800E79C5B /* URLSession.swift in Sources */,
+				98734A061C88E80200E79C5B /* Database.swift in Sources */,
 				274CF67A1B9055B9008BBD50 /* CDTCouchDatabaseOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
