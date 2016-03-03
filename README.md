@@ -1,7 +1,7 @@
 # objective-cloudant
 
 
-** This is an experimental port of objective-cloudant into Swift. It is not supported,
+**This is an experimental port of objective-cloudant into Swift. It is not supported,
 it is not tested, it may not even work.**
 
 **Applications use objective-cloudant to store, index and query remote
