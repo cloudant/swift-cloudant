@@ -49,9 +49,7 @@ class OperationRequestExecutor {
         
         })
         
-        
-        
-        
+        self.task?.resume()
         
     }
     

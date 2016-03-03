@@ -96,6 +96,7 @@ public class URLSessionTask {
                 self.inProgessTask?.resume()
             } else {
                 //call completion
+                self.completionHandler(data,response,error)
             }
         })
     }
