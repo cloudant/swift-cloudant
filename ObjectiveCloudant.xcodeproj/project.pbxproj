@@ -71,6 +71,8 @@
 		98734A021C88E69200E79C5B /* CouchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A011C88E69200E79C5B /* CouchClient.swift */; };
 		98734A061C88E80200E79C5B /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A051C88E80200E79C5B /* Database.swift */; };
 		98734A0A1C88E9AE00E79C5B /* CouchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A091C88E9AE00E79C5B /* CouchOperation.swift */; };
+		98734A0C1C88F68B00E79C5B /* CreateDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A0B1C88F68B00E79C5B /* CreateDatabaseOperation.swift */; };
+		98734A0E1C88FAF900E79C5B /* DeleteDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A0D1C88FAF900E79C5B /* DeleteDatabaseOperation.swift */; };
 		988D313C1BBE9B4400EFB290 /* CouchDBTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 988D313B1BBE9B4400EFB290 /* CouchDBTests.m */; };
 		9896FE801BB57DAD00856BD7 /* CreateIndexTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */; };
 		98A87EE21C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -154,6 +156,8 @@
 		98734A011C88E69200E79C5B /* CouchClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CouchClient.swift; sourceTree = SOURCE_ROOT; };
 		98734A051C88E80200E79C5B /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Database.swift; path = ObjectiveCloudant/Database.swift; sourceTree = SOURCE_ROOT; };
 		98734A091C88E9AE00E79C5B /* CouchOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CouchOperation.swift; sourceTree = SOURCE_ROOT; };
+		98734A0B1C88F68B00E79C5B /* CreateDatabaseOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDatabaseOperation.swift; sourceTree = SOURCE_ROOT; };
+		98734A0D1C88FAF900E79C5B /* DeleteDatabaseOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteDatabaseOperation.swift; sourceTree = SOURCE_ROOT; };
 		988D313B1BBE9B4400EFB290 /* CouchDBTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CouchDBTests.m; path = ObjectiveCloudantTests/CouchDBTests.m; sourceTree = SOURCE_ROOT; };
 		9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateIndexTests.m; path = ObjectiveCloudantTests/CreateIndexTests.m; sourceTree = SOURCE_ROOT; };
 		98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestBuilderDelegate.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestBuilderDelegate.h; sourceTree = SOURCE_ROOT; };
@@ -368,7 +372,9 @@
 		98734A071C88E96300E79C5B /* Swift */ = {
 			isa = PBXGroup;
 			children = (
+				98734A0B1C88F68B00E79C5B /* CreateDatabaseOperation.swift */,
 				98734A091C88E9AE00E79C5B /* CouchOperation.swift */,
+				98734A0D1C88FAF900E79C5B /* DeleteDatabaseOperation.swift */,
 			);
 			name = Swift;
 			sourceTree = "<group>";
@@ -574,6 +580,7 @@
 				275B9CCE1BA9D3540023CB63 /* CDTPutDocumentOperation.m in Sources */,
 				984AA6621BB17E9E003D4DCA /* CDTCreateQueryIndexOperation.m in Sources */,
 				984AA63B1BAAFA08003D4DCA /* CDTInterceptableSession.m in Sources */,
+				98734A0C1C88F68B00E79C5B /* CreateDatabaseOperation.swift in Sources */,
 				987349F81C8363B400E79C5B /* SessionCookieInterceptor.swift in Sources */,
 				274CF67C1B9055B9008BBD50 /* CDTCouchOperation.m in Sources */,
 				984AA63E1BAAFA08003D4DCA /* CDTURLSessionTask.m in Sources */,
@@ -581,6 +588,7 @@
 				274CF67E1B9055B9008BBD50 /* CDTGetDocumentOperation.m in Sources */,
 				984AA6351BAAFA08003D4DCA /* CDTHTTPInterceptorContext.m in Sources */,
 				984AA6381BAAFA08003D4DCA /* CDTSessionCookieInterceptor.m in Sources */,
+				98734A0E1C88FAF900E79C5B /* DeleteDatabaseOperation.swift in Sources */,
 				98734A021C88E69200E79C5B /* CouchClient.swift in Sources */,
 				27F6B7251BA9C322000B523E /* CDTCreateDatabaseOperation.m in Sources */,
 				27F6B72B1BA9C98C000B523E /* CDTDeleteDatabaseOperation.m in Sources */,

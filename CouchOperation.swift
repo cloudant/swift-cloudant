@@ -49,7 +49,6 @@ enum Errors : ErrorType {
 
 public class CouchOperation : NSOperation, HTTPRequestOperation
 {
-    
     // NS operation property overrides
     
     private var mExecuting: Bool = false
@@ -91,13 +90,29 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
     
     var rootURL:NSURL = NSURL()
     
-    var httpPath:String = "/"
-    var httpMethod : String = "GET"
+    var httpPath:String {
+        get {
+            return "/"
+        }
+    }
+    var httpMethod : String {
+        get {
+            return "GET"
+        }
+    }
     
-    var queryItems:[NSURLQueryItem] = []
+    var queryItems:[NSURLQueryItem] {
+        get {
+            return []
+        }
+    }
     
     //return nil if there is no body
-    var httpRequestBody:NSData? = nil
+    var httpRequestBody:NSData? {
+        get {
+            return nil
+        }
+    }
     
     private var executor:OperationRequestExecutor? = nil
     
