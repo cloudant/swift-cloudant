@@ -64,6 +64,8 @@
 		98533EB81BC42E6300E1566A /* DeleteIndexTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 98533EB71BC42E6300E1566A /* DeleteIndexTests.m */; };
 		98629D671BB40EF900E7F5E8 /* CDTCouchOperation+internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 98629D651BB40EF900E7F5E8 /* CDTCouchOperation+internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		98629D681BB40EF900E7F5E8 /* CDTCouchOperation+internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */; };
+		987349F61C834A1800E79C5B /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987349F51C834A1800E79C5B /* URLSession.swift */; };
+		987349F81C8363B400E79C5B /* SessionCookieInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987349F71C8363B400E79C5B /* SessionCookieInterceptor.swift */; };
 		988D313C1BBE9B4400EFB290 /* CouchDBTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 988D313B1BBE9B4400EFB290 /* CouchDBTests.m */; };
 		9896FE801BB57DAD00856BD7 /* CreateIndexTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */; };
 		98A87EE21C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -140,6 +142,8 @@
 		98533EB71BC42E6300E1566A /* DeleteIndexTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DeleteIndexTests.m; path = ObjectiveCloudantTests/DeleteIndexTests.m; sourceTree = SOURCE_ROOT; };
 		98629D651BB40EF900E7F5E8 /* CDTCouchOperation+internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CDTCouchOperation+internal.h"; path = "ObjectiveCloudant/Operations/CDTCouchOperation+internal.h"; sourceTree = SOURCE_ROOT; };
 		98629D661BB40EF900E7F5E8 /* CDTCouchOperation+internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CDTCouchOperation+internal.m"; path = "ObjectiveCloudant/Operations/CDTCouchOperation+internal.m"; sourceTree = SOURCE_ROOT; };
+		987349F51C834A1800E79C5B /* URLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLSession.swift; path = ObjectiveCloudant/HTTP/URLSession.swift; sourceTree = SOURCE_ROOT; };
+		987349F71C8363B400E79C5B /* SessionCookieInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionCookieInterceptor.swift; sourceTree = SOURCE_ROOT; };
 		988D313B1BBE9B4400EFB290 /* CouchDBTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CouchDBTests.m; path = ObjectiveCloudantTests/CouchDBTests.m; sourceTree = SOURCE_ROOT; };
 		9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateIndexTests.m; path = ObjectiveCloudantTests/CreateIndexTests.m; sourceTree = SOURCE_ROOT; };
 		98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestBuilderDelegate.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestBuilderDelegate.h; sourceTree = SOURCE_ROOT; };
@@ -301,6 +305,8 @@
 				273EF55E1C00B870009A09E3 /* CDTOperationRequestBuilder.m */,
 				27BC070C1C07366E009C6440 /* CDTOperationRequestExecutor.h */,
 				27BC070D1C07366E009C6440 /* CDTOperationRequestExecutor.m */,
+				987349F51C834A1800E79C5B /* URLSession.swift */,
+				987349F71C8363B400E79C5B /* SessionCookieInterceptor.swift */,
 			);
 			name = HTTP;
 			sourceTree = "<group>";
@@ -397,6 +403,7 @@
 		279E8D1F1B7F905A001100D4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Small Text";
 				TargetAttributes = {
@@ -502,6 +509,7 @@
 				275B9CCE1BA9D3540023CB63 /* CDTPutDocumentOperation.m in Sources */,
 				984AA6621BB17E9E003D4DCA /* CDTCreateQueryIndexOperation.m in Sources */,
 				984AA63B1BAAFA08003D4DCA /* CDTInterceptableSession.m in Sources */,
+				987349F81C8363B400E79C5B /* SessionCookieInterceptor.swift in Sources */,
 				274CF67C1B9055B9008BBD50 /* CDTCouchOperation.m in Sources */,
 				984AA63E1BAAFA08003D4DCA /* CDTURLSessionTask.m in Sources */,
 				9851D1811BC666C000145176 /* CDTSortSyntaxValidator.m in Sources */,
@@ -517,6 +525,7 @@
 				27BC070F1C07366E009C6440 /* CDTOperationRequestExecutor.m in Sources */,
 				98629D681BB40EF900E7F5E8 /* CDTCouchOperation+internal.m in Sources */,
 				274CF6741B9055B9008BBD50 /* CDTCouchDBClient.m in Sources */,
+				987349F61C834A1800E79C5B /* URLSession.swift in Sources */,
 				274CF67A1B9055B9008BBD50 /* CDTCouchDatabaseOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -643,6 +652,7 @@
 		279E8D3D1B7F905B001100D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -654,12 +664,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.cloudant.ObjectiveCloudant;
 				PRODUCT_NAME = ObjectiveCloudant;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		279E8D3E1B7F905B001100D4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
