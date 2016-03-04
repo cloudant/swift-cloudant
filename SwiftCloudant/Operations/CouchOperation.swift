@@ -86,7 +86,17 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
     }
     
     
-    var session:InterceptableSession
+    var mSession : InterceptableSession? = nil
+    var session:InterceptableSession {
+        get {
+            if let session = mSession {
+                return session
+            } else {
+                mSession = InterceptableSession()
+                return mSession!
+            }
+        }
+    }
     
     var rootURL:NSURL = NSURL()
     
@@ -116,9 +126,7 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
     
     private var executor:OperationRequestExecutor? = nil
     
-    // TODO we need to fix this. This is an aweful user exeperience.
-    init(httpSession:InterceptableSession) {
-        self.session = httpSession
+    override init() {
         super.init()
     }
 

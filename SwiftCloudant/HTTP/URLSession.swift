@@ -84,6 +84,13 @@ public class URLSessionTask {
         }
         
         return self.session.dataTaskWithRequest(request, completionHandler: { (data, response, error) -> Void in
+            
+            guard error == nil
+            else {
+                self.completionHandler(data,response,error)
+                return
+            }
+            
             ctx = HTTPInterceptorContext(request: ctx.request, response: (response as! NSHTTPURLResponse), shouldRetry: ctx.shouldRetry)
             
             for interceptor in self.interceptors {

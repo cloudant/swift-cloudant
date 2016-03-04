@@ -26,7 +26,7 @@ public class CouchDBClient {
     
     
     func addOperation(operation:CouchOperation){
-        operation.session = self.session
+        operation.mSession = self.session
         operation.rootURL = self.rootURL
         queue.addOperation(operation)
     }
