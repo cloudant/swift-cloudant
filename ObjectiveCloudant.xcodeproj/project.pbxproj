@@ -81,6 +81,7 @@
 		98C13E121C8993A800557628 /* RequestExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C13E0F1C8993A800557628 /* RequestExecutor.swift */; };
 		98C13E131C8993A800557628 /* SessionCookieInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C13E101C8993A800557628 /* SessionCookieInterceptor.swift */; };
 		98C13E151C8993C900557628 /* CreateDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C13E141C8993C900557628 /* CreateDatabaseTests.swift */; };
+		F8986E491C89CE3000A28C84 /* CouchDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8986E481C89CE3000A28C84 /* CouchDatabaseOperation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -182,6 +183,7 @@
 		98C13E141C8993C900557628 /* CreateDatabaseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDatabaseTests.swift; sourceTree = "<group>"; };
 		9BE38C8FC08AD2F7D5DE29A0 /* Pods-ObjectiveCloudantTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCloudantTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ObjectiveCloudantTests/Pods-ObjectiveCloudantTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EF088291BC169B0422274EC2 /* Pods_ObjectiveCloudantTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectiveCloudantTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F8986E481C89CE3000A28C84 /* CouchDatabaseOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CouchDatabaseOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -456,6 +458,7 @@
 			isa = PBXGroup;
 			children = (
 				98C13DFD1C89932600557628 /* CouchOperation.swift */,
+				F8986E481C89CE3000A28C84 /* CouchDatabaseOperation.swift */,
 				98C13DFE1C89932600557628 /* CreateDatabaseOperation.swift */,
 				98C13DFF1C89932600557628 /* DeleteDatabaseOperation.swift */,
 			);
@@ -762,6 +765,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				98C13E091C89932600557628 /* DeleteDatabaseOperation.swift in Sources */,
+				F8986E491C89CE3000A28C84 /* CouchDatabaseOperation.swift in Sources */,
 				98C13E131C8993A800557628 /* SessionCookieInterceptor.swift in Sources */,
 				98C13E071C89932600557628 /* CouchOperation.swift in Sources */,
 				98C13E051C89932600557628 /* Database.swift in Sources */,
