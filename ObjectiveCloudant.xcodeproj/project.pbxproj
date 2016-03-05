@@ -71,7 +71,6 @@
 		98734A521C8A600600E79C5B /* RequestExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A441C8A600600E79C5B /* RequestExecutor.swift */; };
 		98734A531C8A600600E79C5B /* SessionCookieInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A451C8A600600E79C5B /* SessionCookieInterceptor.swift */; };
 		98734A541C8A600600E79C5B /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A461C8A600600E79C5B /* URLSession.swift */; };
-		98734A551C8A600600E79C5B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 98734A471C8A600600E79C5B /* Info.plist */; };
 		98734A561C8A600600E79C5B /* CouchDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A491C8A600600E79C5B /* CouchDatabaseOperation.swift */; };
 		98734A571C8A600600E79C5B /* CouchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A4A1C8A600600E79C5B /* CouchOperation.swift */; };
 		98734A581C8A600600E79C5B /* CreateDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A4B1C8A600600E79C5B /* CreateDatabaseOperation.swift */; };
@@ -80,7 +79,6 @@
 		98734A5B1C8A600600E79C5B /* SwiftCloudant.h in Headers */ = {isa = PBXBuildFile; fileRef = 98734A4E1C8A600600E79C5B /* SwiftCloudant.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		98734A611C8A601400E79C5B /* CreateDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A5D1C8A601400E79C5B /* CreateDatabaseTests.swift */; };
 		98734A621C8A601400E79C5B /* GetDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A5E1C8A601400E79C5B /* GetDocumentTests.swift */; };
-		98734A631C8A601400E79C5B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 98734A5F1C8A601400E79C5B /* Info.plist */; };
 		98734A641C8A601400E79C5B /* SwiftCloudantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A601C8A601400E79C5B /* SwiftCloudantTests.swift */; };
 		988D313C1BBE9B4400EFB290 /* CouchDBTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 988D313B1BBE9B4400EFB290 /* CouchDBTests.m */; };
 		9896FE801BB57DAD00856BD7 /* CreateIndexTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */; };
@@ -660,7 +658,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				98734A551C8A600600E79C5B /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -668,7 +665,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				98734A631C8A601400E79C5B /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
