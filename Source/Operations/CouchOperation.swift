@@ -45,6 +45,10 @@ enum Errors : ErrorType {
     Finding documents failed.
     */
     case FindDocumentsFailed
+    /**
+     The JSON format wasn't what we expected.
+     */
+    case UnexpectedJSONFormat
 };
 
 public class CouchOperation : NSOperation, HTTPRequestOperation

@@ -84,6 +84,7 @@
 		9896FE801BB57DAD00856BD7 /* CreateIndexTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */; };
 		98A87EE21C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		98A87EE31C6E31DA00D8B0E1 /* CDTOperationRequestExecutorDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A87EE11C6E31DA00D8B0E1 /* CDTOperationRequestExecutorDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F89766C81C8D8994004C5DAE /* PutDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8ACC9631C8AF3BE00C8650D /* PutDocumentOperation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -188,6 +189,7 @@
 		98A87EE11C6E31DA00D8B0E1 /* CDTOperationRequestExecutorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestExecutorDelegate.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestExecutorDelegate.h; sourceTree = SOURCE_ROOT; };
 		9BE38C8FC08AD2F7D5DE29A0 /* Pods-ObjectiveCloudantTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCloudantTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ObjectiveCloudantTests/Pods-ObjectiveCloudantTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EF088291BC169B0422274EC2 /* Pods_ObjectiveCloudantTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectiveCloudantTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F8ACC9631C8AF3BE00C8650D /* PutDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PutDocumentOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -456,6 +458,7 @@
 				98734A4B1C8A600600E79C5B /* CreateDatabaseOperation.swift */,
 				98734A4C1C8A600600E79C5B /* DeleteDatabaseOperation.swift */,
 				98734A4D1C8A600600E79C5B /* GetDocumentOperation.swift */,
+				F8ACC9631C8AF3BE00C8650D /* PutDocumentOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -776,6 +779,7 @@
 				98734A511C8A600600E79C5B /* RequestBuilder.swift in Sources */,
 				98734A541C8A600600E79C5B /* URLSession.swift in Sources */,
 				98734A581C8A600600E79C5B /* CreateDatabaseOperation.swift in Sources */,
+				F89766C81C8D8994004C5DAE /* PutDocumentOperation.swift in Sources */,
 				98734A501C8A600600E79C5B /* Database.swift in Sources */,
 				98734A4F1C8A600600E79C5B /* CouchClient.swift in Sources */,
 				98734A531C8A600600E79C5B /* SessionCookieInterceptor.swift in Sources */,
