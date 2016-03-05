@@ -148,6 +148,8 @@ public class InterceptableSession {
             let platform = "iOS"
         #elseif os(OSX)
             let platform = "OSX"
+        #elseif os(Linux)
+            let platform = "Linux" // Cribbed from Kitura, neeed to see who is running this on Linux 
         #else
             let platform = "Unkown";
         #endif
