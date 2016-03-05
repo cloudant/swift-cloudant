@@ -45,7 +45,7 @@ class GetDocumentTests : XCTestCase {
         let getDocumentExpectation = expectationWithDescription("get document")
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         
-        let get = GetDocumentOperation(httpSession: client.session)
+        let get = GetDocumentOperation()
         get.databaseName = dbName
         get.docId = "07bb721df13c4e4f3df836fca2f3d95f"
         
