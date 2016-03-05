@@ -77,7 +77,7 @@
 		98734A581C8A600600E79C5B /* CreateDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A4B1C8A600600E79C5B /* CreateDatabaseOperation.swift */; };
 		98734A591C8A600600E79C5B /* DeleteDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A4C1C8A600600E79C5B /* DeleteDatabaseOperation.swift */; };
 		98734A5A1C8A600600E79C5B /* GetDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A4D1C8A600600E79C5B /* GetDocumentOperation.swift */; };
-		98734A5B1C8A600600E79C5B /* SwiftCloudant.h in Headers */ = {isa = PBXBuildFile; fileRef = 98734A4E1C8A600600E79C5B /* SwiftCloudant.h */; };
+		98734A5B1C8A600600E79C5B /* SwiftCloudant.h in Headers */ = {isa = PBXBuildFile; fileRef = 98734A4E1C8A600600E79C5B /* SwiftCloudant.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		98734A611C8A601400E79C5B /* CreateDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A5D1C8A601400E79C5B /* CreateDatabaseTests.swift */; };
 		98734A621C8A601400E79C5B /* GetDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A5E1C8A601400E79C5B /* GetDocumentTests.swift */; };
 		98734A631C8A601400E79C5B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 98734A5F1C8A601400E79C5B /* Info.plist */; };
