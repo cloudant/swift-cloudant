@@ -39,7 +39,7 @@ class GetDocumentOperation: CouchDatabaseOperation {
     var getDocumentCompletionBlock: (([String:AnyObject]?, ErrorType?) -> ())?
 
     override func validate() -> Bool {
-        return true
+        return super.validate() && docId != nil
     }
     
     override var httpMethod: String {
