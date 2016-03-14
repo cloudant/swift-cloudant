@@ -11,43 +11,84 @@ import XCTest
 @testable import SwiftCloudant
 
 class GetDocumentTests : XCTestCase {
-//    let url = "http://localhost:5984"
-//    let username: String? = nil
-//    let password: String? = nil
-//    let dbName = NSUUID().UUIDString.lowercaseString
+    let url = "http://localhost:5984"
+    let username: String? = nil
+    let password: String? = nil
+    var dbName: String? = nil
     
-    let url = "https://skruger.cloudant.com"
-    let username: String? = "XXX"
-    let password: String? = "YYY"
-    let dbName = "swiftdb"
+    func createTestDocuments(count: Int) -> [[String:AnyObject]] {
+        var docs = [[String:AnyObject]]()
+        for _ in 1...count {
+            docs.append(["data": NSUUID().UUIDString.lowercaseString])
+        }
+        
+        return docs
+    }
     
-//    override func setUp() {
-//        super.setUp()
-//        
-//        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
-//        let create = CreateDatabaseOperation(httpSession: client.session)
-//        create.databaseName = dbName
-//        client.addOperation(create)
-//        create.waitUntilFinished()
-//    }
-//    
+    override func setUp() {
+        super.setUp()
+         
+        dbName = NSUUID().UUIDString.lowercaseString
+        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
+        let create = CreateDatabaseOperation()
+        create.databaseName = dbName!
+        client.addOperation(create)
+        create.waitUntilFinished()
+        
+        print("Created database: \(dbName!)")
+    }
+    
 //    override func tearDown() {
 //        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
-//        let delete = DeleteDatabaseOperation(httpSession: client.session)
-//        delete.databaseName = dbName
+//        let delete = DeleteDatabaseOperation()
+//        delete.databaseName = dbName!
 //        client.addOperation(delete)
 //        delete.waitUntilFinished()
 //        
 //        super.tearDown()
+//        
+//        print("Deleted database: \(dbName!)")
 //    }
     
+    func testPutDocument() {
+        let data = createTestDocuments(1)
+        
+        let putDocumentExpectation = expectationWithDescription("put document")
+        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
+        
+        let put = PutDocumentOperation()
+        put.databaseName = dbName
+        put.body = data[0]
+        put.docId = NSUUID().UUIDString.lowercaseString
+        
+        put.putDocumentCompletionBlock = { (docId, revId, statusCode, error) in
+            putDocumentExpectation.fulfill()
+            XCTAssertNil(error)
+            XCTAssertNotNil(docId)
+            XCTAssertNotNil(revId)
+            XCTAssert(statusCode == 201 || statusCode == 202)
+        }
+        
+        client.addOperation(put)
+        
+        waitForExpectationsWithTimeout(10.0, handler: nil)
+    }
+    
     func testGetDocument() {
+        let data = createTestDocuments(1)
         let getDocumentExpectation = expectationWithDescription("get document")
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         
+        let put = PutDocumentOperation()
+        put.databaseName = dbName
+        put.body = data[0]
+        put.docId = NSUUID().UUIDString.lowercaseString
+        client.addOperation(put)
+        put.waitUntilFinished()
+        
         let get = GetDocumentOperation()
         get.databaseName = dbName
-        get.docId = "07bb721df13c4e4f3df836fca2f3d95f"
+        get.docId = put.docId
         
         get.getDocumentCompletionBlock = { (doc, error) in
             getDocumentExpectation.fulfill()
