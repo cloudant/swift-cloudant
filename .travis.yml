@@ -7,5 +7,5 @@ before_script:
 
 script:
   - ./setup.rb
-  - xcodebuild -workspace ObjectiveCloudant.xcworkspace/ -scheme SwiftCloudantTests -destination 'platform=iOS Simulator,OS=latest,name=iPhone 4S' build test |  xcpretty; exit ${PIPESTATUS[0]}
+  - xcodebuild -workspace ObjectiveCloudant.xcworkspace/ -scheme SwiftCloudant -destination 'platform=iOS Simulator,OS=latest,name=iPhone 4S' build test |  xcpretty; exit ${PIPESTATUS[0]}
   - pod lib lint
