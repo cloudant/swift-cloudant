@@ -10,14 +10,18 @@ import Foundation
 
 public class Database  {
     
+    public let name:String
+    private let client:CouchDBClient
     
     init(client:CouchDBClient, dbName:String){
-        
+        name = dbName
+        self.client = client
     }
     
-    // TODO change to CouchDBOperation
-    public func add(operation:NSOperation){
-        
+
+    public func add(operation:CouchDatabaseOperation){
+        operation.databaseName = self.name
+        self.client.addOperation(operation)
     }
     
     
