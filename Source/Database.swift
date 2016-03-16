@@ -26,7 +26,19 @@ public class Database  {
     
     
     subscript(key:String) -> Dictionary<String,AnyObject>?{
-        return nil
+        let getDocument = GetDocumentOperation()
+        getDocument.docId = key
+        
+        
+        var doc:[String:AnyObject]?
+        getDocument.getDocumentCompletionBlock = { (document, error ) in
+            doc = document
+        };
+        
+        self.add(getDocument)
+        getDocument.waitUntilFinished()
+        
+        return doc
     }
     
     
