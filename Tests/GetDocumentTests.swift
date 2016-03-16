@@ -113,4 +113,66 @@ class GetDocumentTests : XCTestCase {
         
         waitForExpectationsWithTimeout(10.0, handler: nil)
     }
+    
+    func testGetDocumentUsingDBObject () {
+        let data = createTestDocuments(1)
+        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
+        let putDocumentExpectation = self.expectationWithDescription("put document")
+        let put = PutDocumentOperation()
+        put.body = data[0]
+        put.docId = NSUUID().UUIDString.lowercaseString
+        put.databaseName = self.dbName
+        put.putDocumentCompletionBlock = { (docId,revId,statusCode, operationError) in
+            putDocumentExpectation.fulfill()
+            XCTAssertEqual(put.docId,docId);
+            XCTAssertNotNil(revId)
+            XCTAssertNil(operationError)
+            XCTAssertTrue(statusCode / 100 == 2)
+        };
+        client.addOperation(put)
+        
+        waitForExpectationsWithTimeout(10.0, handler: nil)
+        
+        let db = client[self.dbName!]
+        let document = db[put.docId!]
+        XCTAssertNotNil(document)
+    }
+    
+    func testGetDocumentUsingDBAdd() {
+        let data = createTestDocuments(1)
+        let getDocumentExpectation = expectationWithDescription("get document")
+        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
+        let db = client[self.dbName!]
+        
+        let putDocumentExpectation = self.expectationWithDescription("put document")
+        let put = PutDocumentOperation()
+        put.body = data[0]
+        put.docId = NSUUID().UUIDString.lowercaseString
+        put.putDocumentCompletionBlock = { (docId,revId,statusCode, operationError) in
+            putDocumentExpectation.fulfill()
+            XCTAssertEqual(put.docId,docId);
+            XCTAssertNotNil(revId)
+            XCTAssertNil(operationError)
+            XCTAssertTrue(statusCode / 100 == 2)
+            
+
+        };
+        
+        db.add(put)
+        put.waitUntilFinished()
+        
+        let get = GetDocumentOperation()
+        get.docId = put.docId
+        get.databaseName = self.dbName
+        
+        get.getDocumentCompletionBlock = { (doc, error) in
+            getDocumentExpectation.fulfill()
+            XCTAssertNil(error)
+            XCTAssertNotNil(doc)
+        }
+        
+        client.addOperation(get)
+        
+        waitForExpectationsWithTimeout(10.0, handler: nil)
+    }
 }

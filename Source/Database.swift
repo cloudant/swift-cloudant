@@ -10,19 +10,35 @@ import Foundation
 
 public class Database  {
     
+    public let name:String
+    private let client:CouchDBClient
     
     init(client:CouchDBClient, dbName:String){
-        
+        name = dbName
+        self.client = client
     }
     
-    // TODO change to CouchDBOperation
-    public func add(operation:NSOperation){
-        
+
+    public func add(operation:CouchDatabaseOperation){
+        operation.databaseName = self.name
+        self.client.addOperation(operation)
     }
     
     
     subscript(key:String) -> Dictionary<String,AnyObject>?{
-        return nil
+        let getDocument = GetDocumentOperation()
+        getDocument.docId = key
+        
+        
+        var doc:[String:AnyObject]?
+        getDocument.getDocumentCompletionBlock = { (document, error ) in
+            doc = document
+        };
+        
+        self.add(getDocument)
+        getDocument.waitUntilFinished()
+        
+        return doc
     }
     
     
