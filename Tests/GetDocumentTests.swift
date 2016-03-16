@@ -28,7 +28,7 @@ class GetDocumentTests : XCTestCase {
     override func setUp() {
         super.setUp()
          
-        dbName = NSUUID().UUIDString.lowercaseString
+        dbName = "a-\(NSUUID().UUIDString.lowercaseString)"
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         let create = CreateDatabaseOperation()
         create.databaseName = dbName!
@@ -79,24 +79,37 @@ class GetDocumentTests : XCTestCase {
         let getDocumentExpectation = expectationWithDescription("get document")
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         
+        let putDocumentExpectation = self.expectationWithDescription("put document")
         let put = PutDocumentOperation()
-        put.databaseName = dbName
         put.body = data[0]
         put.docId = NSUUID().UUIDString.lowercaseString
+        put.databaseName = self.dbName
+        put.putDocumentCompletionBlock = { (docId,revId,statusCode, operationError) in
+            putDocumentExpectation.fulfill()
+            XCTAssertEqual(put.docId,docId);
+            XCTAssertNotNil(revId)
+            XCTAssertNil(operationError)
+            XCTAssertTrue(statusCode / 100 == 2)
+            
+            let get = GetDocumentOperation()
+            get.docId = put.docId
+            get.databaseName = self.dbName
+            
+            get.getDocumentCompletionBlock = { (doc, error) in
+                getDocumentExpectation.fulfill()
+                XCTAssertNil(error)
+                XCTAssertNotNil(doc)
+            }
+            
+            client.addOperation(get)
+        };
+        
+        
+        
+        
         client.addOperation(put)
         put.waitUntilFinished()
-        
-        let get = GetDocumentOperation()
-        get.databaseName = dbName
-        get.docId = put.docId
-        
-        get.getDocumentCompletionBlock = { (doc, error) in
-            getDocumentExpectation.fulfill()
-            XCTAssertNil(error)
-            XCTAssertNotNil(doc)
-        }
-        
-        client.addOperation(get)
+
         
         waitForExpectationsWithTimeout(10.0, handler: nil)
     }
