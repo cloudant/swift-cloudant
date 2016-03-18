@@ -1,5 +1,6 @@
 # swift-cloudant
 
+[![Build Status](https://travis-ci.org/rhyshort/swift-cloudant.svg?branch=master)](https://travis-ci.org/rhyshort/swift-cloudant)
 [![codecov.io](https://codecov.io/github/rhyshort/swift-cloudant/coverage.svg?branch=master)](https://codecov.io/github/rhyshort/swift-cloudant?branch=master)
 
 **This is an experimental port of objective-cloudant into Swift. It is not supported,
