@@ -1,10 +1,11 @@
-# objective-cloudant
+# swift-cloudant
 
+[![codecov.io](https://codecov.io/github/rhyshort/swift-cloudant/coverage.svg?branch=master)](https://codecov.io/github/rhyshort/swift-cloudant?branch=master)
 
 **This is an experimental port of objective-cloudant into Swift. It is not supported,
 it is not tested, it may not even work.**
 
-**Applications use objective-cloudant to store, index and query remote
+**Applications use swift-cloudant to store, index and query remote
 JSON data on Cloudant or CouchDB.**
 
 Objective-Cloudant is an [Apache CouchDB&trade;][acdb] client. It is built by
