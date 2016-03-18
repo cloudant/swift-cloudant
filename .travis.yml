@@ -7,5 +7,8 @@ before_script:
 
 script:
   - ./setup.rb
-  - xcodebuild -workspace ObjectiveCloudant.xcworkspace/ -scheme SwiftCloudant -destination 'platform=iOS Simulator,OS=latest,name=iPhone 6S' build test |  xcpretty; exit ${PIPESTATUS[0]}
+  - set -o pipefail && xcodebuild -workspace ObjectiveCloudant.xcworkspace/ -scheme SwiftCloudant -destination 'platform=iOS Simulator,OS=latest,name=iPhone 6S' build test |  xcpretty
   - pod lib lint
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -J 'SwiftCloudant'
