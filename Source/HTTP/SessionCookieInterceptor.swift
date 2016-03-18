@@ -30,8 +30,25 @@ public struct SessionCookieInterceptor : HTTPInterceptor
   
     }
     
+    public mutating func interceptResponse(var ctx: HTTPInterceptorContext) -> HTTPInterceptorContext {
+        
+        guard let response = ctx.response
+        else {
+            return ctx;
+        }
+        
+        if response.statusCode == 403 || response.statusCode == 401 {
+            ctx.shouldRetry = true
+            self.cookie = nil
+        } else if let cookieHeader = response.allHeaderFields["Set-Cookie"] as? String {
+            cookie = cookieHeader.componentsSeparatedByString(";").first
+        }
+        
+        return ctx;
+    }
     
-    mutating func interceptRequest(ctx: HTTPInterceptorContext) -> HTTPInterceptorContext {
+    
+    public mutating func interceptRequest(ctx: HTTPInterceptorContext) -> HTTPInterceptorContext {
         // if we shouldn't make the request just return th ctx
         guard shouldMakeSessionRequest
             else {

@@ -13,7 +13,7 @@ public class Database  {
     public let name:String
     private let client:CouchDBClient
     
-    init(client:CouchDBClient, dbName:String){
+    public init(client:CouchDBClient, dbName:String){
         name = dbName
         self.client = client
     }
@@ -25,7 +25,7 @@ public class Database  {
     }
     
     
-    subscript(key:String) -> Dictionary<String,AnyObject>?{
+    public subscript(key:String) -> Dictionary<String,AnyObject>?{
         let getDocument = GetDocumentOperation()
         getDocument.docId = key
         

@@ -11,33 +11,33 @@ import Foundation
 
 public class CreateDatabaseOperation : CouchOperation {
     
-    var databaseName:String? = nil
+    public var databaseName:String? = nil
     
-    override var httpMethod:String {
+    override public var httpMethod:String {
         get {
             return "PUT"
         }
     }
     
-    override var httpPath:String {
+    public override var httpPath:String {
         get {
             // Safe to foce unwrap validation would fail if this is nil
             return "/\(self.databaseName!)"
         }
     }
     
-    var createDatabaseCompletionBlock : ((statusCode:Int?, operationError:ErrorType?) -> Void)? = nil
+    public var createDatabaseCompletionBlock : ((statusCode:Int?, operationError:ErrorType?) -> Void)? = nil
     
     
-    override func validate() -> Bool {
+    public override func validate() -> Bool {
         return super.validate() && self.databaseName != nil // should work iirc
     }
     
-    override func callCompletionHandler(error: ErrorType) {
+    override public func callCompletionHandler(error: ErrorType) {
         self.createDatabaseCompletionBlock?(statusCode: nil, operationError: error)
     }
     
-    override func processResponse(data: NSData?, statusCode: Int, error: ErrorType?) {
+    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorType?) {
         guard error == nil
         else  {
             self.callCompletionHandler(error!)

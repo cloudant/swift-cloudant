@@ -11,33 +11,33 @@ import Foundation
 
 public class DeleteDatabaseOperation : CouchOperation {
     
-    var databaseName:String? = nil
+    public var databaseName:String? = nil
     
-    override var httpMethod:String {
+    override public var httpMethod:String {
         get {
             return "DELETE"
         }
     }
     
-    override var httpPath:String {
+    override public var httpPath:String {
         get {
             // Safe to foce unwrap validation would fail if this is nil
             return "/\(self.databaseName!)"
         }
     }
     
-    var deleteDatabaseCompletionBlock : ((statusCode:Int?, operationError:ErrorType?) -> Void)? = nil
+    public var deleteDatabaseCompletionBlock : ((statusCode:Int?, operationError:ErrorType?) -> Void)? = nil
     
     
-    override func validate() -> Bool {
+    public override func validate() -> Bool {
         return super.validate() && self.databaseName != nil // should work iirc
     }
     
-    override func callCompletionHandler(error: ErrorType) {
+    public override func callCompletionHandler(error: ErrorType) {
         self.deleteDatabaseCompletionBlock?(statusCode: nil, operationError: error)
     }
     
-    override func processResponse(data: NSData?, statusCode: Int, error: ErrorType?) {
+    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorType?) {
         guard error == nil
             else  {
                 self.callCompletionHandler(error!)

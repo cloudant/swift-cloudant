@@ -8,10 +8,10 @@
 
 import Foundation
 
-class GetDocumentOperation: CouchDatabaseOperation {
+public class GetDocumentOperation: CouchDatabaseOperation {
 
     // Set to true to return revision information (revs=true)
-    var revs: Bool? = nil
+    public var revs: Bool? = nil
     
     /**
     *  The revision at which you want the document.
@@ -19,14 +19,14 @@ class GetDocumentOperation: CouchDatabaseOperation {
     *  Optional: If omitted CouchDB will return the
     *  document it determines is the current winning revision
     */
-    var revId: String? = nil
+    public var revId: String? = nil
     
     /**
     *  The document that this operation will access or modify.
     *
     *  Must be set before a call can be successfully made.
     */
-    var docId: String? = nil
+    public var docId: String? = nil
     
     /**
     *  Completion block to run when the operation completes.
@@ -36,21 +36,21 @@ class GetDocumentOperation: CouchDatabaseOperation {
     * - operationError - a pointer to an error object containing
     *   information about an error executing the operation
     */
-    var getDocumentCompletionBlock: (([String:AnyObject]?, ErrorType?) -> ())?
+    public var getDocumentCompletionBlock: (([String:AnyObject]?, ErrorType?) -> ())?
 
-    override func validate() -> Bool {
+    public override func validate() -> Bool {
         return super.validate() && docId != nil
     }
     
-    override var httpMethod: String {
+    public override var httpMethod: String {
         return "GET"
     }
     
-    override var httpPath: String {
+    public override var httpPath: String {
         return "/\(self.databaseName!)/\(docId!)"
     }
     
-    override var queryItems: [NSURLQueryItem] {
+    public override var queryItems: [NSURLQueryItem] {
         get {
             var items: [NSURLQueryItem] = []
             
@@ -66,11 +66,11 @@ class GetDocumentOperation: CouchDatabaseOperation {
         }
     }
     
-    override func callCompletionHandler(error: ErrorType) {
+    public override func callCompletionHandler(error: ErrorType) {
         self.getDocumentCompletionBlock?(nil, error)
     }
     
-    override func processResponse(responseData: NSData?, statusCode: Int, error: ErrorType?) {
+    public override func processResponse(responseData: NSData?, statusCode: Int, error: ErrorType?) {
         if let error = error {
             callCompletionHandler(error)
             return
