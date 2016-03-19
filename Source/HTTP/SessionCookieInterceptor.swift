@@ -9,14 +9,14 @@
 import Foundation
 
 
-public struct SessionCookieInterceptor : HTTPInterceptor
+public class SessionCookieInterceptor : HTTPInterceptor
 {
     
-    private let sessionCookieTimeout:Int64 = 600
-    private let sessionRequestBody:NSData
-    private var shouldMakeSessionRequest:Bool = true
-    private var cookie:String?
-    private let urlSession:InterceptableSession
+     let sessionCookieTimeout:Int64 = 600
+     let sessionRequestBody:NSData
+     var shouldMakeSessionRequest:Bool = true
+     var cookie:String?
+     let urlSession:InterceptableSession
     
     
     init(username:String, password:String){
@@ -30,7 +30,7 @@ public struct SessionCookieInterceptor : HTTPInterceptor
   
     }
     
-    public mutating func interceptResponse(var ctx: HTTPInterceptorContext) -> HTTPInterceptorContext {
+    public  func interceptResponse(var ctx: HTTPInterceptorContext) -> HTTPInterceptorContext {
         
         guard let response = ctx.response
         else {
@@ -48,7 +48,7 @@ public struct SessionCookieInterceptor : HTTPInterceptor
     }
     
     
-    public mutating func interceptRequest(ctx: HTTPInterceptorContext) -> HTTPInterceptorContext {
+    public  func interceptRequest(ctx: HTTPInterceptorContext) -> HTTPInterceptorContext {
         // if we shouldn't make the request just return th ctx
         guard shouldMakeSessionRequest
             else {
@@ -70,7 +70,7 @@ public struct SessionCookieInterceptor : HTTPInterceptor
     }
     
     
-    private mutating func startNewSession(url:NSURL) -> String? {
+    private  func startNewSession(url:NSURL) -> String? {
         let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)!
         components.path = "/_session"
         
@@ -150,13 +150,11 @@ public struct SessionCookieInterceptor : HTTPInterceptor
  
             }
         }
-        
+        task.resume()
         dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, self.sessionCookieTimeout * Int64(NSEC_PER_SEC)))
         
         
         return cookie
-        
-        
         
     }
     

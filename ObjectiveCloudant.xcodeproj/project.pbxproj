@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		11234CC81E7933B60EE60402 /* Pods_SwiftCloudantTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71B3BA2CC1BEC198BDE3E6DF /* Pods_SwiftCloudantTests.framework */; };
 		273EF55F1C00B870009A09E3 /* CDTOperationRequestBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 273EF55D1C00B870009A09E3 /* CDTOperationRequestBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		273EF5601C00B870009A09E3 /* CDTOperationRequestBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 273EF55E1C00B870009A09E3 /* CDTOperationRequestBuilder.m */; };
 		274CF6731B9055B9008BBD50 /* CDTCouchDBClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 274CF6661B9055B9008BBD50 /* CDTCouchDBClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -84,6 +85,7 @@
 		9896FE801BB57DAD00856BD7 /* CreateIndexTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */; };
 		98A87EE21C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		98A87EE31C6E31DA00D8B0E1 /* CDTOperationRequestExecutorDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 98A87EE11C6E31DA00D8B0E1 /* CDTOperationRequestExecutorDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		98E5431C1C9CCD0500F02E06 /* InterceptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E5431B1C9CCD0500F02E06 /* InterceptorTests.swift */; };
 		F89766C81C8D8994004C5DAE /* PutDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8ACC9631C8AF3BE00C8650D /* PutDocumentOperation.swift */; };
 /* End PBXBuildFile section */
 
@@ -137,6 +139,7 @@
 		27F6B7291BA9C98C000B523E /* CDTDeleteDatabaseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDTDeleteDatabaseOperation.m; path = ObjectiveCloudant/Operations/CDTDeleteDatabaseOperation.m; sourceTree = SOURCE_ROOT; };
 		27F6B72C1BA9CA0F000B523E /* DeleteDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DeleteDatabaseTests.m; path = ObjectiveCloudantTests/DeleteDatabaseTests.m; sourceTree = SOURCE_ROOT; };
 		6CBCA455EE3CE18541E67E8E /* Pods-ObjectiveCloudantTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCloudantTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ObjectiveCloudantTests/Pods-ObjectiveCloudantTests.release.xcconfig"; sourceTree = "<group>"; };
+		71B3BA2CC1BEC198BDE3E6DF /* Pods_SwiftCloudantTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftCloudantTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		980B2BF51BC27CC800CD40F8 /* CDTDeleteQueryIndexOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDTDeleteQueryIndexOperation.h; sourceTree = "<group>"; };
 		980B2BF61BC27CC800CD40F8 /* CDTDeleteQueryIndexOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDTDeleteQueryIndexOperation.m; sourceTree = "<group>"; };
 		984AA62A1BAAFA08003D4DCA /* CDTHTTPInterceptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTHTTPInterceptor.h; path = ObjectiveCloudant/HTTP/CDTHTTPInterceptor.h; sourceTree = SOURCE_ROOT; };
@@ -187,7 +190,10 @@
 		9896FE7F1BB57DAD00856BD7 /* CreateIndexTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateIndexTests.m; path = ObjectiveCloudantTests/CreateIndexTests.m; sourceTree = SOURCE_ROOT; };
 		98A87EE01C6E31DA00D8B0E1 /* CDTOperationRequestBuilderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestBuilderDelegate.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestBuilderDelegate.h; sourceTree = SOURCE_ROOT; };
 		98A87EE11C6E31DA00D8B0E1 /* CDTOperationRequestExecutorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDTOperationRequestExecutorDelegate.h; path = ObjectiveCloudant/HTTP/CDTOperationRequestExecutorDelegate.h; sourceTree = SOURCE_ROOT; };
+		98E5431B1C9CCD0500F02E06 /* InterceptorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterceptorTests.swift; sourceTree = "<group>"; };
 		9BE38C8FC08AD2F7D5DE29A0 /* Pods-ObjectiveCloudantTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCloudantTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ObjectiveCloudantTests/Pods-ObjectiveCloudantTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C44CC9006A617C35666B7B15 /* Pods-SwiftCloudantTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftCloudantTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftCloudantTests/Pods-SwiftCloudantTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D1DD97C2B236B8346A1BA8AD /* Pods-SwiftCloudantTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftCloudantTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftCloudantTests/Pods-SwiftCloudantTests.release.xcconfig"; sourceTree = "<group>"; };
 		EF088291BC169B0422274EC2 /* Pods_ObjectiveCloudantTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectiveCloudantTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8ACC9631C8AF3BE00C8650D /* PutDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PutDocumentOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -221,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				98734A211C88FDB200E79C5B /* SwiftCloudant.framework in Frameworks */,
+				11234CC81E7933B60EE60402 /* Pods_SwiftCloudantTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				EF088291BC169B0422274EC2 /* Pods_ObjectiveCloudantTests.framework */,
+				71B3BA2CC1BEC198BDE3E6DF /* Pods_SwiftCloudantTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -342,6 +350,8 @@
 			children = (
 				9BE38C8FC08AD2F7D5DE29A0 /* Pods-ObjectiveCloudantTests.debug.xcconfig */,
 				6CBCA455EE3CE18541E67E8E /* Pods-ObjectiveCloudantTests.release.xcconfig */,
+				C44CC9006A617C35666B7B15 /* Pods-SwiftCloudantTests.debug.xcconfig */,
+				D1DD97C2B236B8346A1BA8AD /* Pods-SwiftCloudantTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -470,6 +480,7 @@
 				98734A5E1C8A601400E79C5B /* GetDocumentTests.swift */,
 				98734A5F1C8A601400E79C5B /* Info.plist */,
 				98734A601C8A601400E79C5B /* SwiftCloudantTests.swift */,
+				98E5431B1C9CCD0500F02E06 /* InterceptorTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -580,9 +591,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 98734A2B1C88FDB200E79C5B /* Build configuration list for PBXNativeTarget "SwiftCloudantTests" */;
 			buildPhases = (
+				4A0B6C2241F0CFDD7BC82B38 /* Check Pods Manifest.lock */,
 				98734A1C1C88FDB200E79C5B /* Sources */,
 				98734A1D1C88FDB200E79C5B /* Frameworks */,
 				98734A1E1C88FDB200E79C5B /* Resources */,
+				BFB533C43D64BB62E271EB54 /* Embed Pods Frameworks */,
+				4ABAE3F49C32201D946C30FF /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -689,6 +703,36 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ObjectiveCloudantTests/Pods-ObjectiveCloudantTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		4A0B6C2241F0CFDD7BC82B38 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		4ABAE3F49C32201D946C30FF /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SwiftCloudantTests/Pods-SwiftCloudantTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6168766FB28B8168D8126BDA /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -702,6 +746,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ObjectiveCloudantTests/Pods-ObjectiveCloudantTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BFB533C43D64BB62E271EB54 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SwiftCloudantTests/Pods-SwiftCloudantTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EE6351C1CF79C9FAFAE266A0 /* Check Pods Manifest.lock */ = {
@@ -795,6 +854,7 @@
 				98734A611C8A601400E79C5B /* CreateDatabaseTests.swift in Sources */,
 				98734A621C8A601400E79C5B /* GetDocumentTests.swift in Sources */,
 				98734A641C8A601400E79C5B /* SwiftCloudantTests.swift in Sources */,
+				98E5431C1C9CCD0500F02E06 /* InterceptorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1000,6 +1060,7 @@
 		};
 		98734A2C1C88FDB200E79C5B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C44CC9006A617C35666B7B15 /* Pods-SwiftCloudantTests.debug.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
@@ -1012,6 +1073,7 @@
 		};
 		98734A2D1C88FDB200E79C5B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D1DD97C2B236B8346A1BA8AD /* Pods-SwiftCloudantTests.release.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;

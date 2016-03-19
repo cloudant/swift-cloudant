@@ -16,7 +16,7 @@ public protocol HTTPInterceptor
     func interceptResponse(ctx:HTTPInterceptorContext) -> HTTPInterceptorContext
 }
 
-extension HTTPInterceptor {
+public extension HTTPInterceptor {
     
     public func interceptRequest(ctx:HTTPInterceptorContext) -> HTTPInterceptorContext {
         return ctx;
