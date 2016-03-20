@@ -1,5 +1,9 @@
+use_frameworks!
 target :ObjectiveCloudantTests do
-   pod 'OHHTTPStubs', '~> 4.2'
+   pod 'OHHTTPStubs'
    pod 'OCMock', '~> 3.1'
-   use_frameworks!
+end
+
+target :SwiftCloudantTests do
+   pod 'OHHTTPStubs'
 end

@@ -8,21 +8,21 @@
 
 import Foundation
 
-class PutDocumentOperation: CouchDatabaseOperation {
+public class PutDocumentOperation: CouchDatabaseOperation {
     /**
     The document that this operation will modify.
     
     Must be set before a call can be successfully made.
     */
-    var docId: String? = nil
+    public var docId: String? = nil
     
     /**
     If updating a document, set this value to the current revision ID.
     */
-    var revId: String? = nil
+    public var revId: String? = nil
     
     /** Body of document. Must be serialisable with NSJSONSerialization */
-    var body: AnyObject? = nil
+    public var body: AnyObject? = nil
 
     /**
     Completion block to run when the operation completes.
@@ -35,15 +35,15 @@ class PutDocumentOperation: CouchDatabaseOperation {
     */    
     var putDocumentCompletionBlock: ((String?, String?, Int, ErrorType?) -> ())? = nil
     
-    override func validate() -> Bool {
+    public override func validate() -> Bool {
         return super.validate() && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body!)
     }
     
-    override var httpMethod: String {
+    public override var httpMethod: String {
         return "PUT"
     }
     
-    override var httpRequestBody: NSData? {
+    public override var httpRequestBody: NSData? {
         get {
             do {
                 let data = try NSJSONSerialization.dataWithJSONObject(body!, options: NSJSONWritingOptions())
@@ -54,11 +54,11 @@ class PutDocumentOperation: CouchDatabaseOperation {
         }
     }
     
-    override var httpPath: String {
+    public override var httpPath: String {
         return "/\(self.databaseName!)/\(docId!)"
     }
     
-    override var queryItems: [NSURLQueryItem] {
+    public override var queryItems: [NSURLQueryItem] {
         get {
             var items: [NSURLQueryItem] = []
             
@@ -70,11 +70,11 @@ class PutDocumentOperation: CouchDatabaseOperation {
         }
     }
     
-    override func callCompletionHandler(error: ErrorType) {
+    public override func callCompletionHandler(error: ErrorType) {
         putDocumentCompletionBlock?(nil, nil, 0, error)
     }
     
-    override func processResponse(responseData: NSData?, statusCode: Int, error: ErrorType?) {
+    public override func processResponse(responseData: NSData?, statusCode: Int, error: ErrorType?) {
         if let error = error {
             callCompletionHandler(error)
             return

@@ -104,25 +104,25 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
     
     var rootURL:NSURL = NSURL()
     
-    var httpPath:String {
+    public var httpPath:String {
         get {
             return "/"
         }
     }
-    var httpMethod : String {
+    public var httpMethod : String {
         get {
             return "GET"
         }
     }
     
-    var queryItems:[NSURLQueryItem] {
+    public var queryItems:[NSURLQueryItem] {
         get {
             return []
         }
     }
     
     //return nil if there is no body
-    var httpRequestBody:NSData? {
+    public var httpRequestBody:NSData? {
         get {
             return nil
         }
@@ -130,21 +130,21 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
     
     private var executor:OperationRequestExecutor? = nil
     
-    override init() {
+    public override init() {
         super.init()
     }
 
     
     // subclasses should override
-    func processResponse(data:NSData?, statusCode:Int, error:ErrorType?){
+    public func processResponse(data:NSData?, statusCode:Int, error:ErrorType?){
         
     }
     
-    func callCompletionHandler(error:ErrorType){
+    public func callCompletionHandler(error:ErrorType){
         return
     }
     
-    func validate() -> Bool {
+    public func validate() -> Bool {
         return true
     }
     

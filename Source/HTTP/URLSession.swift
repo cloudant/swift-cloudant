@@ -10,19 +10,19 @@ import Foundation
 
 
 
-protocol HTTPInterceptor
+public protocol HTTPInterceptor
 {
     func interceptRequest(ctx:HTTPInterceptorContext) -> HTTPInterceptorContext
     func interceptResponse(ctx:HTTPInterceptorContext) -> HTTPInterceptorContext
 }
 
-extension HTTPInterceptor {
+public extension HTTPInterceptor {
     
-    func interceptRequest(ctx:HTTPInterceptorContext) -> HTTPInterceptorContext {
+    public func interceptRequest(ctx:HTTPInterceptorContext) -> HTTPInterceptorContext {
         return ctx;
     }
     
-    func interceptResponse(ctx:HTTPInterceptorContext) -> HTTPInterceptorContext {
+    public func interceptResponse(ctx:HTTPInterceptorContext) -> HTTPInterceptorContext {
         return ctx;
     }
 }
