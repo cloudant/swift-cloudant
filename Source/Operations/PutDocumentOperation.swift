@@ -22,7 +22,7 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     public var revId: String? = nil
     
     /** Body of document. Must be serialisable with NSJSONSerialization */
-    public var body: AnyObject? = nil
+    public var body: [String:AnyObject]? = nil
 
     /**
     Completion block to run when the operation completes.
