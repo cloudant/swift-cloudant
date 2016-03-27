@@ -30,12 +30,14 @@ public class SessionCookieInterceptor : HTTPInterceptor
   
     }
     
-    public  func interceptResponse(var ctx: HTTPInterceptorContext) -> HTTPInterceptorContext {
+    public  func interceptResponse(context: HTTPInterceptorContext) -> HTTPInterceptorContext {
         
-        guard let response = ctx.response
+        guard let response = context.response
         else {
-            return ctx;
+            return context;
         }
+        
+        var ctx = context
         
         if response.statusCode == 403 || response.statusCode == 401 {
             ctx.shouldRetry = true

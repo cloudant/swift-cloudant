@@ -74,6 +74,7 @@ class GetDocumentTests : XCTestCase {
         waitForExpectationsWithTimeout(10.0, handler: nil)
     }
     
+    
     func testGetDocument() {
         let data = createTestDocuments(1)
         let getDocumentExpectation = expectationWithDescription("get document")

@@ -98,7 +98,7 @@ public class URLSessionTask {
             }
             
             if ctx.shouldRetry && self.remainingRetries > 0 {
-                self.remainingRetries--;
+                self.remainingRetries -= 1;
                 self.inProgessTask = self.makeRequest()
                 self.inProgessTask?.resume()
             } else {
