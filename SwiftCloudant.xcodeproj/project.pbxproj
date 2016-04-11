@@ -215,7 +215,6 @@
 				TargetAttributes = {
 					98734A161C88FDB200E79C5B = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = QRNQK67ZGE;
 					};
 					98734A1F1C88FDB200E79C5B = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -440,6 +439,7 @@
 		98734A291C88FDB200E79C5B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -448,7 +448,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = uk.me.rhysshort.SwiftCloudant;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cloudant.SwiftCloudant;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -458,6 +458,7 @@
 		98734A2A1C88FDB200E79C5B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -466,7 +467,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = uk.me.rhysshort.SwiftCloudant;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cloudant.SwiftCloudant;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
