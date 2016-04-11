@@ -40,21 +40,18 @@ for the project. All development should be completed via this workspace.
 ## Adding files
 
 First you should make sure you add them in the correct place in the project
-structure.
+structure. All production code goes into `Source` and test code goes into `Test`.
 
 * `HTTP` for classes which are related to HTTP layer above `NSURLSession`
-*  `Operations - Instance` for operations which interact with the sever, such as
-creating databases.
-* `Operations - Database` for  operations which interact with a Database, which
-perform tasks such creating a document.
-* `ObjectiveCloudant` for classes that need to be used in order to successfully
+*  `Operations` for operations perform tasks such creating a document.
+* `Source` for classes that need to be used in order to successfully
 interact with the database. Such as CDTCouchDBClient.
 
 ### Using Xcode build to run the tests.
 
 Run:
 ```bash
-xcodebuild -project ObjectiveCloudant.xcodeproj/ -scheme ObjectiveCloudantTests -destination 'platform=iOS Simulator,OS=latest,name=iPhone 4S' build test
+xcodebuild -project SwiftCloudant.xcodeproj/ -scheme SwiftCloudantTests -destination 'platform=iOS Simulator,OS=latest,name=iPhone 4S' build test
 ```
 
 Currently only iOS is supported for testing.
@@ -65,7 +62,7 @@ __NOTE__: Currently server information is hard coded to localhost without creden
 
 We follow a fairly standard procedure:
 
-* Fork the objective-cloudant repo into your own account, clone to your machine.
+* Fork the swift-cloudant repo into your own account, clone to your machine.
     * Create a branch with your changes on (git checkout -b my-new-feature)
     * Make sure to update the CHANGELOG and CONTRIBUTORS before sending a PR.
     * All contributions must include tests.
