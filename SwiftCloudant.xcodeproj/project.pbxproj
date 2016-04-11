@@ -223,7 +223,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 279E8D221B7F905B001100D4 /* Build configuration list for PBXProject "ObjectiveCloudant" */;
+			buildConfigurationList = 279E8D221B7F905B001100D4 /* Build configuration list for PBXProject "SwiftCloudant" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -498,7 +498,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		279E8D221B7F905B001100D4 /* Build configuration list for PBXProject "ObjectiveCloudant" */ = {
+		279E8D221B7F905B001100D4 /* Build configuration list for PBXProject "SwiftCloudant" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				279E8D3A1B7F905B001100D4 /* Debug */,

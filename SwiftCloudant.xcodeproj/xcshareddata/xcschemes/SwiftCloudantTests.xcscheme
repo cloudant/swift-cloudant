@@ -19,7 +19,7 @@
                BlueprintIdentifier = "98734A1F1C88FDB200E79C5B"
                BuildableName = "SwiftCloudantTests.xctest"
                BlueprintName = "SwiftCloudantTests"
-               ReferencedContainer = "container:ObjectiveCloudant.xcodeproj">
+               ReferencedContainer = "container:SwiftCloudant.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
