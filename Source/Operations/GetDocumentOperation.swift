@@ -45,7 +45,7 @@ public class GetDocumentOperation: CouchDatabaseOperation {
     * - operationError - a pointer to an error object containing
     *   information about an error executing the operation
     */
-    public var getDocumentCompletionBlock: (([String:AnyObject]?, ErrorType?) -> ())?
+    public var getDocumentCompletionBlock: (([String:AnyObject]?, ErrorProtocol?) -> ())?
 
     public override func validate() -> Bool {
         return super.validate() && docId != nil
@@ -75,30 +75,30 @@ public class GetDocumentOperation: CouchDatabaseOperation {
         }
     }
     
-    public override func callCompletionHandler(error: ErrorType) {
+    public override func callCompletionHandler(error: ErrorProtocol) {
         self.getDocumentCompletionBlock?(nil, error)
     }
     
-    public override func processResponse(responseData: NSData?, statusCode: Int, error: ErrorType?) {
+    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
         if let error = error {
-            callCompletionHandler(error)
+            callCompletionHandler(error:error)
             return
         }
         
         // Check status code is 200
         if statusCode == 200 {
-            guard let responseData = responseData else {
+            guard let data = data else {
                 return
             }
             
             do {
-                let json = try NSJSONSerialization.JSONObjectWithData(responseData, options: NSJSONReadingOptions())
+                let json = try NSJSONSerialization.jsonObject(with:data, options: NSJSONReadingOptions())
                 getDocumentCompletionBlock?(json as? [String:AnyObject], nil)
             } catch {
-                callCompletionHandler(error)
+                callCompletionHandler(error:error)
             }
         } else {
-            callCompletionHandler(Errors.GetDocumentFailed)
+            callCompletionHandler(error:Errors.GetDocumentFailed)
         }
     }
 }

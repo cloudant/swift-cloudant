@@ -37,9 +37,9 @@ protocol HTTPRequestOperation {
     
     func completeOpetation()
     
-    func processResponse(data:NSData?, statusCode:Int, error:ErrorType?);
+    func processResponse(data:NSData?, statusCode:Int, error:ErrorProtocol?);
     
-    var cancelled: Bool { get }
+    var isCancelled: Bool { get }
     
 }
 
@@ -55,7 +55,7 @@ class OperationRequestBuilder {
     
     
     func buildRequest() -> NSURLRequest {
-        guard let components = NSURLComponents(URL: operation.rootURL, resolvingAgainstBaseURL: false)
+        guard let components = NSURLComponents(url: operation.rootURL, resolvingAgainstBaseURL: false)
         else {
             //crash for now
             abort()
@@ -64,24 +64,24 @@ class OperationRequestBuilder {
         var queryItems : [NSURLQueryItem] = []
         
         if let _ = components.queryItems {
-            queryItems.appendContentsOf(components.queryItems!)
+            queryItems.append(contentsOf:components.queryItems!)
         }
         
-        queryItems.appendContentsOf(operation.queryItems)
+        queryItems.append(contentsOf:operation.queryItems)
         components.queryItems = queryItems
         
-        guard let url = components.URL
+        guard let url = components.url
         else {
             // crash for now
             abort()
         }
-        let request = NSMutableURLRequest(URL: url)
-        request.cachePolicy = .UseProtocolCachePolicy
+        let request = NSMutableURLRequest(url: url)
+        request.cachePolicy = .useProtocolCachePolicy
         request.timeoutInterval = 10.0
-        request.HTTPMethod = operation.httpMethod
+        request.httpMethod = operation.httpMethod
         
         if let body = operation.httpRequestBody {
-            request.HTTPBody = body
+            request.httpBody = body
         }
         
         

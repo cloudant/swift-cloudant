@@ -17,7 +17,7 @@
 
 import Foundation
 
-enum Errors : ErrorType {
+enum Errors : ErrorProtocol {
     /**
     Creating a database failed.
     */
@@ -65,34 +65,34 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
     // NS operation property overrides
     
     private var mExecuting: Bool = false
-    override public var executing: Bool {
+    override public var isExecuting: Bool {
         get {
             return mExecuting
         }
         set {
             if mExecuting != newValue {
-                willChangeValueForKey("isExecuting")
+                willChangeValue(forKey:"isExecuting")
                 mExecuting = newValue
-                didChangeValueForKey("isExecuting")
+                didChangeValue(forKey:"isExecuting")
             }
         }
     }
     
     private var mFinished:Bool = false
-    override public var finished : Bool {
+    override public var isFinished : Bool {
         get {
             return mFinished
         }
         set {
             if mFinished != newValue {
-                willChangeValueForKey("isFinished")
+                willChangeValue(forKey:"isFinished")
                 mFinished = newValue
-                didChangeValueForKey("isFinished")
+                didChangeValue(forKey:"isFinished")
             }
         }
     }
     
-    override public var asynchronous : Bool {
+    override public var isAsynchronous : Bool {
         get {
             return true
         }
@@ -145,11 +145,11 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
 
     
     // subclasses should override
-    public func processResponse(data:NSData?, statusCode:Int, error:ErrorType?){
+    public func processResponse(data:NSData?, statusCode:Int, error:ErrorProtocol?){
         
     }
     
-    public func callCompletionHandler(error:ErrorType){
+    public func callCompletionHandler(error:ErrorProtocol){
         return
     }
     
@@ -159,26 +159,26 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
     
     final override public func start() {
         // Always check for cancellation before launching the task
-        if cancelled {
-            finished = true
+        if isCancelled {
+            isFinished = true
             return
         }
         
         if !self.validate() {
-            self.callCompletionHandler(Errors.ValidationFailed)
-            finished = true
+            self.callCompletionHandler(error:Errors.ValidationFailed)
+            isFinished = true
             return
         }
         
         // start the operation
-        executing = true
+        isExecuting = true
         executor = OperationRequestExecutor(operation: self)
         executor?.executeRequest()
     }
     
     final func completeOpetation(){
-        self.executing = false
-        self.finished = true
+        self.isExecuting = false
+        self.isFinished = true
     }
     
     final override public func cancel() {

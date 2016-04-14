@@ -33,7 +33,7 @@ class CreateDatabaseTests : XCTestCase {
         
         let delete = DeleteDatabaseOperation()
         delete.databaseName = self.dbName
-        client.addOperation(delete)
+        client.addOperation(operation: delete)
         delete.waitUntilFinished()
         
         super.tearDown()
@@ -43,8 +43,7 @@ class CreateDatabaseTests : XCTestCase {
     
     
     func testCreateUsingPut() {
-        
-        let createExpectation = self.expectationWithDescription("create database")
+        let createExpectation = self.expectation(withDescription:"create database")
         
         let client = CouchDBClient(url:NSURL(string: url)!,username:username,password:password)
         
@@ -59,9 +58,9 @@ class CreateDatabaseTests : XCTestCase {
             XCTAssertNil(error)
         }
         
-        client.addOperation(create)
+        client.addOperation(operation:create)
         
-        self.waitForExpectationsWithTimeout(10.0, handler: nil)
+        self.waitForExpectations(withTimeout:10.0, handler: nil)
     }
 
     

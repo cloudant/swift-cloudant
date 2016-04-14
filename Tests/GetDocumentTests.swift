@@ -27,7 +27,7 @@ class GetDocumentTests : XCTestCase {
     func createTestDocuments(count: Int) -> [[String:AnyObject]] {
         var docs = [[String:AnyObject]]()
         for _ in 1...count {
-            docs.append(["data": NSUUID().UUIDString.lowercaseString])
+            docs.append(["data": NSUUID().uuidString.lowercased()])
         }
         
         return docs
@@ -36,11 +36,11 @@ class GetDocumentTests : XCTestCase {
     override func setUp() {
         super.setUp()
          
-        dbName = "a-\(NSUUID().UUIDString.lowercaseString)"
+        dbName = "a-\(NSUUID().uuidString.lowercased())"
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         let create = CreateDatabaseOperation()
         create.databaseName = dbName!
-        client.addOperation(create)
+        client.addOperation(operation:create)
         create.waitUntilFinished()
         
         print("Created database: \(dbName!)")
@@ -59,15 +59,15 @@ class GetDocumentTests : XCTestCase {
 //    }
     
     func testPutDocument() {
-        let data = createTestDocuments(1)
+        let data = createTestDocuments(count:1)
         
-        let putDocumentExpectation = expectationWithDescription("put document")
+        let putDocumentExpectation = expectation(withDescription:"put document")
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         
         let put = PutDocumentOperation()
         put.databaseName = dbName
         put.body = data[0]
-        put.docId = NSUUID().UUIDString.lowercaseString
+        put.docId = NSUUID().uuidString.lowercased()
         
         put.putDocumentCompletionBlock = { (docId, revId, statusCode, error) in
             putDocumentExpectation.fulfill()
@@ -77,21 +77,21 @@ class GetDocumentTests : XCTestCase {
             XCTAssert(statusCode == 201 || statusCode == 202)
         }
         
-        client.addOperation(put)
+        client.addOperation(operation:put)
         
-        waitForExpectationsWithTimeout(10.0, handler: nil)
+        waitForExpectations(withTimeout:10.0, handler: nil)
     }
     
     
     func testGetDocument() {
-        let data = createTestDocuments(1)
-        let getDocumentExpectation = expectationWithDescription("get document")
+        let data = createTestDocuments(count:1)
+        let getDocumentExpectation = expectation(withDescription:"get document")
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         
-        let putDocumentExpectation = self.expectationWithDescription("put document")
+        let putDocumentExpectation = self.expectation(withDescription:"put document")
         let put = PutDocumentOperation()
         put.body = data[0]
-        put.docId = NSUUID().UUIDString.lowercaseString
+        put.docId = NSUUID().uuidString.lowercased()
         put.databaseName = self.dbName
         put.putDocumentCompletionBlock = { (docId,revId,statusCode, operationError) in
             putDocumentExpectation.fulfill()
@@ -110,26 +110,26 @@ class GetDocumentTests : XCTestCase {
                 XCTAssertNotNil(doc)
             }
             
-            client.addOperation(get)
+            client.addOperation(operation:get)
         };
         
         
         
         
-        client.addOperation(put)
+        client.addOperation(operation: put)
         put.waitUntilFinished()
 
         
-        waitForExpectationsWithTimeout(10.0, handler: nil)
+        waitForExpectations(withTimeout:10.0, handler: nil)
     }
     
     func testGetDocumentUsingDBObject () {
-        let data = createTestDocuments(1)
+        let data = createTestDocuments(count:1)
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
-        let putDocumentExpectation = self.expectationWithDescription("put document")
+        let putDocumentExpectation = self.expectation(withDescription:"put document")
         let put = PutDocumentOperation()
         put.body = data[0]
-        put.docId = NSUUID().UUIDString.lowercaseString
+        put.docId = NSUUID().uuidString.lowercased()
         put.databaseName = self.dbName
         put.putDocumentCompletionBlock = { (docId,revId,statusCode, operationError) in
             putDocumentExpectation.fulfill()
@@ -138,9 +138,9 @@ class GetDocumentTests : XCTestCase {
             XCTAssertNil(operationError)
             XCTAssertTrue(statusCode / 100 == 2)
         };
-        client.addOperation(put)
+        client.addOperation(operation:put)
         
-        waitForExpectationsWithTimeout(10.0, handler: nil)
+        waitForExpectations(withTimeout:10.0, handler: nil)
         
         let db = client[self.dbName!]
         let document = db[put.docId!]
@@ -148,15 +148,15 @@ class GetDocumentTests : XCTestCase {
     }
     
     func testGetDocumentUsingDBAdd() {
-        let data = createTestDocuments(1)
-        let getDocumentExpectation = expectationWithDescription("get document")
+        let data = createTestDocuments(count:1)
+        let getDocumentExpectation = expectation(withDescription:"get document")
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         let db = client[self.dbName!]
         
-        let putDocumentExpectation = self.expectationWithDescription("put document")
+        let putDocumentExpectation = self.expectation(withDescription:"put document")
         let put = PutDocumentOperation()
         put.body = data[0]
-        put.docId = NSUUID().UUIDString.lowercaseString
+        put.docId = NSUUID().uuidString.lowercased()
         put.putDocumentCompletionBlock = { (docId,revId,statusCode, operationError) in
             putDocumentExpectation.fulfill()
             XCTAssertEqual(put.docId,docId);
@@ -167,7 +167,7 @@ class GetDocumentTests : XCTestCase {
 
         };
         
-        db.add(put)
+        db.add(operation:put)
         put.waitUntilFinished()
         
         let get = GetDocumentOperation()
@@ -180,8 +180,8 @@ class GetDocumentTests : XCTestCase {
             XCTAssertNotNil(doc)
         }
         
-        client.addOperation(get)
+        client.addOperation(operation:get)
         
-        waitForExpectationsWithTimeout(10.0, handler: nil)
+        waitForExpectations(withTimeout:10.0, handler: nil)
     }
 }
