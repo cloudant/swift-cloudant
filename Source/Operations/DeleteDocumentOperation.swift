@@ -61,7 +61,7 @@ public class DeleteDocumentOperation : CouchDatabaseOperation {
      * error: An object representing the error that occured, will be nil when the operation
      *                  successfully makes a HTTP request.
      */
-    public var deleteDocumentCompletionBlock : ((statusCode:Int?, error:ErrorType?) ->())? = nil
+    public var deleteDocumentCompletionBlock : ((statusCode:Int?, error:ErrorProtocol?) ->())? = nil
     
     public override func validate() -> Bool {
         return super.validate() && revId != nil && docId != nil
@@ -79,13 +79,13 @@ public class DeleteDocumentOperation : CouchDatabaseOperation {
        return [NSURLQueryItem(name: "rev", value: revId!)]
     }
     
-    public override func callCompletionHandler(error: ErrorType) {
+    public override func callCompletionHandler(error: ErrorProtocol) {
         self.deleteDocumentCompletionBlock?(statusCode: nil,error: error)
     }
     
-    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorType?) {
+    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
         if let error = error {
-            callCompletionHandler(error)
+            callCompletionHandler(error: error)
         } else {
             deleteDocumentCompletionBlock?(statusCode: statusCode,error: error);
         }

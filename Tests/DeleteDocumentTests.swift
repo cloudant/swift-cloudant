@@ -27,11 +27,11 @@ class DeleteDocumentTests : XCTestCase {
     override func setUp() {
         super.setUp()
         
-        dbName = "a-\(NSUUID().UUIDString.lowercaseString)"
+        dbName = "a-\(NSUUID().uuidString.lowercased())"
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         let create = CreateDatabaseOperation()
         create.databaseName = dbName!
-        client.addOperation(create)
+        client.addOperation(operation:create)
         create.waitUntilFinished()
         
         print("Created database: \(dbName!)")
@@ -41,7 +41,7 @@ class DeleteDocumentTests : XCTestCase {
         
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         let db = client[self.dbName!]
-        let expectation = self.expectationWithDescription("Delete document")
+        let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.deleteDocumentCompletionBlock = {(statusCode, error) in
             expectation.fulfill()
@@ -62,10 +62,10 @@ class DeleteDocumentTests : XCTestCase {
         
         delete.addDependency(create)
         
-        db.add(create)
-        db.add(delete)
+        db.add(operation: create)
+        db.add(operation: delete)
         
-        self.waitForExpectationsWithTimeout(10.0, handler: nil)
+        self.waitForExpectations(withTimeout:10.0, handler: nil)
         
     }
     
@@ -73,7 +73,7 @@ class DeleteDocumentTests : XCTestCase {
         
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         let db = client[self.dbName!]
-        let expectation = self.expectationWithDescription("Delete document")
+        let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.docId = "testDocId"
         delete.deleteDocumentCompletionBlock = {(statusCode, error) in
@@ -82,8 +82,8 @@ class DeleteDocumentTests : XCTestCase {
             XCTAssertNotNil(error)
         }
         
-        db.add(delete)
-        self.waitForExpectationsWithTimeout(10.0, handler: nil)
+        db.add(operation: delete)
+        self.waitForExpectations(withTimeout:10.0, handler: nil)
 
     }
     
@@ -91,7 +91,7 @@ class DeleteDocumentTests : XCTestCase {
         
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         let db = client[self.dbName!]
-        let expectation = self.expectationWithDescription("Delete document")
+        let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.docId = "testDocId"
         delete.deleteDocumentCompletionBlock = {(statusCode, error) in
@@ -100,15 +100,15 @@ class DeleteDocumentTests : XCTestCase {
             XCTAssertNotNil(error)
         }
         
-        db.add(delete)
-        self.waitForExpectationsWithTimeout(10.0, handler: nil)
+        db.add(operation: delete)
+        self.waitForExpectations(withTimeout:10.0, handler: nil)
         
     }
     
     func testDeleteDocumentOpCompletesWithoutCallback() {
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         let db = client[self.dbName!]
-        let expectation = self.expectationWithDescription("Delete document")
+        let expectation = self.expectation(withDescription:"Delete document")
         let delete = DeleteDocumentOperation()
         delete.deleteDocumentCompletionBlock = {(statusCode, error) in
             XCTAssertNotNil(statusCode)
@@ -137,10 +137,10 @@ class DeleteDocumentTests : XCTestCase {
         delete.addDependency(create)
         get.addDependency(delete)
         
-        db.add(create)
-        db.add(delete)
-        db.add(get)
+        db.add(operation: create)
+        db.add(operation: delete)
+        db.add(operation: get)
         
-        self.waitForExpectationsWithTimeout(10.0, handler: nil)
+        self.waitForExpectations(withTimeout:10.0, handler: nil)
     }
 }
