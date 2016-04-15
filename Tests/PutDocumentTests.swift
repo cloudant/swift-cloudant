@@ -29,11 +29,11 @@ class PutDocumentTests : XCTestCase {
     override func setUp() {
         super.setUp()
         
-        dbName = "a-\(NSUUID().UUIDString.lowercaseString)"
+        dbName = "a-\(NSUUID().uuidString.lowercased())"
         self.client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         let create = CreateDatabaseOperation()
         create.databaseName = dbName!
-        client!.addOperation(create)
+        client!.addOperation(operation:create)
         create.waitUntilFinished()
         
         print("Created database: \(dbName!)")
@@ -42,7 +42,7 @@ class PutDocumentTests : XCTestCase {
     
     func testSaveDocument(){
         let db = self.client![self.dbName!]
-        let putExpectation = self.expectationWithDescription("Put Document expectation")
+        let putExpectation = self.expectation(withDescription:"Put Document expectation")
         let put = PutDocumentOperation()
         put.docId = "Doc1"
         put.body = ["hello":"world"]
@@ -53,9 +53,9 @@ class PutDocumentTests : XCTestCase {
             XCTAssertEqual(2, statusCode / 100)
             XCTAssertEqual("Doc1", docId)
         }
-        db.add(put)
+        db.add(operation:put)
         
-        self.waitForExpectationsWithTimeout(10) { (_) in
+        self.waitForExpectations(withTimeout: 10) { (_) in
             
         }
         

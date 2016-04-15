@@ -28,12 +28,12 @@ public class SessionCookieInterceptor : HTTPInterceptor
     
     
     init(username:String, password:String){
-        let encodedUsername = username.stringByAddingPercentEncodingWithAllowedCharacters
-        let encodedPassword = password.stringByAddingPercentEncodingWithAllowedCharacters
+        let encodedUsername = username.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics())
+        let encodedPassword = password.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics())
         
         let payload = "name=\(encodedUsername)&password=\(encodedPassword)"
         
-        sessionRequestBody = payload.dataUsingEncoding(NSASCIIStringEncoding)!
+        sessionRequestBody = payload.data(using:NSASCIIStringEncoding)!
         urlSession = InterceptableSession()
   
     }
@@ -51,7 +51,7 @@ public class SessionCookieInterceptor : HTTPInterceptor
             ctx.shouldRetry = true
             self.cookie = nil
         } else if let cookieHeader = response.allHeaderFields["Set-Cookie"] as? String {
-            cookie = cookieHeader.componentsSeparatedByString(";").first
+            cookie = cookieHeader.components(separatedBy: ";").first
         }
         
         return ctx;
@@ -70,7 +70,7 @@ public class SessionCookieInterceptor : HTTPInterceptor
             ctx.request.setValue(cookie, forHTTPHeaderField: "Cookie")
         } else {
             // get the new cookie and apply it
-            self.cookie = self.startNewSession(ctx.request.URL!)
+            self.cookie = self.startNewSession(url: ctx.request.url!)
             if let cookie = self.cookie {
                 ctx.request.setValue(cookie, forHTTPHeaderField: "Cookie")
             }
@@ -81,19 +81,19 @@ public class SessionCookieInterceptor : HTTPInterceptor
     
     
     private  func startNewSession(url:NSURL) -> String? {
-        let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)!
+        let components = NSURLComponents(url: url, resolvingAgainstBaseURL: false)!
         components.path = "/_session"
         
-        let request = NSMutableURLRequest(URL: components.URL!)
+        let request = NSMutableURLRequest(url: components.url!)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.HTTPMethod = "POST"
-        request.HTTPBody = self.sessionRequestBody
+        request.httpMethod = "POST"
+        request.httpBody = self.sessionRequestBody
         
         
         let semaphore = dispatch_semaphore_create(0)
         var cookie:String?
         
-        let task = self.urlSession.dataTask(request) { (data, response, error) -> Void in
+        let task = self.urlSession.dataTask(request:request) { (data, response, error) -> Void in
             
             //defer semaphore
             defer { dispatch_semaphore_signal(semaphore) }
@@ -119,11 +119,11 @@ public class SessionCookieInterceptor : HTTPInterceptor
                     
                     //Check data sent back before attempting to get the cookie from the headers.
                     do {
-                        let jsonResponse = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions())
+                        let jsonResponse = try NSJSONSerialization.jsonObject(with:data, options: NSJSONReadingOptions())
                         
                         // Only check for ok:true, https://issues.apache.org/jira/browse/COUCHDB-1356
                         // means we cannot check that the name returned is the one we sent.
-                        guard let ok = jsonResponse.objectForKey("ok") as? NSNumber where
+                        guard let ok = jsonResponse["ok"] as? NSNumber where
                             ok.boolValue
                             else {
                                 NSLog("Response did not contain ok:true, bailing")
@@ -137,7 +137,7 @@ public class SessionCookieInterceptor : HTTPInterceptor
                                 return
                         }
                         
-                        cookie = cookieHeader.componentsSeparatedByString(";").first
+                        cookie = cookieHeader.components(separatedBy:";").first
 
                     } catch {
                         // log it and error out.

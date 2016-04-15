@@ -42,7 +42,7 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     - operationError - a pointer to an error object containing
     information about an error executing the operation
     */    
-    var putDocumentCompletionBlock: ((String?, String?, Int, ErrorType?) -> ())? = nil
+    var putDocumentCompletionBlock: ((String?, String?, Int, ErrorProtocol?) -> ())? = nil
     
     public override func validate() -> Bool {
         return super.validate() && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body!)
@@ -55,7 +55,7 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     public override var httpRequestBody: NSData? {
         get {
             do {
-                let data = try NSJSONSerialization.dataWithJSONObject(body!, options: NSJSONWritingOptions())
+                let data = try NSJSONSerialization.data(withJSONObject:body!, options: NSJSONWritingOptions())
                 return data
             } catch {
                 return nil
@@ -79,35 +79,35 @@ public class PutDocumentOperation: CouchDatabaseOperation {
         }
     }
     
-    public override func callCompletionHandler(error: ErrorType) {
+    public override func callCompletionHandler(error: ErrorProtocol) {
         putDocumentCompletionBlock?(nil, nil, 0, error)
     }
     
-    public override func processResponse(responseData: NSData?, statusCode: Int, error: ErrorType?) {
+    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
         if let error = error {
-            callCompletionHandler(error)
+            callCompletionHandler(error:error)
             return
         }
         
         // Check status code
         if statusCode == 201 || statusCode == 202 {
-            guard let responseData = responseData else {
+            guard let data = data else {
                 return
             }
             
             do {
-                // Convert the response to JSON. 
-                let json = try NSJSONSerialization.JSONObjectWithData(responseData, options: NSJSONReadingOptions())
+                // Convert the response to JSON.
+                let json = try NSJSONSerialization.jsonObject(with:data, options: NSJSONReadingOptions())
                 if let jsonDict = json as? [String:AnyObject] {
                     putDocumentCompletionBlock?(jsonDict["id"] as? String, jsonDict["rev"] as? String, statusCode, nil)
                 } else {
-                    callCompletionHandler(Errors.UnexpectedJSONFormat)
+                    callCompletionHandler(error: Errors.UnexpectedJSONFormat)
                 }
             } catch {
-                callCompletionHandler(error)
+                callCompletionHandler(error:error)
             }
         } else {
-            callCompletionHandler(Errors.CreateUpdateDocumentFailed)
+            callCompletionHandler(error:Errors.CreateUpdateDocumentFailed)
         }
     }
 }

@@ -28,22 +28,22 @@ class InterceptorTests : XCTestCase {
     override func setUp() {
         
         
-        OHHTTPStubs.stubRequestsPassingTest({ (request) -> Bool in
-            return request.URL!.host! == "username1.cloudant.com"
+        OHHTTPStubs.stubRequests(passingTest:{ (request) -> Bool in
+            return request.url!.host! == "username1.cloudant.com"
             }) { (request) -> OHHTTPStubsResponse in
-                return OHHTTPStubsResponse(JSONObject: [:], statusCode: 401, headers: [:])
+                return OHHTTPStubsResponse(jsonObject: [:], statusCode: 401, headers: [:])
         }
         
-        OHHTTPStubs.stubRequestsPassingTest({ (request) -> Bool in
-            return request.URL!.host! == "username.cloudant.com"
+        OHHTTPStubs.stubRequests(passingTest:{ (request) -> Bool in
+            return request.url!.host! == "username.cloudant.com"
             }) { (request) -> OHHTTPStubsResponse in
-                if request.HTTPMethod == "POST" {
+                if request.httpMethod == "POST" {
                     //do the post thing
-                    return OHHTTPStubsResponse(JSONObject: ["ok":true, "name":"username", "roles":["_admin"]],
+                    return OHHTTPStubsResponse(jsonObject: ["ok":true, "name":"username", "roles":["_admin"]],
                         statusCode: 200,
                         headers: ["Set-Cookie": "\(testCookieHeaderValue); Version=1; Path=/; HttpOnly"])
                 } else {
-                    return OHHTTPStubsResponse(JSONObject: [:], statusCode: 200, headers: [:])
+                    return OHHTTPStubsResponse(jsonObject: [:], statusCode: 200, headers: [:])
                 }
         }
 
@@ -58,15 +58,15 @@ class InterceptorTests : XCTestCase {
         
         // create a context with a request which we can use
         let url = NSURL(string: "http://username.cloudant.com")!
-        let request = NSMutableURLRequest(URL: url)
+        let request = NSMutableURLRequest(url: url)
         
         var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
         
-        ctx = cookieInterceptor.interceptRequest(ctx)
+        ctx = cookieInterceptor.interceptRequest(ctx:ctx)
         
         XCTAssertEqual(cookieInterceptor.cookie, testCookieHeaderValue)
         XCTAssertEqual(cookieInterceptor.shouldMakeSessionRequest, true);
-        XCTAssertEqual(ctx.request.valueForHTTPHeaderField("Cookie"), testCookieHeaderValue)
+        XCTAssertEqual(ctx.request.value(forHTTPHeaderField:"Cookie"), testCookieHeaderValue)
         
     }
     
@@ -75,14 +75,14 @@ class InterceptorTests : XCTestCase {
         
         // create a context with a request which we can use
         let url = NSURL(string: "http://username1.cloudant.com")!
-        let request = NSMutableURLRequest(URL: url)
+        let request = NSMutableURLRequest(url: url)
         
         var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
         
-        ctx = cookieInterceptor.interceptRequest(ctx)
+        ctx = cookieInterceptor.interceptRequest(ctx:ctx)
         
         XCTAssertNil(cookieInterceptor.cookie)
         XCTAssertEqual(cookieInterceptor.shouldMakeSessionRequest, false);
-        XCTAssertNil(ctx.request.valueForHTTPHeaderField("Cookie"))
+        XCTAssertNil(ctx.request.value(forHTTPHeaderField:"Cookie"))
     }
 }

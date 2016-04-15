@@ -34,21 +34,21 @@ public class CreateDatabaseOperation : CouchOperation {
         }
     }
     
-    public var createDatabaseCompletionBlock : ((statusCode:Int?, operationError:ErrorType?) -> Void)? = nil
+    public var createDatabaseCompletionBlock : ((statusCode:Int?, operationError:ErrorProtocol?) -> Void)? = nil
     
     
     public override func validate() -> Bool {
         return super.validate() && self.databaseName != nil // should work iirc
     }
     
-    override public func callCompletionHandler(error: ErrorType) {
+    override public func callCompletionHandler(error: ErrorProtocol) {
         self.createDatabaseCompletionBlock?(statusCode: nil, operationError: error)
     }
     
-    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorType?) {
+    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
         guard error == nil
         else  {
-            self.callCompletionHandler(error!)
+            self.callCompletionHandler(error: error!)
             return
         }
         
@@ -56,7 +56,7 @@ public class CreateDatabaseOperation : CouchOperation {
             /// success!
             self.createDatabaseCompletionBlock?(statusCode: statusCode, operationError: nil)
         } else {
-            callCompletionHandler(Errors.CreateDatabaseFailed)
+            callCompletionHandler(error: Errors.CreateDatabaseFailed)
         }
     }
 

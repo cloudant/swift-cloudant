@@ -30,7 +30,7 @@ public class Database  {
 
     public func add(operation:CouchDatabaseOperation){
         operation.databaseName = self.name
-        self.client.addOperation(operation)
+        self.client.addOperation(operation: operation)
     }
     
     
@@ -44,7 +44,7 @@ public class Database  {
             doc = document
         };
         
-        self.add(getDocument)
+        self.add(operation: getDocument)
         getDocument.waitUntilFinished()
         
         return doc

@@ -34,12 +34,12 @@ class OperationRequestExecutor {
         let builder = OperationRequestBuilder(operation: self.operation)
         let request = builder.buildRequest()
         
-        self.task = self.operation.session.dataTask(request, completionHandler: { (data, response, error) -> Void in
+        self.task = self.operation.session.dataTask(request: request, completionHandler: { (data, response, error) -> Void in
             
             // Should break the retain cycle but not sure.
             self.task = nil
             
-            if self.operation.cancelled {
+            if self.operation.isCancelled {
                 self.operation.completeOpetation()
                 return
             }
@@ -53,7 +53,7 @@ class OperationRequestExecutor {
                 statusCode = -1
             }
             
-            self.operation.processResponse(data, statusCode: statusCode, error: error)
+            self.operation.processResponse(data: data, statusCode: statusCode, error: error)
             self.operation.completeOpetation()
         
         })

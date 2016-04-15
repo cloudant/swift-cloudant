@@ -55,7 +55,7 @@ public class URLSessionTask {
             if let task = self.inProgessTask {
                 return task.state
             } else {
-                return .Suspended
+                return .suspended
             }
         }
     }
@@ -89,10 +89,10 @@ public class URLSessionTask {
         var ctx = HTTPInterceptorContext(request: request.mutableCopy() as! NSMutableURLRequest, response: nil, shouldRetry: false)
         
         for interceptor in interceptors {
-            ctx = interceptor.interceptRequest(ctx)
+            ctx = interceptor.interceptRequest(ctx: ctx)
         }
         
-        return self.session.dataTaskWithRequest(request, completionHandler: { (data, response, error) -> Void in
+        return self.session.dataTask(with:request, completionHandler: { (data, response, error) -> Void in
             
             guard error == nil
             else {
@@ -103,7 +103,7 @@ public class URLSessionTask {
             ctx = HTTPInterceptorContext(request: ctx.request, response: (response as! NSHTTPURLResponse), shouldRetry: ctx.shouldRetry)
             
             for interceptor in self.interceptors {
-                ctx = interceptor.interceptResponse(ctx)
+                ctx = interceptor.interceptResponse(ctx:ctx)
             }
             
             if ctx.shouldRetry && self.remainingRetries > 0 {
@@ -135,7 +135,7 @@ public class InterceptableSession {
         interceptors = requestInterceptors
         
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        config.HTTPAdditionalHeaders = ["User-Agent":InterceptableSession.userAgent()]
+        config.httpAdditionalHeaders = ["User-Agent":InterceptableSession.userAgent()]
         session = NSURLSession(configuration: config,delegate:delegate, delegateQueue: nil)
     }
     
@@ -160,10 +160,9 @@ public class InterceptableSession {
         #elseif os(Linux)
             let platform = "Linux" // Cribbed from Kitura, neeed to see who is running this on Linux 
         #else
-            let platform = "Unkown";
+            let platform = "Unknown";
         #endif
-        
-        let frameworkBundle = NSBundle(forClass: InterceptableSession.self)
+        let frameworkBundle = NSBundle(for: InterceptableSession.self)
         let bundleDisplayName = frameworkBundle.objectForInfoDictionaryKey("CFBundleName")
         let bundleVersionString = frameworkBundle.objectForInfoDictionaryKey("CFBundleShortVersionString")
         
