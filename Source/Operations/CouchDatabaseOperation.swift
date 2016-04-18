@@ -17,6 +17,12 @@
 
 import Foundation
 
+/**
+ A base class for operations which operate on a database. Such as operations which create a document.
+ */
 public class CouchDatabaseOperation : CouchOperation {
-    var databaseName: String?
+    /**
+     The name of the database the operation is operating on.
+     */
+    public var databaseName: String?
 }

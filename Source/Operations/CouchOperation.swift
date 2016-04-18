@@ -17,6 +17,9 @@
 
 import Foundation
 
+/**
+ A enum of errors which could be returned.
+ */
 enum Errors : ErrorProtocol {
     /**
     Creating a database failed.
@@ -60,6 +63,10 @@ enum Errors : ErrorProtocol {
     case UnexpectedJSONFormat
 };
 
+/**
+ The base class for all operations. This provides a lot of the ground work for interacting with
+ NSOperationQueue.
+ */
 public class CouchOperation : NSOperation, HTTPRequestOperation
 {
     // NS operation property overrides
@@ -143,16 +150,22 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
         super.init()
     }
 
-    
-    // subclasses should override
     public func processResponse(data:NSData?, statusCode:Int, error:ErrorProtocol?){
         
     }
     
+    /**
+     Calls the completion handler for the operation with the specified error.
+     Subclasses need to override this to call the completion handler they have defined.
+     */
     public func callCompletionHandler(error:ErrorProtocol){
         return
     }
     
+    /**
+     Validates the operation has been set up correctly, subclasses should override but call and 
+     use the result of the super class implementation.
+    */
     public func validate() -> Bool {
         return true
     }

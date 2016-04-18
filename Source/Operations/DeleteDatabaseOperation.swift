@@ -17,9 +17,16 @@
 
 import Foundation
 
-
+/**
+ Deletes a database from a CouchDB instance
+ */
 public class DeleteDatabaseOperation : CouchOperation {
     
+    /**
+        The name of the database to delete.
+     
+        This must be set before an operation can complete sucessfully
+     */
     public var databaseName:String? = nil
     
     override public var httpMethod:String {
@@ -35,6 +42,11 @@ public class DeleteDatabaseOperation : CouchOperation {
         }
     }
     
+    /**
+        A block to call when the operation completes.
+     - parameter statusCode: The status code of the HTTP response.
+     - parameter operationError: The error that occurred if any.
+     */
     public var deleteDatabaseCompletionBlock : ((statusCode:Int?, operationError:ErrorProtocol?) -> Void)? = nil
     
     

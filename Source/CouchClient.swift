@@ -16,7 +16,9 @@
 
 import Foundation
 
-
+/**
+    Class for running operations against a CouchDB instance.
+ */
 public class CouchDBClient {
     
     private let username:String? = nil
@@ -25,20 +27,34 @@ public class CouchDBClient {
     private let session:InterceptableSession
     private let queue:NSOperationQueue
     
-    
+    /**
+     Creates a CouchDBClient instance.
+     
+     - parameter url: url of the server to connect to.
+     - parameter username: the username to use when authenticating.
+     - parameter password: the password to use when authenticating.
+     */
     public init(url:NSURL, username:String?, password:String?){
         self.rootURL = url
         session = InterceptableSession()
         queue = NSOperationQueue()
     }
     
-    
+    /**
+        Adds an operation to the queue to be executed.
+        - parameter operation: the operation to add to the queue.
+     */
     public func addOperation(operation:CouchOperation){
         operation.mSession = self.session
         operation.rootURL = self.rootURL
         queue.addOperation(operation)
     }
     
+    /**
+      Creates a database object.
+     - parameter dbName: the name of the database the object should represent.
+     - returns: A new `Database` object representing a CouchDB Database.
+     */
     public subscript(dbName:String) -> Database {
         return Database(client: self, dbName: dbName)
     }
