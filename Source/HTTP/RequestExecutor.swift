@@ -18,17 +18,31 @@
 import Foundation
 
 
-
+/**
+    Executes a `HTTPRequestOperation`'s HTTP request.
+ */
 class OperationRequestExecutor {
     
+    /**
+     The HTTP task currently processing
+    */
     var task : URLSessionTask?
+    /**
+     The operation which this OperationRequestExecutor is Executing.
+     */
     let operation : HTTPRequestOperation
-    
+    /**
+     Creates an OperationRequestExecutor.
+     - parameter operation: The operation that this OperationRequestExecutor will execute
+     */
     init(operation:HTTPRequestOperation){
         self.operation = operation
         task = nil
     }
     
+    /**
+     Executes the HTTP request for the operation held in the `operation` property
+     */
     func executeRequest (){
         
         let builder = OperationRequestBuilder(operation: self.operation)
@@ -62,6 +76,9 @@ class OperationRequestExecutor {
         
     }
     
+    /**
+     Cancels the currently processing HTTP task.
+     */
     func cancel(){
         if let task = task {
             task.cancel()

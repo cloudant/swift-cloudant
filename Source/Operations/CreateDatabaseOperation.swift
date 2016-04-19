@@ -16,9 +16,16 @@
 
 import Foundation
 
-
+/**
+ An operation to create a database in a CouchDB instance.
+ */
 public class CreateDatabaseOperation : CouchOperation {
     
+    /**
+     The name of the database to create.
+     
+     This is required to be set before the operation can execute succesfully.
+    */
     public var databaseName:String? = nil
     
     override public var httpMethod:String {
@@ -34,6 +41,12 @@ public class CreateDatabaseOperation : CouchOperation {
         }
     }
     
+    /**
+        A block to call when the operation completes
+     
+     - parameter statusCode: the status code of the http response
+     - parameter operationError: The error that occured, or `nil` if processed succesfully.
+     */
     public var createDatabaseCompletionBlock : ((statusCode:Int?, operationError:ErrorProtocol?) -> Void)? = nil
     
     

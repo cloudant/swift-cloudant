@@ -16,14 +16,31 @@
 
 import Foundation
 
-
+/**
+ An `HTTPInterceptor` which performs session cookie authentication with the
+ CouchDB / Cloudant instance
+ */
 public class SessionCookieInterceptor : HTTPInterceptor
 {
-    
+    /**
+     The time to wait to retrieve a cookie from the server.
+     */
      let sessionCookieTimeout:Int64 = 600
+    /**
+     The requestBody to use when performing HTTP requests to the `_session` endpoint.
+     */
      let sessionRequestBody:NSData
+    /**
+     Determines if the `_session` request should be made
+     */
      var shouldMakeSessionRequest:Bool = true
+    /**
+        The cookie retrieved from the server
+     */
      var cookie:String?
+    /**
+     The `InterceptableSession` to use when making HTTP requests.
+    */
      let urlSession:InterceptableSession
     
     

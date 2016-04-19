@@ -19,33 +19,37 @@ import Foundation
 
 public class GetDocumentOperation: CouchDatabaseOperation {
 
-    // Set to true to return revision information (revs=true)
+    /**
+        Include all revisions of the document.
+        `true` to include revisions, `false` to not include revisions, leave as `nil` to not emit
+        into the json.
+     */
     public var revs: Bool? = nil
     
     /**
-    *  The revision at which you want the document.
-    *
-    *  Optional: If omitted CouchDB will return the
-    *  document it determines is the current winning revision
+      The revision at which you want the document.
+    
+      Optional: If omitted CouchDB will return the
+      document it determines is the current winning revision
     */
     public var revId: String? = nil
     
     /**
-    *  The document that this operation will access or modify.
-    *
-    *  Must be set before a call can be successfully made.
+      The document that this operation will access or modify.
+    
+      Must be set before a call can be successfully made.
     */
     public var docId: String? = nil
     
     /**
-    *  Completion block to run when the operation completes.
-    *
-    *  - document - The document read from the server
-    *
-    * - operationError - a pointer to an error object containing
-    *   information about an error executing the operation
+      Completion block to run when the operation completes.
+    
+      - parameter document: - The document read from the server
+    
+      - parameter operationError: - a pointer to an error object containing
+       information about an error executing the operation
     */
-    public var getDocumentCompletionBlock: (([String:AnyObject]?, ErrorProtocol?) -> ())?
+    public var getDocumentCompletionBlock: ((document:[String:AnyObject]?, operationError:ErrorProtocol?) -> ())?
 
     public override func validate() -> Bool {
         return super.validate() && docId != nil
@@ -76,7 +80,7 @@ public class GetDocumentOperation: CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.getDocumentCompletionBlock?(nil, error)
+        self.getDocumentCompletionBlock?(document: nil, operationError: error)
     }
     
     public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
@@ -93,7 +97,7 @@ public class GetDocumentOperation: CouchDatabaseOperation {
             
             do {
                 let json = try NSJSONSerialization.jsonObject(with:data, options: NSJSONReadingOptions())
-                getDocumentCompletionBlock?(json as? [String:AnyObject], nil)
+                getDocumentCompletionBlock?(document: json as? [String:AnyObject], operationError: nil)
             } catch {
                 callCompletionHandler(error:error)
             }

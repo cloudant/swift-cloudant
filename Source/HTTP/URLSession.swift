@@ -18,13 +18,27 @@
 import Foundation
 
 
-
+/**
+ A protocol which denotes a HTTP interceptor.
+ */
 public protocol HTTPInterceptor
 {
+    /**
+     Intercepts the HTTP request. This will only be run once per request.
+     - parameter ctx: the context for the request that is being intercepted.
+     - returns: the context for the next request interceptor to use.
+     */
     func interceptRequest(ctx:HTTPInterceptorContext) -> HTTPInterceptorContext
+    /**
+     Intercepts the HTTP response. This will only be run once per response.
+     - parameter ctx: the context for the response that is being intercepted.
+     - returns: the context for the next response interceptor to use.
+     */
     func interceptResponse(ctx:HTTPInterceptorContext) -> HTTPInterceptorContext
 }
 
+// extension that implements default behvaiour, this does have limitations, for example
+// only classes can implement HTTPInterceptor due to way polymorphsim is handled.
 public extension HTTPInterceptor {
     
     public func interceptRequest(ctx:HTTPInterceptorContext) -> HTTPInterceptorContext {
@@ -36,12 +50,29 @@ public extension HTTPInterceptor {
     }
 }
 
+/**
+ The context for a HTTP interceptor.
+ */
 public struct HTTPInterceptorContext {
+    /**
+     The request that will be made, this can be modified to add additional data to the request such
+     as session cookie authentication of custom tracking headers.
+     */
     let request:NSMutableURLRequest
+    /** 
+     The response that was received from the server. This will be `nil` if the request errored
+     or has not yet been made.
+     */
     let response: NSHTTPURLResponse?
+    /**
+    A flag that signals to the HTTP layer that it should retry the request.
+    */
     var shouldRetry:Bool = false
 }
 
+/**
+ A class which encapsulates HTTP requests. This class allows requests to be transparently retried.
+ */
 public class URLSessionTask {
     private let request:NSURLRequest
     private var inProgessTask: NSURLSessionDataTask?
@@ -60,6 +91,13 @@ public class URLSessionTask {
         }
     }
     
+    /**
+     Creates a URLSessionTask object
+     - parameter session: the NSURLSession it should use when making HTTP requests.
+     - parameter request: the HTTP request to make
+     - parameter interceptors: the HTTP interceptors to run for the request.
+     - parameter completionHandler: The block to run when the task has completed.
+     */
     init(session:NSURLSession, request:NSURLRequest, interceptors:Array<HTTPInterceptor>, completionHandler:(NSData?, NSURLResponse?, NSError?) -> (Void)){
         self.interceptors = interceptors
         self.request = request
@@ -67,6 +105,9 @@ public class URLSessionTask {
         self.completionHandler = completionHandler
     }
     
+    /**
+        Resumes a suspended task
+     */
     public func resume(){
         if let task = inProgessTask {
             task.resume();
@@ -78,6 +119,9 @@ public class URLSessionTask {
         }
     }
     
+    /**
+        Cancels the task.
+    */
     public func cancel() {
         if let task = self.inProgessTask {
             task.cancel()
@@ -120,6 +164,9 @@ public class URLSessionTask {
     
 }
 
+/**
+ A class to create `URLSessionTask`
+ */
 public class InterceptableSession {
     
     
@@ -131,6 +178,11 @@ public class InterceptableSession {
         self.init(delegate: nil,requestInterceptors: [])
     }
     
+    /**
+     Creates an Interceptable session
+     - parameter delegate: a delegate to use for this session.
+     - parameter requestInterceptors: Interceptors to use with this session.
+     */
     init(delegate:NSURLSessionDelegate?, requestInterceptors:Array<HTTPInterceptor>){
         interceptors = requestInterceptors
         
@@ -139,7 +191,12 @@ public class InterceptableSession {
         session = NSURLSession(configuration: config,delegate:delegate, delegateQueue: nil)
     }
     
-    
+    /**
+        Creates a data task to perform the http request.
+        - parameter request: the request the task should make
+        - parameter completionHandler: A block to call when the task is completed.
+        - returns: A `URLSessionTask` representing the task for the `NSURLRequest`
+     */
     public func dataTask(request:NSURLRequest, completionHandler:(NSData?, NSURLResponse?, NSError?) -> Void ) -> URLSessionTask
     {
         return URLSessionTask(session: session, request: request, interceptors: interceptors, completionHandler: completionHandler)
