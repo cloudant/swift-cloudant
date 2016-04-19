@@ -189,7 +189,7 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
         executor?.executeRequest()
     }
     
-    final func completeOpetation(){
+    final func completeOperation(){
         self.isExecuting = false
         self.isFinished = true
     }
