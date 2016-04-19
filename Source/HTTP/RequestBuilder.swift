@@ -53,7 +53,7 @@ protocol HTTPRequestOperation {
     /**
      A function that is called when the operation is completed.
      */
-    func completeOpetation()
+    func completeOperation()
     /**
       A function to process the response from a HTTP request.
      

@@ -54,7 +54,7 @@ class OperationRequestExecutor {
             self.task = nil
             
             if self.operation.isCancelled {
-                self.operation.completeOpetation()
+                self.operation.completeOperation()
                 return
             }
             
@@ -68,7 +68,7 @@ class OperationRequestExecutor {
             }
             
             self.operation.processResponse(data: data, statusCode: statusCode, error: error)
-            self.operation.completeOpetation()
+            self.operation.completeOperation()
         
         })
         
