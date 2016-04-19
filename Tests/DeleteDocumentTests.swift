@@ -31,7 +31,7 @@ class DeleteDocumentTests : XCTestCase {
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         let create = CreateDatabaseOperation()
         create.databaseName = dbName!
-        client.addOperation(operation:create)
+        client.add(operation:create)
         create.waitUntilFinished()
         
         print("Created database: \(dbName!)")
@@ -43,7 +43,7 @@ class DeleteDocumentTests : XCTestCase {
         let db = client[self.dbName!]
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
-        delete.deleteDocumentCompletionBlock = {(statusCode, error) in
+        delete.deleteDocumentCompletionHandler = {(statusCode, error) in
             expectation.fulfill()
             XCTAssertNotNil(statusCode)
             if let statusCode = statusCode {
@@ -55,7 +55,7 @@ class DeleteDocumentTests : XCTestCase {
         let create = PutDocumentOperation()
         create.docId = "testId"
         create.body = ["hello":"world"]
-        create.putDocumentCompletionBlock = {(docId,revId,statusCode,error) in
+        create.putDocumentCompletionHandler = {(docId,revId,statusCode,error) in
             delete.revId = revId
             delete.docId = docId
         }
@@ -76,7 +76,7 @@ class DeleteDocumentTests : XCTestCase {
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.docId = "testDocId"
-        delete.deleteDocumentCompletionBlock = {(statusCode, error) in
+        delete.deleteDocumentCompletionHandler = {(statusCode, error) in
             expectation.fulfill()
             XCTAssertNil(statusCode)
             XCTAssertNotNil(error)
@@ -94,7 +94,7 @@ class DeleteDocumentTests : XCTestCase {
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.docId = "testDocId"
-        delete.deleteDocumentCompletionBlock = {(statusCode, error) in
+        delete.deleteDocumentCompletionHandler = {(statusCode, error) in
             expectation.fulfill()
             XCTAssertNil(statusCode)
             XCTAssertNotNil(error)
@@ -110,7 +110,7 @@ class DeleteDocumentTests : XCTestCase {
         let db = client[self.dbName!]
         let expectation = self.expectation(withDescription:"Delete document")
         let delete = DeleteDocumentOperation()
-        delete.deleteDocumentCompletionBlock = {(statusCode, error) in
+        delete.deleteDocumentCompletionHandler = {(statusCode, error) in
             XCTAssertNotNil(statusCode)
             if let statusCode = statusCode {
                 XCTAssert(statusCode / 100 == 2)
@@ -121,14 +121,14 @@ class DeleteDocumentTests : XCTestCase {
         let create = PutDocumentOperation()
         create.docId = "testId"
         create.body = ["hello":"world"]
-        create.putDocumentCompletionBlock = {(docId,revId,statusCode,error) in
+        create.putDocumentCompletionHandler = {(docId,revId,statusCode,error) in
             delete.revId = revId
             delete.docId = docId
         }
         
         let get = GetDocumentOperation()
         get.docId = "testId"
-        get.getDocumentCompletionBlock = {(document , error) in
+        get.getDocumentCompletionHandler = {(document , error) in
                         expectation.fulfill()
                         XCTAssertNil(document)
                         XCTAssertNotNil(error)

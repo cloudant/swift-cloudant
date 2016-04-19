@@ -44,7 +44,7 @@ public class CouchDBClient {
         Adds an operation to the queue to be executed.
         - parameter operation: the operation to add to the queue.
      */
-    public func addOperation(operation:CouchOperation){
+    public func add(operation:CouchOperation){
         operation.mSession = self.session
         operation.rootURL = self.rootURL
         queue.addOperation(operation)

@@ -50,7 +50,7 @@ public class Database  {
      */
     public func add(operation:CouchDatabaseOperation){
         operation.databaseName = self.name
-        self.client.addOperation(operation: operation)
+        self.client.add(operation: operation)
     }
     
     /**
@@ -67,7 +67,7 @@ public class Database  {
         
         
         var doc:[String:AnyObject]?
-        getDocument.getDocumentCompletionBlock = { (document, error ) in
+        getDocument.getDocumentCompletionHandler = { (document, error ) in
             doc = document
         };
         
