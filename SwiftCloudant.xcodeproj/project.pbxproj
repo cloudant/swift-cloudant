@@ -8,27 +8,27 @@
 
 /* Begin PBXBuildFile section */
 		2C4B910F7FFAC8132F5280BB /* Pods_SwiftCloudantTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F96FB133EC7F68F6BF31CC3 /* Pods_SwiftCloudantTests.framework */; };
+		9855CF6F1CC6458F00ED28DA /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF6B1CC6458F00ED28DA /* RequestBuilder.swift */; };
+		9855CF701CC6458F00ED28DA /* RequestExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF6C1CC6458F00ED28DA /* RequestExecutor.swift */; };
+		9855CF711CC6458F00ED28DA /* SessionCookieInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF6D1CC6458F00ED28DA /* SessionCookieInterceptor.swift */; };
+		9855CF721CC6458F00ED28DA /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF6E1CC6458F00ED28DA /* URLSession.swift */; };
+		9855CF7A1CC6459E00ED28DA /* CouchDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF731CC6459E00ED28DA /* CouchDatabaseOperation.swift */; };
+		9855CF7B1CC6459E00ED28DA /* CouchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF741CC6459E00ED28DA /* CouchOperation.swift */; };
+		9855CF7C1CC6459E00ED28DA /* CreateDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF751CC6459E00ED28DA /* CreateDatabaseOperation.swift */; };
+		9855CF7D1CC6459E00ED28DA /* DeleteDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF761CC6459E00ED28DA /* DeleteDatabaseOperation.swift */; };
+		9855CF7E1CC6459E00ED28DA /* DeleteDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF771CC6459E00ED28DA /* DeleteDocumentOperation.swift */; };
+		9855CF7F1CC6459E00ED28DA /* GetDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF781CC6459E00ED28DA /* GetDocumentOperation.swift */; };
+		9855CF801CC6459E00ED28DA /* PutDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF791CC6459E00ED28DA /* PutDocumentOperation.swift */; };
 		98734A211C88FDB200E79C5B /* SwiftCloudant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98734A171C88FDB200E79C5B /* SwiftCloudant.framework */; };
 		98734A4F1C8A600600E79C5B /* CouchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A401C8A600600E79C5B /* CouchClient.swift */; };
 		98734A501C8A600600E79C5B /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A411C8A600600E79C5B /* Database.swift */; };
-		98734A511C8A600600E79C5B /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A431C8A600600E79C5B /* RequestBuilder.swift */; };
-		98734A521C8A600600E79C5B /* RequestExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A441C8A600600E79C5B /* RequestExecutor.swift */; };
-		98734A531C8A600600E79C5B /* SessionCookieInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A451C8A600600E79C5B /* SessionCookieInterceptor.swift */; };
-		98734A541C8A600600E79C5B /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A461C8A600600E79C5B /* URLSession.swift */; };
-		98734A561C8A600600E79C5B /* CouchDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A491C8A600600E79C5B /* CouchDatabaseOperation.swift */; };
-		98734A571C8A600600E79C5B /* CouchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A4A1C8A600600E79C5B /* CouchOperation.swift */; };
-		98734A581C8A600600E79C5B /* CreateDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A4B1C8A600600E79C5B /* CreateDatabaseOperation.swift */; };
-		98734A5A1C8A600600E79C5B /* GetDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A4D1C8A600600E79C5B /* GetDocumentOperation.swift */; };
 		98734A5B1C8A600600E79C5B /* SwiftCloudant.h in Headers */ = {isa = PBXBuildFile; fileRef = 98734A4E1C8A600600E79C5B /* SwiftCloudant.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		98734A611C8A601400E79C5B /* CreateDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A5D1C8A601400E79C5B /* CreateDatabaseTests.swift */; };
 		98734A621C8A601400E79C5B /* GetDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A5E1C8A601400E79C5B /* GetDocumentTests.swift */; };
 		98734A641C8A601400E79C5B /* SwiftCloudantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A601C8A601400E79C5B /* SwiftCloudantTests.swift */; };
 		98B4F2CE1CA759130076C5E4 /* PutDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B4F2CD1CA759130076C5E4 /* PutDocumentTests.swift */; };
 		98E5431C1C9CCD0500F02E06 /* InterceptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E5431B1C9CCD0500F02E06 /* InterceptorTests.swift */; };
-		98EC4AE51CC1530800704CFE /* DeleteDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EC4AE41CC1530800704CFE /* DeleteDocumentOperation.swift */; };
 		98EC4AE81CC1533800704CFE /* DeleteDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EC4AE61CC1531200704CFE /* DeleteDocumentTests.swift */; };
-		98EC4AEA1CC1582000704CFE /* DeleteDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EC4AE91CC1582000704CFE /* DeleteDatabaseOperation.swift */; };
-		F89766C81C8D8994004C5DAE /* PutDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8ACC9631C8AF3BE00C8650D /* PutDocumentOperation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,19 +44,22 @@
 /* Begin PBXFileReference section */
 		05340EE0F16E4C566C32FD41 /* Pods-SwiftCloudantTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftCloudantTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftCloudantTests/Pods-SwiftCloudantTests.release.xcconfig"; sourceTree = "<group>"; };
 		7F96FB133EC7F68F6BF31CC3 /* Pods_SwiftCloudantTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftCloudantTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9855CF6B1CC6458F00ED28DA /* RequestBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestBuilder.swift; path = Source/RequestBuilder.swift; sourceTree = SOURCE_ROOT; };
+		9855CF6C1CC6458F00ED28DA /* RequestExecutor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestExecutor.swift; path = Source/RequestExecutor.swift; sourceTree = SOURCE_ROOT; };
+		9855CF6D1CC6458F00ED28DA /* SessionCookieInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SessionCookieInterceptor.swift; path = Source/SessionCookieInterceptor.swift; sourceTree = SOURCE_ROOT; };
+		9855CF6E1CC6458F00ED28DA /* URLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLSession.swift; path = Source/URLSession.swift; sourceTree = SOURCE_ROOT; };
+		9855CF731CC6459E00ED28DA /* CouchDatabaseOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CouchDatabaseOperation.swift; path = Source/CouchDatabaseOperation.swift; sourceTree = SOURCE_ROOT; };
+		9855CF741CC6459E00ED28DA /* CouchOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CouchOperation.swift; path = Source/CouchOperation.swift; sourceTree = SOURCE_ROOT; };
+		9855CF751CC6459E00ED28DA /* CreateDatabaseOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CreateDatabaseOperation.swift; path = Source/CreateDatabaseOperation.swift; sourceTree = SOURCE_ROOT; };
+		9855CF761CC6459E00ED28DA /* DeleteDatabaseOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeleteDatabaseOperation.swift; path = Source/DeleteDatabaseOperation.swift; sourceTree = SOURCE_ROOT; };
+		9855CF771CC6459E00ED28DA /* DeleteDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeleteDocumentOperation.swift; path = Source/DeleteDocumentOperation.swift; sourceTree = SOURCE_ROOT; };
+		9855CF781CC6459E00ED28DA /* GetDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GetDocumentOperation.swift; path = Source/GetDocumentOperation.swift; sourceTree = SOURCE_ROOT; };
+		9855CF791CC6459E00ED28DA /* PutDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PutDocumentOperation.swift; path = Source/PutDocumentOperation.swift; sourceTree = SOURCE_ROOT; };
 		98734A171C88FDB200E79C5B /* SwiftCloudant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftCloudant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		98734A201C88FDB200E79C5B /* SwiftCloudantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftCloudantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		98734A401C8A600600E79C5B /* CouchClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CouchClient.swift; sourceTree = "<group>"; };
 		98734A411C8A600600E79C5B /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
-		98734A431C8A600600E79C5B /* RequestBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestBuilder.swift; sourceTree = "<group>"; };
-		98734A441C8A600600E79C5B /* RequestExecutor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestExecutor.swift; sourceTree = "<group>"; };
-		98734A451C8A600600E79C5B /* SessionCookieInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionCookieInterceptor.swift; sourceTree = "<group>"; };
-		98734A461C8A600600E79C5B /* URLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
 		98734A471C8A600600E79C5B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		98734A491C8A600600E79C5B /* CouchDatabaseOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CouchDatabaseOperation.swift; sourceTree = "<group>"; };
-		98734A4A1C8A600600E79C5B /* CouchOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CouchOperation.swift; sourceTree = "<group>"; };
-		98734A4B1C8A600600E79C5B /* CreateDatabaseOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDatabaseOperation.swift; sourceTree = "<group>"; };
-		98734A4D1C8A600600E79C5B /* GetDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetDocumentOperation.swift; sourceTree = "<group>"; };
 		98734A4E1C8A600600E79C5B /* SwiftCloudant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftCloudant.h; sourceTree = "<group>"; };
 		98734A5D1C8A601400E79C5B /* CreateDatabaseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDatabaseTests.swift; sourceTree = "<group>"; };
 		98734A5E1C8A601400E79C5B /* GetDocumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetDocumentTests.swift; sourceTree = "<group>"; };
@@ -64,11 +67,8 @@
 		98734A601C8A601400E79C5B /* SwiftCloudantTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftCloudantTests.swift; sourceTree = "<group>"; };
 		98B4F2CD1CA759130076C5E4 /* PutDocumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PutDocumentTests.swift; sourceTree = "<group>"; };
 		98E5431B1C9CCD0500F02E06 /* InterceptorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterceptorTests.swift; sourceTree = "<group>"; };
-		98EC4AE41CC1530800704CFE /* DeleteDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteDocumentOperation.swift; sourceTree = "<group>"; };
 		98EC4AE61CC1531200704CFE /* DeleteDocumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteDocumentTests.swift; sourceTree = "<group>"; };
-		98EC4AE91CC1582000704CFE /* DeleteDatabaseOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteDatabaseOperation.swift; sourceTree = "<group>"; };
 		E4900CFECDD4A2C5E31DF972 /* Pods-SwiftCloudantTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftCloudantTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftCloudantTests/Pods-SwiftCloudantTests.debug.xcconfig"; sourceTree = "<group>"; };
-		F8ACC9631C8AF3BE00C8650D /* PutDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PutDocumentOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,10 +127,10 @@
 		98734A421C8A600600E79C5B /* HTTP */ = {
 			isa = PBXGroup;
 			children = (
-				98734A431C8A600600E79C5B /* RequestBuilder.swift */,
-				98734A441C8A600600E79C5B /* RequestExecutor.swift */,
-				98734A451C8A600600E79C5B /* SessionCookieInterceptor.swift */,
-				98734A461C8A600600E79C5B /* URLSession.swift */,
+				9855CF6B1CC6458F00ED28DA /* RequestBuilder.swift */,
+				9855CF6C1CC6458F00ED28DA /* RequestExecutor.swift */,
+				9855CF6D1CC6458F00ED28DA /* SessionCookieInterceptor.swift */,
+				9855CF6E1CC6458F00ED28DA /* URLSession.swift */,
 			);
 			path = HTTP;
 			sourceTree = "<group>";
@@ -138,13 +138,13 @@
 		98734A481C8A600600E79C5B /* Operations */ = {
 			isa = PBXGroup;
 			children = (
-				98EC4AE91CC1582000704CFE /* DeleteDatabaseOperation.swift */,
-				98EC4AE41CC1530800704CFE /* DeleteDocumentOperation.swift */,
-				98734A491C8A600600E79C5B /* CouchDatabaseOperation.swift */,
-				98734A4A1C8A600600E79C5B /* CouchOperation.swift */,
-				98734A4B1C8A600600E79C5B /* CreateDatabaseOperation.swift */,
-				98734A4D1C8A600600E79C5B /* GetDocumentOperation.swift */,
-				F8ACC9631C8AF3BE00C8650D /* PutDocumentOperation.swift */,
+				9855CF731CC6459E00ED28DA /* CouchDatabaseOperation.swift */,
+				9855CF741CC6459E00ED28DA /* CouchOperation.swift */,
+				9855CF751CC6459E00ED28DA /* CreateDatabaseOperation.swift */,
+				9855CF761CC6459E00ED28DA /* DeleteDatabaseOperation.swift */,
+				9855CF771CC6459E00ED28DA /* DeleteDocumentOperation.swift */,
+				9855CF781CC6459E00ED28DA /* GetDocumentOperation.swift */,
+				9855CF791CC6459E00ED28DA /* PutDocumentOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -340,19 +340,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				98734A561C8A600600E79C5B /* CouchDatabaseOperation.swift in Sources */,
-				98734A521C8A600600E79C5B /* RequestExecutor.swift in Sources */,
-				98EC4AEA1CC1582000704CFE /* DeleteDatabaseOperation.swift in Sources */,
-				98734A571C8A600600E79C5B /* CouchOperation.swift in Sources */,
-				98734A511C8A600600E79C5B /* RequestBuilder.swift in Sources */,
-				98734A541C8A600600E79C5B /* URLSession.swift in Sources */,
-				98734A581C8A600600E79C5B /* CreateDatabaseOperation.swift in Sources */,
-				F89766C81C8D8994004C5DAE /* PutDocumentOperation.swift in Sources */,
+				9855CF7D1CC6459E00ED28DA /* DeleteDatabaseOperation.swift in Sources */,
+				9855CF7F1CC6459E00ED28DA /* GetDocumentOperation.swift in Sources */,
+				9855CF7C1CC6459E00ED28DA /* CreateDatabaseOperation.swift in Sources */,
+				9855CF721CC6458F00ED28DA /* URLSession.swift in Sources */,
+				9855CF701CC6458F00ED28DA /* RequestExecutor.swift in Sources */,
+				9855CF7B1CC6459E00ED28DA /* CouchOperation.swift in Sources */,
+				9855CF711CC6458F00ED28DA /* SessionCookieInterceptor.swift in Sources */,
+				9855CF801CC6459E00ED28DA /* PutDocumentOperation.swift in Sources */,
+				9855CF7A1CC6459E00ED28DA /* CouchDatabaseOperation.swift in Sources */,
+				9855CF6F1CC6458F00ED28DA /* RequestBuilder.swift in Sources */,
 				98734A501C8A600600E79C5B /* Database.swift in Sources */,
 				98734A4F1C8A600600E79C5B /* CouchClient.swift in Sources */,
-				98734A531C8A600600E79C5B /* SessionCookieInterceptor.swift in Sources */,
-				98734A5A1C8A600600E79C5B /* GetDocumentOperation.swift in Sources */,
-				98EC4AE51CC1530800704CFE /* DeleteDocumentOperation.swift in Sources */,
+				9855CF7E1CC6459E00ED28DA /* DeleteDocumentOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
