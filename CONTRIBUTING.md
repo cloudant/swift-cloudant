@@ -7,6 +7,7 @@ you'll need:
 
 * Xcode
 * Xcode command line tools
+* Swift 3 development snapshot
 * Cocoapods
 * Homebrew (optional, but useful)
 
@@ -22,9 +23,11 @@ Install homebrew using the [guide on the homebrew site][homebrew].
 
 Install cocoapods using the [guide on their site][cpinstall].
 
+Install Swift 3 development snapshot from [swift.org][swiftorg].
 [adc]: http://developer.apple.com/
 [homebrew]: http://brew.sh
 [cpinstall]: http://guides.cocoapods.org/using/index.html
+[swiftorg]: https://swift.org/download/#snapshots
 
 ## Coding guidelines
 
@@ -51,12 +54,17 @@ interact with the database. Such as CDTCouchDBClient.
 
 Run:
 ```bash
-xcodebuild -project SwiftCloudant.xcodeproj/ -scheme SwiftCloudantTests -destination 'platform=iOS Simulator,OS=latest,name=iPhone 4S' build test
+export TOOLCHAINS=swift
+pod update
+xcodebuild -workspace SwiftCloudant.xcworkspace/ -scheme SwiftCloudantTests -destination 'platform=iOS Simulator,OS=latest,name=iPhone 4S' build test
 ```
 
 Currently only iOS is supported for testing.
 
 __NOTE__: Currently server information is hard coded to localhost without credentials.
+
+__NOTE__: You should also check that any changes made compile using the Swift Package Manager,
+use the command `swift build` in the root of the checkout to compile using the Swift Package Manager.
 
 ## Contributing your changes
 
