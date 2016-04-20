@@ -49,7 +49,7 @@ public class GetDocumentOperation: CouchDatabaseOperation {
       - parameter operationError: - a pointer to an error object containing
        information about an error executing the operation
     */
-    public var getDocumentCompletionBlock: ((document:[String:AnyObject]?, operationError:ErrorProtocol?) -> ())?
+    public var getDocumentCompletionHandler: ((document:[String:AnyObject]?, operationError:ErrorProtocol?) -> ())?
 
     public override func validate() -> Bool {
         return super.validate() && docId != nil
@@ -80,7 +80,7 @@ public class GetDocumentOperation: CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.getDocumentCompletionBlock?(document: nil, operationError: error)
+        self.getDocumentCompletionHandler?(document: nil, operationError: error)
     }
     
     public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
@@ -97,7 +97,7 @@ public class GetDocumentOperation: CouchDatabaseOperation {
             
             do {
                 let json = try NSJSONSerialization.jsonObject(with:data, options: NSJSONReadingOptions())
-                getDocumentCompletionBlock?(document: json as? [String:AnyObject], operationError: nil)
+                getDocumentCompletionHandler?(document: json as? [String:AnyObject], operationError: nil)
             } catch {
                 callCompletionHandler(error:error)
             }

@@ -33,7 +33,7 @@ class CreateDatabaseTests : XCTestCase {
         
         let delete = DeleteDatabaseOperation()
         delete.databaseName = self.dbName
-        client.addOperation(operation: delete)
+        client.add(operation: delete)
         delete.waitUntilFinished()
         
         super.tearDown()
@@ -49,7 +49,7 @@ class CreateDatabaseTests : XCTestCase {
         
         let create = CreateDatabaseOperation()
         create.databaseName = self.dbName
-        create.createDatabaseCompletionBlock = {( statusCode, error) in
+        create.createDatabaseCompletionHandler = {( statusCode, error) in
             createExpectation.fulfill()
             XCTAssertNotNil(statusCode)
             if let statusCode = statusCode {
@@ -58,7 +58,7 @@ class CreateDatabaseTests : XCTestCase {
             XCTAssertNil(error)
         }
         
-        client.addOperation(operation:create)
+        client.add(operation:create)
         
         self.waitForExpectations(withTimeout:10.0, handler: nil)
     }

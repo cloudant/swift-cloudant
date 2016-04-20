@@ -33,7 +33,7 @@ class PutDocumentTests : XCTestCase {
         self.client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         let create = CreateDatabaseOperation()
         create.databaseName = dbName!
-        client!.addOperation(operation:create)
+        client!.add(operation:create)
         create.waitUntilFinished()
         
         print("Created database: \(dbName!)")
@@ -46,7 +46,7 @@ class PutDocumentTests : XCTestCase {
         let put = PutDocumentOperation()
         put.docId = "Doc1"
         put.body = ["hello":"world"]
-        put.putDocumentCompletionBlock = {(docId,revId,statusCode,error) in
+        put.putDocumentCompletionHandler = {(docId,revId,statusCode,error) in
             putExpectation.fulfill()
             XCTAssertNotNil(docId)
             XCTAssertNotNil(revId)

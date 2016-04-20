@@ -47,7 +47,7 @@ public class DeleteDatabaseOperation : CouchOperation {
      - parameter statusCode: The status code of the HTTP response.
      - parameter operationError: The error that occurred if any.
      */
-    public var deleteDatabaseCompletionBlock : ((statusCode:Int?, operationError:ErrorProtocol?) -> Void)? = nil
+    public var deleteDatabaseCompletionHandler: ((statusCode:Int?, operationError:ErrorProtocol?) -> Void)? = nil
     
     
     public override func validate() -> Bool {
@@ -55,7 +55,7 @@ public class DeleteDatabaseOperation : CouchOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.deleteDatabaseCompletionBlock?(statusCode: nil, operationError: error)
+        self.deleteDatabaseCompletionHandler?(statusCode: nil, operationError: error)
     }
     
     public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
@@ -67,7 +67,7 @@ public class DeleteDatabaseOperation : CouchOperation {
         
         if statusCode == 200 || statusCode ==  202 { //Couch could return accepted instead of ok.
             /// success!
-            self.deleteDatabaseCompletionBlock?(statusCode: statusCode, operationError: nil)
+            self.deleteDatabaseCompletionHandler?(statusCode: statusCode, operationError: nil)
         } else {
             callCompletionHandler(error:Errors.CreateDatabaseFailed)
         }

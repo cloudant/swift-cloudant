@@ -40,7 +40,7 @@ class GetDocumentTests : XCTestCase {
         let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         let create = CreateDatabaseOperation()
         create.databaseName = dbName!
-        client.addOperation(operation:create)
+        client.add(operation:create)
         create.waitUntilFinished()
         
         print("Created database: \(dbName!)")
@@ -69,7 +69,7 @@ class GetDocumentTests : XCTestCase {
         put.body = data[0]
         put.docId = NSUUID().uuidString.lowercased()
         
-        put.putDocumentCompletionBlock = { (docId, revId, statusCode, error) in
+        put.putDocumentCompletionHandler = { (docId, revId, statusCode, error) in
             putDocumentExpectation.fulfill()
             XCTAssertNil(error)
             XCTAssertNotNil(docId)
@@ -77,7 +77,7 @@ class GetDocumentTests : XCTestCase {
             XCTAssert(statusCode == 201 || statusCode == 202)
         }
         
-        client.addOperation(operation:put)
+        client.add(operation:put)
         
         waitForExpectations(withTimeout:10.0, handler: nil)
     }
@@ -93,7 +93,7 @@ class GetDocumentTests : XCTestCase {
         put.body = data[0]
         put.docId = NSUUID().uuidString.lowercased()
         put.databaseName = self.dbName
-        put.putDocumentCompletionBlock = { (docId,revId,statusCode, operationError) in
+        put.putDocumentCompletionHandler = { (docId,revId,statusCode, operationError) in
             putDocumentExpectation.fulfill()
             XCTAssertEqual(put.docId,docId);
             XCTAssertNotNil(revId)
@@ -104,19 +104,19 @@ class GetDocumentTests : XCTestCase {
             get.docId = put.docId
             get.databaseName = self.dbName
             
-            get.getDocumentCompletionBlock = { (doc, error) in
+            get.getDocumentCompletionHandler = { (doc, error) in
                 getDocumentExpectation.fulfill()
                 XCTAssertNil(error)
                 XCTAssertNotNil(doc)
             }
             
-            client.addOperation(operation:get)
+            client.add(operation:get)
         };
         
         
         
         
-        client.addOperation(operation: put)
+        client.add(operation: put)
         put.waitUntilFinished()
 
         
@@ -131,14 +131,14 @@ class GetDocumentTests : XCTestCase {
         put.body = data[0]
         put.docId = NSUUID().uuidString.lowercased()
         put.databaseName = self.dbName
-        put.putDocumentCompletionBlock = { (docId,revId,statusCode, operationError) in
+        put.putDocumentCompletionHandler = { (docId,revId,statusCode, operationError) in
             putDocumentExpectation.fulfill()
             XCTAssertEqual(put.docId,docId);
             XCTAssertNotNil(revId)
             XCTAssertNil(operationError)
             XCTAssertTrue(statusCode / 100 == 2)
         };
-        client.addOperation(operation:put)
+        client.add(operation:put)
         
         waitForExpectations(withTimeout:10.0, handler: nil)
         
@@ -157,7 +157,7 @@ class GetDocumentTests : XCTestCase {
         let put = PutDocumentOperation()
         put.body = data[0]
         put.docId = NSUUID().uuidString.lowercased()
-        put.putDocumentCompletionBlock = { (docId,revId,statusCode, operationError) in
+        put.putDocumentCompletionHandler = { (docId,revId,statusCode, operationError) in
             putDocumentExpectation.fulfill()
             XCTAssertEqual(put.docId,docId);
             XCTAssertNotNil(revId)
@@ -174,13 +174,13 @@ class GetDocumentTests : XCTestCase {
         get.docId = put.docId
         get.databaseName = self.dbName
         
-        get.getDocumentCompletionBlock = { (doc, error) in
+        get.getDocumentCompletionHandler = { (doc, error) in
             getDocumentExpectation.fulfill()
             XCTAssertNil(error)
             XCTAssertNotNil(doc)
         }
         
-        client.addOperation(operation:get)
+        client.add(operation:get)
         
         waitForExpectations(withTimeout:10.0, handler: nil)
     }

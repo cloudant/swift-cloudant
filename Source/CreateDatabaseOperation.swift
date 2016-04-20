@@ -47,7 +47,7 @@ public class CreateDatabaseOperation : CouchOperation {
      - parameter statusCode: the status code of the http response
      - parameter operationError: The error that occured, or `nil` if processed succesfully.
      */
-    public var createDatabaseCompletionBlock : ((statusCode:Int?, operationError:ErrorProtocol?) -> Void)? = nil
+    public var createDatabaseCompletionHandler : ((statusCode:Int?, operationError:ErrorProtocol?) -> Void)? = nil
     
     
     public override func validate() -> Bool {
@@ -55,7 +55,7 @@ public class CreateDatabaseOperation : CouchOperation {
     }
     
     override public func callCompletionHandler(error: ErrorProtocol) {
-        self.createDatabaseCompletionBlock?(statusCode: nil, operationError: error)
+        self.createDatabaseCompletionHandler?(statusCode: nil, operationError: error)
     }
     
     public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
@@ -67,7 +67,7 @@ public class CreateDatabaseOperation : CouchOperation {
         
         if statusCode == 201 || statusCode ==  202 {
             /// success!
-            self.createDatabaseCompletionBlock?(statusCode: statusCode, operationError: nil)
+            self.createDatabaseCompletionHandler?(statusCode: statusCode, operationError: nil)
         } else {
             callCompletionHandler(error: Errors.CreateDatabaseFailed)
         }
