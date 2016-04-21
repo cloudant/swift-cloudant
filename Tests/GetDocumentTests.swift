@@ -19,9 +19,6 @@ import XCTest
 @testable import SwiftCloudant
 
 class GetDocumentTests : XCTestCase {
-    let url = "http://localhost:5984"
-    let username: String? = nil
-    let password: String? = nil
     var dbName: String? = nil
     
     func createTestDocuments(count: Int) -> [[String:AnyObject]] {

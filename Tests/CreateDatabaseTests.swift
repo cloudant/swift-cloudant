@@ -23,9 +23,6 @@ import XCTest
 class CreateDatabaseTests : XCTestCase {
     
     
-    let url :String = "http://localhost:5984"
-    let username:String? = nil
-    let password:String? = nil
     let dbName:String = "swift-cloudant-create-db-test" // should randomize do this later
     
     override func tearDown() {

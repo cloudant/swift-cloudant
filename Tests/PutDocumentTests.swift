@@ -20,9 +20,6 @@ import XCTest
 @testable import SwiftCloudant
 
 class PutDocumentTests : XCTestCase {
-    let url = "http://localhost:5984"
-    let username: String? = nil
-    let password: String? = nil
     var client: CouchDBClient? = nil;
     var dbName: String? = nil
     

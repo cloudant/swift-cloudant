@@ -19,9 +19,6 @@ import XCTest
 @testable import SwiftCloudant
 
 class DeleteDocumentTests : XCTestCase {
-    let url = "http://localhost:5984"
-    let username: String? = nil
-    let password: String? = nil
     var dbName: String? = nil
     
     override func setUp() {
