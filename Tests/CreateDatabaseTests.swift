@@ -21,28 +21,27 @@ import XCTest
 
 
 class CreateDatabaseTests : XCTestCase {
+
+    var dbName:String? = nil
+    var client:CouchDBClient? = nil
     
     
-    let dbName:String = "swift-cloudant-create-db-test" // should randomize do this later
+    override func setUp() {
+        super.setUp()
+        self.dbName = generateDBName()
+        client = CouchDBClient(url:NSURL(string: url)!,username:username,password:password)
+    }
     
     override func tearDown() {
-        let client = CouchDBClient(url:NSURL(string: url)!,username:username,password:password)
-        
-        let delete = DeleteDatabaseOperation()
-        delete.databaseName = self.dbName
-        client.add(operation: delete)
-        delete.waitUntilFinished()
-        
+        deleteDatabase(databaseName: dbName!, client: client!)
         super.tearDown()
-        
-        
     }
     
     
     func testCreateUsingPut() {
         let createExpectation = self.expectation(withDescription:"create database")
         
-        let client = CouchDBClient(url:NSURL(string: url)!,username:username,password:password)
+
         
         let create = CreateDatabaseOperation()
         create.databaseName = self.dbName
@@ -55,7 +54,7 @@ class CreateDatabaseTests : XCTestCase {
             XCTAssertNil(error)
         }
         
-        client.add(operation:create)
+        client?.add(operation:create)
         
         self.waitForExpectations(withTimeout:10.0, handler: nil)
     }

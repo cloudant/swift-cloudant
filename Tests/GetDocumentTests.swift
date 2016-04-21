@@ -19,41 +19,27 @@ import XCTest
 @testable import SwiftCloudant
 
 class GetDocumentTests : XCTestCase {
+
     var dbName: String? = nil
+    var client:CouchDBClient? = nil
     
-    func createTestDocuments(count: Int) -> [[String:AnyObject]] {
-        var docs = [[String:AnyObject]]()
-        for _ in 1...count {
-            docs.append(["data": NSUUID().uuidString.lowercased()])
-        }
-        
-        return docs
-    }
+
     
     override func setUp() {
         super.setUp()
          
-        dbName = "a-\(NSUUID().uuidString.lowercased())"
-        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
-        let create = CreateDatabaseOperation()
-        create.databaseName = dbName!
-        client.add(operation:create)
-        create.waitUntilFinished()
-        
-        print("Created database: \(dbName!)")
+        dbName = generateDBName()
+        client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
+        createDatabase(databaseName: dbName!, client: client!)
     }
     
-//    override func tearDown() {
-//        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
-//        let delete = DeleteDatabaseOperation()
-//        delete.databaseName = dbName!
-//        client.addOperation(delete)
-//        delete.waitUntilFinished()
-//        
-//        super.tearDown()
-//        
-//        print("Deleted database: \(dbName!)")
-//    }
+    override func tearDown() {
+        deleteDatabase(databaseName: dbName!, client: client!)
+        
+        super.tearDown()
+        
+        print("Deleted database: \(dbName!)")
+    }
     
     func testPutDocument() {
         let data = createTestDocuments(count:1)
@@ -83,7 +69,6 @@ class GetDocumentTests : XCTestCase {
     func testGetDocument() {
         let data = createTestDocuments(count:1)
         let getDocumentExpectation = expectation(withDescription:"get document")
-        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         
         let putDocumentExpectation = self.expectation(withDescription:"put document")
         let put = PutDocumentOperation()
@@ -107,13 +92,13 @@ class GetDocumentTests : XCTestCase {
                 XCTAssertNotNil(doc)
             }
             
-            client.add(operation:get)
+            self.client!.add(operation:get)
         };
         
         
         
         
-        client.add(operation: put)
+        client?.add(operation: put)
         put.waitUntilFinished()
 
         
@@ -122,7 +107,6 @@ class GetDocumentTests : XCTestCase {
     
     func testGetDocumentUsingDBObject () {
         let data = createTestDocuments(count:1)
-        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
         let putDocumentExpectation = self.expectation(withDescription:"put document")
         let put = PutDocumentOperation()
         put.body = data[0]
@@ -135,11 +119,11 @@ class GetDocumentTests : XCTestCase {
             XCTAssertNil(operationError)
             XCTAssertTrue(statusCode / 100 == 2)
         };
-        client.add(operation:put)
+        client?.add(operation:put)
         
         waitForExpectations(withTimeout:10.0, handler: nil)
         
-        let db = client[self.dbName!]
+        let db = client![self.dbName!]
         let document = db[put.docId!]
         XCTAssertNotNil(document)
     }

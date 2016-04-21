@@ -26,14 +26,9 @@ class PutDocumentTests : XCTestCase {
     override func setUp() {
         super.setUp()
         
-        dbName = "a-\(NSUUID().uuidString.lowercased())"
+        dbName = generateDBName()
         self.client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
-        let create = CreateDatabaseOperation()
-        create.databaseName = dbName!
-        client!.add(operation:create)
-        create.waitUntilFinished()
-        
-        print("Created database: \(dbName!)")
+        createDatabase(databaseName: dbName!, client: client!)
     }
     
     
