@@ -19,6 +19,7 @@
 		9855CF7E1CC6459E00ED28DA /* DeleteDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF771CC6459E00ED28DA /* DeleteDocumentOperation.swift */; };
 		9855CF7F1CC6459E00ED28DA /* GetDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF781CC6459E00ED28DA /* GetDocumentOperation.swift */; };
 		9855CF801CC6459E00ED28DA /* PutDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF791CC6459E00ED28DA /* PutDocumentOperation.swift */; };
+		9855CF861CC8CE5F00ED28DA /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF851CC8CE5F00ED28DA /* TestHelpers.swift */; };
 		98734A211C88FDB200E79C5B /* SwiftCloudant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98734A171C88FDB200E79C5B /* SwiftCloudant.framework */; };
 		98734A4F1C8A600600E79C5B /* CouchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A401C8A600600E79C5B /* CouchClient.swift */; };
 		98734A501C8A600600E79C5B /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A411C8A600600E79C5B /* Database.swift */; };
@@ -55,6 +56,7 @@
 		9855CF771CC6459E00ED28DA /* DeleteDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeleteDocumentOperation.swift; path = Source/DeleteDocumentOperation.swift; sourceTree = SOURCE_ROOT; };
 		9855CF781CC6459E00ED28DA /* GetDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GetDocumentOperation.swift; path = Source/GetDocumentOperation.swift; sourceTree = SOURCE_ROOT; };
 		9855CF791CC6459E00ED28DA /* PutDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PutDocumentOperation.swift; path = Source/PutDocumentOperation.swift; sourceTree = SOURCE_ROOT; };
+		9855CF851CC8CE5F00ED28DA /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		98734A171C88FDB200E79C5B /* SwiftCloudant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftCloudant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		98734A201C88FDB200E79C5B /* SwiftCloudantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftCloudantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		98734A401C8A600600E79C5B /* CouchClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CouchClient.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				98734A5F1C8A601400E79C5B /* Info.plist */,
 				98734A601C8A601400E79C5B /* SwiftCloudantTests.swift */,
 				98E5431B1C9CCD0500F02E06 /* InterceptorTests.swift */,
+				9855CF851CC8CE5F00ED28DA /* TestHelpers.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 			files = (
 				98B4F2CE1CA759130076C5E4 /* PutDocumentTests.swift in Sources */,
 				98EC4AE81CC1533800704CFE /* DeleteDocumentTests.swift in Sources */,
+				9855CF861CC8CE5F00ED28DA /* TestHelpers.swift in Sources */,
 				98734A611C8A601400E79C5B /* CreateDatabaseTests.swift in Sources */,
 				98734A621C8A601400E79C5B /* GetDocumentTests.swift in Sources */,
 				98734A641C8A601400E79C5B /* SwiftCloudantTests.swift in Sources */,

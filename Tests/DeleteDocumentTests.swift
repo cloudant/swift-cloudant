@@ -19,28 +19,26 @@ import XCTest
 @testable import SwiftCloudant
 
 class DeleteDocumentTests : XCTestCase {
-    let url = "http://localhost:5984"
-    let username: String? = nil
-    let password: String? = nil
     var dbName: String? = nil
+    var client: CouchDBClient? = nil
     
     override func setUp() {
         super.setUp()
         
-        dbName = "a-\(NSUUID().uuidString.lowercased())"
-        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
-        let create = CreateDatabaseOperation()
-        create.databaseName = dbName!
-        client.add(operation:create)
-        create.waitUntilFinished()
+        dbName = generateDBName()
+        client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
+        createDatabase(databaseName: dbName!, client: client!)
         
         print("Created database: \(dbName!)")
     }
     
+    override func tearDown() {
+        deleteDatabase(databaseName: dbName!, client: client!)
+        super.tearDown()
+    }
+    
     func testDocumentCanBeDeleted() {
-        
-        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
-        let db = client[self.dbName!]
+        let db = client![self.dbName!]
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.deleteDocumentCompletionHandler = {(statusCode, error) in
@@ -71,8 +69,7 @@ class DeleteDocumentTests : XCTestCase {
     
     func testDeleteDocumentOpFailsValidationWhenRevIdIsMissing() {
         
-        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
-        let db = client[self.dbName!]
+        let db = client![self.dbName!]
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.docId = "testDocId"
@@ -88,9 +85,8 @@ class DeleteDocumentTests : XCTestCase {
     }
     
     func testDeleteDocumentOpFailsValidationWhenDocIdIsMissing() {
-        
-        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
-        let db = client[self.dbName!]
+    
+        let db = client![self.dbName!]
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.docId = "testDocId"
@@ -106,8 +102,7 @@ class DeleteDocumentTests : XCTestCase {
     }
     
     func testDeleteDocumentOpCompletesWithoutCallback() {
-        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
-        let db = client[self.dbName!]
+        let db = client![self.dbName!]
         let expectation = self.expectation(withDescription:"Delete document")
         let delete = DeleteDocumentOperation()
         delete.deleteDocumentCompletionHandler = {(statusCode, error) in

@@ -20,23 +20,15 @@ import XCTest
 @testable import SwiftCloudant
 
 class PutDocumentTests : XCTestCase {
-    let url = "http://localhost:5984"
-    let username: String? = nil
-    let password: String? = nil
     var client: CouchDBClient? = nil;
     var dbName: String? = nil
     
     override func setUp() {
         super.setUp()
         
-        dbName = "a-\(NSUUID().uuidString.lowercased())"
+        dbName = generateDBName()
         self.client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
-        let create = CreateDatabaseOperation()
-        create.databaseName = dbName!
-        client!.add(operation:create)
-        create.waitUntilFinished()
-        
-        print("Created database: \(dbName!)")
+        createDatabase(databaseName: dbName!, client: client!)
     }
     
     
