@@ -1,3 +1,7 @@
+# Unreleased
+
+- [NEW] New FindDocumentsOperation API.
+
 # 0.2.1 (2016-05-13)
 
 - [FIX] Fixed compatibility with Swift Development Snapshot from 2016-05-09
