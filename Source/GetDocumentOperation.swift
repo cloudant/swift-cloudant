@@ -102,7 +102,11 @@ public class GetDocumentOperation: CouchDatabaseOperation {
                 callCompletionHandler(error:error)
             }
         } else {
-            callCompletionHandler(error:Errors.GetDocumentFailed)
+            guard let data = data else {
+                callCompletionHandler(error: Errors.GetDocumentFailed(statusCode: statusCode, jsonResponse: nil))
+                return
+            }
+            callCompletionHandler(error:Errors.GetDocumentFailed(statusCode: statusCode, jsonResponse: String(data: data, encoding: NSUTF8StringEncoding )))
         }
     }
 }
