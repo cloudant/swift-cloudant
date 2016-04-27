@@ -31,6 +31,10 @@ class PutDocumentTests : XCTestCase {
         createDatabase(databaseName: dbName!, client: client!)
     }
     
+    override func tearDown() {
+        deleteDatabase(databaseName: dbName!, client: client!)
+        super.tearDown()
+    }
     
     func testSaveDocument(){
         let db = self.client![self.dbName!]

@@ -88,7 +88,7 @@ extension XCTestCase {
         create.waitUntilFinished()
     }
     
-    func deleteDatabase(databaseName:String, client:CouchDBClient) -> Void {
+    func deleteDatabase(databaseName: String, client: CouchDBClient) -> Void {
         let delete = DeleteDatabaseOperation()
         delete.databaseName = databaseName
         delete.deleteDatabaseCompletionHandler = {(statusCode, error) in
@@ -99,6 +99,7 @@ extension XCTestCase {
             }
             XCTAssertNil(error)
         }
+        client.add(operation: delete)
     }
 }
 
