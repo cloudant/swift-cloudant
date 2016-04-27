@@ -101,13 +101,26 @@ public class PutDocumentOperation: CouchDatabaseOperation {
                 if let jsonDict = json as? [String:AnyObject] {
                     putDocumentCompletionHandler?(docId: jsonDict["id"] as? String, revId: jsonDict["rev"] as? String, statusCode: statusCode, operationError: nil)
                 } else {
-                    callCompletionHandler(error: Errors.UnexpectedJSONFormat)
+                    callCompletionHandler(error: Errors.UnexpectedJSONFormat(statusCode: statusCode, response: String(data: data, encoding: NSUTF8StringEncoding)))
                 }
             } catch {
                 callCompletionHandler(error:error)
             }
         } else {
-            callCompletionHandler(error:Errors.CreateUpdateDocumentFailed)
+            guard let data = data else {
+                putDocumentCompletionHandler?(docId: nil,
+                                              revId: nil,
+                                              statusCode: statusCode,
+                                              operationError: Errors.CreateUpdateDocumentFailed(statusCode: statusCode, jsonResponse: nil))
+                return
+            }
+            
+            
+            putDocumentCompletionHandler?(docId: nil,
+                                          revId: nil,
+                                          statusCode: statusCode,
+                                          operationError: Errors.CreateUpdateDocumentFailed(statusCode: statusCode,
+                                                                                          jsonResponse: String(data: data, encoding: NSUTF8StringEncoding)))
         }
     }
 }

@@ -69,7 +69,16 @@ public class CreateDatabaseOperation : CouchOperation {
             /// success!
             self.createDatabaseCompletionHandler?(statusCode: statusCode, operationError: nil)
         } else {
-            callCompletionHandler(error: Errors.CreateDatabaseFailed)
+            
+            let response: String?
+            if let data = data {
+                 response = String(data: data, encoding: NSUTF8StringEncoding)
+            } else {
+                response = nil
+            }
+            
+            self.createDatabaseCompletionHandler?(statusCode:statusCode,
+                                                 operationError: Errors.CreateDatabaseFailed(statusCode: statusCode, jsonResponse: response))
         }
     }
 
