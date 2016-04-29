@@ -220,10 +220,18 @@ public class InterceptableSession {
             let platform = "Unknown";
         #endif
         let frameworkBundle = NSBundle(for: InterceptableSession.self)
-        let bundleDisplayName = frameworkBundle.objectForInfoDictionaryKey("CFBundleName")
-        let bundleVersionString = frameworkBundle.objectForInfoDictionaryKey("CFBundleShortVersionString")
+        var bundleDisplayName = frameworkBundle.objectForInfoDictionaryKey("CFBundleName")
+        var bundleVersionString = frameworkBundle.objectForInfoDictionaryKey("CFBundleShortVersionString")
         
-        return "\(bundleDisplayName)/\(bundleVersionString) (\(platform), \(osVersion))"
+        if bundleDisplayName == nil {
+            bundleDisplayName = "SwiftCloudant"
+        }
+        if bundleVersionString == nil {
+            bundleVersionString = "Unknown"
+        }
+        
+        return "\(bundleDisplayName!)/\(bundleVersionString!)/\(platform)/\(osVersion))"
+        
     }
     
     
