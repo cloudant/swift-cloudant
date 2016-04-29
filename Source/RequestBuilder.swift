@@ -31,15 +31,15 @@ protocol HTTPRequestOperation {
     /**
      The root of url, e.g. `example.cloudant.com`
      */
-    var rootURL:NSURL { get}
+    var rootURL: NSURL { get }
     /**
      The path of the url e.g. `/exampledb/document1/`
     */
-    var httpPath:String { get }
+    var httpPath: String { get }
     /**
      The method to use for the HTTP request e.g. `GET`
      */
-    var httpMethod : String { get }
+    var httpMethod: String { get }
     /**
         The query items to use for the request
      */
@@ -48,7 +48,13 @@ protocol HTTPRequestOperation {
     /**
         The body of the HTTP request or `nil` if there is no data for the request.
      */
-    var httpRequestBody:NSData? { get }
+    var httpRequestBody: NSData? { get }
+    
+    /**
+        The content type of the HTTP request payload. This is guranteed to be called
+        if and only if `httpRequestBody` is not `nil`
+    */
+    var httpContentType: String { get }
     
     /**
      A function that is called when the operation is completed.
@@ -117,6 +123,7 @@ class OperationRequestBuilder {
         
         if let body = operation.httpRequestBody {
             request.httpBody = body
+            request.setValue(operation.httpContentType, forHTTPHeaderField: "Content-Type")
         }
         
         
