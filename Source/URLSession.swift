@@ -1,6 +1,6 @@
 //
 //  URLSession.swft
-//  ObjectiveCloudant
+//  SwiftCloudant
 //
 //  Created by Rhys Short on 28/02/2016.
 //  Copyright (c) 2016 IBM Corp.

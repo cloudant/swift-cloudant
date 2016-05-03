@@ -1,6 +1,6 @@
 //
 //  CreateDatabaseOperation.swift
-//  ObjectiveCloudant
+//  SwiftCloudant
 //
 //  Created by Rhys Short on 03/03/2016.
 //  Copyright (c) 2016 IBM Corp.

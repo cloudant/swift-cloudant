@@ -1,6 +1,6 @@
 //
 //  PutDocumentOperation.swift
-//  ObjectiveCloudant
+//  SwiftCloudant
 //
 //  Created by stefan kruger on 05/03/2016.
 //  Copyright (c) 2016 IBM Corp.

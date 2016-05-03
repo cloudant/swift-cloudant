@@ -1,6 +1,6 @@
 //
 //  CouchDatabaseOperation.swift
-//  ObjectiveCloudant
+//  SwiftCloudant
 //
 //  Created by Stefan Kruger on 04/03/2016.
 //  Copyright (c) 2016 IBM Corp.
