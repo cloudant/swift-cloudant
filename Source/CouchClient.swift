@@ -21,8 +21,8 @@ import Foundation
  */
 public class CouchDBClient {
     
-    private let username:String? = nil
-    private let password:String? = nil
+    private let username:String?
+    private let password:String?
     private let rootURL:NSURL
     private let session:InterceptableSession
     private let queue:NSOperationQueue
@@ -36,8 +36,20 @@ public class CouchDBClient {
      */
     public init(url:NSURL, username:String?, password:String?){
         self.rootURL = url
-        session = InterceptableSession()
+        self.username = username
+        self.password = password
         queue = NSOperationQueue()
+        let interceptors: [HTTPInterceptor]
+        
+        if let username = username, let password = password {
+            let cookieInterceptor = SessionCookieInterceptor(username: username, password: password)
+            interceptors = [cookieInterceptor]
+        } else {
+            interceptors = []
+        }
+        
+        self.session = InterceptableSession(delegate: nil, requestInterceptors: interceptors)
+
     }
     
     /**

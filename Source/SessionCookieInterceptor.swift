@@ -45,8 +45,8 @@ public class SessionCookieInterceptor : HTTPInterceptor
     
     
     init(username:String, password:String){
-        let encodedUsername = username.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics())
-        let encodedPassword = password.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics())
+        let encodedUsername = username.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics())!
+        let encodedPassword = password.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics())!
         
         let payload = "name=\(encodedUsername)&password=\(encodedPassword)"
         
