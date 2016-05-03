@@ -17,6 +17,20 @@
 
 import Foundation
 
+/**
+    Contains HTTP response information.
+ */
+public struct HttpInfo {
+    /**
+     The status code of the HTTP request.
+    */
+    let statusCode: Int
+    /**
+      The headers that were returned by the server.
+     */
+    let headers: [String: String]
+}
+
 
 /**
     Executes a `HTTPRequestOperation`'s HTTP request.
