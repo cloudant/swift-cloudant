@@ -78,7 +78,7 @@ public class CreateDatabaseOperation : CouchOperation {
             }
             
             self.createDatabaseCompletionHandler?(statusCode:statusCode,
-                                                 operationError: Errors.CreateDatabaseFailed(statusCode: statusCode, jsonResponse: response))
+                                                 operationError: Errors.HTTP(statusCode: statusCode, response: response))
         }
     }
 
