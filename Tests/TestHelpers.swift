@@ -22,15 +22,41 @@ import XCTest
 extension XCTestCase {
     
     var url:String {
-        return "http://localhost:5984"
+        get {
+            let defaultURL = "http://localhost:5984"
+            if let url = TestSettings.getInstance().settings["TEST_COUCH_URL"] as? String {
+                if url.isEmpty {
+                    return defaultURL
+                }
+                return url
+            } else {
+                NSLog("Failed to get URL from config, defaulting to localhost")
+                return defaultURL
+            }
+        }
     }
     
     var username:String? {
-        return nil
+        get {
+            let username = TestSettings.getInstance().settings["TEST_COUCH_USERNAME"] as? String
+            if  username != nil && username!.isEmpty {
+                return nil;
+            } else {
+                return username
+            }
+        }
     }
     
     var password:String? {
-        return nil
+        get {
+            let password =  TestSettings.getInstance().settings["TEST_COUCH_PASSWORD"] as? String
+            if password != nil && password!.isEmpty {
+                return nil
+            } else {
+                return password
+            }
+        }
+        
     }
     
     
@@ -74,4 +100,33 @@ extension XCTestCase {
             XCTAssertNil(error)
         }
     }
+}
+
+class TestSettings {
+    
+    private let settings: [String:AnyObject];
+    private static var instance:TestSettings?
+    
+    private init() {
+        let bundle = NSBundle(for: TestSettings.self)
+
+        let testSettingsPath = bundle.pathForResource("TestSettings", ofType: "plist")
+        
+        if let testSettingsPath = testSettingsPath,
+           let settingsDict = NSDictionary(contentsOfFile: testSettingsPath) as? [String:AnyObject] {
+           settings = settingsDict
+        } else {
+            settings = [:]
+        }
+    }
+    
+    class func getInstance() -> TestSettings {
+        if let instance = instance {
+            return instance
+        } else {
+            instance = TestSettings()
+            return instance!
+        }
+    }
+    
 }

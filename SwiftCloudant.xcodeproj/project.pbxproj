@@ -30,6 +30,7 @@
 		98B4F2CE1CA759130076C5E4 /* PutDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B4F2CD1CA759130076C5E4 /* PutDocumentTests.swift */; };
 		98E5431C1C9CCD0500F02E06 /* InterceptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E5431B1C9CCD0500F02E06 /* InterceptorTests.swift */; };
 		98EC4AE81CC1533800704CFE /* DeleteDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EC4AE61CC1531200704CFE /* DeleteDocumentTests.swift */; };
+		98FAABBE1CD89F7D0087FF57 /* TestSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 98FAABBD1CD89F7D0087FF57 /* TestSettings.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		98B4F2CD1CA759130076C5E4 /* PutDocumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PutDocumentTests.swift; sourceTree = "<group>"; };
 		98E5431B1C9CCD0500F02E06 /* InterceptorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterceptorTests.swift; sourceTree = "<group>"; };
 		98EC4AE61CC1531200704CFE /* DeleteDocumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteDocumentTests.swift; sourceTree = "<group>"; };
+		98FAABBD1CD89F7D0087FF57 /* TestSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = TestSettings.plist; sourceTree = "<group>"; };
 		E4900CFECDD4A2C5E31DF972 /* Pods-SwiftCloudantTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftCloudantTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftCloudantTests/Pods-SwiftCloudantTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -162,6 +164,7 @@
 				98734A601C8A601400E79C5B /* SwiftCloudantTests.swift */,
 				98E5431B1C9CCD0500F02E06 /* InterceptorTests.swift */,
 				9855CF851CC8CE5F00ED28DA /* TestHelpers.swift */,
+				98FAABBD1CD89F7D0087FF57 /* TestSettings.plist */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -285,6 +288,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98FAABBE1CD89F7D0087FF57 /* TestSettings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
