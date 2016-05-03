@@ -111,7 +111,7 @@ public class PutDocumentOperation: CouchDatabaseOperation {
                 putDocumentCompletionHandler?(docId: nil,
                                               revId: nil,
                                               statusCode: statusCode,
-                                              operationError: Errors.CreateUpdateDocumentFailed(statusCode: statusCode, jsonResponse: nil))
+                                              operationError: Errors.HTTP(statusCode: statusCode, response: nil))
                 return
             }
             
@@ -119,8 +119,8 @@ public class PutDocumentOperation: CouchDatabaseOperation {
             putDocumentCompletionHandler?(docId: nil,
                                           revId: nil,
                                           statusCode: statusCode,
-                                          operationError: Errors.CreateUpdateDocumentFailed(statusCode: statusCode,
-                                                                                          jsonResponse: String(data: data, encoding: NSUTF8StringEncoding)))
+                                          operationError: Errors.HTTP(statusCode: statusCode,
+                                                                                          response: String(data: data, encoding: NSUTF8StringEncoding)))
         }
     }
 }

@@ -103,10 +103,10 @@ public class GetDocumentOperation: CouchDatabaseOperation {
             }
         } else {
             guard let data = data else {
-                callCompletionHandler(error: Errors.GetDocumentFailed(statusCode: statusCode, jsonResponse: nil))
+                callCompletionHandler(error: Errors.HTTP(statusCode: statusCode, response: nil))
                 return
             }
-            callCompletionHandler(error:Errors.GetDocumentFailed(statusCode: statusCode, jsonResponse: String(data: data, encoding: NSUTF8StringEncoding )))
+            callCompletionHandler(error: Errors.HTTP(statusCode: statusCode, response: String(data: data, encoding: NSUTF8StringEncoding )))
         }
     }
 }

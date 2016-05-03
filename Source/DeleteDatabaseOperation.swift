@@ -76,7 +76,7 @@ public class DeleteDatabaseOperation : CouchOperation {
                 response = nil
             }
             
-            self.deleteDatabaseCompletionHandler?(statusCode: statusCode, operationError:Errors.CreateDatabaseFailed(statusCode: statusCode, jsonResponse: response))
+            self.deleteDatabaseCompletionHandler?(statusCode: statusCode, operationError: Errors.HTTP(statusCode: statusCode, response: response))
         }
     }
     
