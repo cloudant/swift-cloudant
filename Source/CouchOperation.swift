@@ -137,6 +137,10 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
         }
     }
     
+    public var httpContentType: String {
+        return "application/json"
+    }
+    
     //return nil if there is no body
     public var httpRequestBody:NSData? {
         get {
