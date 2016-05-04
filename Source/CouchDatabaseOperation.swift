@@ -25,4 +25,8 @@ public class CouchDatabaseOperation : CouchOperation {
      The name of the database the operation is operating on.
      */
     public var databaseName: String?
+    
+    override public func validate() -> Bool {
+        return super.validate() && databaseName != nil
+    }
 }
