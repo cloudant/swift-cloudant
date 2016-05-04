@@ -88,7 +88,7 @@ extension XCTestCase {
         create.waitUntilFinished()
     }
     
-    func deleteDatabase(databaseName:String, client:CouchDBClient) -> Void {
+    func deleteDatabase(databaseName: String, client: CouchDBClient) -> Void {
         let delete = DeleteDatabaseOperation()
         delete.databaseName = databaseName
         delete.deleteDatabaseCompletionHandler = {(statusCode, error) in
@@ -99,6 +99,32 @@ extension XCTestCase {
             }
             XCTAssertNil(error)
         }
+        client.add(operation: delete)
+    }
+}
+
+extension Array where Element : NSURLQueryItem {
+    
+    /**
+     Checks if this array is equivalent to another array. For an array to be equivalent to another
+     they need to contain the same elements, however they do __not__ need to be in the same order.
+     
+     - parameter to: the `[NSURLQueryItem]` to compare to.
+     */
+    func isEquivalent(to:[NSURLQueryItem]) -> Bool {
+        var to = to
+        if(self.count != to.count){
+            return false
+        }
+        
+        for queryItem in self {
+            if let index = to.index(of: queryItem) {
+                to.remove(at: index)
+            } else {
+                return false
+            }
+        }
+        return to.count == 0
     }
 }
 
@@ -109,12 +135,12 @@ class TestSettings {
     
     private init() {
         let bundle = NSBundle(for: TestSettings.self)
-
+        
         let testSettingsPath = bundle.pathForResource("TestSettings", ofType: "plist")
         
         if let testSettingsPath = testSettingsPath,
-           let settingsDict = NSDictionary(contentsOfFile: testSettingsPath) as? [String:AnyObject] {
-           settings = settingsDict
+            let settingsDict = NSDictionary(contentsOfFile: testSettingsPath) as? [String:AnyObject] {
+            settings = settingsDict
         } else {
             settings = [:]
         }
@@ -128,5 +154,4 @@ class TestSettings {
             return instance!
         }
     }
-    
 }

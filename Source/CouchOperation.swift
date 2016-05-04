@@ -61,6 +61,10 @@ enum Errors : ErrorProtocol {
      The JSON format wasn't what we expected.
      */
     case UnexpectedJSONFormat(statusCode:Int, response:String?)
+    /**
+     The query view operation failed.
+    */
+    case QueryViewFailed(statusCode: Int, response: String?)
 };
 
 /**
