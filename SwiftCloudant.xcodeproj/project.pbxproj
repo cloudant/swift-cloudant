@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2C4B910F7FFAC8132F5280BB /* Pods_SwiftCloudantTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F96FB133EC7F68F6BF31CC3 /* Pods_SwiftCloudantTests.framework */; };
+		2E79FE9C1CDA2BF500AD20E2 /* QueryViewOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E79FE9B1CDA2BF500AD20E2 /* QueryViewOperation.swift */; };
+		2E79FE9E1CDA2C0900AD20E2 /* QueryViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E79FE9D1CDA2C0900AD20E2 /* QueryViewTests.swift */; };
 		9855CF6F1CC6458F00ED28DA /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF6B1CC6458F00ED28DA /* RequestBuilder.swift */; };
 		9855CF701CC6458F00ED28DA /* RequestExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF6C1CC6458F00ED28DA /* RequestExecutor.swift */; };
 		9855CF711CC6458F00ED28DA /* SessionCookieInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF6D1CC6458F00ED28DA /* SessionCookieInterceptor.swift */; };
@@ -45,6 +47,8 @@
 
 /* Begin PBXFileReference section */
 		05340EE0F16E4C566C32FD41 /* Pods-SwiftCloudantTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftCloudantTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftCloudantTests/Pods-SwiftCloudantTests.release.xcconfig"; sourceTree = "<group>"; };
+		2E79FE9B1CDA2BF500AD20E2 /* QueryViewOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QueryViewOperation.swift; path = Source/QueryViewOperation.swift; sourceTree = SOURCE_ROOT; };
+		2E79FE9D1CDA2C0900AD20E2 /* QueryViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryViewTests.swift; sourceTree = "<group>"; };
 		7F96FB133EC7F68F6BF31CC3 /* Pods_SwiftCloudantTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftCloudantTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9855CF6B1CC6458F00ED28DA /* RequestBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestBuilder.swift; path = Source/RequestBuilder.swift; sourceTree = SOURCE_ROOT; };
 		9855CF6C1CC6458F00ED28DA /* RequestExecutor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestExecutor.swift; path = Source/RequestExecutor.swift; sourceTree = SOURCE_ROOT; };
@@ -142,6 +146,7 @@
 		98734A481C8A600600E79C5B /* Operations */ = {
 			isa = PBXGroup;
 			children = (
+				2E79FE9B1CDA2BF500AD20E2 /* QueryViewOperation.swift */,
 				9855CF731CC6459E00ED28DA /* CouchDatabaseOperation.swift */,
 				9855CF741CC6459E00ED28DA /* CouchOperation.swift */,
 				9855CF751CC6459E00ED28DA /* CreateDatabaseOperation.swift */,
@@ -156,6 +161,7 @@
 		98734A5C1C8A601400E79C5B /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				2E79FE9D1CDA2C0900AD20E2 /* QueryViewTests.swift */,
 				98EC4AE61CC1531200704CFE /* DeleteDocumentTests.swift */,
 				98734A5D1C8A601400E79C5B /* CreateDatabaseTests.swift */,
 				98734A5E1C8A601400E79C5B /* GetDocumentTests.swift */,
@@ -354,6 +360,7 @@
 				9855CF701CC6458F00ED28DA /* RequestExecutor.swift in Sources */,
 				9855CF7B1CC6459E00ED28DA /* CouchOperation.swift in Sources */,
 				9855CF711CC6458F00ED28DA /* SessionCookieInterceptor.swift in Sources */,
+				2E79FE9C1CDA2BF500AD20E2 /* QueryViewOperation.swift in Sources */,
 				9855CF801CC6459E00ED28DA /* PutDocumentOperation.swift in Sources */,
 				9855CF7A1CC6459E00ED28DA /* CouchDatabaseOperation.swift in Sources */,
 				9855CF6F1CC6458F00ED28DA /* RequestBuilder.swift in Sources */,
@@ -370,6 +377,7 @@
 				98B4F2CE1CA759130076C5E4 /* PutDocumentTests.swift in Sources */,
 				98EC4AE81CC1533800704CFE /* DeleteDocumentTests.swift in Sources */,
 				9855CF861CC8CE5F00ED28DA /* TestHelpers.swift in Sources */,
+				2E79FE9E1CDA2C0900AD20E2 /* QueryViewTests.swift in Sources */,
 				98734A611C8A601400E79C5B /* CreateDatabaseTests.swift in Sources */,
 				98734A621C8A601400E79C5B /* GetDocumentTests.swift in Sources */,
 				98734A641C8A601400E79C5B /* SwiftCloudantTests.swift in Sources */,
