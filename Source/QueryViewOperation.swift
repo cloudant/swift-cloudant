@@ -353,7 +353,7 @@ public class QueryViewOperation: CouchDatabaseOperation {
                 callCompletionHandler(error: error)
             }
         } else {
-            callCompletionHandler(error: Errors.QueryViewFailed(statusCode: statusCode, response: String(data, NSUTF8StringEncoding)))
+            callCompletionHandler(error: Errors.HTTP(statusCode: statusCode, response: String(data, NSUTF8StringEncoding)))
         }
     }
     
