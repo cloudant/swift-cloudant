@@ -336,29 +336,38 @@ public class QueryViewOperation: CouchDatabaseOperation {
         self.queryViewCompletionHandler?(response:nil, httpInfo:nil, error: error)
     }
     
-    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
-        if let error = error {
-            self.callCompletionHandler(error:error)
+    public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+        guard  error != nil, let httpInfo = httpInfo
+        else {
+            self.callCompletionHandler(error:error!)
             return
         }
         
-        let httpInfo = HttpInfo(statusCode: statusCode, headers: [:])
-        
-        // Check status code is 200
-        if statusCode == 200 {
-            do {
-                let json = try NSJSONSerialization.jsonObject(with: data!)
-                let rows = json["rows"] as! [[String:AnyObject]]
-                for row:[String:AnyObject] in rows {
-                    self.rowHandler?(row: row)
+        do {
+            if let data = data {
+                let json = try NSJSONSerialization.jsonObject(with: data) as! [String: AnyObject]
+                if httpInfo.statusCode == 200 {  // Check status code is 200
+                    let rows = json["rows"] as! [[String:AnyObject]]
+                    for row:[String:AnyObject] in rows {
+                        self.rowHandler?(row: row)
+                    }
+                    self.queryViewCompletionHandler?(response:json, httpInfo:httpInfo, error: nil)
+                } else {
+                    callCompletionHandler(error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data, NSUTF8StringEncoding)))
                 }
-                self.queryViewCompletionHandler?(response:nil, httpInfo:httpInfo, error: nil)
-            } catch {
-                callCompletionHandler(error: error)
             }
-        } else {
-            callCompletionHandler(error: Errors.HTTP(statusCode: statusCode, response: String(data, NSUTF8StringEncoding)))
+            
+            
+        } catch {
+            let response: String?
+            if let data = data {
+                response = String(data:data, encoding: NSUTF8StringEncoding)
+            } else {
+                response = nil
+            }
+            self.queryViewCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
         }
+
     }
     
     func convertJson(key: AnyObject) -> String {

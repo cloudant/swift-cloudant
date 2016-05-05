@@ -82,40 +82,35 @@ public class PutDocumentOperation: CouchDatabaseOperation {
         putDocumentCompletionHandler?(response: nil, httpInfo: nil, error: error)
     }
     
-    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
-        if let error = error {
-            callCompletionHandler(error:error)
+    public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+        guard error != nil, let httpInfo = httpInfo
+        else {
+            callCompletionHandler(error:error!)
             return
         }
         
-        let httpInfo = HttpInfo(statusCode: statusCode, headers: [:])
-        
-        // Check status code
-        if statusCode == 201 || statusCode == 202 {
-            guard let data = data else {
-                return
-            }
-            
-            do {
-                // Convert the response to JSON.
-                let json = try NSJSONSerialization.jsonObject(with:data, options: NSJSONReadingOptions())
-                if let jsonDict = json as? [String:AnyObject] {
-                    putDocumentCompletionHandler?(response: jsonDict, httpInfo: httpInfo, error: error)
+        do {
+            if let data = data {
+                let json = try NSJSONSerialization.jsonObject(with: data) as! [String: AnyObject]
+                // Check status code
+                if httpInfo.statusCode == 201 || httpInfo.statusCode == 202 {
+                      putDocumentCompletionHandler?(response: json, httpInfo: httpInfo, error: nil)
                 } else {
-                    callCompletionHandler(error: Errors.UnexpectedJSONFormat(statusCode: statusCode, response: String(data: data, encoding: NSUTF8StringEncoding)))
+                    putDocumentCompletionHandler?(response: json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data:data, encoding: NSUTF8StringEncoding)))
                 }
-            } catch {
-                callCompletionHandler(error:error)
+                
+            } else {
+              self.putDocumentCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: nil))
             }
-        } else {
-            guard let data = data else {
-                putDocumentCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: statusCode, response: nil))
-                return
+        } catch {
+            let response:String?
+            if let data = data {
+                response = String(data:data, encoding: NSUTF8StringEncoding)
+            } else {
+                response = nil
             }
-            
-            
-            putDocumentCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: statusCode,
-                                                                                          response: String(data: data, encoding: NSUTF8StringEncoding)))
+            self.putDocumentCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
         }
+
     }
 }

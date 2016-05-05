@@ -128,7 +128,7 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
         super.init()
     }
 
-    public func processResponse(data:NSData?, statusCode:Int, error:ErrorProtocol?){
+    public func processResponse(data:NSData?, httpInfo:HttpInfo?, error:ErrorProtocol?){
         
     }
     

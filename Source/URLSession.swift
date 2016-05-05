@@ -186,7 +186,7 @@ public class InterceptableSession {
     init(delegate:NSURLSessionDelegate?, requestInterceptors:Array<HTTPInterceptor>){
         interceptors = requestInterceptors
         
-        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let config = NSURLSessionConfiguration.default()
         config.httpAdditionalHeaders = ["User-Agent":InterceptableSession.userAgent()]
         session = NSURLSession(configuration: config,delegate:delegate, delegateQueue: nil)
     }

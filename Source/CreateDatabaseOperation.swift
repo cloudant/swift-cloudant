@@ -59,30 +59,35 @@ public class CreateDatabaseOperation : CouchOperation {
         self.createDatabaseCompletionHandler?(response:nil, httpInfo: nil, error: error)
     }
     
-    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
-        guard error == nil
+    public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+        guard error == nil, let httpInfo = httpInfo
         else  {
             self.callCompletionHandler(error: error!)
             return
         }
         
-        let httpInfo = HttpInfo(statusCode: statusCode, headers: [:])
-        
-        if statusCode == 201 || statusCode ==  202 {
-            /// success!
-            self.createDatabaseCompletionHandler?(response:nil, httpInfo: httpInfo, error: nil)
-        } else {
-            
-            let response: String?
+        do {
             if let data = data {
-                 response = String(data: data, encoding: NSUTF8StringEncoding)
+                let json = try NSJSONSerialization.jsonObject(with: data) as! [String:AnyObject]
+                
+                if httpInfo.statusCode == 201 || httpInfo.statusCode ==  202 {
+                    self.createDatabaseCompletionHandler?(response: json, httpInfo: httpInfo, error: nil)
+                } else {
+                    self.createDatabaseCompletionHandler?(response: json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data: data, encoding: NSUTF8StringEncoding)))
+                }
+            } else {
+                self.createDatabaseCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: nil))
+            }
+        } catch {
+            let response:String?
+            if let data = data {
+               response = String(data: data, encoding: NSUTF8StringEncoding)
             } else {
                 response = nil
             }
-            
-            self.createDatabaseCompletionHandler?(response:nil, httpInfo: httpInfo,
-                                                 error: Errors.HTTP(statusCode: statusCode, response: response))
+            self.createDatabaseCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
         }
+
     }
 
 }

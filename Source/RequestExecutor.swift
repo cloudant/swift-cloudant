@@ -73,15 +73,15 @@ class OperationRequestExecutor {
             }
             
             
-            let statusCode: Int
+            let httpInfo: HttpInfo?
             
             if let response = response as? NSHTTPURLResponse {
-                statusCode = response.statusCode
+                httpInfo = HttpInfo(statusCode: response.statusCode, headers: response.allHeaderFields as! [String:String])
             } else {
-                statusCode = -1
+                httpInfo = nil
             }
             
-            self.operation.processResponse(data: data, statusCode: statusCode, error: error)
+            self.operation.processResponse(data: data, httpInfo: httpInfo, error: error)
             self.operation.completeOperation()
         
         })
