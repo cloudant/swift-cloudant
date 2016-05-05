@@ -32,11 +32,6 @@ enum Errors : ErrorProtocol {
     case UnexpectedJSONFormat(statusCode:Int, response:String?)
     
     /**
-     The query view operation failed.
-    */
-    case QueryViewFailed(statusCode: Int, response: String?)
-    
-    /**
      A HTTP error status code (4xx or 5xx) was received (e.g. 400 Bad Request).
      */
     case HTTP(statusCode:Int, response:String?)
