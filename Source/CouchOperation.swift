@@ -22,41 +22,10 @@ import Foundation
  */
 enum Errors : ErrorProtocol {
     /**
-    Creating a database failed.
-    */
-    case CreateDatabaseFailed(statusCode:Int, jsonResponse:String?)
-    /**
-    Deleting a database failed.
-    */
-    case DeleteDatabaseFailed(statusCode:Int, jsonResponse:String?)
-    /**
     Validation of operation settings failed.
     */
     case ValidationFailed
-    /**
-    Deleting a Query index failed.
-    */
-    case DeleteQueryIndexFailed(statusCode:Int, jsonResponse:String?)
-    /**
-    Creating a Query index failed.
-    */
-    case CreateQueryIndexFailed(statusCode:Int, jsonResponse:String?)
-    /**
-    Getting a document failed.
-    */
-    case GetDocumentFailed(statusCode:Int, jsonResponse:String?)
-    /**
-    Creating or updating a document failed.
-    */
-    case CreateUpdateDocumentFailed(statusCode:Int, jsonResponse:String?)
-    /**
-    Deleting a document failed.
-    */
-    case DeleteDocumentFailed(statusCode:Int, jsonResponse:String?)
-    /**
-    Finding documents failed.
-    */
-    case FindDocumentsFailed(statusCode:Int, jsonResponse:String?)
+
     /**
      The JSON format wasn't what we expected.
      */
