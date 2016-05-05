@@ -44,10 +44,11 @@ public class DeleteDatabaseOperation : CouchOperation {
     
     /**
         A block to call when the operation completes.
-     - parameter statusCode: The status code of the HTTP response.
-     - parameter operationError: The error that occurred if any.
+     - parameter response: The full JSON response.
+     - parameter httpInfo: Information about the HTTP response.
+     - parameter error: An Error that occured.
      */
-    public var deleteDatabaseCompletionHandler: ((statusCode:Int?, operationError:ErrorProtocol?) -> Void)? = nil
+    public var deleteDatabaseCompletionHandler: ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)? = nil
     
     
     public override func validate() -> Bool {
@@ -55,7 +56,7 @@ public class DeleteDatabaseOperation : CouchOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.deleteDatabaseCompletionHandler?(statusCode: nil, operationError: error)
+        self.deleteDatabaseCompletionHandler?(response: nil, httpInfo: nil, error: error)
     }
     
     public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
@@ -65,9 +66,11 @@ public class DeleteDatabaseOperation : CouchOperation {
                 return
         }
         
+        let httpInfo = HttpInfo(statusCode: statusCode, headers: [:])
+        
         if statusCode == 200 || statusCode ==  202 { //Couch could return accepted instead of ok.
             /// success!
-            self.deleteDatabaseCompletionHandler?(statusCode: statusCode, operationError: nil)
+            self.deleteDatabaseCompletionHandler?(response:nil, httpInfo: httpInfo, error: nil)
         } else {
             let response:String?
             if let data = data {
@@ -76,7 +79,7 @@ public class DeleteDatabaseOperation : CouchOperation {
                 response = nil
             }
             
-            self.deleteDatabaseCompletionHandler?(statusCode: statusCode, operationError: Errors.HTTP(statusCode: statusCode, response: response))
+            self.deleteDatabaseCompletionHandler?(response:nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: statusCode, response: response))
         }
     }
     

@@ -44,10 +44,11 @@ public class CreateDatabaseOperation : CouchOperation {
     /**
         A block to call when the operation completes
      
-     - parameter statusCode: the status code of the http response
-     - parameter operationError: The error that occured, or `nil` if processed succesfully.
+     - parameter response: The complete JSON response.
+     - parameter httpInfo: Information about the HTTP response.
+     - parameter error: The error that occured, or `nil` if processed succesfully.
      */
-    public var createDatabaseCompletionHandler : ((statusCode:Int?, operationError:ErrorProtocol?) -> Void)? = nil
+    public var createDatabaseCompletionHandler : ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)? = nil
     
     
     public override func validate() -> Bool {
@@ -55,7 +56,7 @@ public class CreateDatabaseOperation : CouchOperation {
     }
     
     override public func callCompletionHandler(error: ErrorProtocol) {
-        self.createDatabaseCompletionHandler?(statusCode: nil, operationError: error)
+        self.createDatabaseCompletionHandler?(response:nil, httpInfo: nil, error: error)
     }
     
     public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
@@ -65,9 +66,11 @@ public class CreateDatabaseOperation : CouchOperation {
             return
         }
         
+        let httpInfo = HttpInfo(statusCode: statusCode, headers: [:])
+        
         if statusCode == 201 || statusCode ==  202 {
             /// success!
-            self.createDatabaseCompletionHandler?(statusCode: statusCode, operationError: nil)
+            self.createDatabaseCompletionHandler?(response:nil, httpInfo: httpInfo, error: nil)
         } else {
             
             let response: String?
@@ -77,8 +80,8 @@ public class CreateDatabaseOperation : CouchOperation {
                 response = nil
             }
             
-            self.createDatabaseCompletionHandler?(statusCode:statusCode,
-                                                 operationError: Errors.HTTP(statusCode: statusCode, response: response))
+            self.createDatabaseCompletionHandler?(response:nil, httpInfo: httpInfo,
+                                                 error: Errors.HTTP(statusCode: statusCode, response: response))
         }
     }
 

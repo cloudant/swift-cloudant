@@ -44,12 +44,12 @@ public class GetDocumentOperation: CouchDatabaseOperation {
     /**
       Completion block to run when the operation completes.
     
-      - parameter document: - The document read from the server
-    
-      - parameter operationError: - a pointer to an error object containing
+      - parameter response: - The full deseralised JSON response.
+      - parameter httpInfo: - Information about the HTTP response.
+      - parameter error: - a pointer to an error object containing
        information about an error executing the operation
     */
-    public var getDocumentCompletionHandler: ((document:[String:AnyObject]?, operationError:ErrorProtocol?) -> ())?
+    public var getDocumentCompletionHandler: ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)?
 
     public override func validate() -> Bool {
         return super.validate() && docId != nil
@@ -80,7 +80,7 @@ public class GetDocumentOperation: CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.getDocumentCompletionHandler?(document: nil, operationError: error)
+        self.getDocumentCompletionHandler?(response:nil, httpInfo: nil ,error: error)
     }
     
     public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
@@ -88,6 +88,8 @@ public class GetDocumentOperation: CouchDatabaseOperation {
             callCompletionHandler(error:error)
             return
         }
+        
+        let httpInfo = HttpInfo(statusCode: statusCode, headers: [:])
         
         // Check status code is 200
         if statusCode == 200 {
@@ -97,7 +99,7 @@ public class GetDocumentOperation: CouchDatabaseOperation {
             
             do {
                 let json = try NSJSONSerialization.jsonObject(with:data, options: NSJSONReadingOptions())
-                getDocumentCompletionHandler?(document: json as? [String:AnyObject], operationError: nil)
+                getDocumentCompletionHandler?(response: json as? [String:AnyObject], httpInfo: httpInfo, error : nil)
             } catch {
                 callCompletionHandler(error:error)
             }

@@ -52,16 +52,14 @@ public class DeleteDocumentOperation : CouchDatabaseOperation {
     public var docId:String? = nil
     
     /**
-     * A block of code to call when the operation completes.
-     * This block will be called once per operation.
-     *
-     * statusCode: The status code returned from the request, will be nil if the operation
-     *                       did not make an http connection.
-     *
-     * error: An object representing the error that occured, will be nil when the operation
-     *                  successfully makes a HTTP request.
+      A block of code to call when the operation completes.
+      This block will be called once per operation.
+     
+      - parameter response: The full deseralised JSON response.
+      - parameter httpInfo: Information about the HTTP response.
+      - parameter error: An object representing the error that occured.
      */
-    public var deleteDocumentCompletionHandler : ((statusCode:Int?, error:ErrorProtocol?) ->())? = nil
+    public var deleteDocumentCompletionHandler : ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)? = nil
     
     public override func validate() -> Bool {
         return super.validate() && revId != nil && docId != nil
@@ -80,14 +78,15 @@ public class DeleteDocumentOperation : CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.deleteDocumentCompletionHandler?(statusCode: nil,error: error)
+        self.deleteDocumentCompletionHandler?(response: nil, httpInfo: nil, error: error)
     }
     
     public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
+        let httpInfo = HttpInfo(statusCode: statusCode, headers: [:])
         if let error = error {
             callCompletionHandler(error: error)
         } else {
-            deleteDocumentCompletionHandler?(statusCode: statusCode,error: error);
+            deleteDocumentCompletionHandler?(response: nil, httpInfo: httpInfo, error: error);
         }
     }
 }

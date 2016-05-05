@@ -208,9 +208,11 @@ public class QueryViewOperation: CouchDatabaseOperation {
     /**
      Sets a completion handler to run when the operation completes.
      
+     - parameter response: - The full deseralised JSON response.
+     - parameter httpInfo: - Information about the HTTP response.
      - parameter error: - ErrorProtocol instance with information about an error executing the operation
      */
-    public var queryViewCompletionHandler: ((error: ErrorProtocol?) -> Void)?
+    public var queryViewCompletionHandler: ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)?
     
     /**
      Sets a handler to run for each row retrieved by the view.
@@ -331,7 +333,7 @@ public class QueryViewOperation: CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.queryViewCompletionHandler?(error: error)
+        self.queryViewCompletionHandler?(response:nil, httpInfo:nil, error: error)
     }
     
     public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
@@ -339,6 +341,8 @@ public class QueryViewOperation: CouchDatabaseOperation {
             self.callCompletionHandler(error:error)
             return
         }
+        
+        let httpInfo = HttpInfo(statusCode: statusCode, headers: [:])
         
         // Check status code is 200
         if statusCode == 200 {
@@ -348,7 +352,7 @@ public class QueryViewOperation: CouchDatabaseOperation {
                 for row:[String:AnyObject] in rows {
                     self.rowHandler?(row: row)
                 }
-                self.queryViewCompletionHandler?(error: nil)
+                self.queryViewCompletionHandler?(response:nil, httpInfo:httpInfo, error: nil)
             } catch {
                 callCompletionHandler(error: error)
             }

@@ -36,13 +36,12 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     /**
     Completion block to run when the operation completes.
     
-    - parameter docId:  the id of the document written to the database
-    - parameter revId: the revision of the document written to the database
-    - parameter statusCode: the HTTP status code
-    - parameter operationError: a pointer to an error object containing
-    information about an error executing the operation
-    */    
-    var putDocumentCompletionHandler: ((docId:String?, revId:String?, statusCode:Int, operationError:ErrorProtocol?) -> ())? = nil
+     - parameter response: - The full deseralised JSON response.
+     - parameter httpInfo: - Information about the HTTP response.
+     - parameter error: - a pointer to an error object containing
+     information about an error executing the operation
+    */
+    var putDocumentCompletionHandler: ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)? = nil
     
     public override func validate() -> Bool {
         return super.validate() && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body!)
@@ -80,7 +79,7 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        putDocumentCompletionHandler?(docId: nil, revId: nil, statusCode: 0, operationError: error)
+        putDocumentCompletionHandler?(response: nil, httpInfo: nil, error: error)
     }
     
     public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
@@ -88,6 +87,8 @@ public class PutDocumentOperation: CouchDatabaseOperation {
             callCompletionHandler(error:error)
             return
         }
+        
+        let httpInfo = HttpInfo(statusCode: statusCode, headers: [:])
         
         // Check status code
         if statusCode == 201 || statusCode == 202 {
@@ -99,7 +100,7 @@ public class PutDocumentOperation: CouchDatabaseOperation {
                 // Convert the response to JSON.
                 let json = try NSJSONSerialization.jsonObject(with:data, options: NSJSONReadingOptions())
                 if let jsonDict = json as? [String:AnyObject] {
-                    putDocumentCompletionHandler?(docId: jsonDict["id"] as? String, revId: jsonDict["rev"] as? String, statusCode: statusCode, operationError: nil)
+                    putDocumentCompletionHandler?(response: jsonDict, httpInfo: httpInfo, error: error)
                 } else {
                     callCompletionHandler(error: Errors.UnexpectedJSONFormat(statusCode: statusCode, response: String(data: data, encoding: NSUTF8StringEncoding)))
                 }
@@ -108,18 +109,12 @@ public class PutDocumentOperation: CouchDatabaseOperation {
             }
         } else {
             guard let data = data else {
-                putDocumentCompletionHandler?(docId: nil,
-                                              revId: nil,
-                                              statusCode: statusCode,
-                                              operationError: Errors.HTTP(statusCode: statusCode, response: nil))
+                putDocumentCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: statusCode, response: nil))
                 return
             }
             
             
-            putDocumentCompletionHandler?(docId: nil,
-                                          revId: nil,
-                                          statusCode: statusCode,
-                                          operationError: Errors.HTTP(statusCode: statusCode,
+            putDocumentCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: statusCode,
                                                                                           response: String(data: data, encoding: NSUTF8StringEncoding)))
         }
     }
