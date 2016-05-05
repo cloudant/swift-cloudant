@@ -32,7 +32,7 @@ enum Errors : ErrorProtocol {
     case UnexpectedJSONFormat(statusCode:Int, response:String?)
     
     /**
-     A HTTP error status code (4xx or 5xx) was received (e.g. 400 Bad Request).
+     An unexpected HTTP status code (e.g. 4xx or 5xx) was received.
      */
     case HTTP(statusCode:Int, response:String?)
 };
