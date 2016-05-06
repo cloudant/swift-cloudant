@@ -36,13 +36,12 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     /**
     Completion block to run when the operation completes.
     
-    - parameter docId:  the id of the document written to the database
-    - parameter revId: the revision of the document written to the database
-    - parameter statusCode: the HTTP status code
-    - parameter operationError: a pointer to an error object containing
-    information about an error executing the operation
-    */    
-    var putDocumentCompletionHandler: ((docId:String?, revId:String?, statusCode:Int, operationError:ErrorProtocol?) -> ())? = nil
+     - parameter response: - The full deseralised JSON response.
+     - parameter httpInfo: - Information about the HTTP response.
+     - parameter error: - a pointer to an error object containing
+     information about an error executing the operation
+    */
+    var putDocumentCompletionHandler: ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)? = nil
     
     public override func validate() -> Bool {
         return super.validate() && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body!)
@@ -80,47 +79,38 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        putDocumentCompletionHandler?(docId: nil, revId: nil, statusCode: 0, operationError: error)
+        putDocumentCompletionHandler?(response: nil, httpInfo: nil, error: error)
     }
     
-    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
-        if let error = error {
-            callCompletionHandler(error:error)
+    public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+        guard error == nil, let httpInfo = httpInfo
+        else {
+            callCompletionHandler(error:error!)
             return
         }
         
-        // Check status code
-        if statusCode == 201 || statusCode == 202 {
-            guard let data = data else {
-                return
-            }
-            
-            do {
-                // Convert the response to JSON.
-                let json = try NSJSONSerialization.jsonObject(with:data, options: NSJSONReadingOptions())
-                if let jsonDict = json as? [String:AnyObject] {
-                    putDocumentCompletionHandler?(docId: jsonDict["id"] as? String, revId: jsonDict["rev"] as? String, statusCode: statusCode, operationError: nil)
+        do {
+            if let data = data {
+                let json = try NSJSONSerialization.jsonObject(with: data) as! [String: AnyObject]
+                // Check status code
+                if httpInfo.statusCode == 201 || httpInfo.statusCode == 202 {
+                      putDocumentCompletionHandler?(response: json, httpInfo: httpInfo, error: nil)
                 } else {
-                    callCompletionHandler(error: Errors.UnexpectedJSONFormat(statusCode: statusCode, response: String(data: data, encoding: NSUTF8StringEncoding)))
+                    putDocumentCompletionHandler?(response: json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data:data, encoding: NSUTF8StringEncoding)))
                 }
-            } catch {
-                callCompletionHandler(error:error)
+                
+            } else {
+              self.putDocumentCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: nil))
             }
-        } else {
-            guard let data = data else {
-                putDocumentCompletionHandler?(docId: nil,
-                                              revId: nil,
-                                              statusCode: statusCode,
-                                              operationError: Errors.HTTP(statusCode: statusCode, response: nil))
-                return
+        } catch {
+            let response:String?
+            if let data = data {
+                response = String(data:data, encoding: NSUTF8StringEncoding)
+            } else {
+                response = nil
             }
-            
-            
-            putDocumentCompletionHandler?(docId: nil,
-                                          revId: nil,
-                                          statusCode: statusCode,
-                                          operationError: Errors.HTTP(statusCode: statusCode,
-                                                                                          response: String(data: data, encoding: NSUTF8StringEncoding)))
+            self.putDocumentCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
         }
+
     }
 }

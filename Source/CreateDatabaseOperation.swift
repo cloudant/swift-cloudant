@@ -44,10 +44,11 @@ public class CreateDatabaseOperation : CouchOperation {
     /**
         A block to call when the operation completes
      
-     - parameter statusCode: the status code of the http response
-     - parameter operationError: The error that occured, or `nil` if processed succesfully.
+     - parameter response: The complete JSON response.
+     - parameter httpInfo: Information about the HTTP response.
+     - parameter error: The error that occured, or `nil` if processed succesfully.
      */
-    public var createDatabaseCompletionHandler : ((statusCode:Int?, operationError:ErrorProtocol?) -> Void)? = nil
+    public var createDatabaseCompletionHandler : ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)? = nil
     
     
     public override func validate() -> Bool {
@@ -55,31 +56,38 @@ public class CreateDatabaseOperation : CouchOperation {
     }
     
     override public func callCompletionHandler(error: ErrorProtocol) {
-        self.createDatabaseCompletionHandler?(statusCode: nil, operationError: error)
+        self.createDatabaseCompletionHandler?(response:nil, httpInfo: nil, error: error)
     }
     
-    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
-        guard error == nil
+    public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+        guard error == nil, let httpInfo = httpInfo
         else  {
             self.callCompletionHandler(error: error!)
             return
         }
         
-        if statusCode == 201 || statusCode ==  202 {
-            /// success!
-            self.createDatabaseCompletionHandler?(statusCode: statusCode, operationError: nil)
-        } else {
-            
-            let response: String?
+        do {
             if let data = data {
-                 response = String(data: data, encoding: NSUTF8StringEncoding)
+                let json = try NSJSONSerialization.jsonObject(with: data) as! [String:AnyObject]
+                
+                if httpInfo.statusCode == 201 || httpInfo.statusCode ==  202 {
+                    self.createDatabaseCompletionHandler?(response: json, httpInfo: httpInfo, error: nil)
+                } else {
+                    self.createDatabaseCompletionHandler?(response: json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data: data, encoding: NSUTF8StringEncoding)))
+                }
+            } else {
+                self.createDatabaseCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: nil))
+            }
+        } catch {
+            let response:String?
+            if let data = data {
+               response = String(data: data, encoding: NSUTF8StringEncoding)
             } else {
                 response = nil
             }
-            
-            self.createDatabaseCompletionHandler?(statusCode:statusCode,
-                                                 operationError: Errors.HTTP(statusCode: statusCode, response: response))
+            self.createDatabaseCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
         }
+
     }
 
 }

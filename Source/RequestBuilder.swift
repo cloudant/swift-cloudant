@@ -64,10 +64,10 @@ protocol HTTPRequestOperation {
       A function to process the response from a HTTP request.
      
      - parameter data: The data returned from the HTTP request or nil if there was an error.
-     - parameter statusCode: The statusCode of the HTTP response.
+     - parameter httpInfo: Information about the HTTP response.
      - parameter error: A type representing an error if one occurred or `nil`
      */
-    func processResponse(data:NSData?, statusCode:Int, error:ErrorProtocol?);
+    func processResponse(data:NSData?, httpInfo:HttpInfo?, error:ErrorProtocol?);
     
     var isCancelled: Bool { get }
     

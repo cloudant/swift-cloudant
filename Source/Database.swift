@@ -67,8 +67,8 @@ public class Database  {
         
         
         var doc:[String:AnyObject]?
-        getDocument.getDocumentCompletionHandler = { (document, error ) in
-            doc = document
+        getDocument.getDocumentCompletionHandler = { (response, httpInfo, error ) in
+            doc = response
         };
         
         self.add(operation: getDocument)

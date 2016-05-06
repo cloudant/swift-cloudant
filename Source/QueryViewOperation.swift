@@ -208,9 +208,11 @@ public class QueryViewOperation: CouchDatabaseOperation {
     /**
      Sets a completion handler to run when the operation completes.
      
+     - parameter response: - The full deseralised JSON response.
+     - parameter httpInfo: - Information about the HTTP response.
      - parameter error: - ErrorProtocol instance with information about an error executing the operation
      */
-    public var queryViewCompletionHandler: ((error: ErrorProtocol?) -> Void)?
+    public var queryViewCompletionHandler: ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)?
     
     /**
      Sets a handler to run for each row retrieved by the view.
@@ -331,30 +333,41 @@ public class QueryViewOperation: CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.queryViewCompletionHandler?(error: error)
+        self.queryViewCompletionHandler?(response:nil, httpInfo:nil, error: error)
     }
     
-    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
-        if let error = error {
-            self.callCompletionHandler(error:error)
+    public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+        guard  error == nil, let httpInfo = httpInfo
+        else {
+            self.callCompletionHandler(error:error!)
             return
         }
         
-        // Check status code is 200
-        if statusCode == 200 {
-            do {
-                let json = try NSJSONSerialization.jsonObject(with: data!)
-                let rows = json["rows"] as! [[String:AnyObject]]
-                for row:[String:AnyObject] in rows {
-                    self.rowHandler?(row: row)
+        do {
+            if let data = data {
+                let json = try NSJSONSerialization.jsonObject(with: data) as! [String: AnyObject]
+                if httpInfo.statusCode == 200 {  // Check status code is 200
+                    let rows = json["rows"] as! [[String:AnyObject]]
+                    for row:[String:AnyObject] in rows {
+                        self.rowHandler?(row: row)
+                    }
+                    self.queryViewCompletionHandler?(response:json, httpInfo:httpInfo, error: nil)
+                } else {
+                    callCompletionHandler(error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data, NSUTF8StringEncoding)))
                 }
-                self.queryViewCompletionHandler?(error: nil)
-            } catch {
-                callCompletionHandler(error: error)
             }
-        } else {
-            callCompletionHandler(error: Errors.HTTP(statusCode: statusCode, response: String(data, NSUTF8StringEncoding)))
+            
+            
+        } catch {
+            let response: String?
+            if let data = data {
+                response = String(data:data, encoding: NSUTF8StringEncoding)
+            } else {
+                response = nil
+            }
+            self.queryViewCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
         }
+
     }
     
     func convertJson(key: AnyObject) -> String {
