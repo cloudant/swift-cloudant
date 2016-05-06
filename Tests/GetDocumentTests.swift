@@ -52,12 +52,13 @@ class GetDocumentTests : XCTestCase {
         put.body = data[0]
         put.docId = NSUUID().uuidString.lowercased()
         
-        put.putDocumentCompletionHandler = { (docId, revId, statusCode, error) in
+        put.putDocumentCompletionHandler = { (response, httpInfo, error) in
             putDocumentExpectation.fulfill()
             XCTAssertNil(error)
-            XCTAssertNotNil(docId)
-            XCTAssertNotNil(revId)
-            XCTAssert(statusCode == 201 || statusCode == 202)
+            XCTAssertNotNil(response)
+            if let httpInfo = httpInfo {
+                XCTAssert(httpInfo.statusCode == 201 || httpInfo.statusCode == 202)
+            }
         }
         
         client.add(operation:put)
@@ -75,21 +76,24 @@ class GetDocumentTests : XCTestCase {
         put.body = data[0]
         put.docId = NSUUID().uuidString.lowercased()
         put.databaseName = self.dbName
-        put.putDocumentCompletionHandler = { (docId,revId,statusCode, operationError) in
+        put.putDocumentCompletionHandler = { (response, httpInfo, operationError) in
             putDocumentExpectation.fulfill()
-            XCTAssertEqual(put.docId,docId);
-            XCTAssertNotNil(revId)
+            XCTAssertEqual(put.docId,response?["id"] as? String);
+            XCTAssertNotNil(response?["rev"])
             XCTAssertNil(operationError)
-            XCTAssertTrue(statusCode / 100 == 2)
+            XCTAssertNotNil(httpInfo)
+            if let httpInfo = httpInfo {
+                XCTAssertTrue(httpInfo.statusCode / 100 == 2)
+            }
             
             let get = GetDocumentOperation()
             get.docId = put.docId
             get.databaseName = self.dbName
             
-            get.getDocumentCompletionHandler = { (doc, error) in
+            get.getDocumentCompletionHandler = { (response, httpInfo, error) in
                 getDocumentExpectation.fulfill()
                 XCTAssertNil(error)
-                XCTAssertNotNil(doc)
+                XCTAssertNotNil(response)
             }
             
             self.client!.add(operation:get)
@@ -112,12 +116,15 @@ class GetDocumentTests : XCTestCase {
         put.body = data[0]
         put.docId = NSUUID().uuidString.lowercased()
         put.databaseName = self.dbName
-        put.putDocumentCompletionHandler = { (docId,revId,statusCode, operationError) in
+        put.putDocumentCompletionHandler = { (response, httpInfo, error) in
             putDocumentExpectation.fulfill()
-            XCTAssertEqual(put.docId,docId);
-            XCTAssertNotNil(revId)
-            XCTAssertNil(operationError)
-            XCTAssertTrue(statusCode / 100 == 2)
+            XCTAssertEqual(put.docId,response?["id"] as? String);
+            XCTAssertNotNil(response?["rev"])
+            XCTAssertNil(error)
+            XCTAssertNotNil(httpInfo)
+            if let httpInfo = httpInfo {
+            XCTAssertTrue(httpInfo.statusCode / 100 == 2)
+            }
         };
         client?.add(operation:put)
         
@@ -138,12 +145,15 @@ class GetDocumentTests : XCTestCase {
         let put = PutDocumentOperation()
         put.body = data[0]
         put.docId = NSUUID().uuidString.lowercased()
-        put.putDocumentCompletionHandler = { (docId,revId,statusCode, operationError) in
+        put.putDocumentCompletionHandler = { (response, httpInfo, operationError) in
             putDocumentExpectation.fulfill()
-            XCTAssertEqual(put.docId,docId);
-            XCTAssertNotNil(revId)
+            XCTAssertEqual(put.docId,response?["id"] as? String);
+            XCTAssertNotNil(response?["rev"])
             XCTAssertNil(operationError)
-            XCTAssertTrue(statusCode / 100 == 2)
+            XCTAssertNotNil(httpInfo)
+            if let httpInfo = httpInfo {
+                XCTAssertTrue(httpInfo.statusCode / 100 == 2)
+            }
             
 
         };
@@ -155,11 +165,16 @@ class GetDocumentTests : XCTestCase {
         get.docId = put.docId
         get.databaseName = self.dbName
         
-        get.getDocumentCompletionHandler = { (doc, error) in
+        get.getDocumentCompletionHandler = { (response, httpInfo, error) in
             getDocumentExpectation.fulfill()
             XCTAssertNil(error)
-            XCTAssertNotNil(doc)
+            XCTAssertNotNil(response)
+            XCTAssertNotNil(httpInfo)
+            if let httpInfo = httpInfo {
+                XCTAssertEqual(200, httpInfo.statusCode)
+            }
         }
+        
         
         client.add(operation:get)
         

@@ -41,21 +41,22 @@ class DeleteDocumentTests : XCTestCase {
         let db = client![self.dbName!]
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
-        delete.deleteDocumentCompletionHandler = {(statusCode, error) in
+        delete.deleteDocumentCompletionHandler = {(response, httpInfo, error) in
             expectation.fulfill()
-            XCTAssertNotNil(statusCode)
-            if let statusCode = statusCode {
-                XCTAssert(statusCode / 100 == 2)
+            XCTAssertNotNil(httpInfo)
+            if let httpInfo = httpInfo {
+                XCTAssert(httpInfo.statusCode / 100 == 2)
             }
             XCTAssertNil(error)
+            XCTAssertEqual(true,response?["ok"] as? Bool)
         }
         
         let create = PutDocumentOperation()
         create.docId = "testId"
         create.body = ["hello":"world"]
-        create.putDocumentCompletionHandler = {(docId,revId,statusCode,error) in
-            delete.revId = revId
-            delete.docId = docId
+        create.putDocumentCompletionHandler = {(response, httpInfo, error) in
+            delete.revId = response?["rev"] as? String
+            delete.docId = response?["id"] as? String
         }
         
         delete.addDependency(create)
@@ -73,9 +74,9 @@ class DeleteDocumentTests : XCTestCase {
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.docId = "testDocId"
-        delete.deleteDocumentCompletionHandler = {(statusCode, error) in
+        delete.deleteDocumentCompletionHandler = {(response, httpInfo, error) in
             expectation.fulfill()
-            XCTAssertNil(statusCode)
+            XCTAssertNil(httpInfo)
             XCTAssertNotNil(error)
         }
         
@@ -90,9 +91,9 @@ class DeleteDocumentTests : XCTestCase {
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.docId = "testDocId"
-        delete.deleteDocumentCompletionHandler = {(statusCode, error) in
+        delete.deleteDocumentCompletionHandler = {(response, httpInfo, error) in
             expectation.fulfill()
-            XCTAssertNil(statusCode)
+            XCTAssertNil(httpInfo)
             XCTAssertNotNil(error)
         }
         
@@ -105,10 +106,10 @@ class DeleteDocumentTests : XCTestCase {
         let db = client![self.dbName!]
         let expectation = self.expectation(withDescription:"Delete document")
         let delete = DeleteDocumentOperation()
-        delete.deleteDocumentCompletionHandler = {(statusCode, error) in
-            XCTAssertNotNil(statusCode)
-            if let statusCode = statusCode {
-                XCTAssert(statusCode / 100 == 2)
+        delete.deleteDocumentCompletionHandler = {(response, httpInfo, error) in
+            XCTAssertNotNil(httpInfo)
+            if let httpInfo = httpInfo {
+                XCTAssert(httpInfo.statusCode / 100 == 2)
             }
             XCTAssertNil(error)
         }
@@ -116,16 +117,16 @@ class DeleteDocumentTests : XCTestCase {
         let create = PutDocumentOperation()
         create.docId = "testId"
         create.body = ["hello":"world"]
-        create.putDocumentCompletionHandler = {(docId,revId,statusCode,error) in
-            delete.revId = revId
-            delete.docId = docId
+        create.putDocumentCompletionHandler = {(response, httpInfo, error) in
+            delete.revId = response?["rev"] as? String
+            delete.docId = response?["id"] as? String
         }
         
         let get = GetDocumentOperation()
         get.docId = "testId"
-        get.getDocumentCompletionHandler = {(document , error) in
+        get.getDocumentCompletionHandler = {(response, httpInfo, error) in
                         expectation.fulfill()
-                        XCTAssertNil(document)
+                        XCTAssertNil(response)
                         XCTAssertNotNil(error)
             }
         

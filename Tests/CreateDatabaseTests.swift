@@ -45,11 +45,11 @@ class CreateDatabaseTests : XCTestCase {
         
         let create = CreateDatabaseOperation()
         create.databaseName = self.dbName
-        create.createDatabaseCompletionHandler = {( statusCode, error) in
+        create.createDatabaseCompletionHandler = {(response, httpInfo, error) in
             createExpectation.fulfill()
-            XCTAssertNotNil(statusCode)
-            if let statusCode = statusCode {
-                XCTAssertTrue(statusCode / 100 == 2)
+            XCTAssertNotNil(httpInfo)
+            if let httpInfo = httpInfo {
+                XCTAssertTrue(httpInfo.statusCode / 100 == 2)
             }
             XCTAssertNil(error)
         }
