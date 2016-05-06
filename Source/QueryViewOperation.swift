@@ -337,7 +337,7 @@ public class QueryViewOperation: CouchDatabaseOperation {
     }
     
     public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
-        guard  error != nil, let httpInfo = httpInfo
+        guard  error == nil, let httpInfo = httpInfo
         else {
             self.callCompletionHandler(error:error!)
             return

@@ -94,6 +94,7 @@ public class GetDocumentOperation: CouchDatabaseOperation {
             if let data = data {
                 let json = try NSJSONSerialization.jsonObject(with: data) as! [String:AnyObject]
                 if httpInfo.statusCode == 200 {
+                    self.getDocumentCompletionHandler?(response: json, httpInfo: httpInfo, error: nil)
                 } else {
                     self.getDocumentCompletionHandler?(response: json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data:data, encoding:NSUTF8StringEncoding)))
                 }
