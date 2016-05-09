@@ -147,8 +147,8 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
         do {
             if let data = data {
                 let json = try NSJSONSerialization.jsonObject(with: data) as! [String:AnyObject]
-                
                 if httpInfo.statusCode / 100 == 2 {
+                    self.processResponse(json: json)
                     self.completionHandler?(response: json, httpInfo: httpInfo, error: nil)
                 } else {
                     self.completionHandler?(response: json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data: data, encoding: NSUTF8StringEncoding)))
@@ -166,6 +166,19 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
             self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
         }
         
+    }
+    
+    /**
+     This method is called from the
+     `processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?)` method,
+     it will contain the deserialized json response in the event the request returned with a
+     2xx status code. 
+     
+     - Note: This should be overridden to trigger other handlers such as a handler for each row of
+     a returned view.
+     */
+    public func processResponse(json: [String:AnyObject]) {
+        return
     }
 
     
