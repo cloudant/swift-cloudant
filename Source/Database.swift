@@ -67,7 +67,7 @@ public class Database  {
         
         
         var doc:[String:AnyObject]?
-        getDocument.getDocumentCompletionHandler = { (response, httpInfo, error ) in
+        getDocument.completionHandler = { (response, httpInfo, error ) in
             doc = response
         };
         

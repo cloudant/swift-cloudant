@@ -40,16 +40,6 @@ public class GetDocumentOperation: CouchDatabaseOperation {
       Must be set before a call can be successfully made.
     */
     public var docId: String? = nil
-    
-    /**
-      Completion block to run when the operation completes.
-    
-      - parameter response: - The full deseralised JSON response.
-      - parameter httpInfo: - Information about the HTTP response.
-      - parameter error: - a pointer to an error object containing
-       information about an error executing the operation
-    */
-    public var getDocumentCompletionHandler: ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)?
 
     public override func validate() -> Bool {
         return super.validate() && docId != nil
@@ -80,7 +70,7 @@ public class GetDocumentOperation: CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.getDocumentCompletionHandler?(response:nil, httpInfo: nil ,error: error)
+        self.completionHandler?(response:nil, httpInfo: nil ,error: error)
     }
     
     public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
@@ -94,13 +84,13 @@ public class GetDocumentOperation: CouchDatabaseOperation {
             if let data = data {
                 let json = try NSJSONSerialization.jsonObject(with: data) as! [String:AnyObject]
                 if httpInfo.statusCode == 200 {
-                    self.getDocumentCompletionHandler?(response: json, httpInfo: httpInfo, error: nil)
+                    self.completionHandler?(response: json, httpInfo: httpInfo, error: nil)
                 } else {
-                    self.getDocumentCompletionHandler?(response: json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data:data, encoding:NSUTF8StringEncoding)))
+                    self.completionHandler?(response: json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data:data, encoding:NSUTF8StringEncoding)))
                 }
                 
             } else {
-                self.getDocumentCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: nil))
+                self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: nil))
             }
         } catch {
             let response:String?
@@ -110,7 +100,7 @@ public class GetDocumentOperation: CouchDatabaseOperation {
                 response = nil
             }
             
-            self.getDocumentCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
+            self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
         }
     }
 }

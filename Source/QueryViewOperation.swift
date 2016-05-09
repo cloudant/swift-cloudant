@@ -206,15 +206,6 @@ public class QueryViewOperation: CouchDatabaseOperation {
     public var stale: Stale? = nil
     
     /**
-     Sets a completion handler to run when the operation completes.
-     
-     - parameter response: - The full deseralised JSON response.
-     - parameter httpInfo: - Information about the HTTP response.
-     - parameter error: - ErrorProtocol instance with information about an error executing the operation
-     */
-    public var queryViewCompletionHandler: ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)?
-    
-    /**
      Sets a handler to run for each row retrieved by the view.
      
      - parameter row: dictionary of the JSON data from the view row
@@ -333,7 +324,7 @@ public class QueryViewOperation: CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.queryViewCompletionHandler?(response:nil, httpInfo:nil, error: error)
+        self.completionHandler?(response:nil, httpInfo:nil, error: error)
     }
     
     public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
@@ -351,7 +342,7 @@ public class QueryViewOperation: CouchDatabaseOperation {
                     for row:[String:AnyObject] in rows {
                         self.rowHandler?(row: row)
                     }
-                    self.queryViewCompletionHandler?(response:json, httpInfo:httpInfo, error: nil)
+                    self.completionHandler?(response:json, httpInfo:httpInfo, error: nil)
                 } else {
                     callCompletionHandler(error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data, NSUTF8StringEncoding)))
                 }
@@ -365,7 +356,7 @@ public class QueryViewOperation: CouchDatabaseOperation {
             } else {
                 response = nil
             }
-            self.queryViewCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
+            self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
         }
 
     }

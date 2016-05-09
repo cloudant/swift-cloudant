@@ -122,6 +122,15 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
         }
     }
     
+    /**
+     Sets a completion handler to run when the operation completes.
+     
+     - parameter response: - The full deseralised JSON response.
+     - parameter httpInfo: - Information about the HTTP response.
+     - parameter error: - ErrorProtocol instance with information about an error executing the operation
+    */
+    public var completionHandler: ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)? = nil
+    
     private var executor:OperationRequestExecutor? = nil
     
     public override init() {

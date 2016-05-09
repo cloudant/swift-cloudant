@@ -32,16 +32,6 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     
     /** Body of document. Must be serialisable with NSJSONSerialization */
     public var body: [String:AnyObject]? = nil
-
-    /**
-    Completion block to run when the operation completes.
-    
-     - parameter response: - The full deseralised JSON response.
-     - parameter httpInfo: - Information about the HTTP response.
-     - parameter error: - a pointer to an error object containing
-     information about an error executing the operation
-    */
-    var putDocumentCompletionHandler: ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)? = nil
     
     public override func validate() -> Bool {
         return super.validate() && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body!)
@@ -79,7 +69,7 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        putDocumentCompletionHandler?(response: nil, httpInfo: nil, error: error)
+        completionHandler?(response: nil, httpInfo: nil, error: error)
     }
     
     public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
@@ -94,13 +84,13 @@ public class PutDocumentOperation: CouchDatabaseOperation {
                 let json = try NSJSONSerialization.jsonObject(with: data) as! [String: AnyObject]
                 // Check status code
                 if httpInfo.statusCode == 201 || httpInfo.statusCode == 202 {
-                      putDocumentCompletionHandler?(response: json, httpInfo: httpInfo, error: nil)
+                      completionHandler?(response: json, httpInfo: httpInfo, error: nil)
                 } else {
-                    putDocumentCompletionHandler?(response: json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data:data, encoding: NSUTF8StringEncoding)))
+                    completionHandler?(response: json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data:data, encoding: NSUTF8StringEncoding)))
                 }
                 
             } else {
-              self.putDocumentCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: nil))
+              self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: nil))
             }
         } catch {
             let response:String?
@@ -109,7 +99,7 @@ public class PutDocumentOperation: CouchDatabaseOperation {
             } else {
                 response = nil
             }
-            self.putDocumentCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
+            self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
         }
 
     }
