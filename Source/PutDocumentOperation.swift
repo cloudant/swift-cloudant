@@ -71,36 +71,5 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     public override func callCompletionHandler(error: ErrorProtocol) {
         completionHandler?(response: nil, httpInfo: nil, error: error)
     }
-    
-    public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
-        guard error == nil, let httpInfo = httpInfo
-        else {
-            callCompletionHandler(error:error!)
-            return
-        }
-        
-        do {
-            if let data = data {
-                let json = try NSJSONSerialization.jsonObject(with: data) as! [String: AnyObject]
-                // Check status code
-                if httpInfo.statusCode == 201 || httpInfo.statusCode == 202 {
-                      completionHandler?(response: json, httpInfo: httpInfo, error: nil)
-                } else {
-                    completionHandler?(response: json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data:data, encoding: NSUTF8StringEncoding)))
-                }
-                
-            } else {
-              self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: nil))
-            }
-        } catch {
-            let response:String?
-            if let data = data {
-                response = String(data:data, encoding: NSUTF8StringEncoding)
-            } else {
-                response = nil
-            }
-            self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
-        }
 
-    }
 }
