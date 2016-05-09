@@ -38,7 +38,7 @@ import Foundation
  
  // Set a completion handler to get a callback 
  // when the operation finishes
- view.queryViewCompletionHandler = {(error) in
+ view.completionHandler = {(response, httpInfo, error) in
      if error != nil {
      // Example: handle an error by printing a message
      print("Error")
