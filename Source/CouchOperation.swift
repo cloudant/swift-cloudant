@@ -22,49 +22,19 @@ import Foundation
  */
 enum Errors : ErrorProtocol {
     /**
-    Creating a database failed.
-    */
-    case CreateDatabaseFailed(statusCode:Int, jsonResponse:String?)
-    /**
-    Deleting a database failed.
-    */
-    case DeleteDatabaseFailed(statusCode:Int, jsonResponse:String?)
-    /**
     Validation of operation settings failed.
     */
     case ValidationFailed
-    /**
-    Deleting a Query index failed.
-    */
-    case DeleteQueryIndexFailed(statusCode:Int, jsonResponse:String?)
-    /**
-    Creating a Query index failed.
-    */
-    case CreateQueryIndexFailed(statusCode:Int, jsonResponse:String?)
-    /**
-    Getting a document failed.
-    */
-    case GetDocumentFailed(statusCode:Int, jsonResponse:String?)
-    /**
-    Creating or updating a document failed.
-    */
-    case CreateUpdateDocumentFailed(statusCode:Int, jsonResponse:String?)
-    /**
-    Deleting a document failed.
-    */
-    case DeleteDocumentFailed(statusCode:Int, jsonResponse:String?)
-    /**
-    Finding documents failed.
-    */
-    case FindDocumentsFailed(statusCode:Int, jsonResponse:String?)
+
     /**
      The JSON format wasn't what we expected.
      */
     case UnexpectedJSONFormat(statusCode:Int, response:String?)
+    
     /**
-     The query view operation failed.
-    */
-    case QueryViewFailed(statusCode: Int, response: String?)
+     An unexpected HTTP status code (e.g. 4xx or 5xx) was received.
+     */
+    case HTTP(statusCode:Int, response:String?)
 };
 
 /**
@@ -152,15 +122,65 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
         }
     }
     
+    /**
+     Sets a completion handler to run when the operation completes.
+     
+     - parameter response: - The full deseralised JSON response.
+     - parameter httpInfo: - Information about the HTTP response.
+     - parameter error: - ErrorProtocol instance with information about an error executing the operation.
+    */
+    public var completionHandler: ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)? = nil
+    
     private var executor:OperationRequestExecutor? = nil
     
     public override init() {
         super.init()
     }
 
-    public func processResponse(data:NSData?, statusCode:Int, error:ErrorProtocol?){
+    public func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+        guard error == nil, let httpInfo = httpInfo
+            else  {
+                self.callCompletionHandler(error: error!)
+                return
+        }
+        
+        do {
+            if let data = data {
+                let json = try NSJSONSerialization.jsonObject(with: data) as! [String:AnyObject]
+                if httpInfo.statusCode / 100 == 2 {
+                    self.processResponse(json: json)
+                    self.completionHandler?(response: json, httpInfo: httpInfo, error: nil)
+                } else {
+                    self.completionHandler?(response: json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data: data, encoding: NSUTF8StringEncoding)))
+                }
+            } else {
+                self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: nil))
+            }
+        } catch {
+            let response:String?
+            if let data = data {
+                response = String(data: data, encoding: NSUTF8StringEncoding)
+            } else {
+                response = nil
+            }
+            self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
+        }
         
     }
+    
+    /**
+     This method is called from the
+     `processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?)` method,
+     it will contain the deserialized json response in the event the request returned with a
+     2xx status code. 
+     
+     - Note: This should be overridden to trigger other handlers such as a handler for each row of
+     a returned view.
+     */
+    public func processResponse(json: [String:AnyObject]) {
+        return
+    }
+
     
     /**
      Calls the completion handler for the operation with the specified error.

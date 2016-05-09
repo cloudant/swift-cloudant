@@ -32,17 +32,6 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     
     /** Body of document. Must be serialisable with NSJSONSerialization */
     public var body: [String:AnyObject]? = nil
-
-    /**
-    Completion block to run when the operation completes.
-    
-    - parameter docId:  the id of the document written to the database
-    - parameter revId: the revision of the document written to the database
-    - parameter statusCode: the HTTP status code
-    - parameter operationError: a pointer to an error object containing
-    information about an error executing the operation
-    */    
-    var putDocumentCompletionHandler: ((docId:String?, revId:String?, statusCode:Int, operationError:ErrorProtocol?) -> ())? = nil
     
     public override func validate() -> Bool {
         return super.validate() && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body!)
@@ -80,47 +69,7 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        putDocumentCompletionHandler?(docId: nil, revId: nil, statusCode: 0, operationError: error)
+        completionHandler?(response: nil, httpInfo: nil, error: error)
     }
-    
-    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
-        if let error = error {
-            callCompletionHandler(error:error)
-            return
-        }
-        
-        // Check status code
-        if statusCode == 201 || statusCode == 202 {
-            guard let data = data else {
-                return
-            }
-            
-            do {
-                // Convert the response to JSON.
-                let json = try NSJSONSerialization.jsonObject(with:data, options: NSJSONReadingOptions())
-                if let jsonDict = json as? [String:AnyObject] {
-                    putDocumentCompletionHandler?(docId: jsonDict["id"] as? String, revId: jsonDict["rev"] as? String, statusCode: statusCode, operationError: nil)
-                } else {
-                    callCompletionHandler(error: Errors.UnexpectedJSONFormat(statusCode: statusCode, response: String(data: data, encoding: NSUTF8StringEncoding)))
-                }
-            } catch {
-                callCompletionHandler(error:error)
-            }
-        } else {
-            guard let data = data else {
-                putDocumentCompletionHandler?(docId: nil,
-                                              revId: nil,
-                                              statusCode: statusCode,
-                                              operationError: Errors.CreateUpdateDocumentFailed(statusCode: statusCode, jsonResponse: nil))
-                return
-            }
-            
-            
-            putDocumentCompletionHandler?(docId: nil,
-                                          revId: nil,
-                                          statusCode: statusCode,
-                                          operationError: Errors.CreateUpdateDocumentFailed(statusCode: statusCode,
-                                                                                          jsonResponse: String(data: data, encoding: NSUTF8StringEncoding)))
-        }
-    }
+
 }

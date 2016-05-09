@@ -76,11 +76,10 @@ extension XCTestCase {
     func createDatabase(databaseName:String, client:CouchDBClient) -> Void {
         let create = CreateDatabaseOperation()
         create.databaseName = databaseName;
-        create.createDatabaseCompletionHandler = {(statusCode, error) in
-            if let statusCode = statusCode {
-                XCTAssert(statusCode / 100 == 2)
-            } else {
-                XCTAssertNotNil(statusCode)
+        create.completionHandler = {(response, httpInfo, error) in
+            XCTAssertNotNil(httpInfo)
+            if let httpInfo  = httpInfo {
+                XCTAssert(httpInfo.statusCode / 100 == 2)
             }
             XCTAssertNil(error)
         }
@@ -91,11 +90,10 @@ extension XCTestCase {
     func deleteDatabase(databaseName: String, client: CouchDBClient) -> Void {
         let delete = DeleteDatabaseOperation()
         delete.databaseName = databaseName
-        delete.deleteDatabaseCompletionHandler = {(statusCode, error) in
-            if let statusCode = statusCode {
-                XCTAssert(statusCode / 100 == 2)
-            } else {
-                XCTAssertNotNil(statusCode)
+        delete.completionHandler = {(response, httpInfo, error) in
+            XCTAssertNotNil(httpInfo)
+            if let httpInfo = httpInfo {
+                XCTAssert(httpInfo.statusCode / 100 == 2)
             }
             XCTAssertNil(error)
         }

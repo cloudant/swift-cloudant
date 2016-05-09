@@ -51,18 +51,6 @@ public class DeleteDocumentOperation : CouchDatabaseOperation {
      */
     public var docId:String? = nil
     
-    /**
-     * A block of code to call when the operation completes.
-     * This block will be called once per operation.
-     *
-     * statusCode: The status code returned from the request, will be nil if the operation
-     *                       did not make an http connection.
-     *
-     * error: An object representing the error that occured, will be nil when the operation
-     *                  successfully makes a HTTP request.
-     */
-    public var deleteDocumentCompletionHandler : ((statusCode:Int?, error:ErrorProtocol?) ->())? = nil
-    
     public override func validate() -> Bool {
         return super.validate() && revId != nil && docId != nil
     }
@@ -80,14 +68,7 @@ public class DeleteDocumentOperation : CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.deleteDocumentCompletionHandler?(statusCode: nil,error: error)
+        self.completionHandler?(response: nil, httpInfo: nil, error: error)
     }
-    
-    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
-        if let error = error {
-            callCompletionHandler(error: error)
-        } else {
-            deleteDocumentCompletionHandler?(statusCode: statusCode,error: error);
-        }
-    }
+
 }

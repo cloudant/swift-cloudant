@@ -206,13 +206,6 @@ public class QueryViewOperation: CouchDatabaseOperation {
     public var stale: Stale? = nil
     
     /**
-     Sets a completion handler to run when the operation completes.
-     
-     - parameter error: - ErrorProtocol instance with information about an error executing the operation
-     */
-    public var queryViewCompletionHandler: ((error: ErrorProtocol?) -> Void)?
-    
-    /**
      Sets a handler to run for each row retrieved by the view.
      
      - parameter row: dictionary of the JSON data from the view row
@@ -331,29 +324,13 @@ public class QueryViewOperation: CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.queryViewCompletionHandler?(error: error)
+        self.completionHandler?(response:nil, httpInfo:nil, error: error)
     }
     
-    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
-        if let error = error {
-            self.callCompletionHandler(error:error)
-            return
-        }
-        
-        // Check status code is 200
-        if statusCode == 200 {
-            do {
-                let json = try NSJSONSerialization.jsonObject(with: data!)
-                let rows = json["rows"] as! [[String:AnyObject]]
-                for row:[String:AnyObject] in rows {
-                    self.rowHandler?(row: row)
-                }
-                self.queryViewCompletionHandler?(error: nil)
-            } catch {
-                callCompletionHandler(error: error)
-            }
-        } else {
-            callCompletionHandler(error: Errors.QueryViewFailed(statusCode: statusCode, response: String(data, NSUTF8StringEncoding)))
+    public override func processResponse(json: [String : AnyObject]) {
+        let rows = json["rows"] as! [[String:AnyObject]]
+        for row:[String:AnyObject] in rows {
+            self.rowHandler?(row: row)
         }
     }
     

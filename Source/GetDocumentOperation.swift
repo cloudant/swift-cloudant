@@ -40,16 +40,6 @@ public class GetDocumentOperation: CouchDatabaseOperation {
       Must be set before a call can be successfully made.
     */
     public var docId: String? = nil
-    
-    /**
-      Completion block to run when the operation completes.
-    
-      - parameter document: - The document read from the server
-    
-      - parameter operationError: - a pointer to an error object containing
-       information about an error executing the operation
-    */
-    public var getDocumentCompletionHandler: ((document:[String:AnyObject]?, operationError:ErrorProtocol?) -> ())?
 
     public override func validate() -> Bool {
         return super.validate() && docId != nil
@@ -80,33 +70,7 @@ public class GetDocumentOperation: CouchDatabaseOperation {
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.getDocumentCompletionHandler?(document: nil, operationError: error)
+        self.completionHandler?(response:nil, httpInfo: nil ,error: error)
     }
     
-    public override func processResponse(data: NSData?, statusCode: Int, error: ErrorProtocol?) {
-        if let error = error {
-            callCompletionHandler(error:error)
-            return
-        }
-        
-        // Check status code is 200
-        if statusCode == 200 {
-            guard let data = data else {
-                return
-            }
-            
-            do {
-                let json = try NSJSONSerialization.jsonObject(with:data, options: NSJSONReadingOptions())
-                getDocumentCompletionHandler?(document: json as? [String:AnyObject], operationError: nil)
-            } catch {
-                callCompletionHandler(error:error)
-            }
-        } else {
-            guard let data = data else {
-                callCompletionHandler(error: Errors.GetDocumentFailed(statusCode: statusCode, jsonResponse: nil))
-                return
-            }
-            callCompletionHandler(error:Errors.GetDocumentFailed(statusCode: statusCode, jsonResponse: String(data: data, encoding: NSUTF8StringEncoding )))
-        }
-    }
 }
