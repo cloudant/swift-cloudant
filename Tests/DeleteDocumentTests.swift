@@ -41,7 +41,7 @@ class DeleteDocumentTests : XCTestCase {
         let db = client![self.dbName!]
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
-        delete.deleteDocumentCompletionHandler = {(response, httpInfo, error) in
+        delete.completionHandler = {(response, httpInfo, error) in
             expectation.fulfill()
             XCTAssertNotNil(httpInfo)
             if let httpInfo = httpInfo {
@@ -54,7 +54,7 @@ class DeleteDocumentTests : XCTestCase {
         let create = PutDocumentOperation()
         create.docId = "testId"
         create.body = ["hello":"world"]
-        create.putDocumentCompletionHandler = {(response, httpInfo, error) in
+        create.completionHandler = {(response, httpInfo, error) in
             delete.revId = response?["rev"] as? String
             delete.docId = response?["id"] as? String
         }
@@ -74,7 +74,7 @@ class DeleteDocumentTests : XCTestCase {
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.docId = "testDocId"
-        delete.deleteDocumentCompletionHandler = {(response, httpInfo, error) in
+        delete.completionHandler = {(response, httpInfo, error) in
             expectation.fulfill()
             XCTAssertNil(httpInfo)
             XCTAssertNotNil(error)
@@ -91,7 +91,7 @@ class DeleteDocumentTests : XCTestCase {
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.docId = "testDocId"
-        delete.deleteDocumentCompletionHandler = {(response, httpInfo, error) in
+        delete.completionHandler = {(response, httpInfo, error) in
             expectation.fulfill()
             XCTAssertNil(httpInfo)
             XCTAssertNotNil(error)
@@ -106,7 +106,7 @@ class DeleteDocumentTests : XCTestCase {
         let db = client![self.dbName!]
         let expectation = self.expectation(withDescription:"Delete document")
         let delete = DeleteDocumentOperation()
-        delete.deleteDocumentCompletionHandler = {(response, httpInfo, error) in
+        delete.completionHandler = {(response, httpInfo, error) in
             XCTAssertNotNil(httpInfo)
             if let httpInfo = httpInfo {
                 XCTAssert(httpInfo.statusCode / 100 == 2)
@@ -117,14 +117,14 @@ class DeleteDocumentTests : XCTestCase {
         let create = PutDocumentOperation()
         create.docId = "testId"
         create.body = ["hello":"world"]
-        create.putDocumentCompletionHandler = {(response, httpInfo, error) in
+        create.completionHandler = {(response, httpInfo, error) in
             delete.revId = response?["rev"] as? String
             delete.docId = response?["id"] as? String
         }
         
         let get = GetDocumentOperation()
         get.docId = "testId"
-        get.getDocumentCompletionHandler = {(response, httpInfo, error) in
+        get.completionHandler = {(response, httpInfo, error) in
                         expectation.fulfill()
                         XCTAssertNil(response)
                         XCTAssertNotNil(error)

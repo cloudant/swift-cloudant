@@ -122,15 +122,52 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
         }
     }
     
+    /**
+     Sets a completion handler to run when the operation completes.
+     
+     - parameter response: - The full deseralised JSON response.
+     - parameter httpInfo: - Information about the HTTP response.
+     - parameter error: - ErrorProtocol instance with information about an error executing the operation.
+    */
+    public var completionHandler: ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)? = nil
+    
     private var executor:OperationRequestExecutor? = nil
     
     public override init() {
         super.init()
     }
 
-    public func processResponse(data:NSData?, httpInfo:HttpInfo?, error:ErrorProtocol?){
+    public func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+        guard error == nil, let httpInfo = httpInfo
+            else  {
+                self.callCompletionHandler(error: error!)
+                return
+        }
+        
+        do {
+            if let data = data {
+                let json = try NSJSONSerialization.jsonObject(with: data) as! [String:AnyObject]
+                
+                if httpInfo.statusCode / 100 == 2 {
+                    self.completionHandler?(response: json, httpInfo: httpInfo, error: nil)
+                } else {
+                    self.completionHandler?(response: json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data: data, encoding: NSUTF8StringEncoding)))
+                }
+            } else {
+                self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: nil))
+            }
+        } catch {
+            let response:String?
+            if let data = data {
+                response = String(data: data, encoding: NSUTF8StringEncoding)
+            } else {
+                response = nil
+            }
+            self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
+        }
         
     }
+
     
     /**
      Calls the completion handler for the operation with the specified error.

@@ -42,57 +42,12 @@ public class DeleteDatabaseOperation : CouchOperation {
         }
     }
     
-    /**
-        A block to call when the operation completes.
-     - parameter response: The full JSON response.
-     - parameter httpInfo: Information about the HTTP response.
-     - parameter error: An Error that occured.
-     */
-    public var deleteDatabaseCompletionHandler: ((response:[String:AnyObject]?, httpInfo: HttpInfo?, error:ErrorProtocol?)-> Void)? = nil
-    
-    
     public override func validate() -> Bool {
         return super.validate() && self.databaseName != nil // should work iirc
     }
     
     public override func callCompletionHandler(error: ErrorProtocol) {
-        self.deleteDatabaseCompletionHandler?(response: nil, httpInfo: nil, error: error)
-    }
-    
-    public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
-        guard error == nil, let httpInfo = httpInfo
-            else  {
-                self.callCompletionHandler(error: error!)
-                return
-        }
-        
-        do {
-            if let data = data {
-                let json = try NSJSONSerialization.jsonObject(with: data) as! [String: AnyObject]
-                
-                if httpInfo.statusCode == 200 || httpInfo.statusCode ==  202 { //Couch could return accepted instead of ok.
-                    /// success!
-                    self.deleteDatabaseCompletionHandler?(response:json, httpInfo: httpInfo, error: nil)
-                } else {
-                    let response = String(data: data, encoding: NSUTF8StringEncoding)
-                    self.deleteDatabaseCompletionHandler?(response:json, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: response))
-                }
-                
-            } else {
-                self.deleteDatabaseCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: nil))
-            }
-        } catch {
-            let response:String?
-            if let data = data {
-                response = String(data:data, encoding: NSUTF8StringEncoding)
-            } else {
-                response = nil
-            }
-            self.deleteDatabaseCompletionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
-        }
-        
-        
-
+        self.completionHandler?(response: nil, httpInfo: nil, error: error)
     }
     
 }

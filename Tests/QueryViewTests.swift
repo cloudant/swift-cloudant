@@ -219,7 +219,7 @@ public class QueryViewTests : XCTestCase {
             XCTAssertNotNil(row)
         }
         
-        view.queryViewCompletionHandler = {(error) in
+        view.completionHandler = {(error) in
             completionHandler.fulfill()
             XCTAssertNil(error)
         }

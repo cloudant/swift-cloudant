@@ -42,7 +42,7 @@ class PutDocumentTests : XCTestCase {
         let put = PutDocumentOperation()
         put.docId = "Doc1"
         put.body = ["hello":"world"]
-        put.putDocumentCompletionHandler = {(response,httpInfo,error) in
+        put.completionHandler = {(response,httpInfo,error) in
             putExpectation.fulfill()
             XCTAssertEqual("Doc1", response?["id"] as? String)
             XCTAssertNotNil(response?["rev"])
