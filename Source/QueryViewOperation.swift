@@ -327,38 +327,11 @@ public class QueryViewOperation: CouchDatabaseOperation {
         self.completionHandler?(response:nil, httpInfo:nil, error: error)
     }
     
-    public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
-        guard  error == nil, let httpInfo = httpInfo
-        else {
-            self.callCompletionHandler(error:error!)
-            return
+    public override func processResponse(json: [String : AnyObject]) {
+        let rows = json["rows"] as! [[String:AnyObject]]
+        for row:[String:AnyObject] in rows {
+            self.rowHandler?(row: row)
         }
-        
-        do {
-            if let data = data {
-                let json = try NSJSONSerialization.jsonObject(with: data) as! [String: AnyObject]
-                if httpInfo.statusCode == 200 {  // Check status code is 200
-                    let rows = json["rows"] as! [[String:AnyObject]]
-                    for row:[String:AnyObject] in rows {
-                        self.rowHandler?(row: row)
-                    }
-                    self.completionHandler?(response:json, httpInfo:httpInfo, error: nil)
-                } else {
-                    callCompletionHandler(error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data, NSUTF8StringEncoding)))
-                }
-            }
-            
-            
-        } catch {
-            let response: String?
-            if let data = data {
-                response = String(data:data, encoding: NSUTF8StringEncoding)
-            } else {
-                response = nil
-            }
-            self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
-        }
-
     }
     
     func convertJson(key: AnyObject) -> String {
