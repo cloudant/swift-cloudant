@@ -93,6 +93,7 @@ class DeleteDocumentTests : XCTestCase {
         delete.docId = "testDocId"
         delete.completionHandler = {(response, httpInfo, error) in
             expectation.fulfill()
+            XCTAssertNil(response)
             XCTAssertNil(httpInfo)
             XCTAssertNotNil(error)
         }
@@ -126,7 +127,7 @@ class DeleteDocumentTests : XCTestCase {
         get.docId = "testId"
         get.completionHandler = {(response, httpInfo, error) in
                         expectation.fulfill()
-                        XCTAssertNil(response)
+                        XCTAssertNotNil(response)
                         XCTAssertNotNil(error)
             }
         
