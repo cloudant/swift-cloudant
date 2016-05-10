@@ -78,6 +78,10 @@ protocol HTTPRequestOperation {
  */
 class OperationRequestBuilder {
     
+    enum Error : ErrorProtocol {
+        case URLGenerationFailed
+    }
+    
     /**
      The operation this builder will turn into a HTTP object.
     */
@@ -95,11 +99,10 @@ class OperationRequestBuilder {
     /**
         Builds the NSURLRequest from the operation in the property `operation`
      */
-    func buildRequest() -> NSURLRequest {
+    func buildRequest() throws -> NSURLRequest {
         guard let components = NSURLComponents(url: operation.rootURL, resolvingAgainstBaseURL: false)
         else {
-            //crash for now
-            abort()
+            throw Error.URLGenerationFailed
         }
         components.path = operation.httpPath
         var queryItems : [NSURLQueryItem] = []
@@ -113,9 +116,9 @@ class OperationRequestBuilder {
         
         guard let url = components.url
         else {
-            // crash for now
-            abort()
+            throw Error.URLGenerationFailed
         }
+        
         let request = NSMutableURLRequest(url: url)
         request.cachePolicy = .useProtocolCachePolicy
         request.timeoutInterval = 10.0
