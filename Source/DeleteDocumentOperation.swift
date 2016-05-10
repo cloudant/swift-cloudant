@@ -25,7 +25,7 @@ import Foundation
         let delete = DeleteDocumentOperation()
         delete.docId = "exampleDocId"
         delete.revId = "1-examplerevid"
-        delete.deleteDocumentCompletionBlock = { (statusCode,error) in 
+        delete.completionHandler = { (response, httpInfo, error) in
                 if let error = error {
                     NSLog("An error occured attemtping to delete a document")
                 } else {

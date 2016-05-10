@@ -55,11 +55,11 @@ let db = client["database"]
 let create = PutDocumentOperation()
 create.docId = "doc1"
 create.body = ["hello":"world"]
-create.putDocumentCompletionHandler = {(docId, revId, statusCode, error) in
+create.completionHandler = {(response, httpInfo, error) in
     if let error = error {
         NSLog("Encountered an error while creating a document. Error:\(error)")
     } else {
-        NSLog("Created document \(docId) with revision id \(revId)");
+        NSLog("Created document \(response?["id"]) with revision id \(response?["rev"])");
     }
 }
 db.add(operation:create)
@@ -67,11 +67,11 @@ db.add(operation:create)
 // Read a document
 let read = GetDocumentOperation()
 read.docId = "doc1"
-read.getDocumentCompletionHandler = { (doc, error) in
+read.completionHandler = { (response, httpInfo, error) in
     if let error = error {
         NSLog("Encountered an error while reading a document. Error:\(error)";
     } else {
-        NSLog("Read document: \(doc)");
+        NSLog("Read document: \(response)");
     }   
 }
 db.add(operation:read)
@@ -80,7 +80,7 @@ db.add(operation:read)
 let delete = DeleteDocumentOperation()
 delete.docId = "doc1"
 delete.revId = "1-revisionidhere"
-delete.deleteDocumentCompletionHandler = {(statusCode, error) in
+delete.completionHandler = {(response, httpInfo, error) in
     if let error = error {
         NSLog("Encountered an error while deleting a document. Error: \(error)");
     } else {
