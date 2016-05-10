@@ -59,34 +59,39 @@ class OperationRequestExecutor {
      */
     func executeRequest (){
         
-        let builder = OperationRequestBuilder(operation: self.operation)
-        let request = builder.buildRequest()
-        
-        self.task = self.operation.session.dataTask(request: request, completionHandler: { (data, response, error) -> Void in
+        do {
+            let builder = OperationRequestBuilder(operation: self.operation)
+            let request = try builder.buildRequest()
             
-            // Should break the retain cycle but not sure.
-            self.task = nil
-            
-            if self.operation.isCancelled {
+            self.task = self.operation.session.dataTask(request: request, completionHandler: { (data, response, error) -> Void in
+                
+                // Should break the retain cycle but not sure.
+                self.task = nil
+                
+                if self.operation.isCancelled {
+                    self.operation.completeOperation()
+                    return
+                }
+                
+                
+                let httpInfo: HttpInfo?
+                
+                if let response = response as? NSHTTPURLResponse {
+                    httpInfo = HttpInfo(statusCode: response.statusCode, headers: response.allHeaderFields as! [String:String])
+                } else {
+                    httpInfo = nil
+                }
+                
+                self.operation.processResponse(data: data, httpInfo: httpInfo, error: error)
                 self.operation.completeOperation()
-                return
-            }
+                
+            })
             
-            
-            let httpInfo: HttpInfo?
-            
-            if let response = response as? NSHTTPURLResponse {
-                httpInfo = HttpInfo(statusCode: response.statusCode, headers: response.allHeaderFields as! [String:String])
-            } else {
-                httpInfo = nil
-            }
-            
-            self.operation.processResponse(data: data, httpInfo: httpInfo, error: error)
+            self.task?.resume()
+        } catch {
+            self.operation.processResponse(data: nil, httpInfo: nil, error: error)
             self.operation.completeOperation()
-        
-        })
-        
-        self.task?.resume()
+        }
         
     }
     
