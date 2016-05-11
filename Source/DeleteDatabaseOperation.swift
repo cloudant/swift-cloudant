@@ -14,36 +14,35 @@
 //  and limitations under the License.
 //
 
-
 import Foundation
 
 /**
  Deletes a database from a CouchDB instance
  */
-public class DeleteDatabaseOperation : CouchOperation {
-    
+public class DeleteDatabaseOperation: CouchOperation {
+
     /**
-        The name of the database to delete.
-     
-        This must be set before an operation can complete sucessfully
+     The name of the database to delete.
+
+     This must be set before an operation can complete sucessfully
      */
-    public var databaseName:String? = nil
-    
-    override public var httpMethod:String {
+    public var databaseName: String? = nil
+
+    override public var httpMethod: String {
         get {
             return "DELETE"
         }
     }
-    
-    override public var httpPath:String {
+
+    override public var httpPath: String {
         get {
             // Safe to foce unwrap validation would fail if this is nil
             return "/\(self.databaseName!)"
         }
     }
-    
+
     public override func validate() -> Bool {
         return super.validate() && self.databaseName != nil // should work iirc
     }
-    
+
 }

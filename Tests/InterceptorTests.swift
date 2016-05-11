@@ -21,68 +21,65 @@ import OHHTTPStubs
 
 let testCookieHeaderValue = "AuthSession=cm9vdDo1MEJCRkYwMjq0LO0ylOIwShrgt8y-UkhI-c6BGw";
 
-class InterceptorTests : XCTestCase {
-    
-    
-    
+class InterceptorTests: XCTestCase {
+
     override func setUp() {
-        
-        
-        OHHTTPStubs.stubRequests(passingTest:{ (request) -> Bool in
+
+        OHHTTPStubs.stubRequests(passingTest: { (request) -> Bool in
             return request.url!.host! == "username1.cloudant.com"
-            }) { (request) -> OHHTTPStubsResponse in
-                return OHHTTPStubsResponse(jsonObject: [:], statusCode: 401, headers: [:])
+        }) { (request) -> OHHTTPStubsResponse in
+            return OHHTTPStubsResponse(jsonObject: [:], statusCode: 401, headers: [:])
         }
-        
-        OHHTTPStubs.stubRequests(passingTest:{ (request) -> Bool in
+
+        OHHTTPStubs.stubRequests(passingTest: { (request) -> Bool in
             return request.url!.host! == "username.cloudant.com"
-            }) { (request) -> OHHTTPStubsResponse in
-                if request.httpMethod == "POST" {
-                    //do the post thing
-                    return OHHTTPStubsResponse(jsonObject: ["ok":true, "name":"username", "roles":["_admin"]],
-                        statusCode: 200,
-                        headers: ["Set-Cookie": "\(testCookieHeaderValue); Version=1; Path=/; HttpOnly"])
-                } else {
-                    return OHHTTPStubsResponse(jsonObject: [:], statusCode: 200, headers: [:])
-                }
+        }) { (request) -> OHHTTPStubsResponse in
+            if request.httpMethod == "POST" {
+                // do the post thing
+                return OHHTTPStubsResponse(jsonObject: ["ok": true, "name": "username", "roles": ["_admin"]],
+                    statusCode: 200,
+                    headers: ["Set-Cookie": "\(testCookieHeaderValue); Version=1; Path=/; HttpOnly"])
+            } else {
+                return OHHTTPStubsResponse(jsonObject: [:], statusCode: 200, headers: [:])
+            }
         }
 
     }
-    
+
     override func tearDown() {
         OHHTTPStubs.removeAllStubs()
     }
-    
+
     func testCookieInterceptorSucessfullGetsCookie() {
         let cookieInterceptor = SessionCookieInterceptor(username: "username", password: "password")
-        
+
         // create a context with a request which we can use
         let url = NSURL(string: "http://username.cloudant.com")!
         let request = NSMutableURLRequest(url: url)
-        
+
         var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
-        
-        ctx = cookieInterceptor.interceptRequest(ctx:ctx)
-        
+
+        ctx = cookieInterceptor.interceptRequest(ctx: ctx)
+
         XCTAssertEqual(cookieInterceptor.cookie, testCookieHeaderValue)
         XCTAssertEqual(cookieInterceptor.shouldMakeSessionRequest, true);
-        XCTAssertEqual(ctx.request.value(forHTTPHeaderField:"Cookie"), testCookieHeaderValue)
-        
+        XCTAssertEqual(ctx.request.value(forHTTPHeaderField: "Cookie"), testCookieHeaderValue)
+
     }
-    
+
     func testCookieInterceptorHandles401 () {
         let cookieInterceptor = SessionCookieInterceptor(username: "username", password: "password")
-        
+
         // create a context with a request which we can use
         let url = NSURL(string: "http://username1.cloudant.com")!
         let request = NSMutableURLRequest(url: url)
-        
+
         var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
-        
-        ctx = cookieInterceptor.interceptRequest(ctx:ctx)
-        
+
+        ctx = cookieInterceptor.interceptRequest(ctx: ctx)
+
         XCTAssertNil(cookieInterceptor.cookie)
         XCTAssertEqual(cookieInterceptor.shouldMakeSessionRequest, false);
-        XCTAssertNil(ctx.request.value(forHTTPHeaderField:"Cookie"))
+        XCTAssertNil(ctx.request.value(forHTTPHeaderField: "Cookie"))
     }
 }

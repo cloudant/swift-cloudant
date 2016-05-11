@@ -14,35 +14,34 @@
 //  and limitations under the License.
 //
 
-
 import Foundation
 import XCTest
 @testable import SwiftCloudant
 
-class PutDocumentTests : XCTestCase {
+class PutDocumentTests: XCTestCase {
     var client: CouchDBClient? = nil;
     var dbName: String? = nil
-    
+
     override func setUp() {
         super.setUp()
-        
+
         dbName = generateDBName()
-        self.client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
+        self.client = CouchDBClient(url: NSURL(string: url)!, username: username, password: password)
         createDatabase(databaseName: dbName!, client: client!)
     }
-    
+
     override func tearDown() {
         deleteDatabase(databaseName: dbName!, client: client!)
         super.tearDown()
     }
-    
-    func testSaveDocument(){
+
+    func testSaveDocument() {
         let db = self.client![self.dbName!]
-        let putExpectation = self.expectation(withDescription:"Put Document expectation")
+        let putExpectation = self.expectation(withDescription: "Put Document expectation")
         let put = PutDocumentOperation()
         put.docId = "Doc1"
-        put.body = ["hello":"world"]
-        put.completionHandler = {(response,httpInfo,error) in
+        put.body = ["hello": "world"]
+        put.completionHandler = { (response, httpInfo, error) in
             putExpectation.fulfill()
             XCTAssertEqual("Doc1", response?["id"] as? String)
             XCTAssertNotNil(response?["rev"])
@@ -52,11 +51,11 @@ class PutDocumentTests : XCTestCase {
             }
 
         }
-        db.add(operation:put)
-        
+        db.add(operation: put)
+
         self.waitForExpectations(withTimeout: 10) { (_) in
-            
+
         }
-        
+
     }
 }

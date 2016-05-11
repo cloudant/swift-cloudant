@@ -18,40 +18,38 @@ import Foundation
 import XCTest
 @testable import SwiftCloudant
 
-class GetDocumentTests : XCTestCase {
+class GetDocumentTests: XCTestCase {
 
     var dbName: String? = nil
-    var client:CouchDBClient? = nil
-    
+    var client: CouchDBClient? = nil
 
-    
     override func setUp() {
         super.setUp()
-         
+
         dbName = generateDBName()
-        client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
+        client = CouchDBClient(url: NSURL(string: url)!, username: username, password: password)
         createDatabase(databaseName: dbName!, client: client!)
     }
-    
+
     override func tearDown() {
         deleteDatabase(databaseName: dbName!, client: client!)
-        
+
         super.tearDown()
-        
+
         print("Deleted database: \(dbName!)")
     }
-    
+
     func testPutDocument() {
-        let data = createTestDocuments(count:1)
-        
-        let putDocumentExpectation = expectation(withDescription:"put document")
-        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
-        
+        let data = createTestDocuments(count: 1)
+
+        let putDocumentExpectation = expectation(withDescription: "put document")
+        let client = CouchDBClient(url: NSURL(string: url)!, username: username, password: password)
+
         let put = PutDocumentOperation()
         put.databaseName = dbName
         put.body = data[0]
         put.docId = NSUUID().uuidString.lowercased()
-        
+
         put.completionHandler = { (response, httpInfo, error) in
             putDocumentExpectation.fulfill()
             XCTAssertNil(error)
@@ -60,111 +58,105 @@ class GetDocumentTests : XCTestCase {
                 XCTAssert(httpInfo.statusCode == 201 || httpInfo.statusCode == 202)
             }
         }
-        
-        client.add(operation:put)
-        
-        waitForExpectations(withTimeout:10.0, handler: nil)
+
+        client.add(operation: put)
+
+        waitForExpectations(withTimeout: 10.0, handler: nil)
     }
-    
-    
+
     func testGetDocument() {
-        let data = createTestDocuments(count:1)
-        let getDocumentExpectation = expectation(withDescription:"get document")
-        
-        let putDocumentExpectation = self.expectation(withDescription:"put document")
+        let data = createTestDocuments(count: 1)
+        let getDocumentExpectation = expectation(withDescription: "get document")
+
+        let putDocumentExpectation = self.expectation(withDescription: "put document")
         let put = PutDocumentOperation()
         put.body = data[0]
         put.docId = NSUUID().uuidString.lowercased()
         put.databaseName = self.dbName
         put.completionHandler = { (response, httpInfo, operationError) in
             putDocumentExpectation.fulfill()
-            XCTAssertEqual(put.docId,response?["id"] as? String);
+            XCTAssertEqual(put.docId, response?["id"] as? String);
             XCTAssertNotNil(response?["rev"])
             XCTAssertNil(operationError)
             XCTAssertNotNil(httpInfo)
             if let httpInfo = httpInfo {
                 XCTAssertTrue(httpInfo.statusCode / 100 == 2)
             }
-            
+
             let get = GetDocumentOperation()
             get.docId = put.docId
             get.databaseName = self.dbName
-            
+
             get.completionHandler = { (response, httpInfo, error) in
                 getDocumentExpectation.fulfill()
                 XCTAssertNil(error)
                 XCTAssertNotNil(response)
             }
-            
-            self.client!.add(operation:get)
+
+            self.client!.add(operation: get)
         };
-        
-        
-        
-        
+
         client?.add(operation: put)
         put.waitUntilFinished()
 
-        
-        waitForExpectations(withTimeout:10.0, handler: nil)
+        waitForExpectations(withTimeout: 10.0, handler: nil)
     }
-    
+
     func testGetDocumentUsingDBObject () {
-        let data = createTestDocuments(count:1)
-        let putDocumentExpectation = self.expectation(withDescription:"put document")
+        let data = createTestDocuments(count: 1)
+        let putDocumentExpectation = self.expectation(withDescription: "put document")
         let put = PutDocumentOperation()
         put.body = data[0]
         put.docId = NSUUID().uuidString.lowercased()
         put.databaseName = self.dbName
         put.completionHandler = { (response, httpInfo, error) in
             putDocumentExpectation.fulfill()
-            XCTAssertEqual(put.docId,response?["id"] as? String);
+            XCTAssertEqual(put.docId, response?["id"] as? String);
             XCTAssertNotNil(response?["rev"])
             XCTAssertNil(error)
             XCTAssertNotNil(httpInfo)
             if let httpInfo = httpInfo {
-            XCTAssertTrue(httpInfo.statusCode / 100 == 2)
+                XCTAssertTrue(httpInfo.statusCode / 100 == 2)
             }
         };
-        client?.add(operation:put)
-        
-        waitForExpectations(withTimeout:10.0, handler: nil)
-        
+        client?.add(operation: put)
+
+        waitForExpectations(withTimeout: 10.0, handler: nil)
+
         let db = client![self.dbName!]
         let document = db[put.docId!]
         XCTAssertNotNil(document)
     }
-    
+
     func testGetDocumentUsingDBAdd() {
-        let data = createTestDocuments(count:1)
-        let getDocumentExpectation = expectation(withDescription:"get document")
-        let client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
+        let data = createTestDocuments(count: 1)
+        let getDocumentExpectation = expectation(withDescription: "get document")
+        let client = CouchDBClient(url: NSURL(string: url)!, username: username, password: password)
         let db = client[self.dbName!]
-        
-        let putDocumentExpectation = self.expectation(withDescription:"put document")
+
+        let putDocumentExpectation = self.expectation(withDescription: "put document")
         let put = PutDocumentOperation()
         put.body = data[0]
         put.docId = NSUUID().uuidString.lowercased()
         put.completionHandler = { (response, httpInfo, operationError) in
             putDocumentExpectation.fulfill()
-            XCTAssertEqual(put.docId,response?["id"] as? String);
+            XCTAssertEqual(put.docId, response?["id"] as? String);
             XCTAssertNotNil(response?["rev"])
             XCTAssertNil(operationError)
             XCTAssertNotNil(httpInfo)
             if let httpInfo = httpInfo {
                 XCTAssertTrue(httpInfo.statusCode / 100 == 2)
             }
-            
 
         };
-        
-        db.add(operation:put)
+
+        db.add(operation: put)
         put.waitUntilFinished()
-        
+
         let get = GetDocumentOperation()
         get.docId = put.docId
         get.databaseName = self.dbName
-        
+
         get.completionHandler = { (response, httpInfo, error) in
             getDocumentExpectation.fulfill()
             XCTAssertNil(error)
@@ -174,10 +166,9 @@ class GetDocumentTests : XCTestCase {
                 XCTAssertEqual(200, httpInfo.statusCode)
             }
         }
-        
-        
-        client.add(operation:get)
-        
-        waitForExpectations(withTimeout:10.0, handler: nil)
+
+        client.add(operation: get)
+
+        waitForExpectations(withTimeout: 10.0, handler: nil)
     }
 }

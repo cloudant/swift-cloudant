@@ -14,90 +14,88 @@
 //  and limitations under the License.
 //
 
-
 import Foundation
-
 
 // TODO rename to something that makes a little more swift sense.
 /**
-  Designates an operation which provides data to perform a HTTP Request.
+ Designates an operation which provides data to perform a HTTP Request.
  */
 protocol HTTPRequestOperation {
-    
+
     /**
      Provides the `InterceptableSession` to use when making HTTP requests.
      */
-    var session:InterceptableSession { get }
+    var session: InterceptableSession { get }
     /**
      The root of url, e.g. `example.cloudant.com`
      */
     var rootURL: NSURL { get }
     /**
      The path of the url e.g. `/exampledb/document1/`
-    */
+     */
     var httpPath: String { get }
     /**
      The method to use for the HTTP request e.g. `GET`
      */
     var httpMethod: String { get }
     /**
-        The query items to use for the request
+     The query items to use for the request
      */
-    var queryItems:[NSURLQueryItem] { get }
-    
+    var queryItems: [NSURLQueryItem] { get }
+
     /**
-        The body of the HTTP request or `nil` if there is no data for the request.
+     The body of the HTTP request or `nil` if there is no data for the request.
      */
     var httpRequestBody: NSData? { get }
-    
+
     /**
-        The content type of the HTTP request payload. This is guranteed to be called
-        if and only if `httpRequestBody` is not `nil`
-    */
+     The content type of the HTTP request payload. This is guranteed to be called
+     if and only if `httpRequestBody` is not `nil`
+     */
     var httpContentType: String { get }
-    
+
     /**
      A function that is called when the operation is completed.
      */
     func completeOperation()
     /**
-      A function to process the response from a HTTP request.
-     
+     A function to process the response from a HTTP request.
+
      - parameter data: The data returned from the HTTP request or nil if there was an error.
      - parameter httpInfo: Information about the HTTP response.
      - parameter error: A type representing an error if one occurred or `nil`
      */
-    func processResponse(data:NSData?, httpInfo:HttpInfo?, error:ErrorProtocol?);
-    
+    func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?);
+
     var isCancelled: Bool { get }
-    
+
 }
 
 /**
-    A class which builds `NSURLRequest` objects from `HTTPRequestOperation` objects.
+ A class which builds `NSURLRequest` objects from `HTTPRequestOperation` objects.
  */
 class OperationRequestBuilder {
-    
-    enum Error : ErrorProtocol {
+
+    enum Error: ErrorProtocol {
         case URLGenerationFailed
     }
-    
+
     /**
      The operation this builder will turn into a HTTP object.
-    */
-    let operation:HTTPRequestOperation
-    
+     */
+    let operation: HTTPRequestOperation
+
     /**
      Creates an OperationRequestBuilder instance.
-     
+
      - parameter operation: the operation that the request will be built from.
-    */
-    init(operation:HTTPRequestOperation){
+     */
+    init(operation: HTTPRequestOperation) {
         self.operation = operation
     }
-    
+
     /**
-        Builds the NSURLRequest from the operation in the property `operation`
+     Builds the NSURLRequest from the operation in the property `operation`
      */
     func buildRequest() throws -> NSURLRequest {
         guard let components = NSURLComponents(url: operation.rootURL, resolvingAgainstBaseURL: false)
@@ -105,69 +103,32 @@ class OperationRequestBuilder {
             throw Error.URLGenerationFailed
         }
         components.path = operation.httpPath
-        var queryItems : [NSURLQueryItem] = []
-        
+        var queryItems: [NSURLQueryItem] = []
+
         if let _ = components.queryItems {
-            queryItems.append(contentsOf:components.queryItems!)
+            queryItems.append(contentsOf: components.queryItems!)
         }
-        
-        queryItems.append(contentsOf:operation.queryItems)
+
+        queryItems.append(contentsOf: operation.queryItems)
         components.queryItems = queryItems
-        
+
         guard let url = components.url
         else {
             throw Error.URLGenerationFailed
         }
-        
+
         let request = NSMutableURLRequest(url: url)
         request.cachePolicy = .useProtocolCachePolicy
         request.timeoutInterval = 10.0
         request.httpMethod = operation.httpMethod
-        
+
         if let body = operation.httpRequestBody {
             request.httpBody = body
             request.setValue(operation.httpContentType, forHTTPHeaderField: "Content-Type")
         }
-        
-        
+
         return request
 
     }
-    
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

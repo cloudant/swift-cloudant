@@ -18,126 +18,126 @@ import Foundation
 import XCTest
 @testable import SwiftCloudant
 
-class DeleteDocumentTests : XCTestCase {
+class DeleteDocumentTests: XCTestCase {
     var dbName: String? = nil
     var client: CouchDBClient? = nil
-    
+
     override func setUp() {
         super.setUp()
-        
+
         dbName = generateDBName()
-        client = CouchDBClient(url:NSURL(string: url)!, username:username, password:password)
+        client = CouchDBClient(url: NSURL(string: url)!, username: username, password: password)
         createDatabase(databaseName: dbName!, client: client!)
-        
+
         print("Created database: \(dbName!)")
     }
-    
+
     override func tearDown() {
         deleteDatabase(databaseName: dbName!, client: client!)
         super.tearDown()
     }
-    
+
     func testDocumentCanBeDeleted() {
         let db = client![self.dbName!]
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
-        delete.completionHandler = {(response, httpInfo, error) in
+        delete.completionHandler = { (response, httpInfo, error) in
             expectation.fulfill()
             XCTAssertNotNil(httpInfo)
             if let httpInfo = httpInfo {
                 XCTAssert(httpInfo.statusCode / 100 == 2)
             }
             XCTAssertNil(error)
-            XCTAssertEqual(true,response?["ok"] as? Bool)
+            XCTAssertEqual(true, response?["ok"] as? Bool)
         }
-        
+
         let create = PutDocumentOperation()
         create.docId = "testId"
-        create.body = ["hello":"world"]
-        create.completionHandler = {(response, httpInfo, error) in
+        create.body = ["hello": "world"]
+        create.completionHandler = { (response, httpInfo, error) in
             delete.revId = response?["rev"] as? String
             delete.docId = response?["id"] as? String
         }
-        
+
         delete.addDependency(create)
-        
+
         db.add(operation: create)
         db.add(operation: delete)
-        
-        self.waitForExpectations(withTimeout:10.0, handler: nil)
-        
+
+        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+
     }
-    
+
     func testDeleteDocumentOpFailsValidationWhenRevIdIsMissing() {
-        
+
         let db = client![self.dbName!]
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.docId = "testDocId"
-        delete.completionHandler = {(response, httpInfo, error) in
+        delete.completionHandler = { (response, httpInfo, error) in
             expectation.fulfill()
             XCTAssertNil(httpInfo)
             XCTAssertNotNil(error)
         }
-        
+
         db.add(operation: delete)
-        self.waitForExpectations(withTimeout:10.0, handler: nil)
+        self.waitForExpectations(withTimeout: 10.0, handler: nil)
 
     }
-    
+
     func testDeleteDocumentOpFailsValidationWhenDocIdIsMissing() {
-    
+
         let db = client![self.dbName!]
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.docId = "testDocId"
-        delete.completionHandler = {(response, httpInfo, error) in
+        delete.completionHandler = { (response, httpInfo, error) in
             expectation.fulfill()
             XCTAssertNil(response)
             XCTAssertNil(httpInfo)
             XCTAssertNotNil(error)
         }
-        
+
         db.add(operation: delete)
-        self.waitForExpectations(withTimeout:10.0, handler: nil)
-        
+        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+
     }
-    
+
     func testDeleteDocumentOpCompletesWithoutCallback() {
         let db = client![self.dbName!]
-        let expectation = self.expectation(withDescription:"Delete document")
+        let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
-        delete.completionHandler = {(response, httpInfo, error) in
+        delete.completionHandler = { (response, httpInfo, error) in
             XCTAssertNotNil(httpInfo)
             if let httpInfo = httpInfo {
                 XCTAssert(httpInfo.statusCode / 100 == 2)
             }
             XCTAssertNil(error)
         }
-        
+
         let create = PutDocumentOperation()
         create.docId = "testId"
-        create.body = ["hello":"world"]
-        create.completionHandler = {(response, httpInfo, error) in
+        create.body = ["hello": "world"]
+        create.completionHandler = { (response, httpInfo, error) in
             delete.revId = response?["rev"] as? String
             delete.docId = response?["id"] as? String
         }
-        
+
         let get = GetDocumentOperation()
         get.docId = "testId"
-        get.completionHandler = {(response, httpInfo, error) in
-                        expectation.fulfill()
-                        XCTAssertNotNil(response)
-                        XCTAssertNotNil(error)
-            }
-        
+        get.completionHandler = { (response, httpInfo, error) in
+            expectation.fulfill()
+            XCTAssertNotNil(response)
+            XCTAssertNotNil(error)
+        }
+
         delete.addDependency(create)
         get.addDependency(delete)
-        
+
         db.add(operation: create)
         db.add(operation: delete)
         db.add(operation: get)
-        
-        self.waitForExpectations(withTimeout:10.0, handler: nil)
+
+        self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
 }

@@ -20,8 +20,8 @@ import XCTest
 
 // Extension to add functions for commonly used operations in tests.
 extension XCTestCase {
-    
-    var url:String {
+
+    var url: String {
         get {
             let defaultURL = "http://localhost:5984"
             if let url = TestSettings.getInstance().settings["TEST_COUCH_URL"] as? String {
@@ -35,50 +35,49 @@ extension XCTestCase {
             }
         }
     }
-    
-    var username:String? {
+
+    var username: String? {
         get {
             let username = TestSettings.getInstance().settings["TEST_COUCH_USERNAME"] as? String
-            if  username != nil && username!.isEmpty {
+            if username != nil && username!.isEmpty {
                 return nil;
             } else {
                 return username
             }
         }
     }
-    
-    var password:String? {
+
+    var password: String? {
         get {
-            let password =  TestSettings.getInstance().settings["TEST_COUCH_PASSWORD"] as? String
+            let password = TestSettings.getInstance().settings["TEST_COUCH_PASSWORD"] as? String
             if password != nil && password!.isEmpty {
                 return nil
             } else {
                 return password
             }
         }
-        
+
     }
-    
-    
-    func createTestDocuments(count: Int) -> [[String:AnyObject]] {
-        var docs = [[String:AnyObject]]()
-        for _ in 1...count {
+
+    func createTestDocuments(count: Int) -> [[String: AnyObject]] {
+        var docs = [[String: AnyObject]]()
+        for _ in 1 ... count {
             docs.append(["data": NSUUID().uuidString.lowercased()])
         }
-        
+
         return docs
     }
-    
+
     func generateDBName() -> String {
         return "a-\(NSUUID().uuidString.lowercased())"
     }
-    
-    func createDatabase(databaseName:String, client:CouchDBClient) -> Void {
+
+    func createDatabase(databaseName: String, client: CouchDBClient) -> Void {
         let create = CreateDatabaseOperation()
         create.databaseName = databaseName;
-        create.completionHandler = {(response, httpInfo, error) in
+        create.completionHandler = { (response, httpInfo, error) in
             XCTAssertNotNil(httpInfo)
-            if let httpInfo  = httpInfo {
+            if let httpInfo = httpInfo {
                 XCTAssert(httpInfo.statusCode / 100 == 2)
             }
             XCTAssertNil(error)
@@ -86,11 +85,11 @@ extension XCTestCase {
         client.add(operation: create)
         create.waitUntilFinished()
     }
-    
+
     func deleteDatabase(databaseName: String, client: CouchDBClient) -> Void {
         let delete = DeleteDatabaseOperation()
         delete.databaseName = databaseName
-        delete.completionHandler = {(response, httpInfo, error) in
+        delete.completionHandler = { (response, httpInfo, error) in
             XCTAssertNotNil(httpInfo)
             if let httpInfo = httpInfo {
                 XCTAssert(httpInfo.statusCode / 100 == 2)
@@ -101,20 +100,20 @@ extension XCTestCase {
     }
 }
 
-extension Array where Element : NSURLQueryItem {
-    
+extension Array where Element: NSURLQueryItem {
+
     /**
      Checks if this array is equivalent to another array. For an array to be equivalent to another
      they need to contain the same elements, however they do __not__ need to be in the same order.
-     
+
      - parameter to: the `[NSURLQueryItem]` to compare to.
      */
-    func isEquivalent(to:[NSURLQueryItem]) -> Bool {
+    func isEquivalent(to: [NSURLQueryItem]) -> Bool {
         var to = to
-        if(self.count != to.count){
+        if (self.count != to.count) {
             return false
         }
-        
+
         for queryItem in self {
             if let index = to.index(of: queryItem) {
                 to.remove(at: index)
@@ -127,23 +126,23 @@ extension Array where Element : NSURLQueryItem {
 }
 
 class TestSettings {
-    
-    private let settings: [String:AnyObject];
-    private static var instance:TestSettings?
-    
+
+    private let settings: [String: AnyObject];
+    private static var instance: TestSettings?
+
     private init() {
         let bundle = NSBundle(for: TestSettings.self)
-        
+
         let testSettingsPath = bundle.pathForResource("TestSettings", ofType: "plist")
-        
+
         if let testSettingsPath = testSettingsPath,
-            let settingsDict = NSDictionary(contentsOfFile: testSettingsPath) as? [String:AnyObject] {
-            settings = settingsDict
+            let settingsDict = NSDictionary(contentsOfFile: testSettingsPath) as? [String: AnyObject] {
+                settings = settingsDict
         } else {
-            settings = [:]
+                settings = [:]
         }
     }
-    
+
     class func getInstance() -> TestSettings {
         if let instance = instance {
             return instance

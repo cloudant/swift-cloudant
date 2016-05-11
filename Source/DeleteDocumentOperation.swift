@@ -17,54 +17,54 @@
 import Foundation
 
 /**
- 
-    An operation to delete a document from a database.
- 
-    Example usage:
- 
-        let delete = DeleteDocumentOperation()
-        delete.docId = "exampleDocId"
-        delete.revId = "1-examplerevid"
-        delete.completionHandler = { (response, httpInfo, error) in
-                if let error = error {
-                    NSLog("An error occured attemtping to delete a document")
-                } else {
-                    NSLog("Document deleted with statusCode \(statusCode!)"
-                }
-            }
-        database.add(delete)
- 
+
+ An operation to delete a document from a database.
+
+ Example usage:
+ ````
+ let delete = DeleteDocumentOperation()
+ delete.docId = "exampleDocId"
+ delete.revId = "1-examplerevid"
+ delete.completionHandler = { (response, httpInfo, error) in
+    if let error = error {
+        NSLog("An error occured attemtping to delete a document")
+    } else {
+        NSLog("Document deleted with statusCode \(statusCode!)"
+    }
+ }
+ database.add(delete)
+ ````
  */
-public class DeleteDocumentOperation : CouchDatabaseOperation {
-    
+public class DeleteDocumentOperation: CouchDatabaseOperation {
+
     /**
      * The revision of the document to delete
      *
      * **Must** be set before an operation can succesfully execute.
      */
-    public var revId:String? = nil
-    
+    public var revId: String? = nil
+
     /**
      * The id of the document to delete.
      *
      * **Must** be set before an operation can succesfully execute.
      */
-    public var docId:String? = nil
-    
+    public var docId: String? = nil
+
     public override func validate() -> Bool {
         return super.validate() && revId != nil && docId != nil
     }
-    
+
     public override var httpMethod: String {
         return "DELETE"
     }
-    
+
     public override var httpPath: String {
         return "/\(self.databaseName!)/\(docId!)"
     }
-    
+
     public override var queryItems: [NSURLQueryItem] {
-       return [NSURLQueryItem(name: "rev", value: revId!)]
+        return [NSURLQueryItem(name: "rev", value: revId!)]
     }
 
 }

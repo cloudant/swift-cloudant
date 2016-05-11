@@ -14,69 +14,65 @@
 //  and limitations under the License.
 //
 
-
 import Foundation
 
 /**
  A class representing a CouchDB Database.
  */
-public class Database  {
-    
+public class Database {
+
     /**
      The name of the database
      */
-    public let name:String
-    private let client:CouchDBClient
-    
+    public let name: String
+    private let client: CouchDBClient
+
     /**
-        Creates a Database object to represent a CouchDB database
-        - parameter client: An instance of `CouchDBClient`
-        - parameter dbName: The name of the database to represent.
-    */
-    public init(client:CouchDBClient, dbName:String){
+     Creates a Database object to represent a CouchDB database
+     - parameter client: An instance of `CouchDBClient`
+     - parameter dbName: The name of the database to represent.
+     */
+    public init(client: CouchDBClient, dbName: String) {
         name = dbName
         self.client = client
     }
-    
+
     /**
-        Add an operation to the queue to be executed.
-        
-        This performs the equivalent of
-            
-            let databaseOperation = PutDocumentOperation()
-            // ...
-            databaseOperation.databaseName = "exampleDB"
-            client.addOperation(operation:databaseOperation)
+     Add an operation to the queue to be executed.
+
+     This performs the equivalent of
+
+     let databaseOperation = PutDocumentOperation()
+     // ...
+     databaseOperation.databaseName = "exampleDB"
+     client.addOperation(operation:databaseOperation)
      */
-    public func add(operation:CouchDatabaseOperation){
+    public func add(operation: CouchDatabaseOperation) {
         operation.databaseName = self.name
         self.client.add(operation: operation)
     }
-    
+
     /**
-        Provides a synchronous way of retrieving a document from the database represented by
-        this object.
-     
-        - parameter key: The id of the document to retrieve.
-        - returns: The document as a `Dictionary` or `nil` if the document was not found or 
-            an error occured.
-    */
-    public subscript(key:String) -> Dictionary<String,AnyObject>?{
+     Provides a synchronous way of retrieving a document from the database represented by
+     this object.
+
+     - parameter key: The id of the document to retrieve.
+     - returns: The document as a `Dictionary` or `nil` if the document was not found or
+     an error occured.
+     */
+    public subscript(key: String) -> Dictionary<String, AnyObject>? {
         let getDocument = GetDocumentOperation()
         getDocument.docId = key
-        
-        
-        var doc:[String:AnyObject]?
-        getDocument.completionHandler = { (response, httpInfo, error ) in
+
+        var doc: [String: AnyObject]?
+        getDocument.completionHandler = { (response, httpInfo, error) in
             doc = response
         };
-        
+
         self.add(operation: getDocument)
         getDocument.waitUntilFinished()
-        
+
         return doc
     }
-    
-    
-    
+
 }

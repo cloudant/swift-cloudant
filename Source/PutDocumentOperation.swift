@@ -14,56 +14,55 @@
 //  and limitations under the License.
 //
 
-
 import Foundation
 
 public class PutDocumentOperation: CouchDatabaseOperation {
     /**
-    The document that this operation will modify.
-    
-    Must be set before a call can be successfully made.
-    */
+     The document that this operation will modify.
+
+     Must be set before a call can be successfully made.
+     */
     public var docId: String? = nil
-    
+
     /**
-    If updating a document, set this value to the current revision ID.
-    */
+     If updating a document, set this value to the current revision ID.
+     */
     public var revId: String? = nil
-    
+
     /** Body of document. Must be serialisable with NSJSONSerialization */
-    public var body: [String:AnyObject]? = nil
-    
+    public var body: [String: AnyObject]? = nil
+
     public override func validate() -> Bool {
         return super.validate() && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body!)
     }
-    
+
     public override var httpMethod: String {
         return "PUT"
     }
-    
+
     public override var httpRequestBody: NSData? {
         get {
             do {
-                let data = try NSJSONSerialization.data(withJSONObject:body!, options: NSJSONWritingOptions())
+                let data = try NSJSONSerialization.data(withJSONObject: body!, options: NSJSONWritingOptions())
                 return data
             } catch {
                 return nil
             }
         }
     }
-    
+
     public override var httpPath: String {
         return "/\(self.databaseName!)/\(docId!)"
     }
-    
+
     public override var queryItems: [NSURLQueryItem] {
         get {
             var items: [NSURLQueryItem] = []
-            
+
             if let revId = revId {
                 items.append(NSURLQueryItem(name: "rev", value: "\(revId)"))
             }
-            
+
             return items
         }
     }

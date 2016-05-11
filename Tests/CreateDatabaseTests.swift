@@ -14,38 +14,32 @@
 //  and limitations under the License.
 //
 
-
 import Foundation
 import XCTest
 @testable import SwiftCloudant
 
+class CreateDatabaseTests: XCTestCase {
 
-class CreateDatabaseTests : XCTestCase {
+    var dbName: String? = nil
+    var client: CouchDBClient? = nil
 
-    var dbName:String? = nil
-    var client:CouchDBClient? = nil
-    
-    
     override func setUp() {
         super.setUp()
         self.dbName = generateDBName()
-        client = CouchDBClient(url:NSURL(string: url)!,username:username,password:password)
+        client = CouchDBClient(url: NSURL(string: url)!, username: username, password: password)
     }
-    
+
     override func tearDown() {
         deleteDatabase(databaseName: dbName!, client: client!)
         super.tearDown()
     }
-    
-    
-    func testCreateUsingPut() {
-        let createExpectation = self.expectation(withDescription:"create database")
-        
 
-        
+    func testCreateUsingPut() {
+        let createExpectation = self.expectation(withDescription: "create database")
+
         let create = CreateDatabaseOperation()
         create.databaseName = self.dbName
-        create.completionHandler = {(response, httpInfo, error) in
+        create.completionHandler = { (response, httpInfo, error) in
             createExpectation.fulfill()
             XCTAssertNotNil(httpInfo)
             if let httpInfo = httpInfo {
@@ -53,11 +47,10 @@ class CreateDatabaseTests : XCTestCase {
             }
             XCTAssertNil(error)
         }
-        
-        client?.add(operation:create)
-        
-        self.waitForExpectations(withTimeout:10.0, handler: nil)
+
+        client?.add(operation: create)
+
+        self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
 
-    
 }
