@@ -46,8 +46,4 @@ public class DeleteDatabaseOperation : CouchOperation {
         return super.validate() && self.databaseName != nil // should work iirc
     }
     
-    public override func callCompletionHandler(error: ErrorProtocol) {
-        self.completionHandler?(response: nil, httpInfo: nil, error: error)
-    }
-    
 }

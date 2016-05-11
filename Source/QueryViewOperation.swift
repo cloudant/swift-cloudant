@@ -340,11 +340,7 @@ public class QueryViewOperation: CouchDatabaseOperation {
         }
         
     }
-    
-    public override func callCompletionHandler(error: ErrorProtocol) {
-        self.completionHandler?(response:nil, httpInfo:nil, error: error)
-    }
-    
+
     public override func processResponse(json: [String : AnyObject]) {
         let rows = json["rows"] as! [[String:AnyObject]]
         for row:[String:AnyObject] in rows {
