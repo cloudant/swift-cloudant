@@ -1,13 +1,13 @@
 Pod::Spec.new do |s|
 
   s.name         = "SwiftCloudant"
-  s.version      = "0.1.0"
-  s.summary      = "SwiftCloudant is a client library for  Apache CouchDB / IBM Cloudant"
+  s.version      = "0.2.0"
+  s.summary      = "SwiftCloudant is a client library for  Apache CouchDB / IBM Cloudant from Swift 3"
 
   s.description  = <<-DESC
 
                    SwiftCloudant is a client library for interacting with
-                   Apache CouchDB / IBM Cloudant.
+                   Apache CouchDB / IBM Cloudant from Swift 3.
 
                    It provides an operation based API for performing actions
                    with the Apache CouchDB HTTP API.

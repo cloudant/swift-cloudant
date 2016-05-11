@@ -1,4 +1,4 @@
-# 0.2.0 (Unreleased)
+# 0.2.0 (2016-05-11)
 
 - [BREAKING CHANGE] Renamed and changed completion handler signatures for **all**
   operations. They are now called `completionHandler` instead of `xxxxCompletionHandler`.
@@ -16,6 +16,7 @@
    as a handler for each row in a view response.
 - [NEW] New `QueryViewOperation`, to query CouchDB views, see the class documentation
   for usage.
+- [NEW] New hook for operation subclasses, `serialise`, for usage see method documentation.
 
 # 0.1.0 (2016-04-21)
 
