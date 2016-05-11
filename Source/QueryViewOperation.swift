@@ -267,16 +267,16 @@ public class QueryViewOperation: CouchDatabaseOperation {
                 items.append(NSURLQueryItem(name: "descending", value: "\(descending)"))
             }
             
-            if let startKey = startKey {
-                items.append(NSURLQueryItem(name: "startkey", value: convertJson(key: startKey)))
+            if let startKeyJson = startKeyJson  {
+                items.append(NSURLQueryItem(name: "startkey", value: startKeyJson))
             }
             
             if let startKeyDocId = startKeyDocId {
                 items.append(NSURLQueryItem(name: "startkey_docid", value: "\(startKeyDocId)"))
             }
             
-            if let endKey = endKey {
-                items.append(NSURLQueryItem(name: "endkey", value: convertJson(key: endKey)))
+            if let endKeyJson = endKeyJson {
+                items.append(NSURLQueryItem(name: "endkey", value: endKeyJson))
             }
             
             if let endKeyDocId = endKeyDocId {
@@ -287,8 +287,8 @@ public class QueryViewOperation: CouchDatabaseOperation {
                 items.append(NSURLQueryItem(name: "inclusive_end", value: "\(inclusiveEnd)"))
             }
             
-            if let key = key {
-                items.append(NSURLQueryItem(name: "key", value: convertJson(key: key)))
+            if let keyJson = keyJson {
+                items.append(NSURLQueryItem(name: "key", value: keyJson))
             }
             
             if let limit = limit {
@@ -323,6 +323,24 @@ public class QueryViewOperation: CouchDatabaseOperation {
         }
     }
     
+    private var keyJson: String?
+    private var endKeyJson: String?
+    private var startKeyJson: String?
+    
+    public override func serialise() throws {
+        if let key = key {
+            keyJson = try convertJson(key: key)
+        }
+        if let endKey = endKey {
+            endKeyJson = try convertJson(key: endKey)
+        }
+        
+        if let startKey = startKey {
+            startKeyJson = try convertJson(key: startKey)
+        }
+        
+    }
+    
     public override func callCompletionHandler(error: ErrorProtocol) {
         self.completionHandler?(response:nil, httpInfo:nil, error: error)
     }
@@ -334,15 +352,10 @@ public class QueryViewOperation: CouchDatabaseOperation {
         }
     }
     
-    func convertJson(key: AnyObject) -> String {
+    func convertJson(key: AnyObject) throws -> String {
         if NSJSONSerialization.isValidJSONObject(key) {
-            do {
-                let keyJson = try NSJSONSerialization.data(withJSONObject: key)
-                return String(data: keyJson , encoding: NSUTF8StringEncoding)!
-            } catch {
-                callCompletionHandler(error: error)
-                return ""
-            }
+            let keyJson = try NSJSONSerialization.data(withJSONObject: key)
+            return String(data: keyJson , encoding: NSUTF8StringEncoding)!
         } else if key is String {
             // we need to quote JSON primitive strings
             return "\"\(key)\""

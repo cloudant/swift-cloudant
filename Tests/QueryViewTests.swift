@@ -59,7 +59,7 @@ public class QueryViewTests : XCTestCase {
         super.tearDown()
     }
     
-    func testViewGeneratesCorrectRequestUsingStartAndEndKeys(){
+    func testViewGeneratesCorrectRequestUsingStartAndEndKeys() throws {
         let view = QueryViewOperation()
         view.designDoc = "ddoc"
         view.viewName = "view1"
@@ -74,6 +74,8 @@ public class QueryViewTests : XCTestCase {
         view.databaseName = self.dbName
         
         XCTAssert(view.validate())
+        try view.serialise()
+        
         XCTAssertEqual("GET",view.httpMethod)
         XCTAssertNil(view.httpRequestBody)
         XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1",view.httpPath)
@@ -90,7 +92,7 @@ public class QueryViewTests : XCTestCase {
         XCTAssert(expectedQueryItems.isEquivalent(to: view.queryItems))
     }
     
-    func testViewGeneratesCorrectRequestUsingJsonStartAndEndKeys(){
+    func testViewGeneratesCorrectRequestUsingJsonStartAndEndKeys() throws {
         let view = QueryViewOperation()
         view.designDoc = "ddoc"
         view.viewName = "view1"
@@ -105,6 +107,8 @@ public class QueryViewTests : XCTestCase {
         view.databaseName = self.dbName
         
         XCTAssert(view.validate())
+        try view.serialise()
+
         XCTAssertEqual("GET",view.httpMethod)
         XCTAssertNil(view.httpRequestBody)
         XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1",view.httpPath)
@@ -121,7 +125,7 @@ public class QueryViewTests : XCTestCase {
         XCTAssert(expectedQueryItems.isEquivalent(to: view.queryItems))
     }
     
-    func testViewGeneratesCorrectRequestUsingKey(){
+    func testViewGeneratesCorrectRequestUsingKey() throws {
         let view = QueryViewOperation()
         view.designDoc = "ddoc"
         view.viewName = "view1"
@@ -135,6 +139,8 @@ public class QueryViewTests : XCTestCase {
         view.databaseName = self.dbName
         
         XCTAssert(view.validate())
+        try view.serialise()
+        
         XCTAssertEqual("GET",view.httpMethod)
         XCTAssertNil(view.httpRequestBody)
         XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1",view.httpPath)

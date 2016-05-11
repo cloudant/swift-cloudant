@@ -198,23 +198,42 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
         return true
     }
     
+    /**
+     This should be used to serialise any data into the format expected by the CouchDB/Cloudant 
+     endpoint.
+     
+     - throws: An error in the event of a failure to serialise.
+     - note: This is guranteed to be  called after `validate() -> Bool` and before the 
+     `HTTPRequestOperation` properties are computed.
+    */
+    public func serialise() throws {
+        
+    }
+    
     final override public func start() {
-        // Always check for cancellation before launching the task
-        if isCancelled {
+        do {
+            // Always check for cancellation before launching the task
+            if isCancelled {
+                isFinished = true
+                return
+            }
+            
+            if !self.validate() {
+                self.callCompletionHandler(error:Errors.ValidationFailed)
+                isFinished = true
+                return
+            }
+            
+            try self.serialise()
+            
+            // start the operation
+            isExecuting = true
+            executor = OperationRequestExecutor(operation: self)
+            executor?.executeRequest()
+        } catch {
+            self.callCompletionHandler(error:error)
             isFinished = true
-            return
         }
-        
-        if !self.validate() {
-            self.callCompletionHandler(error:Errors.ValidationFailed)
-            isFinished = true
-            return
-        }
-        
-        // start the operation
-        isExecuting = true
-        executor = OperationRequestExecutor(operation: self)
-        executor?.executeRequest()
     }
     
     final func completeOperation(){
