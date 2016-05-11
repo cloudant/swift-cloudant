@@ -187,7 +187,7 @@ public class CouchOperation : NSOperation, HTTPRequestOperation
      Subclasses need to override this to call the completion handler they have defined.
      */
     public func callCompletionHandler(error:ErrorProtocol){
-        return
+        self.completionHandler?(response: nil, httpInfo: nil, error: error)
     }
     
     /**

@@ -66,9 +66,5 @@ public class DeleteDocumentOperation : CouchDatabaseOperation {
     public override var queryItems: [NSURLQueryItem] {
        return [NSURLQueryItem(name: "rev", value: revId!)]
     }
-    
-    public override func callCompletionHandler(error: ErrorProtocol) {
-        self.completionHandler?(response: nil, httpInfo: nil, error: error)
-    }
 
 }

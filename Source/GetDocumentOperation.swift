@@ -68,9 +68,5 @@ public class GetDocumentOperation: CouchDatabaseOperation {
             return items
         }
     }
-    
-    public override func callCompletionHandler(error: ErrorProtocol) {
-        self.completionHandler?(response:nil, httpInfo: nil ,error: error)
-    }
-    
+
 }
