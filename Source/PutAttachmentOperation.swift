@@ -47,7 +47,6 @@ public class PutAttachmentOperation: CouchDatabaseOperation {
     /**
      The id of the document that the attachment should be attached to.
      
-     - Note: mut be set for the attachment operation to successfully run.
      */
     public var docId: String?
     
@@ -73,8 +72,11 @@ public class PutAttachmentOperation: CouchDatabaseOperation {
     
     
     public override func validate() -> Bool {
-        if docId == nil{
-            return false;
+        if !super.validate() {
+            return false
+        }
+        if docId == nil {
+            return false
         }
         
         if revId == nil {
@@ -86,14 +88,14 @@ public class PutAttachmentOperation: CouchDatabaseOperation {
         }
         
         if data == nil {
-            return false;
+            return false
         }
         
         if contentType == nil {
             return false
         }
         
-        return super.validate()
+        return true
     }
     
     public override var httpMethod: String {

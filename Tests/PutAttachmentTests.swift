@@ -45,20 +45,12 @@ class PutAttachmentTests : XCTestCase {
         deleteDatabase(databaseName: dbName!, client: client!)
         
         super.tearDown()
-        
-        print("Deleted database: \(dbName!)")
     }
     
     
     func testPutAttachment() {
         let putExpect = self.expectation(withDescription: "put attachment")
-        let attachment = "This is my awesome essay attachment for my document"
-        let put = PutAttachmentOperation()
-        put.docId = docId
-        put.revId = revId
-        put.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
-        put.attachmentName = "myAwesomeAttachment"
-        put.contentType = "text/plain"
+        let put = self.createPutAttachmentOperation()
         put.completionHandler = {(response, info, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(info)
@@ -77,11 +69,8 @@ class PutAttachmentTests : XCTestCase {
     
     func testPutAttachmentValidationMissingData() {
         let putExpect = self.expectation(withDescription: "put attachment")
-        let put = PutAttachmentOperation()
-        put.docId = docId
-        put.revId = revId
-        put.attachmentName = "myAwesomeAttachment"
-        put.contentType = "text/plain"
+        let put = self.createPutAttachmentOperation()
+        put.data = nil
         put.completionHandler = {(response, info, error) in
             XCTAssertNotNil(error)
             XCTAssertNil(info)
@@ -96,12 +85,8 @@ class PutAttachmentTests : XCTestCase {
     
     func testPutAttachmentValidationMissingRev() {
         let putExpect = self.expectation(withDescription: "put attachment")
-        let attachment = "This is my awesome essay attachment for my document"
-        let put = PutAttachmentOperation()
-        put.docId = docId
-        put.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
-        put.attachmentName = "myAwesomeAttachment"
-        put.contentType = "text/plain"
+        let put = self.createPutAttachmentOperation()
+        put.revId = nil
         put.completionHandler = {(response, info, error) in
             XCTAssertNotNil(error)
             XCTAssertNil(info)
@@ -116,12 +101,8 @@ class PutAttachmentTests : XCTestCase {
     
     func testPutAttachmentValidationMissingId() {
         let putExpect = self.expectation(withDescription: "put attachment")
-        let attachment = "This is my awesome essay attachment for my document"
-        let put = PutAttachmentOperation()
-        put.revId = revId
-        put.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
-        put.attachmentName = "myAwesomeAttachment"
-        put.contentType = "text/plain"
+        let put = self.createPutAttachmentOperation()
+        put.docId = nil
         put.completionHandler = {(response, info, error) in
             XCTAssertNotNil(error)
             XCTAssertNil(info)
@@ -136,12 +117,8 @@ class PutAttachmentTests : XCTestCase {
     
     func testPutAttachmentValidationMissingName() {
         let putExpect = self.expectation(withDescription: "put attachment")
-        let attachment = "This is my awesome essay attachment for my document"
-        let put = PutAttachmentOperation()
-        put.docId = docId
-        put.revId = revId
-        put.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
-        put.contentType = "text/plain"
+        let put = self.createPutAttachmentOperation()
+        put.attachmentName = nil
         put.completionHandler = {(response, info, error) in
             XCTAssertNotNil(error)
             XCTAssertNil(info)
@@ -156,12 +133,8 @@ class PutAttachmentTests : XCTestCase {
     
     func testPutAttachmentValidationMissingContentType() {
         let putExpect = self.expectation(withDescription: "put attachment")
-        let attachment = "This is my awesome essay attachment for my document"
-        let put = PutAttachmentOperation()
-        put.docId = docId
-        put.revId = revId
-        put.attachmentName = "myAwesomeAttachment"
-        put.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
+        let put = self.createPutAttachmentOperation()
+        put.contentType = nil
         put.completionHandler = {(response, info, error) in
             XCTAssertNotNil(error)
             XCTAssertNil(info)
@@ -175,13 +148,7 @@ class PutAttachmentTests : XCTestCase {
     }
     
     func testPutAttachmentHTTPOperationProperties(){
-        let attachment = "This is my awesome essay attachment for my document"
-        let put = PutAttachmentOperation()
-        put.docId = docId
-        put.revId = revId
-        put.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
-        put.attachmentName = "myAwesomeAttachment"
-        put.contentType = "text/plain"
+        let put = self.createPutAttachmentOperation()
         put.databaseName = self.dbName
         XCTAssertTrue(put.validate())
         XCTAssertTrue(put.queryItems.isEquivalent(to: [NSURLQueryItem(name: "rev", value: revId)]))
@@ -191,7 +158,16 @@ class PutAttachmentTests : XCTestCase {
         XCTAssertEqual(put.contentType, put.httpContentType)
     }
 
-    
+    func createPutAttachmentOperation() -> PutAttachmentOperation {
+        let attachment = "This is my awesome essay attachment for my document"
+        let put = PutAttachmentOperation()
+        put.docId = docId
+        put.revId = revId
+        put.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
+        put.attachmentName = "myAwesomeAttachment"
+        put.contentType = "text/plain"
+        return put
+    }
     
     
     
