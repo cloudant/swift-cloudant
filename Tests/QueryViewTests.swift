@@ -225,9 +225,14 @@ public class QueryViewTests: XCTestCase {
             XCTAssertNotNil(row)
         }
 
-        view.completionHandler = { (error) in
-            completionHandler.fulfill()
+        view.completionHandler = { (response, httpInfo, error) in
             XCTAssertNil(error)
+            XCTAssertNotNil(response)
+            XCTAssertNotNil(httpInfo)
+            if let httpInfo = httpInfo {
+                XCTAssert(httpInfo.statusCode / 100 == 2)
+            }
+            completionHandler.fulfill()
         }
 
         self.client?[self.dbName!].add(operation: view)
