@@ -1,3 +1,7 @@
+# 0.2.1 (2016-05-13)
+
+- [FIX] Fixed compatibility with Swift Development Snapshot from 2016-05-09
+
 # 0.2.0 (2016-05-11)
 
 - [BREAKING CHANGE] Renamed and changed completion handler signatures for **all**
