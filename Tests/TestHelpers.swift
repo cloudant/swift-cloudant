@@ -62,7 +62,7 @@ extension XCTestCase {
     func createTestDocuments(count: Int) -> [[String: AnyObject]] {
         var docs = [[String: AnyObject]]()
         for _ in 1 ... count {
-            docs.append(["data": NSUUID().uuidString.lowercased()])
+            docs.append(["data": NSUUID().uuidString.lowercased() as NSString])
         }
 
         return docs

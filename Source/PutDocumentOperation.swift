@@ -33,7 +33,7 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     public var body: [String: AnyObject]? = nil
 
     public override func validate() -> Bool {
-        return super.validate() && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body!)
+        return super.validate() && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body! as NSDictionary)
     }
 
     public override var httpMethod: String {
@@ -43,7 +43,7 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     public override var httpRequestBody: NSData? {
         get {
             do {
-                let data = try NSJSONSerialization.data(withJSONObject: body!, options: NSJSONWritingOptions())
+                let data = try NSJSONSerialization.data(withJSONObject: body! as NSDictionary, options: NSJSONWritingOptions())
                 return data
             } catch {
                 return nil

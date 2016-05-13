@@ -38,7 +38,7 @@ class InterceptorTests: XCTestCase {
                 // do the post thing
                 return OHHTTPStubsResponse(jsonObject: ["ok": true, "name": "username", "roles": ["_admin"]],
                     statusCode: 200,
-                    headers: ["Set-Cookie": "\(testCookieHeaderValue); Version=1; Path=/; HttpOnly"])
+                    headers: ["Set-Cookie": "\(testCookieHeaderValue); Version=1; Path=/; HttpOnly" as NSString])
             } else {
                 return OHHTTPStubsResponse(jsonObject: [:], statusCode: 200, headers: [:])
             }

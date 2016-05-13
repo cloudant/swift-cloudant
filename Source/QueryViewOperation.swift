@@ -246,7 +246,8 @@ public class QueryViewOperation: CouchDatabaseOperation {
     public override var httpRequestBody: NSData? {
         if let keys = keys {
             do {
-                let keysJson = try NSJSONSerialization.data(withJSONObject: ["keys": keys])
+                let keysDict: NSDictionary = ["keys": keys as NSArray]
+                let keysJson = try NSJSONSerialization.data(withJSONObject: keysDict)
                 return keysJson
             } catch {
                 callCompletionHandler(error: error)

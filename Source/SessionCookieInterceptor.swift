@@ -103,7 +103,12 @@ public class SessionCookieInterceptor: HTTPInterceptor
         request.httpMethod = "POST"
         request.httpBody = self.sessionRequestBody
 
-        let semaphore = dispatch_semaphore_create(0)
+        let semaphoreOpt = dispatch_semaphore_create(0)
+        
+        guard let semaphore = semaphoreOpt
+        else {
+            return nil
+        }
         var cookie: String?
 
         let task = self.urlSession.dataTask(request: request) { (data, response, error) -> Void in
