@@ -64,6 +64,23 @@ create.completionHandler = {(response, httpInfo, error) in
 }
 db.add(operation:create)
 
+// create an attachment
+let attachment = "This is my awesome essay attachment for my document"
+let putAttachment = PutAttachmentOperation()
+putAttachment.docId = "doc1"
+putAttachment.revId = "1-revisionidhere"
+putAttachment.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
+putAttachment.attachmentName = "myAwesomeAttachment"
+putAttachment.contentType = "text/plain"
+putAttachment.completionHandler = {(response, info, error) in
+   if let error = error {
+       // handle the error
+   } else {
+       // process successful response
+   }
+}
+database.add(operation: putAttachment)
+
 // Read a document
 let read = GetDocumentOperation()
 read.docId = "doc1"
