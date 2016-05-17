@@ -39,26 +39,10 @@ import Foundation
     }
  }
  database.add(operation: putAttachment)
- 
+ ```
  
  */
-public class PutAttachmentOperation: CouchDatabaseOperation {
-    
-    /**
-     The id of the document that the attachment should be attached to.
-     
-     */
-    public var docId: String?
-    
-    /**
-     The revision of the document that the attachment should be attached to.
-    */
-    public var revId: String?
-    
-    /**
-     The name of the attachment.
-     */
-    public var attachmentName: String?
+public class PutAttachmentOperation: AttachmentOperation {
     
     /**
      The attachment's data.
@@ -75,17 +59,6 @@ public class PutAttachmentOperation: CouchDatabaseOperation {
         if !super.validate() {
             return false
         }
-        if docId == nil {
-            return false
-        }
-        
-        if revId == nil {
-            return false
-        }
-        
-        if attachmentName == nil {
-            return false
-        }
         
         if data == nil {
             return false
@@ -100,14 +73,6 @@ public class PutAttachmentOperation: CouchDatabaseOperation {
     
     public override var httpMethod: String {
         return "PUT"
-    }
-    
-    public override var httpPath: String {
-        return "/\(self.databaseName!)/\(docId!)/\(attachmentName!)"
-    }
-    
-    public override var queryItems: [NSURLQueryItem] {
-        return [NSURLQueryItem(name: "rev", value: revId)]
     }
     
     public override var httpRequestBody: NSData? {
