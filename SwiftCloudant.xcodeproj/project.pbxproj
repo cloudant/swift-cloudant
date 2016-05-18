@@ -10,6 +10,7 @@
 		2C4B910F7FFAC8132F5280BB /* Pods_SwiftCloudantTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F96FB133EC7F68F6BF31CC3 /* Pods_SwiftCloudantTests.framework */; };
 		2E79FE9C1CDA2BF500AD20E2 /* QueryViewOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E79FE9B1CDA2BF500AD20E2 /* QueryViewOperation.swift */; };
 		2E79FE9E1CDA2C0900AD20E2 /* QueryViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E79FE9D1CDA2C0900AD20E2 /* QueryViewTests.swift */; };
+		980A04941CEC56B000F5F049 /* DeleteQueryIndexTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 980A04931CEC56B000F5F049 /* DeleteQueryIndexTests.swift */; };
 		9855CF6F1CC6458F00ED28DA /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF6B1CC6458F00ED28DA /* RequestBuilder.swift */; };
 		9855CF701CC6458F00ED28DA /* RequestExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF6C1CC6458F00ED28DA /* RequestExecutor.swift */; };
 		9855CF711CC6458F00ED28DA /* SessionCookieInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF6D1CC6458F00ED28DA /* SessionCookieInterceptor.swift */; };
@@ -21,9 +22,9 @@
 		9855CF7E1CC6459E00ED28DA /* DeleteDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF771CC6459E00ED28DA /* DeleteDocumentOperation.swift */; };
 		9855CF7F1CC6459E00ED28DA /* GetDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF781CC6459E00ED28DA /* GetDocumentOperation.swift */; };
 		9855CF801CC6459E00ED28DA /* PutDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF791CC6459E00ED28DA /* PutDocumentOperation.swift */; };
-		9855CF861CC8CE5F00ED28DA /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF851CC8CE5F00ED28DA /* TestHelpers.swift */; };
 		9855CF821CC7C5D100ED28DA /* FindDocumentsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF811CC7C5D100ED28DA /* FindDocumentsOperation.swift */; };
 		9855CF841CC7E3DB00ED28DA /* FindDocumentOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF831CC7E3DB00ED28DA /* FindDocumentOperationTests.swift */; };
+		9855CF861CC8CE5F00ED28DA /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF851CC8CE5F00ED28DA /* TestHelpers.swift */; };
 		98593EE41CE373CA008F365F /* PutAttachmentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98593EE31CE373CA008F365F /* PutAttachmentOperation.swift */; };
 		98593EE61CE378A7008F365F /* PutAttachmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98593EE51CE378A7008F365F /* PutAttachmentTests.swift */; };
 		98734A211C88FDB200E79C5B /* SwiftCloudant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98734A171C88FDB200E79C5B /* SwiftCloudant.framework */; };
@@ -34,6 +35,7 @@
 		98734A621C8A601400E79C5B /* GetDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A5E1C8A601400E79C5B /* GetDocumentTests.swift */; };
 		98734A641C8A601400E79C5B /* SwiftCloudantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A601C8A601400E79C5B /* SwiftCloudantTests.swift */; };
 		98B4F2CE1CA759130076C5E4 /* PutDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B4F2CD1CA759130076C5E4 /* PutDocumentTests.swift */; };
+		98C175ED1CEC5DF800A9CF2F /* DeleteQueryIndexOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C175EC1CEC5DF800A9CF2F /* DeleteQueryIndexOperation.swift */; };
 		98E5431C1C9CCD0500F02E06 /* InterceptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E5431B1C9CCD0500F02E06 /* InterceptorTests.swift */; };
 		98EC4AE81CC1533800704CFE /* DeleteDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EC4AE61CC1531200704CFE /* DeleteDocumentTests.swift */; };
 		98FAABBE1CD89F7D0087FF57 /* TestSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 98FAABBD1CD89F7D0087FF57 /* TestSettings.plist */; };
@@ -54,6 +56,7 @@
 		2E79FE9B1CDA2BF500AD20E2 /* QueryViewOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QueryViewOperation.swift; path = Source/QueryViewOperation.swift; sourceTree = SOURCE_ROOT; };
 		2E79FE9D1CDA2C0900AD20E2 /* QueryViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryViewTests.swift; sourceTree = "<group>"; };
 		7F96FB133EC7F68F6BF31CC3 /* Pods_SwiftCloudantTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftCloudantTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		980A04931CEC56B000F5F049 /* DeleteQueryIndexTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteQueryIndexTests.swift; sourceTree = "<group>"; };
 		9855CF6B1CC6458F00ED28DA /* RequestBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestBuilder.swift; path = Source/RequestBuilder.swift; sourceTree = SOURCE_ROOT; };
 		9855CF6C1CC6458F00ED28DA /* RequestExecutor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestExecutor.swift; path = Source/RequestExecutor.swift; sourceTree = SOURCE_ROOT; };
 		9855CF6D1CC6458F00ED28DA /* SessionCookieInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SessionCookieInterceptor.swift; path = Source/SessionCookieInterceptor.swift; sourceTree = SOURCE_ROOT; };
@@ -65,9 +68,9 @@
 		9855CF771CC6459E00ED28DA /* DeleteDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeleteDocumentOperation.swift; path = Source/DeleteDocumentOperation.swift; sourceTree = SOURCE_ROOT; };
 		9855CF781CC6459E00ED28DA /* GetDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GetDocumentOperation.swift; path = Source/GetDocumentOperation.swift; sourceTree = SOURCE_ROOT; };
 		9855CF791CC6459E00ED28DA /* PutDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PutDocumentOperation.swift; path = Source/PutDocumentOperation.swift; sourceTree = SOURCE_ROOT; };
-		9855CF851CC8CE5F00ED28DA /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		9855CF811CC7C5D100ED28DA /* FindDocumentsOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FindDocumentsOperation.swift; path = Source/FindDocumentsOperation.swift; sourceTree = SOURCE_ROOT; };
 		9855CF831CC7E3DB00ED28DA /* FindDocumentOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDocumentOperationTests.swift; sourceTree = "<group>"; };
+		9855CF851CC8CE5F00ED28DA /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		98593EE31CE373CA008F365F /* PutAttachmentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PutAttachmentOperation.swift; path = Source/PutAttachmentOperation.swift; sourceTree = SOURCE_ROOT; };
 		98593EE51CE378A7008F365F /* PutAttachmentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PutAttachmentTests.swift; sourceTree = "<group>"; };
 		98734A171C88FDB200E79C5B /* SwiftCloudant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftCloudant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,6 +84,7 @@
 		98734A5F1C8A601400E79C5B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		98734A601C8A601400E79C5B /* SwiftCloudantTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftCloudantTests.swift; sourceTree = "<group>"; };
 		98B4F2CD1CA759130076C5E4 /* PutDocumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PutDocumentTests.swift; sourceTree = "<group>"; };
+		98C175EC1CEC5DF800A9CF2F /* DeleteQueryIndexOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeleteQueryIndexOperation.swift; path = Source/DeleteQueryIndexOperation.swift; sourceTree = SOURCE_ROOT; };
 		98E5431B1C9CCD0500F02E06 /* InterceptorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterceptorTests.swift; sourceTree = "<group>"; };
 		98EC4AE61CC1531200704CFE /* DeleteDocumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteDocumentTests.swift; sourceTree = "<group>"; };
 		98FAABBD1CD89F7D0087FF57 /* TestSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = TestSettings.plist; sourceTree = "<group>"; };
@@ -154,6 +158,7 @@
 		98734A481C8A600600E79C5B /* Operations */ = {
 			isa = PBXGroup;
 			children = (
+				98C175EC1CEC5DF800A9CF2F /* DeleteQueryIndexOperation.swift */,
 				2E79FE9B1CDA2BF500AD20E2 /* QueryViewOperation.swift */,
 				9855CF811CC7C5D100ED28DA /* FindDocumentsOperation.swift */,
 				9855CF731CC6459E00ED28DA /* CouchDatabaseOperation.swift */,
@@ -183,6 +188,7 @@
 				98FAABBD1CD89F7D0087FF57 /* TestSettings.plist */,
 				9855CF831CC7E3DB00ED28DA /* FindDocumentOperationTests.swift */,
 				98593EE51CE378A7008F365F /* PutAttachmentTests.swift */,
+				980A04931CEC56B000F5F049 /* DeleteQueryIndexTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -378,6 +384,7 @@
 				9855CF7A1CC6459E00ED28DA /* CouchDatabaseOperation.swift in Sources */,
 				9855CF6F1CC6458F00ED28DA /* RequestBuilder.swift in Sources */,
 				98734A501C8A600600E79C5B /* Database.swift in Sources */,
+				98C175ED1CEC5DF800A9CF2F /* DeleteQueryIndexOperation.swift in Sources */,
 				98734A4F1C8A600600E79C5B /* CouchClient.swift in Sources */,
 				9855CF7E1CC6459E00ED28DA /* DeleteDocumentOperation.swift in Sources */,
 				9855CF821CC7C5D100ED28DA /* FindDocumentsOperation.swift in Sources */,
@@ -394,6 +401,7 @@
 				2E79FE9E1CDA2C0900AD20E2 /* QueryViewTests.swift in Sources */,
 				98734A611C8A601400E79C5B /* CreateDatabaseTests.swift in Sources */,
 				98734A621C8A601400E79C5B /* GetDocumentTests.swift in Sources */,
+				980A04941CEC56B000F5F049 /* DeleteQueryIndexTests.swift in Sources */,
 				98734A641C8A601400E79C5B /* SwiftCloudantTests.swift in Sources */,
 				9855CF841CC7E3DB00ED28DA /* FindDocumentOperationTests.swift in Sources */,
 				98593EE61CE378A7008F365F /* PutAttachmentTests.swift in Sources */,
