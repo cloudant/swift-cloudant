@@ -48,7 +48,7 @@ class FindDocumentOperationTests: XCTestCase {
             OHHTTPStubs.stubRequests(passingTest: { (request) -> Bool in
                 return (request.url?.path?.contains("_find"))! && !(request.httpMethod! == "POST")
                 }, withStubResponse: { (request) -> OHHTTPStubsResponse in
-                    OHHTTPStubsResponse(jsonObject: [], statusCode: 405, headers: [:])
+                    OHHTTPStubsResponse(jsonObject: [:], statusCode: 405, headers: [:])
             })
         
         dbName = generateDBName()
