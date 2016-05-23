@@ -28,6 +28,7 @@ import Foundation
  view.dbName = "example"
  view.designDoc = "exampleDesignDoc"
  view.viewName = "exampleView"
+ view.databaseName = "exampledb"
 
  // Set a row handler to process each returned row
  view.rowHandler = {(row) in
@@ -46,10 +47,13 @@ import Foundation
  }
 
  // Add the operation to the database operation queue
- database.add(view)
+ client.add(view)
  ```
  */
-public class QueryViewOperation: CouchDatabaseOperation {
+public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
+    
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    public var databaseName: String?
 
     /**
      The name of the design document which contains the view.
@@ -212,7 +216,12 @@ public class QueryViewOperation: CouchDatabaseOperation {
      */
     public var rowHandler: ((row: [String: AnyObject]) -> Void)?
 
-    public override func validate() -> Bool {
+    public func validate() -> Bool {
+        
+        if databaseName == nil {
+            return false
+        }
+        
         // Design doc and view name must be set
         if designDoc == nil || viewName == nil {
             return false
@@ -232,10 +241,10 @@ public class QueryViewOperation: CouchDatabaseOperation {
                 return false
             }
         }
-        return super.validate()
+        return true
     }
 
-    public override var httpMethod: String {
+    public var method: String {
         if (keys != nil) {
             return "POST"
         } else {
@@ -243,7 +252,7 @@ public class QueryViewOperation: CouchDatabaseOperation {
         }
     }
 
-    public override var httpRequestBody: NSData? {
+    public var data: NSData? {
         if let keys = keys {
             do {
                 let keysDict: NSDictionary = ["keys": keys as NSArray]
@@ -256,68 +265,68 @@ public class QueryViewOperation: CouchDatabaseOperation {
         return nil
     }
 
-    public override var httpPath: String {
+    public var endpoint: String {
         return "/\(self.databaseName!)/_design/\(designDoc!)/_view/\(viewName!)"
     }
 
-    public override var queryItems: [NSURLQueryItem] {
+    public var parameters: [String: String] {
         get {
-            var items: [NSURLQueryItem] = []
+            var items: [String: String] = [:]
 
             if let descending = descending {
-                items.append(NSURLQueryItem(name: "descending", value: "\(descending)"))
+                items["descending"] = "\(descending)"
             }
 
             if let startKeyJson = startKeyJson {
-                items.append(NSURLQueryItem(name: "startkey", value: startKeyJson))
+                items["startkey"] = startKeyJson
             }
 
             if let startKeyDocId = startKeyDocId {
-                items.append(NSURLQueryItem(name: "startkey_docid", value: "\(startKeyDocId)"))
+                items["startkey_docid"] = startKeyDocId
             }
 
             if let endKeyJson = endKeyJson {
-                items.append(NSURLQueryItem(name: "endkey", value: endKeyJson))
+                items["endkey"] =  endKeyJson
             }
 
             if let endKeyDocId = endKeyDocId {
-                items.append(NSURLQueryItem(name: "endkey_docid", value: "\(endKeyDocId)"))
+                items["endkey_docid"] = "\(endKeyDocId)"
             }
 
             if let inclusiveEnd = inclusiveEnd {
-                items.append(NSURLQueryItem(name: "inclusive_end", value: "\(inclusiveEnd)"))
+                items["inclusive_end"] = "\(inclusiveEnd)"
             }
 
             if let keyJson = keyJson {
-                items.append(NSURLQueryItem(name: "key", value: keyJson))
+                items["key"] = keyJson
             }
 
             if let limit = limit {
-                items.append(NSURLQueryItem(name: "limit", value: "\(limit)"))
+                items["limit"] = "\(limit)"
             }
 
             if let skip = skip {
-                items.append(NSURLQueryItem(name: "skip", value: "\(skip)"))
+                items["skip"] = "\(skip)"
             }
 
             if let includeDocs = includeDocs {
-                items.append(NSURLQueryItem(name: "include_docs", value: "\(includeDocs)"))
+                items["include_docs"] = "\(includeDocs)"
             }
 
             if let reduce = reduce {
-                items.append(NSURLQueryItem(name: "reduce", value: "\(reduce)"))
+                items["reduce"] = "\(reduce)"
             }
 
             if let group = group {
-                items.append(NSURLQueryItem(name: "group", value: "\(group)"))
+                items["group"] = "\(group)"
             }
 
             if let groupLevel = groupLevel {
-                items.append(NSURLQueryItem(name: "group_level", value: "\(groupLevel)"))
+                items["group_level"] = "\(groupLevel)"
             }
 
             if let stale = stale {
-                items.append(NSURLQueryItem(name: "stale", value: "\(stale)"))
+                items["stale"] = "\(stale)"
             }
 
             return items
@@ -328,7 +337,7 @@ public class QueryViewOperation: CouchDatabaseOperation {
     private var endKeyJson: String?
     private var startKeyJson: String?
 
-    public override func serialise() throws {
+    public  func serialise() throws {
         if let key = key {
             keyJson = try convertJson(key: key)
         }
@@ -342,10 +351,12 @@ public class QueryViewOperation: CouchDatabaseOperation {
 
     }
 
-    public override func processResponse(json: [String: AnyObject]) {
-        let rows = json["rows"] as! [[String: AnyObject]]
-        for row: [String: AnyObject] in rows {
-            self.rowHandler?(row: row)
+    public func processResponse(json: Any) {
+        if let json = json as? [String: AnyObject] {
+            let rows = json["rows"] as! [[String: AnyObject]]
+            for row: [String: AnyObject] in rows {
+                self.rowHandler?(row: row)
+            }
         }
     }
 

@@ -26,6 +26,7 @@ import Foundation
     index.indexName = "exampleIndex"
     index.fields = [Sort(field:"food", sort: .Desc)]
     index.designDoc = "examples"
+    index.databaseName = "exampledb"
     index.completionHandler = { (response, httpInfo, error) in
         if let error = error {
             // handle the error
@@ -35,10 +36,14 @@ import Foundation
  
     }
  
-    database.add(operation: index)
+    client.add(operation: index)
     ```
  */
-public class CreateJsonQueryIndexOperation: CouchDatabaseOperation, MangoOperation {
+public class CreateJsonQueryIndexOperation: CouchDatabaseOperation, MangoOperation, JsonOperation {
+    
+    public var databaseName: String?
+    
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
     
     /**
      The name of the index.
@@ -65,27 +70,27 @@ public class CreateJsonQueryIndexOperation: CouchDatabaseOperation, MangoOperati
     private var jsonData: NSData?
     
     
-    public override var httpMethod: String {
+    public var method: String {
         return "POST"
     }
 
-    public override var httpRequestBody: NSData? {
+    public var data: NSData? {
         return self.jsonData
     }
     
-    public override var httpPath: String {
+    public var endpoint: String {
         return "/\(self.databaseName!)/_index"
     }
     
-    public override func validate() -> Bool {
-        if !super.validate(){
+    public func validate() -> Bool {
+        if databaseName == nil {
             return false
         }
         
         return fields != nil
     }
 
-    public override func serialise() throws {
+    public func serialise() throws {
 
         var jsonDict: [String:AnyObject] = ["type": "json"]
 
@@ -153,6 +158,7 @@ public enum TextIndexFieldType : String {
  index.defaultFieldEnabled = true
  index.selector = ["type": "food"]
  index.designDoc = "examples"
+ index.databaseName = "exampledb"
  index.completionHandler = { (response, httpInfo, error) in 
     if let error = error {
         // handle the error
@@ -160,8 +166,12 @@ public enum TextIndexFieldType : String {
         // Check the status code for success.
     }
  }
+ client.add(operation: index)
  */
-public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperation {
+public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperation, JsonOperation {
+    
+    public var databaseName: String?
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
     
     /**
      The name of the index
@@ -215,20 +225,20 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
     public var designDoc: String?
 
     private var jsonData : NSData?
-    public override var httpRequestBody: NSData? {
+    public  var data: NSData? {
         return jsonData
     }
     
-    public override var httpMethod: String {
+    public var method: String {
         return "POST"
     }
     
-    public override var httpPath: String {
+    public var endpoint: String {
         return "/\(self.databaseName!)/_index"
     }
     
-    public override func validate() -> Bool {
-        if !super.validate() {
+    public func validate() -> Bool {
+        if databaseName == nil {
             return false
         }
         
@@ -239,7 +249,7 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
         return true
     }
     
-    public override func serialise() throws {
+    public func serialise() throws {
 
         do {
             var jsonDict: [String: AnyObject] = [:]

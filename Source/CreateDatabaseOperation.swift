@@ -19,30 +19,32 @@ import Foundation
 /**
  An operation to create a database in a CouchDB instance.
  */
-public class CreateDatabaseOperation: CouchOperation {
+public class CreateDatabaseOperation: CouchOperation, JsonOperation {
 
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    
     /**
      The name of the database to create.
 
      This is required to be set before the operation can execute succesfully.
      */
-    public var databaseName: String? = nil
+    public var databaseName: String?
 
-    override public var httpMethod: String {
+     public var method: String {
         get {
             return "PUT"
         }
     }
 
-    public override var httpPath: String {
+    public var endpoint: String {
         get {
-            // Safe to foce unwrap validation would fail if this is nil
+            // Safe to force unwrap, validation would fail if this is nil
             return "/\(self.databaseName!)"
         }
     }
 
-    public override func validate() -> Bool {
-        return super.validate() && self.databaseName != nil // should work iirc
+    public func validate() -> Bool {
+        return  self.databaseName != nil
     }
 
 }

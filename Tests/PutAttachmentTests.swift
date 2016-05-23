@@ -32,13 +32,15 @@ class PutAttachmentTests : XCTestCase {
         client = CouchDBClient(url: NSURL(string: url)!, username: username, password: password)
         createDatabase(databaseName: dbName!, client: client!)
         let createDoc = PutDocumentOperation()
+        createDoc.databaseName = dbName
         createDoc.body = createTestDocuments(count: 1).first
         createDoc.docId = docId
         createDoc.completionHandler = {[weak self] (response, info, error) in
                 self?.revId = response?["rev"] as? String
         }
-        client?[dbName!].add(operation: createDoc)
-        createDoc.waitUntilFinished()
+        let nsCreate = Operation(couchOperation: createDoc)
+        client?.add(operation: nsCreate)
+        nsCreate.waitUntilFinished()
     }
     
     override func tearDown() {
@@ -61,7 +63,8 @@ class PutAttachmentTests : XCTestCase {
             
             putExpect.fulfill()
         }
-        client?[dbName!].add(operation: put)
+        put.databaseName = dbName
+        client?.add(operation: put)
         
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
         
@@ -70,6 +73,7 @@ class PutAttachmentTests : XCTestCase {
     func testPutAttachmentValidationMissingData() {
         let putExpect = self.expectation(withDescription: "put attachment")
         let put = self.createPutAttachmentOperation()
+        put.databaseName = dbName
         put.data = nil
         put.completionHandler = {(response, info, error) in
             XCTAssertNotNil(error)
@@ -78,7 +82,7 @@ class PutAttachmentTests : XCTestCase {
             
             putExpect.fulfill()
         }
-        client?[dbName!].add(operation: put)
+        client?.add(operation: put)
         
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
@@ -86,6 +90,7 @@ class PutAttachmentTests : XCTestCase {
     func testPutAttachmentValidationMissingRev() {
         let putExpect = self.expectation(withDescription: "put attachment")
         let put = self.createPutAttachmentOperation()
+        put.databaseName = dbName
         put.revId = nil
         put.completionHandler = {(response, info, error) in
             XCTAssertNotNil(error)
@@ -94,7 +99,7 @@ class PutAttachmentTests : XCTestCase {
             
             putExpect.fulfill()
         }
-        client?[dbName!].add(operation: put)
+        client?.add(operation: put)
         
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
@@ -102,6 +107,7 @@ class PutAttachmentTests : XCTestCase {
     func testPutAttachmentValidationMissingId() {
         let putExpect = self.expectation(withDescription: "put attachment")
         let put = self.createPutAttachmentOperation()
+        put.databaseName = dbName
         put.docId = nil
         put.completionHandler = {(response, info, error) in
             XCTAssertNotNil(error)
@@ -110,7 +116,7 @@ class PutAttachmentTests : XCTestCase {
             
             putExpect.fulfill()
         }
-        client?[dbName!].add(operation: put)
+        client?.add(operation: put)
         
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
@@ -118,6 +124,7 @@ class PutAttachmentTests : XCTestCase {
     func testPutAttachmentValidationMissingName() {
         let putExpect = self.expectation(withDescription: "put attachment")
         let put = self.createPutAttachmentOperation()
+        put.databaseName = dbName
         put.attachmentName = nil
         put.completionHandler = {(response, info, error) in
             XCTAssertNotNil(error)
@@ -126,7 +133,7 @@ class PutAttachmentTests : XCTestCase {
             
             putExpect.fulfill()
         }
-        client?[dbName!].add(operation: put)
+        client?.add(operation: put)
         
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
@@ -134,6 +141,7 @@ class PutAttachmentTests : XCTestCase {
     func testPutAttachmentValidationMissingContentType() {
         let putExpect = self.expectation(withDescription: "put attachment")
         let put = self.createPutAttachmentOperation()
+        put.databaseName = dbName
         put.contentType = nil
         put.completionHandler = {(response, info, error) in
             XCTAssertNotNil(error)
@@ -142,7 +150,7 @@ class PutAttachmentTests : XCTestCase {
             
             putExpect.fulfill()
         }
-        client?[dbName!].add(operation: put)
+        client?.add(operation: put)
         
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
@@ -151,16 +159,17 @@ class PutAttachmentTests : XCTestCase {
         let put = self.createPutAttachmentOperation()
         put.databaseName = self.dbName
         XCTAssertTrue(put.validate())
-        XCTAssertTrue(put.queryItems.isEquivalent(to: [NSURLQueryItem(name: "rev", value: revId)]))
-        XCTAssertEqual("/\(self.dbName!)/\(docId)/myAwesomeAttachment", put.httpPath)
-        XCTAssertEqual("PUT", put.httpMethod)
-        XCTAssertEqual(put.data, put.httpRequestBody)
-        XCTAssertEqual(put.contentType, put.httpContentType)
+        XCTAssertEqual(["rev": revId!], put.parameters)
+        XCTAssertEqual("/\(self.dbName!)/\(docId)/myAwesomeAttachment", put.endpoint)
+        XCTAssertEqual("PUT", put.method)
+        XCTAssertEqual(put.data, put.data)
+        XCTAssertEqual(put.contentType, put.contentType)
     }
 
     func createPutAttachmentOperation() -> PutAttachmentOperation {
         let attachment = "This is my awesome essay attachment for my document"
         let put = PutAttachmentOperation()
+        put.databaseName = dbName
         put.docId = docId
         put.revId = revId
         put.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)

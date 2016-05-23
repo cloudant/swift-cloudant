@@ -82,8 +82,9 @@ extension XCTestCase {
             }
             XCTAssertNil(error)
         }
-        client.add(operation: create)
-        create.waitUntilFinished()
+        let nsOperation = Operation(couchOperation: create)
+        client.add(operation: nsOperation)
+        nsOperation.waitUntilFinished()
     }
 
     func deleteDatabase(databaseName: String, client: CouchDBClient) -> Void {

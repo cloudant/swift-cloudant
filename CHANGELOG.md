@@ -2,6 +2,26 @@
 
 - [NEW] New FindDocumentsOperation API.
 - [NEW] New DeleteAttachmentOperation API.
+- [BREAKING] `Database` class has been removed
+- [BREAKING] `CouchOperation` is now a protocol, in order to use `NSOperation` APIs
+  you need to use the `Operation` class in conjunction with objects that conform
+  to `CouchOperation`
+- [BREAKING] `CouchDatabaseOperation` is now a protocol.
+- [NEW] `JsonOperation` and `DataOperation` protocols.
+- [BREAKING] `completionHandler` property is no longer defined on `CouchOperation`
+   its replacement is `completionHander` defined on `JsonOperation` and `DataOperation`
+- [BREAKING] The following properties on `CouchOperation` have been renamed:
+
+| Previous Name | New Name |
+|---------------|---------|
+| `httpPath` | `endpoint`|
+| `httpRequestData` | `data` |
+| `httpContentType` | `contentType`|
+|`httpMethod` | `method`|
+
+- [BREAKING] `QueryItems` property has been removed.
+- [NEW] parameters property API, used to define HTTP query parameters for a CouchOperation request.
+
 
 # 0.2.1 (2016-05-13)
 

@@ -17,7 +17,7 @@
 		9855CF711CC6458F00ED28DA /* SessionCookieInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF6D1CC6458F00ED28DA /* SessionCookieInterceptor.swift */; };
 		9855CF721CC6458F00ED28DA /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF6E1CC6458F00ED28DA /* URLSession.swift */; };
 		9855CF7A1CC6459E00ED28DA /* CouchDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF731CC6459E00ED28DA /* CouchDatabaseOperation.swift */; };
-		9855CF7B1CC6459E00ED28DA /* CouchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF741CC6459E00ED28DA /* CouchOperation.swift */; };
+		9855CF7B1CC6459E00ED28DA /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF741CC6459E00ED28DA /* Operation.swift */; };
 		9855CF7C1CC6459E00ED28DA /* CreateDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF751CC6459E00ED28DA /* CreateDatabaseOperation.swift */; };
 		9855CF7D1CC6459E00ED28DA /* DeleteDatabaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF761CC6459E00ED28DA /* DeleteDatabaseOperation.swift */; };
 		9855CF7E1CC6459E00ED28DA /* DeleteDocumentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9855CF771CC6459E00ED28DA /* DeleteDocumentOperation.swift */; };
@@ -32,7 +32,6 @@
 		986DA7251D0072550065D462 /* ReadAttachmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986DA7241D0072550065D462 /* ReadAttachmentTests.swift */; };
 		98734A211C88FDB200E79C5B /* SwiftCloudant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98734A171C88FDB200E79C5B /* SwiftCloudant.framework */; };
 		98734A4F1C8A600600E79C5B /* CouchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A401C8A600600E79C5B /* CouchClient.swift */; };
-		98734A501C8A600600E79C5B /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A411C8A600600E79C5B /* Database.swift */; };
 		98734A5B1C8A600600E79C5B /* SwiftCloudant.h in Headers */ = {isa = PBXBuildFile; fileRef = 98734A4E1C8A600600E79C5B /* SwiftCloudant.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		98734A611C8A601400E79C5B /* CreateDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A5D1C8A601400E79C5B /* CreateDatabaseTests.swift */; };
 		98734A621C8A601400E79C5B /* GetDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A5E1C8A601400E79C5B /* GetDocumentTests.swift */; };
@@ -42,9 +41,9 @@
 		98B4F2CE1CA759130076C5E4 /* PutDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B4F2CD1CA759130076C5E4 /* PutDocumentTests.swift */; };
 		98C175ED1CEC5DF800A9CF2F /* DeleteQueryIndexOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C175EC1CEC5DF800A9CF2F /* DeleteQueryIndexOperation.swift */; };
 		98D129601CF3095E00CF7219 /* GetAllDatabasesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D1295F1CF3095E00CF7219 /* GetAllDatabasesTests.swift */; };
-		98D129641CF32D8E00CF7219 /* AttachmentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D129631CF32D8E00CF7219 /* AttachmentOperation.swift */; };
 		98D129661CF3318800CF7219 /* GetAllDatabasesOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D129651CF3318800CF7219 /* GetAllDatabasesOperation.swift */; };
 		98E148CF1CF73E81006FE90E /* DeleteAttachmentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E148CE1CF73E81006FE90E /* DeleteAttachmentOperation.swift */; };
+		98E1EB041D0582F9008137E3 /* OperationProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E1EB031D0582F9008137E3 /* OperationProtocols.swift */; };
 		98E5431C1C9CCD0500F02E06 /* InterceptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E5431B1C9CCD0500F02E06 /* InterceptorTests.swift */; };
 		98EC4AE81CC1533800704CFE /* DeleteDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EC4AE61CC1531200704CFE /* DeleteDocumentTests.swift */; };
 		98FAABBE1CD89F7D0087FF57 /* TestSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 98FAABBD1CD89F7D0087FF57 /* TestSettings.plist */; };
@@ -72,7 +71,7 @@
 		9855CF6D1CC6458F00ED28DA /* SessionCookieInterceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SessionCookieInterceptor.swift; path = Source/SessionCookieInterceptor.swift; sourceTree = SOURCE_ROOT; };
 		9855CF6E1CC6458F00ED28DA /* URLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLSession.swift; path = Source/URLSession.swift; sourceTree = SOURCE_ROOT; };
 		9855CF731CC6459E00ED28DA /* CouchDatabaseOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CouchDatabaseOperation.swift; path = Source/CouchDatabaseOperation.swift; sourceTree = SOURCE_ROOT; };
-		9855CF741CC6459E00ED28DA /* CouchOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CouchOperation.swift; path = Source/CouchOperation.swift; sourceTree = SOURCE_ROOT; };
+		9855CF741CC6459E00ED28DA /* Operation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Operation.swift; path = Source/Operation.swift; sourceTree = SOURCE_ROOT; };
 		9855CF751CC6459E00ED28DA /* CreateDatabaseOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CreateDatabaseOperation.swift; path = Source/CreateDatabaseOperation.swift; sourceTree = SOURCE_ROOT; };
 		9855CF761CC6459E00ED28DA /* DeleteDatabaseOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeleteDatabaseOperation.swift; path = Source/DeleteDatabaseOperation.swift; sourceTree = SOURCE_ROOT; };
 		9855CF771CC6459E00ED28DA /* DeleteDocumentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeleteDocumentOperation.swift; path = Source/DeleteDocumentOperation.swift; sourceTree = SOURCE_ROOT; };
@@ -88,7 +87,6 @@
 		98734A171C88FDB200E79C5B /* SwiftCloudant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftCloudant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		98734A201C88FDB200E79C5B /* SwiftCloudantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftCloudantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		98734A401C8A600600E79C5B /* CouchClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CouchClient.swift; sourceTree = "<group>"; };
-		98734A411C8A600600E79C5B /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		98734A471C8A600600E79C5B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		98734A4E1C8A600600E79C5B /* SwiftCloudant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftCloudant.h; sourceTree = "<group>"; };
 		98734A5D1C8A601400E79C5B /* CreateDatabaseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateDatabaseTests.swift; sourceTree = "<group>"; };
@@ -100,9 +98,9 @@
 		98B4F2CD1CA759130076C5E4 /* PutDocumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PutDocumentTests.swift; sourceTree = "<group>"; };
 		98C175EC1CEC5DF800A9CF2F /* DeleteQueryIndexOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeleteQueryIndexOperation.swift; path = Source/DeleteQueryIndexOperation.swift; sourceTree = SOURCE_ROOT; };
 		98D1295F1CF3095E00CF7219 /* GetAllDatabasesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetAllDatabasesTests.swift; sourceTree = "<group>"; };
-		98D129631CF32D8E00CF7219 /* AttachmentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AttachmentOperation.swift; path = Source/AttachmentOperation.swift; sourceTree = SOURCE_ROOT; };
 		98D129651CF3318800CF7219 /* GetAllDatabasesOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GetAllDatabasesOperation.swift; path = Source/GetAllDatabasesOperation.swift; sourceTree = SOURCE_ROOT; };
 		98E148CE1CF73E81006FE90E /* DeleteAttachmentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeleteAttachmentOperation.swift; path = Source/DeleteAttachmentOperation.swift; sourceTree = SOURCE_ROOT; };
+		98E1EB031D0582F9008137E3 /* OperationProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OperationProtocols.swift; path = Source/OperationProtocols.swift; sourceTree = SOURCE_ROOT; };
 		98E5431B1C9CCD0500F02E06 /* InterceptorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterceptorTests.swift; sourceTree = "<group>"; };
 		98EC4AE61CC1531200704CFE /* DeleteDocumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteDocumentTests.swift; sourceTree = "<group>"; };
 		98FAABBD1CD89F7D0087FF57 /* TestSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = TestSettings.plist; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 			isa = PBXGroup;
 			children = (
 				98734A401C8A600600E79C5B /* CouchClient.swift */,
-				98734A411C8A600600E79C5B /* Database.swift */,
 				98734A421C8A600600E79C5B /* HTTP */,
 				98734A471C8A600600E79C5B /* Info.plist */,
 				98734A481C8A600600E79C5B /* Operations */,
@@ -182,7 +179,7 @@
 				2E79FE9B1CDA2BF500AD20E2 /* QueryViewOperation.swift */,
 				9855CF811CC7C5D100ED28DA /* FindDocumentsOperation.swift */,
 				9855CF731CC6459E00ED28DA /* CouchDatabaseOperation.swift */,
-				9855CF741CC6459E00ED28DA /* CouchOperation.swift */,
+				9855CF741CC6459E00ED28DA /* Operation.swift */,
 				9855CF751CC6459E00ED28DA /* CreateDatabaseOperation.swift */,
 				9855CF761CC6459E00ED28DA /* DeleteDatabaseOperation.swift */,
 				9855CF771CC6459E00ED28DA /* DeleteDocumentOperation.swift */,
@@ -190,8 +187,8 @@
 				9855CF791CC6459E00ED28DA /* PutDocumentOperation.swift */,
 				98593EE31CE373CA008F365F /* PutAttachmentOperation.swift */,
 				988A746C1CECC25A00242C24 /* CreateQueryIndexOperation.swift */,
-				98D129631CF32D8E00CF7219 /* AttachmentOperation.swift */,
 				986DA7221D006E7F0065D462 /* ReadAttachmentOperation.swift */,
+				98E1EB031D0582F9008137E3 /* OperationProtocols.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -404,10 +401,9 @@
 				9855CF7C1CC6459E00ED28DA /* CreateDatabaseOperation.swift in Sources */,
 				9855CF721CC6458F00ED28DA /* URLSession.swift in Sources */,
 				9855CF701CC6458F00ED28DA /* RequestExecutor.swift in Sources */,
-				9855CF7B1CC6459E00ED28DA /* CouchOperation.swift in Sources */,
+				9855CF7B1CC6459E00ED28DA /* Operation.swift in Sources */,
 				98593EE41CE373CA008F365F /* PutAttachmentOperation.swift in Sources */,
 				98E148CF1CF73E81006FE90E /* DeleteAttachmentOperation.swift in Sources */,
-				98D129641CF32D8E00CF7219 /* AttachmentOperation.swift in Sources */,
 				986DA7231D006E7F0065D462 /* ReadAttachmentOperation.swift in Sources */,
 				9855CF711CC6458F00ED28DA /* SessionCookieInterceptor.swift in Sources */,
 				2E79FE9C1CDA2BF500AD20E2 /* QueryViewOperation.swift in Sources */,
@@ -415,7 +411,7 @@
 				9855CF7A1CC6459E00ED28DA /* CouchDatabaseOperation.swift in Sources */,
 				9855CF6F1CC6458F00ED28DA /* RequestBuilder.swift in Sources */,
 				988A746D1CECC25A00242C24 /* CreateQueryIndexOperation.swift in Sources */,
-				98734A501C8A600600E79C5B /* Database.swift in Sources */,
+				98E1EB041D0582F9008137E3 /* OperationProtocols.swift in Sources */,
 				98C175ED1CEC5DF800A9CF2F /* DeleteQueryIndexOperation.swift in Sources */,
 				98734A4F1C8A600600E79C5B /* CouchClient.swift in Sources */,
 				9855CF7E1CC6459E00ED28DA /* DeleteDocumentOperation.swift in Sources */,

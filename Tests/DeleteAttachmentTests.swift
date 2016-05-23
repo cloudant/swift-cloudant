@@ -37,8 +37,10 @@ class DeleteAttachmentTests : XCTestCase {
         createDoc.completionHandler = {[weak self] (response, info, error) in
             self?.revId = response?["rev"] as? String
         }
-        client?[dbName!].add(operation: createDoc)
-        createDoc.waitUntilFinished()
+        createDoc.databaseName = dbName
+        let nsCreate = Operation(couchOperation: createDoc)
+        client?.add(operation: nsCreate)
+        nsCreate.waitUntilFinished()
         
         let attachment = "This is my awesome essay attachment for my document"
         let put = PutAttachmentOperation()
@@ -47,6 +49,7 @@ class DeleteAttachmentTests : XCTestCase {
         put.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
         put.attachmentName = "myAwesomeAttachment"
         put.contentType = "text/plain"
+        put.databaseName = dbName
         put.completionHandler = {[weak self] (response, info, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(info)
@@ -57,8 +60,9 @@ class DeleteAttachmentTests : XCTestCase {
             self?.revId = response?["rev"] as? String
             
         }
-        client?[dbName!].add(operation: put)
-        put.waitUntilFinished()
+        let nsPut = Operation(couchOperation: put)
+        client?.add(operation: nsPut)
+        nsPut.waitUntilFinished()
     }
     
     override func tearDown() {
@@ -83,7 +87,7 @@ class DeleteAttachmentTests : XCTestCase {
             XCTAssertNotNil(response)
             deleteExpectation.fulfill()
         }
-        client?[dbName!].add(operation: delete)
+        client?.add(operation: delete)
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
     
@@ -118,9 +122,9 @@ class DeleteAttachmentTests : XCTestCase {
         delete.attachmentName = "myAwesomeAttachment"
         delete.databaseName = self.dbName
         XCTAssertTrue(delete.validate())
-        XCTAssertTrue(delete.queryItems.isEquivalent(to: [NSURLQueryItem(name: "rev", value: revId)]))
-        XCTAssertEqual("/\(self.dbName!)/\(docId)/myAwesomeAttachment", delete.httpPath)
-        XCTAssertEqual("DELETE", delete.httpMethod)
+        XCTAssertEqual(["rev": revId!], delete.parameters)
+        XCTAssertEqual("/\(self.dbName!)/\(docId)/myAwesomeAttachment", delete.endpoint)
+        XCTAssertEqual("DELETE", delete.method)
     }
 
 }

@@ -90,6 +90,7 @@ internal extension MangoOperation {
  find.selector = ["foo":"bar"]
  find.fields = ["foo"]
  find.sort = [Sort(field: "foo", sort: .Desc)]
+ find.databaseName = "exampledb"
  find.documentFoundHanlder = { (document) in
     // Do something with the document.
  }
@@ -100,11 +101,15 @@ internal extension MangoOperation {
         // do something on success.
     }
  }
- database.add(operation:find)
+ client.add(operation:find)
  
  ```
  */
-public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation {
+public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JsonOperation {
+    
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    public var databaseName: String?
+    
     /**
      The selector for the query, as a dictionary representation. See
      [the Cloudant documentation](https://docs.cloudant.com/cloudant_query.html#selector-syntax)
@@ -183,25 +188,25 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation {
 
      - parameter document: a document matching the query.
      */
-    public var documentFoundHanlder: ((document: [String: AnyObject]) -> Void)?
+    public var documentFoundHandler: ((document: [String: AnyObject]) -> Void)?
 
     private var json: [String: AnyObject]?
 
-    public override var httpMethod: String {
+    public var method: String {
         return "POST"
     }
 
-    public override var httpPath: String {
+    public var endpoint: String {
         return "/\(self.databaseName!)/_find"
     }
 
     private var jsonData: NSData?
-    public override var httpRequestBody: NSData? {
+    public var data: NSData? {
         return self.jsonData
     }
 
-    public override func validate() -> Bool {
-        if !super.validate() {
+    public func validate() -> Bool {
+        if databaseName == nil  {
             return false
         }
         
@@ -272,7 +277,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation {
         return transfomed
     }
 
-    public override func serialise() throws {
+    public func serialise() throws {
         
         if self.json == nil {
             self.json = createJsonDict()
@@ -283,11 +288,18 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation {
         }
     }
 
-    public override func processResponse(json: [String: AnyObject]) {
-        if let docs = json["docs"] as? [[String: AnyObject]] { // Array of [String:AnyObject]
+    public func processResponse(json: Any) {
+        if let json = json as? [String: AnyObject],
+           let docs = json["docs"] as? [[String: AnyObject]] { // Array of [String:AnyObject]
             for doc: [String: AnyObject] in docs {
-                self.documentFoundHanlder?(document: doc)
+                self.documentFoundHandler?(document: doc)
             }
         }
     }
+    
+    public func callCompletionHandler(response: Any?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+        self.completionHandler?(response: response as? [String: AnyObject], httpInfo: httpInfo, error: error)
+    }
+
+
 }

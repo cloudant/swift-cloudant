@@ -21,7 +21,6 @@ import OHHTTPStubs
 class FindDocumentOperationTests: XCTestCase {
     var client: CouchDBClient? = nil;
     var dbName: String? = nil
-    var db: Database? = nil
     
     
     override func setUp() {
@@ -53,7 +52,6 @@ class FindDocumentOperationTests: XCTestCase {
         
         dbName = generateDBName()
         client = CouchDBClient(url: NSURL(string:self.url)!, username: self.username, password: self.password)
-        db = client![dbName!]
     }
     
     override func tearDown() {
@@ -64,6 +62,7 @@ class FindDocumentOperationTests: XCTestCase {
     
     func testInvalidSelector() {
         let find = FindDocumentsOperation()
+        find.databaseName = dbName
         find.selector = ["foo":find]
         
         let expectation = self.expectation(withDescription: "invalidSelector")
@@ -75,7 +74,7 @@ class FindDocumentOperationTests: XCTestCase {
             expectation.fulfill()
         }
 
-        db?.add(operation: find)
+        client?.add(operation: find)
         
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
         
@@ -83,6 +82,7 @@ class FindDocumentOperationTests: XCTestCase {
     
     func testCanQueryDocsOnlySelector() {
         let find = FindDocumentsOperation()
+        find.databaseName = dbName
         find.selector = ["foo":"bar"]
         
         let firstDocExpectation = self.expectation(withDescription: "1st Doc result")
@@ -91,7 +91,7 @@ class FindDocumentOperationTests: XCTestCase {
         
         var first = true
         
-        find.documentFoundHanlder = {(document) in
+        find.documentFoundHandler = {(document) in
             if first {
                 first = false
                 firstDocExpectation.fulfill()
@@ -113,7 +113,7 @@ class FindDocumentOperationTests: XCTestCase {
             
         }
         
-        db?.add(operation: find)
+        client?.add(operation: find)
         
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
 
@@ -129,6 +129,7 @@ class FindDocumentOperationTests: XCTestCase {
         find.bookmark = "blah"
         find.useIndex = "anIndex"
         find.r = 1
+        find.databaseName = dbName
         
         let expectation = self.expectation(withDescription: "Find op with all the options")
         find.completionHandler = { (response, httpInfo, error) in
@@ -140,7 +141,7 @@ class FindDocumentOperationTests: XCTestCase {
             
         }
         
-        db?.add(operation: find)
+        client?.add(operation: find)
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
     
@@ -159,9 +160,9 @@ class FindDocumentOperationTests: XCTestCase {
         
         XCTAssert(find.validate())
         try find.serialise()
-        XCTAssertEqual("/\(dbName!)/_find", find.httpPath)
-        XCTAssertEqual("POST", find.httpMethod)
-        let httpBodyOpt = find.httpRequestBody
+        XCTAssertEqual("/\(dbName!)/_find", find.endpoint)
+        XCTAssertEqual("POST", find.method)
+        let httpBodyOpt = find.data
         XCTAssertNotNil(httpBodyOpt)
         
         if let httpBody = httpBodyOpt {
@@ -200,9 +201,9 @@ class FindDocumentOperationTests: XCTestCase {
         
         XCTAssert(find.validate())
         try find.serialise()
-        XCTAssertEqual("/\(dbName!)/_find", find.httpPath)
-        XCTAssertEqual("POST", find.httpMethod)
-        let httpBodyOpt = find.httpRequestBody
+        XCTAssertEqual("/\(dbName!)/_find", find.endpoint)
+        XCTAssertEqual("POST", find.method)
+        let httpBodyOpt = find.data
         XCTAssertNotNil(httpBodyOpt)
         
         if let httpBody = httpBodyOpt {
@@ -235,9 +236,9 @@ class FindDocumentOperationTests: XCTestCase {
         
         XCTAssert(find.validate())
         try find.serialise()
-        XCTAssertEqual("/\(dbName!)/_find", find.httpPath)
-        XCTAssertEqual("POST", find.httpMethod)
-        let httpBodyOpt = find.httpRequestBody
+        XCTAssertEqual("/\(dbName!)/_find", find.endpoint)
+        XCTAssertEqual("POST", find.method)
+        let httpBodyOpt = find.data
         XCTAssertNotNil(httpBodyOpt)
         
         if let httpBody = httpBodyOpt {
@@ -286,6 +287,7 @@ class FindDocumentOperationTests: XCTestCase {
         find.bookmark = "blah"
         find.useIndex = "anIndex"
         find.r = 1
+        find.databaseName = dbName
         
         let expectation = self.expectation(withDescription: "Find op with all the options")
         find.completionHandler = { (response, httpInfo, error) in
@@ -297,7 +299,7 @@ class FindDocumentOperationTests: XCTestCase {
             
         }
         
-        db?.add(operation: find)
+        client?.add(operation: find)
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
     
@@ -310,9 +312,9 @@ class FindDocumentOperationTests: XCTestCase {
         
 
         
-        XCTAssertEqual("/\(dbName!)/_find", find.httpPath)
-        XCTAssertEqual("POST", find.httpMethod);
-        let httpBodyOpt = find.httpRequestBody
+        XCTAssertEqual("/\(dbName!)/_find", find.endpoint)
+        XCTAssertEqual("POST", find.method);
+        let httpBodyOpt = find.data
         XCTAssertNotNil(httpBodyOpt)
         
         if let httpBody = httpBodyOpt {

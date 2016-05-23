@@ -40,7 +40,7 @@ import Foundation
  ```
  */
  
-public class ReadAttachmentOperation: AttachmentOperation {
+public class ReadAttachmentOperation: CouchDatabaseOperation, DataOperation {
     
     /**
      Sets a completion handler to run when the operation completes.
@@ -49,24 +49,54 @@ public class ReadAttachmentOperation: AttachmentOperation {
      - parameter httpInfo: - Information about the HTTP response.
      - parameter error: - ErrorProtocol instance with information about an error executing the operation.
      */
-    public var readAttachmentCompletionHandler: ((data:NSData?, httpInfo:HttpInfo?, error: ErrorProtocol?) -> Void)?
+    public var completionHandler: ((response: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
     
-    public override func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
-        guard error == nil, let httpInfo = httpInfo
-            else {
-                self.callCompletionHandler(error: error!)
-                return
+    public var databaseName: String?
+    
+    /**
+     The id of the document that the attachment should be attached to.
+     */
+    public var docId: String?
+    
+    /**
+     The revision of the document that the attachment should be attached to.
+     */
+    public var revId: String?
+    
+    /**
+     The name of the attachment.
+     */
+    public var attachmentName: String?
+    
+    public func validate() -> Bool {
+        if self.databaseName == nil {
+            return false
         }
-                if httpInfo.statusCode / 100 == 2 {
-                    self.readAttachmentCompletionHandler?(data: data, httpInfo: httpInfo, error: error)
-                } else {
-                    self.readAttachmentCompletionHandler?(data: data, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data: data!, encoding: NSUTF8StringEncoding)))
-                }
-
+        if docId == nil {
+            return false
+        }
+        
+        if revId == nil {
+            return false
+        }
+        
+        if attachmentName == nil {
+            return false
+        }
+        
+        return true
     }
     
-    public override var httpMethod: String {
+    public var method: String {
         return "GET"
+    }
+    
+    public var endpoint: String {
+        return "/\(self.databaseName!)/\(docId!)/\(attachmentName!)"
+    }
+    
+    public var parameters: [String: String] {
+        return ["rev": revId!]
     }
     
     

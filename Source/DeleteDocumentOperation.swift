@@ -25,6 +25,7 @@ import Foundation
  let delete = DeleteDocumentOperation()
  delete.docId = "exampleDocId"
  delete.revId = "1-examplerevid"
+ delete.databaseName = "exampledb"
  delete.completionHandler = { (response, httpInfo, error) in
     if let error = error {
         NSLog("An error occured attemtping to delete a document")
@@ -32,10 +33,15 @@ import Foundation
         NSLog("Document deleted with statusCode \(statusCode!)"
     }
  }
- database.add(delete)
+ client.add(delete)
  ````
  */
-public class DeleteDocumentOperation: CouchDatabaseOperation {
+public class DeleteDocumentOperation: CouchDatabaseOperation, JsonOperation {
+
+    
+    
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    public var databaseName: String?
 
     /**
      * The revision of the document to delete
@@ -51,20 +57,20 @@ public class DeleteDocumentOperation: CouchDatabaseOperation {
      */
     public var docId: String? = nil
 
-    public override func validate() -> Bool {
-        return super.validate() && revId != nil && docId != nil
+    public func validate() -> Bool {
+        return databaseName != nil  && revId != nil && docId != nil
     }
 
-    public override var httpMethod: String {
+    public var method: String {
         return "DELETE"
     }
 
-    public override var httpPath: String {
+    public var endpoint: String {
         return "/\(self.databaseName!)/\(docId!)"
     }
 
-    public override var queryItems: [NSURLQueryItem] {
-        return [NSURLQueryItem(name: "rev", value: revId!)]
+    public var parameters: [String: String] {
+        return ["rev": revId!]
     }
 
 }

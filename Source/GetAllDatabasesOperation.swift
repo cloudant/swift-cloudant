@@ -33,13 +33,8 @@ import Foundation
     // process the response information
  }
  
- - Note: The `response` parameter for the `completionHandler` **will not** match the response
-  received from Couch. This is because CouchDB returns an array as a top level object and the
-  completion handler only accepts Dictionaries. To access the list of database names, use the key
-  `databases`
- 
  */
-public class GetAllDatabasesOperation : CouchOperation {
+public class GetAllDatabasesOperation : CouchOperation, JsonOperation {
     
     /**
         Handler to run for each database returned.
@@ -48,47 +43,22 @@ public class GetAllDatabasesOperation : CouchOperation {
      */
     public var databaseHandler: ((databaseName: String) -> Void)?
     
-    override public var httpPath: String {
+    public var completionHandler: ((response: [AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    
+    public var endpoint: String {
         return "/_all_dbs"
     }
     
-    
-    override public func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
-        guard error == nil, let httpInfo = httpInfo
-            else {
-                self.callCompletionHandler(error: error!)
-                return
-        }
-        
-        do {
-            if let data = data {
-                let json = try NSJSONSerialization.jsonObject(with: data)
-                if httpInfo.statusCode / 100 == 2 {
-                    
-                    if let json = json as? [String] {
-                        for dbName in json {
-                            self.databaseHandler?(databaseName: dbName)
-                        }
-                        // we need to wrap the response, because if it is sucessful it returns an array not a dict
-                        self.completionHandler?(response: ["databases":json as NSArray], httpInfo: httpInfo, error: nil)
-                    }
-
-                } else {
-                    self.completionHandler?(response: json as? [String : AnyObject], httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data: data, encoding: NSUTF8StringEncoding)))
-                }
-            } else {
-                self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: nil))
-            }
-        } catch {
-            let response: String?
-            if let data = data {
-                response = String(data: data, encoding: NSUTF8StringEncoding)
-            } else {
-                response = nil
-            }
-            self.completionHandler?(response: nil, httpInfo: httpInfo, error: Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response))
-        }
+    public func validate() -> Bool {
+        return true
     }
     
+    public func processResponse(json: Any) {
+        if let json = json as? [String] {
+            for dbName in json {
+                self.databaseHandler?(databaseName: dbName)
+            }
+        }
+    }
     
 }
