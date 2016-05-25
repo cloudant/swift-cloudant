@@ -43,6 +43,46 @@ public struct Sort {
 }
 
 /**
+ Protocol for operations which deal with the Mango API set for CouchDB / Cloudant.
+*/
+internal protocol MangoOperation {
+    
+}
+
+internal extension MangoOperation {
+    /**
+        Transform an Array of Sort into a Array in the form of Sort Syntax.
+    */
+    internal func transform(sortArray: [Sort]) -> [AnyObject] {
+        
+        var transformed: [AnyObject] = []
+        for s in sortArray {
+            if let sort = s.sort {
+                let dict = [s.field: sort.rawValue]
+                transformed.append(dict as NSDictionary)
+            } else {
+                transformed.append(s.field as NSString)
+            }
+        }
+        
+        return transformed
+    }
+
+    /**
+        Transform an array of TextIndexField into an Array in the form of Lucene field definitions.
+    */
+    internal func transform(fields: [TextIndexField]) -> NSArray {
+        var array: [[String:String]] = []
+
+        for field in fields {
+            array.append([field.name: field.type.rawValue])
+        }
+
+        return array as NSArray
+    }
+}
+
+/**
  Usage example:
 
  ```
@@ -64,7 +104,7 @@ public struct Sort {
  
  ```
  */
-public class FindDocumentsOperation: CouchDatabaseOperation {
+public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation {
     /**
      The selector for the query, as a dictionary representation. See
      [the Cloudant documentation](https://docs.cloudant.com/cloudant_query.html#selector-syntax)
@@ -199,6 +239,8 @@ public class FindDocumentsOperation: CouchDatabaseOperation {
         }
         
         if let sort = self.sort {
+            transform(sortArray: sort)
+            
             jsonObj["sort"] = transform(sortArray: sort) as NSArray
         }
         
@@ -217,7 +259,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation {
         return jsonObj
     }
 
-    private func transform(sortArray: [Sort]) -> [AnyObject] {
+    internal class func transform(sortArray: [Sort]) -> [AnyObject] {
 
         var transfomed: [AnyObject] = []
         for s in sortArray {

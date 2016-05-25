@@ -34,6 +34,8 @@
 		98734A611C8A601400E79C5B /* CreateDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A5D1C8A601400E79C5B /* CreateDatabaseTests.swift */; };
 		98734A621C8A601400E79C5B /* GetDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A5E1C8A601400E79C5B /* GetDocumentTests.swift */; };
 		98734A641C8A601400E79C5B /* SwiftCloudantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98734A601C8A601400E79C5B /* SwiftCloudantTests.swift */; };
+		988A746D1CECC25A00242C24 /* CreateQueryIndexOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988A746C1CECC25A00242C24 /* CreateQueryIndexOperation.swift */; };
+		988A746F1CECC26B00242C24 /* CreateQueryIndexTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988A746E1CECC26B00242C24 /* CreateQueryIndexTests.swift */; };
 		98B4F2CE1CA759130076C5E4 /* PutDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B4F2CD1CA759130076C5E4 /* PutDocumentTests.swift */; };
 		98C175ED1CEC5DF800A9CF2F /* DeleteQueryIndexOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C175EC1CEC5DF800A9CF2F /* DeleteQueryIndexOperation.swift */; };
 		98D129601CF3095E00CF7219 /* GetAllDatabasesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D1295F1CF3095E00CF7219 /* GetAllDatabasesTests.swift */; };
@@ -85,6 +87,8 @@
 		98734A5E1C8A601400E79C5B /* GetDocumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetDocumentTests.swift; sourceTree = "<group>"; };
 		98734A5F1C8A601400E79C5B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		98734A601C8A601400E79C5B /* SwiftCloudantTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftCloudantTests.swift; sourceTree = "<group>"; };
+		988A746C1CECC25A00242C24 /* CreateQueryIndexOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CreateQueryIndexOperation.swift; path = Source/CreateQueryIndexOperation.swift; sourceTree = SOURCE_ROOT; };
+		988A746E1CECC26B00242C24 /* CreateQueryIndexTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateQueryIndexTests.swift; sourceTree = "<group>"; };
 		98B4F2CD1CA759130076C5E4 /* PutDocumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PutDocumentTests.swift; sourceTree = "<group>"; };
 		98C175EC1CEC5DF800A9CF2F /* DeleteQueryIndexOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeleteQueryIndexOperation.swift; path = Source/DeleteQueryIndexOperation.swift; sourceTree = SOURCE_ROOT; };
 		98D1295F1CF3095E00CF7219 /* GetAllDatabasesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetAllDatabasesTests.swift; sourceTree = "<group>"; };
@@ -174,6 +178,7 @@
 				9855CF781CC6459E00ED28DA /* GetDocumentOperation.swift */,
 				9855CF791CC6459E00ED28DA /* PutDocumentOperation.swift */,
 				98593EE31CE373CA008F365F /* PutAttachmentOperation.swift */,
+				988A746C1CECC25A00242C24 /* CreateQueryIndexOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -195,6 +200,7 @@
 				98593EE51CE378A7008F365F /* PutAttachmentTests.swift */,
 				980A04931CEC56B000F5F049 /* DeleteQueryIndexTests.swift */,
 				98D1295F1CF3095E00CF7219 /* GetAllDatabasesTests.swift */,
+				988A746E1CECC26B00242C24 /* CreateQueryIndexTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -390,6 +396,7 @@
 				9855CF801CC6459E00ED28DA /* PutDocumentOperation.swift in Sources */,
 				9855CF7A1CC6459E00ED28DA /* CouchDatabaseOperation.swift in Sources */,
 				9855CF6F1CC6458F00ED28DA /* RequestBuilder.swift in Sources */,
+				988A746D1CECC25A00242C24 /* CreateQueryIndexOperation.swift in Sources */,
 				98734A501C8A600600E79C5B /* Database.swift in Sources */,
 				98C175ED1CEC5DF800A9CF2F /* DeleteQueryIndexOperation.swift in Sources */,
 				98734A4F1C8A600600E79C5B /* CouchClient.swift in Sources */,
@@ -402,6 +409,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				988A746F1CECC26B00242C24 /* CreateQueryIndexTests.swift in Sources */,
 				98B4F2CE1CA759130076C5E4 /* PutDocumentTests.swift in Sources */,
 				98EC4AE81CC1533800704CFE /* DeleteDocumentTests.swift in Sources */,
 				9855CF861CC8CE5F00ED28DA /* TestHelpers.swift in Sources */,
