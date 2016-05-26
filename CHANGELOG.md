@@ -1,6 +1,7 @@
 # Unreleased
 
 - [NEW] New FindDocumentsOperation API.
+- [NEW] New DeleteAttachmentOperation API.
 
 # 0.2.1 (2016-05-13)
 
