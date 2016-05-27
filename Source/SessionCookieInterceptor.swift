@@ -39,9 +39,9 @@ public class SessionCookieInterceptor: HTTPInterceptor
      */
     var cookie: String?
     /**
-     The `InterceptableSession` to use when making HTTP requests.
+     The `NSURLSession` to use when making HTTP requests.
      */
-    let urlSession: InterceptableSession
+    let urlSession: NSURLSession
 
     init(username: String, password: String) {
         let encodedUsername = username.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics())!
@@ -50,8 +50,7 @@ public class SessionCookieInterceptor: HTTPInterceptor
         let payload = "name=\(encodedUsername)&password=\(encodedPassword)"
 
         sessionRequestBody = payload.data(using: NSASCIIStringEncoding)!
-        urlSession = InterceptableSession()
-
+        urlSession = NSURLSession(configuration: NSURLSessionConfiguration.ephemeral())
     }
 
     public func interceptResponse(context: HTTPInterceptorContext) -> HTTPInterceptorContext {
@@ -110,8 +109,8 @@ public class SessionCookieInterceptor: HTTPInterceptor
             return nil
         }
         var cookie: String?
-
-        let task = self.urlSession.dataTask(request: request) { (data, response, error) -> Void in
+ 
+        let task = self.urlSession.dataTask(with: request) { (data, response, error) -> Void in
 
             // defer semaphore
             defer { dispatch_semaphore_signal(semaphore) }

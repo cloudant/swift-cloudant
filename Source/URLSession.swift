@@ -35,6 +35,31 @@ public protocol HTTPInterceptor
     func interceptResponse(ctx: HTTPInterceptorContext) -> HTTPInterceptorContext
 }
 
+/**
+    A delegate for receiving data and responses from a URL task.
+ */
+internal protocol InterceptableSessionDelegate {
+    
+    /**
+     Called when the response is received from the server
+     - parameter response: The response received from the server
+    */
+    func received(response:NSHTTPURLResponse)
+    
+    /**
+    Called when response data is available from the server, may be called multiple times.
+     - parameter data: The data received from the server, this may be only a fraction of the data
+     the server is sending as part of the response.
+    */
+    func received(data: NSData)
+    
+    /**
+    Called when the request has completed
+     - parameter error: The error that occurred when making the request if any.
+    */
+    func completed(error: ErrorProtocol?)
+}
+
 // extension that implements default behvaiour, this does have limitations, for example
 // only classes can implement HTTPInterceptor due to way polymorphsim is handled.
 public extension HTTPInterceptor {
@@ -73,19 +98,14 @@ public struct HTTPInterceptorContext {
  */
 public class URLSessionTask {
     private let request: NSURLRequest
-    private var inProgessTask: NSURLSessionDataTask?
+    private var inProgressTask: NSURLSessionDataTask
     private let session: NSURLSession
-    private var remainingRetries: Int = 10
-    private let interceptors: Array<HTTPInterceptor>
-    private let completionHandler: (NSData?, NSURLResponse?, NSError?) -> (Void)
+    private var remainingRetries: UInt = 10
+    private let delegate: InterceptableSessionDelegate
 
     public var state: NSURLSessionTaskState {
         get {
-            if let task = self.inProgessTask {
-                return task.state
-            } else {
-                return .suspended
-            }
+            return inProgressTask.state
         }
     }
 
@@ -93,82 +113,48 @@ public class URLSessionTask {
      Creates a URLSessionTask object
      - parameter session: the NSURLSession it should use when making HTTP requests.
      - parameter request: the HTTP request to make
-     - parameter interceptors: the HTTP interceptors to run for the request.
-     - parameter completionHandler: The block to run when the task has completed.
+     - parameter inProgressTask: The NSURLSessionDataTask that is performing the request in NSURLSession.
+     - parameter delegate: The delegate for this task.
      */
-    init(session: NSURLSession, request: NSURLRequest, interceptors: Array<HTTPInterceptor>, completionHandler: (NSData?, NSURLResponse?, NSError?) -> (Void)) {
-        self.interceptors = interceptors
+    init(session: NSURLSession, request: NSURLRequest, inProgressTask:NSURLSessionDataTask, delegate: InterceptableSessionDelegate) {
         self.request = request
         self.session = session
-        self.completionHandler = completionHandler
+        self.delegate = delegate
+        self.inProgressTask = inProgressTask
     }
 
     /**
      Resumes a suspended task
      */
     public func resume() {
-        if let task = inProgessTask {
-            task.resume();
-        } else {
-            // make task and start
-            let task = self.makeRequest()
-            self.inProgessTask = task
-            task.resume()
-        }
+        inProgressTask.resume()
     }
 
     /**
      Cancels the task.
      */
     public func cancel() {
-        if let task = self.inProgessTask {
-            task.cancel()
-        }
+        inProgressTask.cancel()
     }
-
-    private func makeRequest() -> NSURLSessionDataTask {
-        var ctx = HTTPInterceptorContext(request: request.mutableCopy() as! NSMutableURLRequest, response: nil, shouldRetry: false)
-
-        for interceptor in interceptors {
-            ctx = interceptor.interceptRequest(ctx: ctx)
-        }
-
-        return self.session.dataTask(with: request, completionHandler: { (data, response, error) -> Void in
-
-            guard error == nil
-            else {
-                self.completionHandler(data, response, error)
-                return
-            }
-
-            ctx = HTTPInterceptorContext(request: ctx.request, response: (response as! NSHTTPURLResponse), shouldRetry: ctx.shouldRetry)
-
-            for interceptor in self.interceptors {
-                ctx = interceptor.interceptResponse(ctx: ctx)
-            }
-
-            if ctx.shouldRetry && self.remainingRetries > 0 {
-                self.remainingRetries -= 1;
-                self.inProgessTask = self.makeRequest()
-                self.inProgessTask?.resume()
-            } else {
-                // call completion
-                self.completionHandler(data, response, error)
-            }
-        })
-    }
-
 }
 
 /**
  A class to create `URLSessionTask`
  */
-public class InterceptableSession {
+internal class InterceptableSession: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLSessionDataDelegate, NSURLSessionStreamDelegate {
 
-    private let session: NSURLSession
+    private lazy var session: NSURLSession = { () -> NSURLSession in
+        let config = NSURLSessionConfiguration.default()
+        config.httpAdditionalHeaders = ["User-Agent": InterceptableSession.userAgent() as NSString]
+        return NSURLSession(configuration: config, delegate: self, delegateQueue: nil) }()
+    
     private let interceptors: Array<HTTPInterceptor>
 
-    convenience init() {
+    
+    private var taskDict: [NSURLSessionTask: URLSessionTask] = [:]
+    
+    
+    convenience override init() {
         self.init(delegate: nil, requestInterceptors: [])
     }
 
@@ -179,22 +165,87 @@ public class InterceptableSession {
      */
     init(delegate: NSURLSessionDelegate?, requestInterceptors: Array<HTTPInterceptor>) {
         interceptors = requestInterceptors
-
-        let config = NSURLSessionConfiguration.default()
-        config.httpAdditionalHeaders = ["User-Agent": InterceptableSession.userAgent() as NSString]
-        session = NSURLSession(configuration: config, delegate: delegate, delegateQueue: nil)
     }
 
     /**
      Creates a data task to perform the http request.
      - parameter request: the request the task should make
-     - parameter completionHandler: A block to call when the task is completed.
+     - parameter delegate: The delegate for the task being created.
      - returns: A `URLSessionTask` representing the task for the `NSURLRequest`
      */
-    public func dataTask(request: NSURLRequest, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) -> URLSessionTask
-    {
-        return URLSessionTask(session: session, request: request, interceptors: interceptors, completionHandler: completionHandler)
+    internal func dataTask(request: NSURLRequest, delegate: InterceptableSessionDelegate) -> URLSessionTask {
+        // create the underlying task.
+        var ctx = HTTPInterceptorContext(request: request.mutableCopy() as! NSMutableURLRequest, response: nil, shouldRetry: false)
+        
+        for interceptor in interceptors {
+            ctx = interceptor.interceptRequest(ctx: ctx)
+        }
+        
+        let nsTask = self.session.dataTask(with: request.copy() as! NSURLRequest)
+        let task = URLSessionTask(session: session, request: request, inProgressTask: nsTask, delegate: delegate)
+        
+        self.taskDict[nsTask] = task
+        
+        return task
     }
+    
+    
+    internal func urlSession(_ session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+        guard let mTask = taskDict[task]
+        else {
+                return
+        }
+        
+        mTask.delegate.completed(error: error)
+        // remove the task from the dict so it can be released.
+        taskDict.removeValue(forKey: task)
+    }
+    
+    internal func urlSession(_ session: NSURLSession, dataTask: NSURLSessionDataTask, didReceive data: NSData) {
+        // yay datas
+        guard let task = taskDict[dataTask]
+        else {
+            // perhaps we should also cancel the task if we fail to look it up.
+            return
+        }
+        
+        task.delegate.received(data: data)
+    }
+    
+    internal func urlSession(_ session: NSURLSession, dataTask: NSURLSessionDataTask, didReceive response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
+        // Retrieve the task from the dict.
+        guard let task = taskDict[dataTask], let response = response as? NSHTTPURLResponse
+        else {
+            completionHandler(.cancel)
+            return
+        }
+        
+        var ctx = HTTPInterceptorContext(request: task.request.mutableCopy() as! NSMutableURLRequest, response: response, shouldRetry: false)
+        for interceptor in interceptors {
+            ctx = interceptor.interceptResponse(ctx: ctx)
+        }
+        
+        if ctx.shouldRetry  && task.remainingRetries > 0 {
+            task.remainingRetries -= 1
+            // retry the request.
+            ctx = HTTPInterceptorContext(request: task.request.mutableCopy() as! NSMutableURLRequest, response: nil, shouldRetry: false)
+            for interceptor in interceptors {
+                ctx = interceptor.interceptRequest(ctx: ctx)
+            }
+            taskDict.removeValue(forKey: task.inProgressTask)
+            task.inProgressTask = self.session.dataTask(with: ctx.request.copy() as! NSURLRequest)
+            taskDict[task.inProgressTask] = task
+            task.resume()
+            
+            completionHandler(.cancel)
+        } else {
+            // pass the result back to the delegate.
+            task.delegate.received(response: response)
+            completionHandler(.allow)
+        }
+    }
+    
+    
 
     deinit {
         self.session.finishTasksAndInvalidate()
