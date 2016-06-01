@@ -234,6 +234,7 @@ public class CouchOperation: NSOperation, HTTPRequestOperation
     }
 
     final func completeOperation() {
+        self.executor = nil // break the cycle.
         self.isExecuting = false
         self.isFinished = true
     }

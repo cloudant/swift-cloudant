@@ -33,7 +33,7 @@ public struct HttpInfo {
 /**
  Executes a `HTTPRequestOperation`'s HTTP request.
  */
-class OperationRequestExecutor {
+class OperationRequestExecutor: InterceptableSessionDelegate {
 
     /**
      The HTTP task currently processing
@@ -43,6 +43,9 @@ class OperationRequestExecutor {
      The operation which this OperationRequestExecutor is Executing.
      */
     let operation: HTTPRequestOperation
+    
+    let buffer: NSMutableData
+    var response: NSHTTPURLResponse?
     /**
      Creates an OperationRequestExecutor.
      - parameter operation: The operation that this OperationRequestExecutor will execute
@@ -50,6 +53,42 @@ class OperationRequestExecutor {
     init(operation: HTTPRequestOperation) {
         self.operation = operation
         task = nil
+        buffer = NSMutableData()
+    }
+    
+    func received(data: NSData) {
+        // This class doesn't support streaming of data
+        // so we buffer until the request completes 
+        // and then we will deliver it to the
+        // operation in chunk.
+        buffer.append(data)
+    }
+    
+    func received(response: NSHTTPURLResponse) {
+        // Store the response to deliver with the data when the task completes.
+        self.response = response
+    }
+    
+    func completed(error: ErrorProtocol?) {
+        self.task = nil // allow task to be deallocated.
+        
+        // task has completed, handle the operation canceling etc.
+        if self.operation.isCancelled {
+            self.operation.completeOperation()
+            return
+        }
+        
+        let httpInfo: HttpInfo?
+        
+        if let response = response {
+            httpInfo = HttpInfo(statusCode: response.statusCode, headers: response.allHeaderFields as! [String: String])
+        } else {
+            httpInfo = nil
+        }
+        
+        self.operation.processResponse(data: buffer, httpInfo: httpInfo, error: error)
+        self.operation.completeOperation()
+
     }
 
     /**
@@ -61,29 +100,7 @@ class OperationRequestExecutor {
             let builder = OperationRequestBuilder(operation: self.operation)
             let request = try builder.buildRequest()
 
-            self.task = self.operation.session.dataTask(request: request, completionHandler: { (data, response, error) -> Void in
-
-                // Should break the retain cycle but not sure.
-                self.task = nil
-
-                if self.operation.isCancelled {
-                    self.operation.completeOperation()
-                    return
-                }
-
-                let httpInfo: HttpInfo?
-
-                if let response = response as? NSHTTPURLResponse {
-                    httpInfo = HttpInfo(statusCode: response.statusCode, headers: response.allHeaderFields as! [String: String])
-                } else {
-                    httpInfo = nil
-                }
-
-                self.operation.processResponse(data: data, httpInfo: httpInfo, error: error)
-                self.operation.completeOperation()
-
-            })
-
+            self.task = self.operation.session.dataTask(request: request, delegate: self)
             self.task?.resume()
         } catch {
             self.operation.processResponse(data: nil, httpInfo: nil, error: error)
