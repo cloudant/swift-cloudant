@@ -3,9 +3,9 @@
 ## Contributor License Agreement
 
 In order for us to accept pull-requests, the contributor must first complete
-a Contributor License Agreement (CLA). This clarifies the intellectual 
-property license granted with any contribution. It is for your protection as a 
-Contributor as well as the protection of IBM and its customers; it does not 
+a Contributor License Agreement (CLA). This clarifies the intellectual
+property license granted with any contribution. It is for your protection as a
+Contributor as well as the protection of IBM and its customers; it does not
 change your rights to use your own Contributions for any other purpose.
 
 This is a quick process: one option is signing using Preview on a Mac,
@@ -27,8 +27,8 @@ you'll need:
 
 * Xcode
 * Xcode command line tools
-* Swift 3 development snapshot
-* Cocoapods
+* Latest Swift 3 development snapshot
+* CocoaPods
 * Homebrew (optional, but useful)
 
 First, download Xcode from the app store or [ADC][adc].
@@ -56,7 +56,7 @@ The house style is [documented](doc/style-guide.md). There's information there o
 
 ## Getting started with the project
 
-The main workspace is `ObjectiveCloudant.xcworkspace` this is in the root of
+The main workspace is `SwiftCloudant.xcworkspace` this is in the root of
 the checkout after `pod install` has been run to setup all the dependancies
 for the project. All development should be completed via this workspace.
 
@@ -70,18 +70,34 @@ structure. All production code goes into `Source` and test code goes into `Test`
 * `Source` for classes that need to be used in order to successfully
 interact with the database. Such as CDTCouchDBClient.
 
+__NOTE__: Due to the lack of xcode support for Swift Package Manager source
+layouts, the `Source` directory on disk cannot contain folders so the `swift build` command
+can continue to work.
+
+### Test Configuration
+
+By default, the tests will attempt to use CouchDB located at `http://localhost:5984`,
+these can be configured using the Test Bundle's `TestSettings.plist` file. The properties
+are as follows:
+
+| Property Name | Purpose | Default |
+|---------------|---------|---------|
+| TEST_COUCH_URL | The URL to connect to | http://localhost:5984 |
+| TEST_COUCH_USERNAME | The username to use when accessing the server | `nil` |
+| TEST_COUCH_PASSWORD | The password to use when accessing the server | `nil`|
+
+
+
 ### Using Xcode build to run the tests.
 
 Run:
 ```bash
 export TOOLCHAINS=swift
 pod update
-xcodebuild -workspace SwiftCloudant.xcworkspace/ -scheme SwiftCloudantTests -destination 'platform=iOS Simulator,OS=latest,name=iPhone 4S' build test
+xcodebuild -workspace SwiftCloudant.xcworkspace -scheme SwiftCloudant -destination 'platform=iOS Simulator,OS=latest,name=iPhone 6S' test
 ```
 
 Currently only iOS is supported for testing.
-
-__NOTE__: Currently server information is hard coded to localhost without credentials.
 
 __NOTE__: You should also check that any changes made compile using the Swift Package Manager,
 use the command `swift build` in the root of the checkout to compile using the Swift Package Manager.
