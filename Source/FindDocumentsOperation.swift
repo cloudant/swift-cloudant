@@ -239,8 +239,6 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation {
         }
         
         if let sort = self.sort {
-            transform(sortArray: sort)
-            
             jsonObj["sort"] = transform(sortArray: sort) as NSArray
         }
         
