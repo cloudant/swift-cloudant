@@ -15,7 +15,6 @@
 //
 
 import XCTest
-import OHHTTPStubs
 @testable import SwiftCloudant
 
 class FindDocumentOperationTests: XCTestCase {

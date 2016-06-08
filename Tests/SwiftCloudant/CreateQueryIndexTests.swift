@@ -16,7 +16,6 @@
 
 import Foundation
 import XCTest
-import OHHTTPStubs
 @testable import SwiftCloudant
 
 
@@ -31,18 +30,6 @@ public class CreateQueryIndexTests : XCTestCase {
         
         dbName = generateDBName()
         client = CouchDBClient(url: NSURL(string:self.url)!, username: self.username, password: self.password)
-        
-        OHHTTPStubs.stubRequests(passingTest: { (request) -> Bool in
-            return (request.url?.path?.contains("_index"))! && !(request.httpMethod! == "POST")
-            }, withStubResponse: { (request) -> OHHTTPStubsResponse in
-                OHHTTPStubsResponse(jsonObject: [:], statusCode: 405, headers: [:])
-        })
-        
-        OHHTTPStubs.stubRequests(passingTest: { (request) -> Bool in
-            return (request.url?.path?.contains("_index"))! && (request.httpMethod! == "POST")
-            }, withStubResponse: { (request) -> OHHTTPStubsResponse in
-                OHHTTPStubsResponse(jsonObject: [:], statusCode: 201, headers: ["result": "created"])
-        })
     }
     
     
@@ -59,7 +46,7 @@ public class CreateQueryIndexTests : XCTestCase {
             XCTAssertNil(error)
             expectation.fulfill()
         }
-        client?.add(operation: index)
+        self.simulateOkResponseFor(operation: index)
         self.waitForExpectations(withTimeout:10.0, handler: nil)
     }
     
@@ -77,7 +64,7 @@ public class CreateQueryIndexTests : XCTestCase {
             XCTAssertNil(error)
             expectation.fulfill()
         }
-        client?.add(operation: index)
+        self.simulateOkResponseFor(operation: index)
         self.waitForExpectations(withTimeout:10.0, handler: nil)
     }
     
