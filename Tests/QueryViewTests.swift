@@ -16,46 +16,37 @@
 
 import Foundation
 import XCTest
-import OHHTTPStubs
 @testable import SwiftCloudant
 
 public class QueryViewTests: XCTestCase {
 
     var dbName: String? = nil
     var client: CouchDBClient?
+    let response = ["offset": 0,
+                    "rows": [["id": "3-tiersalmonspinachandavocadoterrine",
+                              "key": "3-tier salmon, spinach and avocado terrine",
+                              "value": ["3-tier salmon, spinach and avocado terrine"]],
+                             ["id": "Aberffrawcake",
+                              "key": "Aberffraw cake",
+                              "value": ["Aberffraw cake"]],
+                             ["id": "Adukiandorangecasserole-microwave",
+                              "key": "Aduki and orange casserole - microwave",
+                              "value": ["Aduki and orange casserole - microwave"]],
+                             ["id": "Aioli-garlicmayonnaise",
+                              "key": "Aioli - garlic mayonnaise",
+                              "value": ["Aioli - garlic mayonnaise"]],
+                             ["id": "Alabamapeanutchicken",
+                              "key": "Alabama peanut chicken",
+                              "value": ["Alabama peanut chicken"]]],
+                    "total_rows": 2667]
 
     override public func setUp() {
         super.setUp()
         dbName = generateDBName()
         client = CouchDBClient(url: NSURL(string: url)!, username: username, password: password)
-
-        OHHTTPStubs.stubRequests(passingTest: { (request) -> Bool in
-            return (request.url?.path?.contains("/_view/"))!
-            }, withStubResponse: { (response) -> OHHTTPStubsResponse in
-            return OHHTTPStubsResponse(jsonObject: ["offset": 0,
-                "rows": [["id": "3-tiersalmonspinachandavocadoterrine",
-                    "key": "3-tier salmon, spinach and avocado terrine",
-                    "value": ["3-tier salmon, spinach and avocado terrine"]],
-                    ["id": "Aberffrawcake",
-                        "key": "Aberffraw cake",
-                        "value": ["Aberffraw cake"]],
-                    ["id": "Adukiandorangecasserole-microwave",
-                        "key": "Aduki and orange casserole - microwave",
-                        "value": ["Aduki and orange casserole - microwave"]],
-                    ["id": "Aioli-garlicmayonnaise",
-                        "key": "Aioli - garlic mayonnaise",
-                        "value": ["Aioli - garlic mayonnaise"]],
-                    ["id": "Alabamapeanutchicken",
-                        "key": "Alabama peanut chicken",
-                        "value": ["Alabama peanut chicken"]]],
-                "total_rows": 2667],
-                statusCode: 200,
-                headers: [:])
-        })
     }
 
     override public func tearDown() {
-        OHHTTPStubs.removeAllStubs()
         super.tearDown()
     }
 
@@ -235,8 +226,7 @@ public class QueryViewTests: XCTestCase {
             }
             completionHandler.fulfill()
         }
-
-        self.client?.add(operation: view)
+        self.simulateOkResponseFor(operation: view, jsonResponse:JSONResponse(dictionary:response))
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
 

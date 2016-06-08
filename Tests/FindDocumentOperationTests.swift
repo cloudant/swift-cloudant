@@ -21,42 +21,30 @@ import OHHTTPStubs
 class FindDocumentOperationTests: XCTestCase {
     var client: CouchDBClient? = nil;
     var dbName: String? = nil
+    let response = [    "docs" : [
+        [
+            "_id" : "2",
+            "_rev" : "1-9f0e70c7592b2e88c055c51afc2ec6fd",
+            "foo" : "test",
+            "bar" : 2600000
+        ],
+        [
+            "_id" : "1",
+            "_rev" : "1-026418c17a353a9b73a6ccac19c142a4",
+            "foo" : "another test",
+            "bar" : 9800000
+        ]
+        ]]
     
     
     override func setUp() {
         super.setUp()
-        OHHTTPStubs.stubRequests(passingTest: { (request) -> Bool in
-            return (request.url?.path?.contains("_find"))! && request.httpMethod == "POST"
-            } , withStubResponse: { (request) -> OHHTTPStubsResponse in
-            return OHHTTPStubsResponse(jsonObject: [    "docs" : [
-                                                                     [
-                                                                         "_id" : "2",
-                                                                         "_rev" : "1-9f0e70c7592b2e88c055c51afc2ec6fd",
-                                                                         "foo" : "test",
-                                                                         "bar" : 2600000
-                ],
-                                                                     [
-                                                                         "_id" : "1",
-                                                                         "_rev" : "1-026418c17a353a9b73a6ccac19c142a4",
-                                                                         "foo" : "another test",
-                                                                         "bar" : 9800000
-                ]
-                ]], statusCode: 200, headers: [:])
-        })
-        
-            OHHTTPStubs.stubRequests(passingTest: { (request) -> Bool in
-                return (request.url?.path?.contains("_find"))! && !(request.httpMethod! == "POST")
-                }, withStubResponse: { (request) -> OHHTTPStubsResponse in
-                    OHHTTPStubsResponse(jsonObject: [:], statusCode: 405, headers: [:])
-            })
-        
         dbName = generateDBName()
         client = CouchDBClient(url: NSURL(string:self.url)!, username: self.username, password: self.password)
     }
     
     override func tearDown() {
         super.tearDown()
-        OHHTTPStubs.removeAllStubs()
     }
 
     
@@ -113,7 +101,7 @@ class FindDocumentOperationTests: XCTestCase {
             
         }
         
-        client?.add(operation: find)
+        self.simulateOkResponseFor(operation: find, jsonResponse: JSONResponse(dictionary: response))
         
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
 
@@ -141,7 +129,7 @@ class FindDocumentOperationTests: XCTestCase {
             
         }
         
-        client?.add(operation: find)
+        self.simulateOkResponseFor(operation: find, jsonResponse: JSONResponse(dictionary: response))
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
     
@@ -263,21 +251,6 @@ class FindDocumentOperationTests: XCTestCase {
     }
     
     func testBookmarkReturnedFromTextQuery() {
-        
-        OHHTTPStubs.removeAllStubs() // Remove stubs, we just want a custom one for now
-        OHHTTPStubs.stubRequests(passingTest: { (request) -> Bool in
-            if let retvar = request.url?.path?.contains("_find") {
-                return retvar
-            } else {
-                return false
-            }
-            }, withStubResponse: { (request) -> OHHTTPStubsResponse in
-                return OHHTTPStubsResponse(jsonObject: ["bookmark":"blah", "docs":[]], statusCode: 200, headers: [:])
-        })
-    
-        
-        
-        
         let find = FindDocumentsOperation()
         find.selector = ["foo":"bar"]
         find.fields = ["foo","bar"]
@@ -299,7 +272,7 @@ class FindDocumentOperationTests: XCTestCase {
             
         }
         
-        client?.add(operation: find)
+        self.simulateOkResponseFor(operation: find, jsonResponse: ["bookmark":"blah", "docs":[]])
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
     

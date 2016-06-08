@@ -99,6 +99,85 @@ extension XCTestCase {
         }
         client.add(operation: delete)
     }
+    
+    func simulateCreatedResponseFor(operation: CouchOperation, jsonResponse: JSONResponse = ["ok": true, "rev": "1-thisisarevision"]) {
+        simulateExecutionOf(operation: operation, httpResponse: HttpInfo(statusCode: 201, headers: [:]), response: jsonResponse)
+    }
+    
+    func simulateOkResponseFor(operation: CouchOperation, jsonResponse: JSONResponse = ["ok" : true]) {
+        simulateExecutionOf(operation: operation, httpResponse: HttpInfo(statusCode: 200, headers: [:]), response: jsonResponse)
+    }
+    
+    func simulateExecutionOf(operation: CouchOperation, httpResponse: HttpInfo, response: JSONResponse) {
+        do {
+            let data = try NSJSONSerialization.data(withJSONObject: response.json)
+            let httpInfo = HttpInfo(statusCode: 200, headers: [:])
+            self.simulateExecutionOf(operation: operation, httpResponse: httpInfo, response: data)
+        } catch {
+            NSLog("Failed to seralise json, aborting simulation")
+        }
+
+    }
+    
+    func simulateExecutionOf(operation: CouchOperation, httpResponse: HttpInfo, response: NSData) {
+        dispatch_async(dispatch_get_main_queue()) {
+            
+            do {
+                if !operation.validate() {
+                    operation.callCompletionHandler(error: Errors.ValidationFailed)
+                }
+                
+                try operation.serialise()
+                
+                operation.processResponse(data: response, httpInfo: httpResponse, error: nil)
+            } catch {
+                operation.callCompletionHandler(error: error)
+            }
+            
+            
+        }
+    }
+}
+
+struct JSONResponse: ArrayLiteralConvertible, DictionaryLiteralConvertible {
+    
+    let array: NSArray?
+    let dictionary: NSDictionary?
+    
+    init(arrayLiteral:AnyObject...){
+        array = NSArray(arrayLiteral: arrayLiteral)
+        dictionary = nil
+    }
+    
+    init(dictionaryLiteral elements: (String, AnyObject)...){
+        array = nil
+        let mutableDict = NSMutableDictionary()
+        for (key, value) in elements {
+            mutableDict.setValue(value, forKey: key)
+        }
+        dictionary = NSDictionary(dictionary: mutableDict)
+    }
+    
+    init(dictionary: [String:AnyObject]){
+        self.dictionary = dictionary as NSDictionary
+        self.array = nil
+    }
+    
+    var json: AnyObject {
+        get {
+            if let array = array {
+                return array
+            }
+            
+            if let dictionary = dictionary {
+                return dictionary
+            }
+            
+            return NSDictionary() // return empty dict just in case all else fails.
+        }
+    }
+
+    
 }
 
 extension Array where Element: NSURLQueryItem {
