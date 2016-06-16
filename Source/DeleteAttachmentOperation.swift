@@ -28,6 +28,7 @@ import Foundation
  deleteAttachment.docId = docId
  deleteAttachment.revId = revId
  deleteAttachment.attachmentName = "myAwesomeAttachment"
+ deleteAttachment.databaseName = "exampledb"
  deleteAttachment.completionHandler = {(response, info, error) in
  if let error = error {
  // handle the error
@@ -35,14 +36,61 @@ import Foundation
  // process successful response
  }
  }
- database.add(operation: deleteAttachment)
+ client.add(operation: deleteAttachment)
  ```
  
  */
-public class DeleteAttachmentOperation: AttachmentOperation {
-
-    public override var httpMethod: String {
+public class DeleteAttachmentOperation: CouchDatabaseOperation, JsonOperation {
+    
+    public var databaseName: String?
+    
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    
+    /**
+     The id of the document that the attachment is attached to.
+     
+     */
+    public var docId: String?
+    
+    /**
+     The revision of the document that the attachment is attached to.
+     */
+    public var revId: String?
+    
+    /**
+     The name of the attachment.
+     */
+    public var attachmentName: String?
+    
+    public func validate() -> Bool {
+        if self.databaseName == nil {
+            return false
+        }
+        if docId == nil {
+            return false
+        }
+        
+        if revId == nil {
+            return false
+        }
+        
+        if attachmentName == nil {
+            return false
+        }
+        
+        return true
+    }
+    
+    public var endpoint: String {
+        return "/\(self.databaseName!)/\(docId!)/\(attachmentName!)"
+    }
+    
+    public var parameters: [String: String] {
+        return ["rev": revId!]
+    }
+    
+    public var method: String {
         return "DELETE"
     }
-
+    
 }

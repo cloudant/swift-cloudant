@@ -36,9 +36,9 @@ class PutDocumentTests: XCTestCase {
     }
 
     func testSaveDocument() {
-        let db = self.client![self.dbName!]
         let putExpectation = self.expectation(withDescription: "Put Document expectation")
         let put = PutDocumentOperation()
+        put.databaseName = dbName
         put.docId = "Doc1"
         put.body = ["hello": "world"]
         put.completionHandler = { (response, httpInfo, error) in
@@ -51,7 +51,7 @@ class PutDocumentTests: XCTestCase {
             }
 
         }
-        db.add(operation: put)
+        client?.add(operation: put)
 
         self.waitForExpectations(withTimeout: 10) { (_) in
 

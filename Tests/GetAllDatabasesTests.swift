@@ -54,19 +54,17 @@ public class GetAllDatabasesTest : XCTestCase {
             if let httpInfo = httpInfo {
                 XCTAssert(httpInfo.statusCode / 100 == 2)
             }
-            if var response = response {
-                let expected: [String: AnyObject] = ["databases" : [self.dbName! as NSString]]
+            if let response = response {
+                let expected: [String] = [self.dbName!]
                 
                 // we need to filter the dbs responses to remove system databases, ones prefixed with _
-                if let responseDBs = response["databases"] as? [String] {
+                if let responseDBs = response as? [String] {
                     
                    let filtered =  responseDBs.filter({ (dbName) -> Bool in
                         return !dbName.hasPrefix("_")
                     })
                     
-                    response["databases"] = filtered as NSArray
-                    
-                    XCTAssertEqual(expected as NSDictionary, response as NSDictionary)
+                    XCTAssertEqual(expected, filtered)
                 }
                 
             }

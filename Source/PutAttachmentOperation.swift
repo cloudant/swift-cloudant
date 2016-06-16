@@ -31,6 +31,7 @@ import Foundation
  putAttachment.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
  putAttachment.attachmentName = "myAwesomeAttachment"
  putAttachment.contentType = "text/plain"
+ putAttachment.databaseName = "exampledb"
  putAttachment.completionHandler = {(response, info, error) in
     if let error = error {
         // handle the error
@@ -38,11 +39,30 @@ import Foundation
         // process successful response
     }
  }
- database.add(operation: putAttachment)
+ client.add(operation: putAttachment)
  ```
  
  */
-public class PutAttachmentOperation: AttachmentOperation {
+public class PutAttachmentOperation: CouchDatabaseOperation, JsonOperation {
+    
+    public var databaseName: String?
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    
+    /**
+     The id of the document that the attachment should be attached to.
+     
+     */
+    public var docId: String?
+    
+    /**
+     The revision of the document that the attachment should be attached to.
+    */
+    public var revId: String?
+    
+    /**
+     The name of the attachment.
+     */
+    public var attachmentName: String?
     
     /**
      The attachment's data.
@@ -55,8 +75,8 @@ public class PutAttachmentOperation: AttachmentOperation {
     public var contentType: String?
     
     
-    public override func validate() -> Bool {
-        if !super.validate() {
+    public func validate() -> Bool {
+        if databaseName == nil {
             return false
         }
         
@@ -68,19 +88,35 @@ public class PutAttachmentOperation: AttachmentOperation {
             return false
         }
         
+        if attachmentName == nil {
+            return false
+        }
+        
+        if docId == nil {
+            return false
+        }
+        
+        if revId == nil {
+            return false
+        }
+        
         return true
     }
     
-    public override var httpMethod: String {
+    public var method: String {
         return "PUT"
     }
     
-    public override var httpRequestBody: NSData? {
-        return data
+    public var endpoint: String {
+        return "/\(self.databaseName!)/\(docId!)/\(attachmentName!)"
     }
     
-    public override var httpContentType: String {
-        return contentType!
+    public var parameters: [String: String] {
+        return ["rev": revId!]
+    }
+    
+    public var httpRequestBody: NSData? {
+        return data
     }
     
 }

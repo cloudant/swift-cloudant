@@ -38,7 +38,6 @@ class DeleteDocumentTests: XCTestCase {
     }
 
     func testDocumentCanBeDeleted() {
-        let db = client![self.dbName!]
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
         delete.completionHandler = { (response, httpInfo, error) in
@@ -58,11 +57,16 @@ class DeleteDocumentTests: XCTestCase {
             delete.revId = response?["rev"] as? String
             delete.docId = response?["id"] as? String
         }
+        
+        create.databaseName = dbName
+        delete.databaseName = dbName
 
-        delete.addDependency(create)
-
-        db.add(operation: create)
-        db.add(operation: delete)
+        let nsCreate = Operation(couchOperation: create)
+        let nsDelete = Operation(couchOperation: delete)
+        nsDelete.addDependency(nsCreate)
+        
+        client?.add(operation: nsCreate)
+        client?.add(operation: nsDelete)
 
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
 
@@ -70,9 +74,10 @@ class DeleteDocumentTests: XCTestCase {
 
     func testDeleteDocumentOpFailsValidationWhenRevIdIsMissing() {
 
-        let db = client![self.dbName!]
+        
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
+        delete.databaseName = dbName
         delete.docId = "testDocId"
         delete.completionHandler = { (response, httpInfo, error) in
             expectation.fulfill()
@@ -80,16 +85,16 @@ class DeleteDocumentTests: XCTestCase {
             XCTAssertNotNil(error)
         }
 
-        db.add(operation: delete)
+        client?.add(operation: delete)
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
 
     }
 
     func testDeleteDocumentOpFailsValidationWhenDocIdIsMissing() {
 
-        let db = client![self.dbName!]
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
+        delete.databaseName = dbName
         delete.docId = "testDocId"
         delete.completionHandler = { (response, httpInfo, error) in
             expectation.fulfill()
@@ -98,15 +103,15 @@ class DeleteDocumentTests: XCTestCase {
             XCTAssertNotNil(error)
         }
 
-        db.add(operation: delete)
+        client?.add(operation: delete)
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
 
     }
 
     func testDeleteDocumentOpCompletesWithoutCallback() {
-        let db = client![self.dbName!]
         let expectation = self.expectation(withDescription: "Delete document")
         let delete = DeleteDocumentOperation()
+        delete.databaseName = dbName
         delete.completionHandler = { (response, httpInfo, error) in
             XCTAssertNotNil(httpInfo)
             if let httpInfo = httpInfo {
@@ -118,6 +123,7 @@ class DeleteDocumentTests: XCTestCase {
         let create = PutDocumentOperation()
         create.docId = "testId"
         create.body = ["hello": "world"]
+        create.databaseName = dbName
         create.completionHandler = { (response, httpInfo, error) in
             delete.revId = response?["rev"] as? String
             delete.docId = response?["id"] as? String
@@ -125,18 +131,22 @@ class DeleteDocumentTests: XCTestCase {
 
         let get = GetDocumentOperation()
         get.docId = "testId"
+        get.databaseName = dbName
         get.completionHandler = { (response, httpInfo, error) in
             expectation.fulfill()
             XCTAssertNotNil(response)
             XCTAssertNotNil(error)
         }
+        
+        let nsDelete = Operation(couchOperation: delete)
+        let nsCreate = Operation(couchOperation: create)
+        let nsGet = Operation(couchOperation: get)
+        nsDelete.addDependency(nsCreate)
+        nsGet.addDependency(nsDelete)
 
-        delete.addDependency(create)
-        get.addDependency(delete)
-
-        db.add(operation: create)
-        db.add(operation: delete)
-        db.add(operation: get)
+        client?.add(operation: nsCreate)
+        client?.add(operation: nsDelete)
+        client?.add(operation: nsGet)
 
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }

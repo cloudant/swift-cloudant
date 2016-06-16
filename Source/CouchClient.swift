@@ -55,20 +55,24 @@ public class CouchDBClient {
     /**
      Adds an operation to the queue to be executed.
      - parameter operation: the operation to add to the queue.
+     - returns: An `Operation` instance which represents the executing
+     `CouchOperation`
      */
-    public func add(operation: CouchOperation) {
+    @discardableResult
+    public func add(operation: CouchOperation) -> Operation {
+        let cOp = Operation(couchOperation: operation)
+        self.add(operation: cOp)
+        return cOp
+    }
+    
+    /**
+     Adds an operation to the queue to be executed.
+     - parameter operation: the operation to add to the queue.
+     */
+    func add(operation: Operation) {
         operation.mSession = self.session
         operation.rootURL = self.rootURL
         queue.addOperation(operation)
-    }
-
-    /**
-     Creates a database object.
-     - parameter dbName: the name of the database the object should represent.
-     - returns: A new `Database` object representing a CouchDB Database.
-     */
-    public subscript(dbName: String) -> Database {
-        return Database(client: self, dbName: dbName)
     }
 
 }

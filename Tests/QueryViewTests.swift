@@ -76,20 +76,20 @@ public class QueryViewTests: XCTestCase {
         XCTAssert(view.validate())
         try view.serialise()
 
-        XCTAssertEqual("GET", view.httpMethod)
-        XCTAssertNil(view.httpRequestBody)
-        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.httpPath)
+        XCTAssertEqual("GET", view.method)
+        XCTAssertNil(view.data)
+        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.endpoint)
 
-        let expectedQueryItems = [NSURLQueryItem(name: "descending", value: "true"),
-            NSURLQueryItem(name: "endkey", value: "\"endkey\""),
-            NSURLQueryItem(name: "include_docs", value: "true"),
-            NSURLQueryItem(name: "inclusive_end", value: "true"),
-            NSURLQueryItem(name: "limit", value: "4"),
-            NSURLQueryItem(name: "skip", value: "0"),
-            NSURLQueryItem(name: "stale", value: "ok"),
-            NSURLQueryItem(name: "startkey", value: "\"startKey\"")]
+        let expectedQueryItems = ["descending": "true",
+            "endkey": "\"endkey\"",
+            "include_docs": "true",
+            "inclusive_end": "true",
+            "limit": "4",
+            "skip": "0",
+            "stale": "ok",
+            "startkey": "\"startKey\""]
 
-        XCTAssert(expectedQueryItems.isEquivalent(to: view.queryItems))
+        XCTAssertEqual(expectedQueryItems, view.parameters)
     }
 
     func testViewGeneratesCorrectRequestUsingJsonStartAndEndKeys() throws {
@@ -109,20 +109,20 @@ public class QueryViewTests: XCTestCase {
         XCTAssert(view.validate())
         try view.serialise()
 
-        XCTAssertEqual("GET", view.httpMethod)
-        XCTAssertNil(view.httpRequestBody)
-        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.httpPath)
+        XCTAssertEqual("GET", view.method)
+        XCTAssertNil(view.data)
+        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.endpoint)
 
-        let expectedQueryItems: [NSURLQueryItem] = [NSURLQueryItem(name: "descending", value: "true"),
-            NSURLQueryItem(name: "endkey", value: "[\"endkey\",\"endkey2\"]"),
-            NSURLQueryItem(name: "include_docs", value: "true"),
-            NSURLQueryItem(name: "inclusive_end", value: "true"),
-            NSURLQueryItem(name: "limit", value: "4"),
-            NSURLQueryItem(name: "skip", value: "0"),
-            NSURLQueryItem(name: "stale", value: "ok"),
-            NSURLQueryItem(name: "startkey", value: "[\"startKey\",\"startKey2\"]")]
+        let expectedQueryItems = ["descending": "true",
+            "endkey": "[\"endkey\",\"endkey2\"]",
+            "include_docs": "true",
+            "inclusive_end": "true",
+            "limit": "4",
+            "skip": "0",
+            "stale": "ok",
+            "startkey": "[\"startKey\",\"startKey2\"]"]
 
-        XCTAssert(expectedQueryItems.isEquivalent(to: view.queryItems))
+        XCTAssertEqual(expectedQueryItems, view.parameters)
     }
 
     func testViewGeneratesCorrectRequestUsingKey() throws {
@@ -141,19 +141,19 @@ public class QueryViewTests: XCTestCase {
         XCTAssert(view.validate())
         try view.serialise()
 
-        XCTAssertEqual("GET", view.httpMethod)
-        XCTAssertNil(view.httpRequestBody)
-        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.httpPath)
+        XCTAssertEqual("GET", view.method)
+        XCTAssertNil(view.data)
+        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.endpoint)
 
-        let expectedQueryItems: [NSURLQueryItem] = [NSURLQueryItem(name: "descending", value: "true"),
-            NSURLQueryItem(name: "key", value: "\"testKey\""),
-            NSURLQueryItem(name: "include_docs", value: "true"),
-            NSURLQueryItem(name: "inclusive_end", value: "true"),
-            NSURLQueryItem(name: "limit", value: "4"),
-            NSURLQueryItem(name: "skip", value: "0"),
-            NSURLQueryItem(name: "stale", value: "ok")]
+        let expectedQueryItems = ["descending": "true",
+            "key": "\"testKey\"",
+            "include_docs": "true",
+            "inclusive_end": "true",
+            "limit": "4",
+            "skip": "0",
+            "stale": "ok"]
 
-        XCTAssert(expectedQueryItems.isEquivalent(to: view.queryItems))
+        XCTAssertEqual(expectedQueryItems, view.parameters)
     }
 
     func testViewGeneratesCorrectRequestUsingKeys() {
@@ -170,20 +170,20 @@ public class QueryViewTests: XCTestCase {
         view.databaseName = self.dbName
 
         XCTAssert(view.validate())
-        XCTAssertEqual("POST", view.httpMethod)
-        XCTAssertNotNil(view.httpRequestBody)
+        XCTAssertEqual("POST", view.method)
+        XCTAssertNotNil(view.data)
         XCTAssertEqual("{\"keys\":[\"testkey\",[\"testkey2\",\"testkey3\"]]}",
-            String(data: view.httpRequestBody!, encoding: NSUTF8StringEncoding))
-        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.httpPath)
+            String(data: view.data!, encoding: NSUTF8StringEncoding))
+        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.endpoint)
 
-        let expectedQueryItems: [NSURLQueryItem] = [NSURLQueryItem(name: "descending", value: "true"),
-            NSURLQueryItem(name: "include_docs", value: "true"),
-            NSURLQueryItem(name: "inclusive_end", value: "true"),
-            NSURLQueryItem(name: "limit", value: "4"),
-            NSURLQueryItem(name: "skip", value: "0"),
-            NSURLQueryItem(name: "stale", value: "ok")]
+        let expectedQueryItems = ["descending": "true",
+            "include_docs": "true",
+            "inclusive_end": "true",
+            "limit": "4",
+            "skip": "0",
+            "stale": "ok"]
 
-        XCTAssert(expectedQueryItems.isEquivalent(to: view.queryItems))
+        XCTAssertEqual(expectedQueryItems, view.parameters)
     }
 
     func testViewGeneratesCorrectRequestForReduces() {
@@ -196,20 +196,21 @@ public class QueryViewTests: XCTestCase {
         view.databaseName = self.dbName
 
         XCTAssert(view.validate())
-        XCTAssertEqual("GET", view.httpMethod)
-        XCTAssertNil(view.httpRequestBody)
-        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.httpPath)
+        XCTAssertEqual("GET", view.method)
+        XCTAssertNil(view.data)
+        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.endpoint)
 
-        let expectedQueryItems: [NSURLQueryItem] = [NSURLQueryItem(name: "group", value: "true"),
-            NSURLQueryItem(name: "group_level", value: "3"),
-            NSURLQueryItem(name: "reduce", value: "true")]
+        let expectedQueryItems = ["group": "true",
+            "group_level": "3",
+            "reduce": "true"]
 
-        XCTAssert(expectedQueryItems.isEquivalent(to: view.queryItems))
+        XCTAssertEqual(expectedQueryItems, view.parameters)
     }
 
     func testViewHandlesResponsesCorrectly() {
         let view = QueryViewOperation()
         view.designDoc = "ddoc"
+        view.databaseName = dbName
         view.viewName = "view1"
 
         var rowCount = 0
@@ -235,7 +236,7 @@ public class QueryViewTests: XCTestCase {
             completionHandler.fulfill()
         }
 
-        self.client?[self.dbName!].add(operation: view)
+        self.client?.add(operation: view)
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
 
@@ -335,13 +336,13 @@ public class QueryViewTests: XCTestCase {
         view.databaseName = self.dbName
 
         XCTAssert(view.validate())
-        XCTAssertEqual("GET", view.httpMethod)
-        XCTAssertNil(view.httpRequestBody)
-        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.httpPath)
+        XCTAssertEqual("GET", view.method)
+        XCTAssertNil(view.data)
+        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.endpoint)
 
-        let expectedQueryItems: [NSURLQueryItem] = []
+        let expectedQueryItems = [:]
 
-        XCTAssert(expectedQueryItems.isEquivalent(to: view.queryItems))
+        XCTAssertEqual(expectedQueryItems, view.parameters)
     }
 
     func testViewGeneratesCorrectRequestStaleOk() {
@@ -352,13 +353,13 @@ public class QueryViewTests: XCTestCase {
         view.stale = .Ok
 
         XCTAssert(view.validate())
-        XCTAssertEqual("GET", view.httpMethod)
-        XCTAssertNil(view.httpRequestBody)
-        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.httpPath)
+        XCTAssertEqual("GET", view.method)
+        XCTAssertNil(view.data)
+        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.endpoint)
 
-        let expectedQueryItems: [NSURLQueryItem] = [NSURLQueryItem(name: "stale", value: "ok")]
+        let expectedQueryItems = ["stale": "ok"]
 
-        XCTAssert(expectedQueryItems.isEquivalent(to: view.queryItems))
+        XCTAssertEqual(expectedQueryItems, view.parameters)
     }
 
     func testViewGeneratesCorrectRequestStaleUpdateAfter() {
@@ -369,12 +370,12 @@ public class QueryViewTests: XCTestCase {
         view.stale = .UpdateAfter
 
         XCTAssert(view.validate())
-        XCTAssertEqual("GET", view.httpMethod)
-        XCTAssertNil(view.httpRequestBody)
-        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.httpPath)
+        XCTAssertEqual("GET", view.method)
+        XCTAssertNil(view.data)
+        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.endpoint)
 
-        let expectedQueryItems: [NSURLQueryItem] = [NSURLQueryItem(name: "stale", value: "update_after")]
+        let expectedQueryItems = ["stale": "update_after"]
 
-        XCTAssert(expectedQueryItems.isEquivalent(to: view.queryItems))
+        XCTAssertEqual(expectedQueryItems, view.parameters)
     }
 }

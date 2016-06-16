@@ -16,7 +16,10 @@
 
 import Foundation
 
-public class PutDocumentOperation: CouchDatabaseOperation {
+public class PutDocumentOperation: CouchDatabaseOperation, JsonOperation {
+    
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    public var databaseName: String?
     /**
      The document that this operation will modify.
 
@@ -32,15 +35,15 @@ public class PutDocumentOperation: CouchDatabaseOperation {
     /** Body of document. Must be serialisable with NSJSONSerialization */
     public var body: [String: AnyObject]? = nil
 
-    public override func validate() -> Bool {
-        return super.validate() && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body! as NSDictionary)
+    public func validate() -> Bool {
+        return databaseName != nil && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body! as NSDictionary)
     }
 
-    public override var httpMethod: String {
+    public var method: String {
         return "PUT"
     }
 
-    public override var httpRequestBody: NSData? {
+    public var data: NSData? {
         get {
             do {
                 let data = try NSJSONSerialization.data(withJSONObject: body! as NSDictionary, options: NSJSONWritingOptions())
@@ -51,18 +54,18 @@ public class PutDocumentOperation: CouchDatabaseOperation {
         }
     }
 
-    public override var httpPath: String {
+    public var endpoint: String {
         return "/\(self.databaseName!)/\(docId!)"
     }
 
-    public override var queryItems: [NSURLQueryItem] {
+    public var parameters: [String: String] {
         get {
-            var items: [NSURLQueryItem] = []
+            var items:[String:String] = [:]
 
             if let revId = revId {
-                items.append(NSURLQueryItem(name: "rev", value: "\(revId)"))
+                items["rev"] = revId
             }
-
+            
             return items
         }
     }

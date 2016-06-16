@@ -41,8 +41,8 @@ class ReadAttachmentTests: XCTestCase {
         createDoc.completionHandler = {[weak self] (response, info, error) in
             self?.revId = response?["rev"] as? String
         }
-        client?[dbName!].add(operation: createDoc)
-        createDoc.waitUntilFinished()
+        createDoc.databaseName = dbName
+        client?.add(operation: createDoc).waitUntilFinished()
         
         
         let put = PutAttachmentOperation()
@@ -54,11 +54,11 @@ class ReadAttachmentTests: XCTestCase {
         put.completionHandler = {[weak self] (response, info, error) in
             self?.revId = response?["rev"] as? String
         }
-        client?[dbName!].add(operation: put)
-        put.waitUntilFinished()
+        put.databaseName = dbName
+        client?.add(operation: put).waitUntilFinished()
     }
     
-    override func tearDown() {
+    override func tearDown() { 
         deleteDatabase(databaseName: dbName!, client: client!)
         
         super.tearDown()
@@ -70,7 +70,7 @@ class ReadAttachmentTests: XCTestCase {
         read.docId = docId
         read.revId = revId
         read.attachmentName = attachmentName
-        read.readAttachmentCompletionHandler = {[weak self] (data, info, error) in
+        read.completionHandler = {[weak self] (data, info, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(info)
             if let info = info {
@@ -85,8 +85,8 @@ class ReadAttachmentTests: XCTestCase {
             
             expectation.fulfill()
         }
-        
-        client?[dbName!].add(operation: read)
+        read.databaseName = dbName
+        client?.add(operation: read)
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
     
@@ -97,10 +97,10 @@ class ReadAttachmentTests: XCTestCase {
         read.attachmentName = attachmentName
         read.databaseName = dbName
         XCTAssert(read.validate())
-        XCTAssertEqual("GET", read.httpMethod)
-        XCTAssertEqual("/\(dbName!)/\(docId)/\(attachmentName)", read.httpPath)
-        XCTAssertEqual([NSURLQueryItem(name: "rev", value: revId)], read.queryItems)
-        XCTAssertNil(read.httpRequestBody)
+        XCTAssertEqual("GET", read.method)
+        XCTAssertEqual("/\(dbName!)/\(docId)/\(attachmentName)", read.endpoint)
+        XCTAssertEqual(["rev": revId!], read.parameters)
+        XCTAssertNil(read.data)
     }
     
     func testReadAttachmentValidationMissingDocId() {

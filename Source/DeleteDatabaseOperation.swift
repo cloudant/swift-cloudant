@@ -19,8 +19,10 @@ import Foundation
 /**
  Deletes a database from a CouchDB instance
  */
-public class DeleteDatabaseOperation: CouchOperation {
+public class DeleteDatabaseOperation: CouchOperation, JsonOperation {
 
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    
     /**
      The name of the database to delete.
 
@@ -28,21 +30,21 @@ public class DeleteDatabaseOperation: CouchOperation {
      */
     public var databaseName: String? = nil
 
-    override public var httpMethod: String {
+     public var method: String {
         get {
             return "DELETE"
         }
     }
 
-    override public var httpPath: String {
+     public var endpoint: String {
         get {
-            // Safe to foce unwrap validation would fail if this is nil
+            // Safe to force unwrap, validation would fail if this is nil
             return "/\(self.databaseName!)"
         }
     }
 
-    public override func validate() -> Bool {
-        return super.validate() && self.databaseName != nil // should work iirc
+    public func validate() -> Bool {
+        return self.databaseName != nil
     }
 
 }

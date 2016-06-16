@@ -16,8 +16,12 @@
 
 import Foundation
 
-public class GetDocumentOperation: CouchDatabaseOperation {
+public class GetDocumentOperation: CouchDatabaseOperation, JsonOperation {
 
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    
+    public var databaseName: String?
+    
     /**
      Include all revisions of the document.
      `true` to include revisions, `false` to not include revisions, leave as `nil` to not emit
@@ -40,28 +44,24 @@ public class GetDocumentOperation: CouchDatabaseOperation {
      */
     public var docId: String? = nil
 
-    public override func validate() -> Bool {
-        return super.validate() && docId != nil
+    public func validate() -> Bool {
+        return databaseName != nil && docId != nil
     }
 
-    public override var httpMethod: String {
-        return "GET"
-    }
-
-    public override var httpPath: String {
+    public var endpoint: String {
         return "/\(self.databaseName!)/\(docId!)"
     }
 
-    public override var queryItems: [NSURLQueryItem] {
+    public var parameters: [String:  String] {
         get {
-            var items: [NSURLQueryItem] = []
+            var items: [String: String] = [:]
 
             if let revId = revId {
-                items.append(NSURLQueryItem(name: "rev", value: "\(revId)"))
+                items["rev"] = revId
             }
 
             if let revs = revs {
-                items.append(NSURLQueryItem(name: "revs", value: "\(revs)"))
+                items["revs"] = "\(revs)"
             }
 
             return items

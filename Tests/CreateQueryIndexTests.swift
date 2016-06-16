@@ -24,7 +24,6 @@ public class CreateQueryIndexTests : XCTestCase {
     
     var client: CouchDBClient? = nil;
     var dbName: String? = nil
-    var db: Database? = nil
     
     
     public override func setUp() {
@@ -32,7 +31,6 @@ public class CreateQueryIndexTests : XCTestCase {
         
         dbName = generateDBName()
         client = CouchDBClient(url: NSURL(string:self.url)!, username: self.username, password: self.password)
-        db = client![dbName!]
         
         OHHTTPStubs.stubRequests(passingTest: { (request) -> Bool in
             return (request.url?.path?.contains("_index"))! && !(request.httpMethod! == "POST")
@@ -51,6 +49,7 @@ public class CreateQueryIndexTests : XCTestCase {
     func testCanCreateTextIndexes() {
         let expectation = self.expectation(withDescription: "create text index")
         let index = CreateTextQueryIndexOperation()
+        index.databaseName = dbName
         index.completionHandler = { (response, httpStatus, error) in
             XCTAssertNotNil(response)
             XCTAssertNotNil(httpStatus)
@@ -60,13 +59,14 @@ public class CreateQueryIndexTests : XCTestCase {
             XCTAssertNil(error)
             expectation.fulfill()
         }
-        db?.add(operation: index)
+        client?.add(operation: index)
         self.waitForExpectations(withTimeout:10.0, handler: nil)
     }
     
     func testCanCreateJSONIndexes() {
         let expectation = self.expectation(withDescription: "create json Index")
         let index = CreateJsonQueryIndexOperation()
+        index.databaseName = dbName
         index.fields = [Sort(field:"foo", sort:nil)]
         index.completionHandler = { (response, httpStatus, error) in
             XCTAssertNotNil(response)
@@ -77,7 +77,7 @@ public class CreateQueryIndexTests : XCTestCase {
             XCTAssertNil(error)
             expectation.fulfill()
         }
-        db?.add(operation: index)
+        client?.add(operation: index)
         self.waitForExpectations(withTimeout:10.0, handler: nil)
     }
     
@@ -89,12 +89,12 @@ public class CreateQueryIndexTests : XCTestCase {
         index.databaseName = "dbname"
         XCTAssert(index.validate())
         try index.serialise()
-        XCTAssertEqual("POST", index.httpMethod)
-        XCTAssertEqual("/dbname/_index", index.httpPath)
-        XCTAssertEqual([], index.queryItems)
+        XCTAssertEqual("POST", index.method)
+        XCTAssertEqual("/dbname/_index", index.endpoint)
+        XCTAssertEqual([:], index.parameters)
         
         // do the json manipulation stuff.
-        let data = index.httpRequestBody
+        let data = index.data
         
         XCTAssertNotNil(data)
         if let data = data {
@@ -115,12 +115,12 @@ public class CreateQueryIndexTests : XCTestCase {
         index.databaseName = "dbname"
         XCTAssert(index.validate())
         try index.serialise()
-        XCTAssertEqual("POST", index.httpMethod)
-        XCTAssertEqual("/dbname/_index", index.httpPath)
-        XCTAssertEqual([], index.queryItems)
+        XCTAssertEqual("POST", index.method)
+        XCTAssertEqual("/dbname/_index", index.endpoint)
+        XCTAssertEqual([:], index.parameters)
         
         // do the json manipulation stuff.
-        let data = index.httpRequestBody
+        let data = index.data
         
         XCTAssertNotNil(data)
         if let data = data {
@@ -143,7 +143,7 @@ public class CreateQueryIndexTests : XCTestCase {
         index.databaseName = "dbname"
         XCTAssert(index.validate())
         try index.serialise()
-        let data = index.httpRequestBody
+        let data = index.data
         
         XCTAssertNotNil(data)
         if let data = data {
@@ -159,7 +159,7 @@ public class CreateQueryIndexTests : XCTestCase {
         index.databaseName = "dbname"
         XCTAssert(index.validate())
         try index.serialise()
-        let data = index.httpRequestBody
+        let data = index.data
         
         XCTAssertNotNil(data)
         if let data = data {
@@ -179,7 +179,7 @@ public class CreateQueryIndexTests : XCTestCase {
         XCTAssert(index.validate())
         try index.serialise()
         // do the json manipulation stuff.
-        let data = index.httpRequestBody
+        let data = index.data
         
         XCTAssertNotNil(data)
         if let data = data {
@@ -199,7 +199,7 @@ public class CreateQueryIndexTests : XCTestCase {
         XCTAssert(index.validate())
         try index.serialise()
         // do the json manipulation stuff.
-        let data = index.httpRequestBody
+        let data = index.data
         
         XCTAssertNotNil(data)
         if let data = data {
@@ -219,7 +219,7 @@ public class CreateQueryIndexTests : XCTestCase {
         XCTAssert(index.validate())
         try index.serialise()
         // do the json manipulation stuff.
-        let data = index.httpRequestBody
+        let data = index.data
         
         XCTAssertNotNil(data)
         if let data = data {
@@ -239,7 +239,7 @@ public class CreateQueryIndexTests : XCTestCase {
         XCTAssert(index.validate())
         try index.serialise()
         // do the json manipulation stuff.
-        let data = index.httpRequestBody
+        let data = index.data
         
         XCTAssertNotNil(data)
         if let data = data {
@@ -259,7 +259,7 @@ public class CreateQueryIndexTests : XCTestCase {
         XCTAssert(index.validate())
         try index.serialise()
         // do the json manipulation stuff.
-        let data = index.httpRequestBody
+        let data = index.data
         
         XCTAssertNotNil(data)
         if let data = data {
@@ -279,7 +279,7 @@ public class CreateQueryIndexTests : XCTestCase {
         XCTAssert(index.validate())
         try index.serialise()
         // do the json manipulation stuff.
-        let data = index.httpRequestBody
+        let data = index.data
         
         XCTAssertNotNil(data)
         if let data = data {

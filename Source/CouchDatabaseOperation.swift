@@ -17,15 +17,13 @@
 import Foundation
 
 /**
- A base class for operations which operate on a database. Such as operations which create a document.
+ A protocol for an Operation which operates on a specfied database, rather than
+ on CouchDB as a whole.
  */
-public class CouchDatabaseOperation: CouchOperation {
+public protocol CouchDatabaseOperation: CouchOperation {
+    
     /**
-     The name of the database the operation is operating on.
-     */
-    public var databaseName: String?
-
-    override public func validate() -> Bool {
-        return super.validate() && databaseName != nil
-    }
+        The name of the database that the operation will be operating on.
+    */
+    var databaseName: String? { get set }
 }

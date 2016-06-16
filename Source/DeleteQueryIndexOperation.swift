@@ -41,6 +41,7 @@ public enum IndexType : String {
 	deleteIndex.designDoc = "exampleDesignDoc"
 	deleteIndex.indexName = "exampleIndexName"
 	deleteIndex.type = .JSON
+    deleteIndex.databaseName = "exampledb"
 	deleteIndex.completionHandler = {(response, httpInfo, error) in 
 		if error != nil {
         	// Example: handle an error by printing a message
@@ -48,10 +49,13 @@ public enum IndexType : String {
     	}
 	}
 
-	database.add(operation: deleteIndex)
+	client.add(operation: deleteIndex)
 	```
  */
-public class DeleteQueryIndexOperation: CouchDatabaseOperation {
+public class DeleteQueryIndexOperation: CouchDatabaseOperation, JsonOperation {
+    
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    public var databaseName: String?
 
 	/**
 		The name of the design document which contains the index.
@@ -68,19 +72,16 @@ public class DeleteQueryIndexOperation: CouchDatabaseOperation {
 	*/
 	public var type: IndexType?
 
-	public override var httpPath: String {
+	public var endpoint: String {
 	 	return "/\(self.databaseName!)/_index/\(self.designDoc!)/\(self.type!.rawValue)/\(self.indexName!)"
 	}
 
-	public override var  httpMethod: String {
+	public var  method: String {
 	 	return "DELETE"
 	}
 
-	public override func validate() -> Bool {
-		if !super.validate() {
-	 		return false
-	 	}
-
-	 	return self.designDoc != nil && self.indexName != nil && self.type != nil
+    public func validate() -> Bool {
+	 	return self.designDoc != nil && self.indexName != nil && self.type != nil && self.databaseName != nil
 	}
+
 }
