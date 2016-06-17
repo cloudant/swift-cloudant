@@ -16,7 +16,6 @@
 
 import Foundation
 import XCTest
-import OHHTTPStubs
 @testable import SwiftCloudant
 
 public class DeleteQueryIndexTests: XCTestCase {
@@ -26,23 +25,12 @@ public class DeleteQueryIndexTests: XCTestCase {
     
     override public func setUp() {
         super.setUp()
-            OHHTTPStubs.stubRequests(passingTest: { (request) -> Bool in
-                return (request.url?.path?.contains("_index"))! && !(request.httpMethod! == "POST")
-                }, withStubResponse: { (request) -> OHHTTPStubsResponse in
-                	if request.httpMethod == "DELETE" {
-                        return OHHTTPStubsResponse(jsonObject: ["ok": true], statusCode: 200, headers: [:])
-                	} else {
-                        return OHHTTPStubsResponse(jsonObject: ["error": "Method not allowed."], statusCode: 405, headers: [:])
-                	}
-            })
-        
         dbName = generateDBName()
         client = CouchDBClient(url: NSURL(string:self.url)!, username: self.username, password: self.password)
     }
 
     override public func tearDown() {
         super.tearDown()
-        OHHTTPStubs.removeAllStubs()
     }
 
     func testCanDeleteJSONIndex() {
@@ -62,7 +50,7 @@ public class DeleteQueryIndexTests: XCTestCase {
     		XCTAssertNil(error)
     		deleteExpectation.fulfill()
     	}
-    	self.client?.add(operation: deleteIndex)
+    	self.simulateOkResponseFor(operation: deleteIndex)
     	self.waitForExpectations(withTimeout:10.0, handler:nil)
     }
 
@@ -83,7 +71,7 @@ public class DeleteQueryIndexTests: XCTestCase {
     		XCTAssertNil(error)
     		deleteExpectation.fulfill()
     	}
-    	self.client?.add(operation: deleteIndex)
+    	self.simulateOkResponseFor(operation: deleteIndex)
     	self.waitForExpectations(withTimeout:10.0, handler:nil)
     }
 

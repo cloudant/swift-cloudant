@@ -43,14 +43,19 @@ public class SessionCookieInterceptor: HTTPInterceptor
      */
     let urlSession: NSURLSession
 
-    init(username: String, password: String) {
+    convenience init(username: String, password: String) {
+        self.init(username: username,
+                  password: password,
+                  session: NSURLSession(configuration: NSURLSessionConfiguration.ephemeral()))
+    }
+    
+    init(username: String, password: String, session: NSURLSession){
         let encodedUsername = username.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics())!
         let encodedPassword = password.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics())!
-
+        
         let payload = "name=\(encodedUsername)&password=\(encodedPassword)"
-
         sessionRequestBody = payload.data(using: NSASCIIStringEncoding)!
-        urlSession = NSURLSession(configuration: NSURLSessionConfiguration.ephemeral())
+        self.urlSession = session
     }
 
     public func interceptResponse(context: HTTPInterceptorContext) -> HTTPInterceptorContext {
