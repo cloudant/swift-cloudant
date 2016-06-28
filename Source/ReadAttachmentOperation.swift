@@ -42,6 +42,8 @@ import Foundation
  
 public class ReadAttachmentOperation: CouchDatabaseOperation, DataOperation {
     
+    public init() { }
+    
     /**
      Sets a completion handler to run when the operation completes.
      

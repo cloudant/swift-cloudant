@@ -36,6 +36,8 @@ import Foundation
  */
 public class GetAllDatabasesOperation : CouchOperation, JsonOperation {
     
+    public init() { }
+    
     /**
         Handler to run for each database returned.
      

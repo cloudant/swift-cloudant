@@ -52,6 +52,8 @@ import Foundation
  */
 public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
     
+    public init() { }
+    
     public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
     public var databaseName: String?
 

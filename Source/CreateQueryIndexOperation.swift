@@ -41,6 +41,8 @@ import Foundation
  */
 public class CreateJsonQueryIndexOperation: CouchDatabaseOperation, MangoOperation, JsonOperation {
     
+    public init() { }
+    
     public var databaseName: String?
     
     public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
@@ -169,6 +171,8 @@ public enum TextIndexFieldType : String {
  client.add(operation: index)
  */
 public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperation, JsonOperation {
+    
+    public init() { }
     
     public var databaseName: String?
     public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?

@@ -45,6 +45,8 @@ import Foundation
  */
 public class PutAttachmentOperation: CouchDatabaseOperation, JsonOperation {
     
+    public init() { }
+    
     public var databaseName: String?
     public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
     
