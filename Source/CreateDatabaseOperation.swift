@@ -21,6 +21,8 @@ import Foundation
  */
 public class CreateDatabaseOperation: CouchOperation, JsonOperation {
 
+    public init() { }
+    
     public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
     
     /**
