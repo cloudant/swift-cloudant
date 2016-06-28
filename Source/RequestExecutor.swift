@@ -23,11 +23,11 @@ public struct HttpInfo {
     /**
      The status code of the HTTP request.
      */
-    let statusCode: Int
+    public let statusCode: Int
     /**
      The headers that were returned by the server.
      */
-    let headers: [String: String]
+    public let headers: [String: String]
 }
 
 /**
