@@ -133,7 +133,7 @@ public class Operation: NSOperation, HTTPRequestOperation
 
     internal var executor: OperationRequestExecutor? = nil
 
-    internal func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+    internal func processResponse(data: NSData?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
         couchOperation.processResponse(data: data, httpInfo: httpInfo, error: error)
     }
 

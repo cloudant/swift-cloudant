@@ -109,7 +109,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, Jso
     
     public init() { }
     
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     public var databaseName: String?
     
     /**
@@ -299,7 +299,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, Jso
         }
     }
     
-    public func callCompletionHandler(response: Any?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+    public func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
         self.completionHandler?(response: response as? [String: AnyObject], httpInfo: httpInfo, error: error)
     }
 

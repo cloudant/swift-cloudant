@@ -45,7 +45,7 @@ public class GetAllDatabasesOperation : CouchOperation, JsonOperation {
      */
     public var databaseHandler: ((databaseName: String) -> Void)?
     
-    public var completionHandler: ((response: [AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    public var completionHandler: ((response: [AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     
     public var endpoint: String {
         return "/_all_dbs"

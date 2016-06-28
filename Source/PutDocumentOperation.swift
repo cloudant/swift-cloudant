@@ -20,7 +20,7 @@ public class PutDocumentOperation: CouchDatabaseOperation, JsonOperation {
     
     public init() { }
     
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     public var databaseName: String?
     /**
      The document that this operation will modify.
@@ -30,7 +30,7 @@ public class PutDocumentOperation: CouchDatabaseOperation, JsonOperation {
     public var docId: String? = nil
 
     /**
-     If updating a document, set this value to the current revision ID.
+     If updating a document, set this value to the current revision ID.HTTPInfo
      */
     public var revId: String? = nil
 

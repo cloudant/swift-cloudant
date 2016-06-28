@@ -19,7 +19,7 @@ import Foundation
 /**
  Contains HTTP response information.
  */
-public struct HttpInfo {
+public struct HTTPInfo {
     /**
      The status code of the HTTP request.
      */
@@ -78,10 +78,10 @@ class OperationRequestExecutor: InterceptableSessionDelegate {
             return
         }
         
-        let httpInfo: HttpInfo?
+        let httpInfo: HTTPInfo?
         
         if let response = response {
-            httpInfo = HttpInfo(statusCode: response.statusCode, headers: response.allHeaderFields as! [String: String])
+            httpInfo = HTTPInfo(statusCode: response.statusCode, headers: response.allHeaderFields as! [String: String])
         } else {
             httpInfo = nil
         }

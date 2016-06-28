@@ -45,7 +45,7 @@ public class CreateJsonQueryIndexOperation: CouchDatabaseOperation, MangoOperati
     
     public var databaseName: String?
     
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     
     /**
      The name of the index.
@@ -175,7 +175,7 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
     public init() { }
     
     public var databaseName: String?
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     
     /**
      The name of the index

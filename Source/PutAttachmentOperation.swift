@@ -48,7 +48,7 @@ public class PutAttachmentOperation: CouchDatabaseOperation, JsonOperation {
     public init() { }
     
     public var databaseName: String?
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     
     /**
      The id of the document that the attachment should be attached to.

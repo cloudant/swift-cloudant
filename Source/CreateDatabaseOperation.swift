@@ -23,7 +23,7 @@ public class CreateDatabaseOperation: CouchOperation, JsonOperation {
 
     public init() { }
     
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)?
+    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     
     /**
      The name of the database to create.
