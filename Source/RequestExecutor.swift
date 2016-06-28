@@ -81,7 +81,11 @@ class OperationRequestExecutor: InterceptableSessionDelegate {
         let httpInfo: HTTPInfo?
         
         if let response = response {
-            httpInfo = HTTPInfo(statusCode: response.statusCode, headers: response.allHeaderFields as! [String: String])
+            #if os(Linux)
+                httpInfo = HTTPInfo(statusCode: response.statusCode, headers: response.allHeaderFields)
+            #else
+                httpInfo = HTTPInfo(statusCode: response.statusCode, headers: response.allHeaderFields as! [String: String])
+            #endif
         } else {
             httpInfo = nil
         }

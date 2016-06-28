@@ -38,7 +38,11 @@ public class PutDocumentOperation: CouchDatabaseOperation, JsonOperation {
     public var body: [String: AnyObject]? = nil
 
     public func validate() -> Bool {
-        return databaseName != nil && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body! as NSDictionary)
+        #if os(Linux)
+            return databaseName != nil && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body!.bridge())
+        #else
+            return databaseName != nil && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body! as NSDictionary)
+        #endif
     }
 
     public var method: String {
@@ -48,7 +52,11 @@ public class PutDocumentOperation: CouchDatabaseOperation, JsonOperation {
     public var data: NSData? {
         get {
             do {
-                let data = try NSJSONSerialization.data(withJSONObject: body! as NSDictionary, options: NSJSONWritingOptions())
+                #if os(Linux)
+                    let data = try NSJSONSerialization.data(withJSONObject: body!.bridge(), options: NSJSONWritingOptions())
+                #else
+                    let data = try NSJSONSerialization.data(withJSONObject: body! as NSDictionary, options: NSJSONWritingOptions())
+                #endif
                 return data
             } catch {
                 return nil
