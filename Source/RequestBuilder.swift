@@ -67,7 +67,7 @@ internal protocol HTTPRequestOperation   {
      - parameter httpInfo: Information about the HTTP response.
      - parameter error: A type representing an error if one occurred or `nil`
      */
-    func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?);
+    func processResponse(data: NSData?, httpInfo: HTTPInfo?, error: ErrorProtocol?);
 
     var isCancelled: Bool { get }
 

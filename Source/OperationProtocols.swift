@@ -57,7 +57,7 @@ public protocol CouchOperation {
      - parameter httpInfo: Information about the HTTP response.
      - parameter error: The error that occurred, or nil if the request was made successfully.
     */
-    func callCompletionHandler(response: Any?, httpInfo: HttpInfo?, error: ErrorProtocol?)
+    func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: ErrorProtocol?)
     
     /**
      This method is called from the
@@ -84,7 +84,7 @@ public protocol CouchOperation {
      * processResponse(json:) when a 2xx response code was received and the response is a JSON response.
        This allows an operation to provide additional processing of the JSON.
      */
-    func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?)
+    func processResponse(data: NSData?, httpInfo: HTTPInfo?, error: ErrorProtocol?)
     
     /**
      Validates the operation has been set up correctly, subclasses should override but call and
@@ -146,16 +146,16 @@ public protocol JsonOperation: CouchOperation {
      - parameter httpInfo: - Information about the HTTP response.
      - parameter error: - ErrorProtocol instance with information about an error executing the operation.
      */
-    var completionHandler: ((response: Json?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)? { get set }
+    var completionHandler: ((response: Json?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? { get set }
 }
 
 public extension JsonOperation {
     
-    public func callCompletionHandler(response: Any?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+    public func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
         self.completionHandler?(response: response as? Json, httpInfo: httpInfo, error: error)
     }
     
-    public func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+    public func processResponse(data: NSData?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
         guard error == nil, let httpInfo = httpInfo
             else {
                 self.callCompletionHandler(error: error!)
@@ -202,15 +202,15 @@ public protocol DataOperation: CouchOperation {
      - parameter httpInfo: - Information about the HTTP response.
      - parameter error: - ErrorProtocol instance with information about an error executing the operation.
      */
-    var completionHandler: ((response: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) -> Void)? { get set }
+    var completionHandler: ((response: NSData?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? { get set }
 }
 
 public extension DataOperation {
-    public func callCompletionHandler(response: Any?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+    public func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
         self.completionHandler?(response: response as? NSData, httpInfo: httpInfo, error: error)
     }
     
-    public func processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?) {
+    public func processResponse(data: NSData?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
         guard error == nil, let httpInfo = httpInfo
             else {
                 self.callCompletionHandler(error: error!)

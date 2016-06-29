@@ -101,17 +101,17 @@ extension XCTestCase {
     }
     
     func simulateCreatedResponseFor(operation: CouchOperation, jsonResponse: JSONResponse = ["ok": true, "rev": "1-thisisarevision"]) {
-        simulateExecutionOf(operation: operation, httpResponse: HttpInfo(statusCode: 201, headers: [:]), response: jsonResponse)
+        simulateExecutionOf(operation: operation, httpResponse: HTTPInfo(statusCode: 201, headers: [:]), response: jsonResponse)
     }
     
     func simulateOkResponseFor(operation: CouchOperation, jsonResponse: JSONResponse = ["ok" : true]) {
-        simulateExecutionOf(operation: operation, httpResponse: HttpInfo(statusCode: 200, headers: [:]), response: jsonResponse)
+        simulateExecutionOf(operation: operation, httpResponse: HTTPInfo(statusCode: 200, headers: [:]), response: jsonResponse)
     }
     
-    func simulateExecutionOf(operation: CouchOperation, httpResponse: HttpInfo, response: JSONResponse) {
+    func simulateExecutionOf(operation: CouchOperation, httpResponse: HTTPInfo, response: JSONResponse) {
         do {
             let data = try NSJSONSerialization.data(withJSONObject: response.json)
-            let httpInfo = HttpInfo(statusCode: 200, headers: [:])
+            let httpInfo = HTTPInfo(statusCode: 200, headers: [:])
             self.simulateExecutionOf(operation: operation, httpResponse: httpInfo, response: data)
         } catch {
             NSLog("Failed to seralise json, aborting simulation")
@@ -119,7 +119,7 @@ extension XCTestCase {
 
     }
     
-    func simulateExecutionOf(operation: CouchOperation, httpResponse: HttpInfo, response: NSData) {
+    func simulateExecutionOf(operation: CouchOperation, httpResponse: HTTPInfo, response: NSData) {
         dispatch_async(dispatch_get_main_queue()) {
             
             do {
