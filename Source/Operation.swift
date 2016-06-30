@@ -102,7 +102,7 @@ public class Operation: NSOperation, HTTPRequestOperation
         }
     }
 
-    internal var rootURL: NSURL = NSURL()
+    internal var rootURL: NSURL = NSURL(string: "http://cloudant.invalid")!
 
     internal var httpPath: String {
         return couchOperation.endpoint

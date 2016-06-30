@@ -145,7 +145,11 @@ internal class InterceptableSession: NSObject, NSURLSessionDelegate, NSURLSessio
 
     private lazy var session: NSURLSession = { () -> NSURLSession in
         let config = NSURLSessionConfiguration.default()
-        config.httpAdditionalHeaders = ["User-Agent": InterceptableSession.userAgent() as NSString]
+        #if os(Linux)
+            config.httpAdditionalHeaders = ["User-Agent".bridge() : InterceptableSession.userAgent().bridge()]
+        #else
+            config.httpAdditionalHeaders = ["User-Agent": InterceptableSession.userAgent() as NSString]
+        #endif
         return NSURLSession(configuration: config, delegate: self, delegateQueue: nil) }()
     
     private let interceptors: Array<HTTPInterceptor>

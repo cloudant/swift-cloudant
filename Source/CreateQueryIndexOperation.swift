@@ -93,25 +93,46 @@ public class CreateJsonQueryIndexOperation: CouchDatabaseOperation, MangoOperati
     }
 
     public func serialise() throws {
-
-        var jsonDict: [String:AnyObject] = ["type": "json"]
+        
+        #if os(Linux)
+            var jsonDict: [String:AnyObject] = ["type": "json".bridge()]
+        #else
+            var jsonDict: [String:AnyObject] = ["type": "json"]
+        #endif
 
         if let fields = fields {
             var index: [String: AnyObject] = [:]
-            index["fields"] = transform(sortArray: fields) as NSArray
-            jsonDict["index"] = index as NSDictionary
+            #if os(Linux)
+                index["fields"] = transform(sortArray: fields).bridge()
+                jsonDict["index"] = index.bridge()
+            #else
+                index["fields"] = transform(sortArray: fields) as NSArray
+                jsonDict["index"] = index as NSDictionary
+            #endif
+            
         }
 
         if let indexName = indexName {
-            jsonDict["name"] = indexName as NSString
+            #if os(Linux)
+                jsonDict["name"] = indexName.bridge()
+            #else
+                jsonDict["name"] = indexName as NSString
+            #endif
         }
 
         if let designDoc = designDoc {
-            jsonDict["ddoc"] = designDoc as NSString
+            #if os(Linux)
+                jsonDict["ddoc"] = designDoc.bridge()
+            #else
+                jsonDict["ddoc"] = designDoc as NSString
+            #endif
         }
 
-
-        jsonData = try NSJSONSerialization.data(withJSONObject:jsonDict as NSDictionary) 
+        #if os(Linux)
+            jsonData = try NSJSONSerialization.data(withJSONObject:jsonDict.bridge())
+        #else
+            jsonData = try NSJSONSerialization.data(withJSONObject:jsonDict as NSDictionary)
+        #endif
     }
     
 }
@@ -247,7 +268,11 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
         }
         
         if let selector = selector {
-            return NSJSONSerialization.isValidJSONObject(selector as NSDictionary)
+            #if os(Linux)
+                return NSJSONSerialization.isValidJSONObject(selector.bridge())
+            #else
+                return NSJSONSerialization.isValidJSONObject(selector as NSDictionary)
+            #endif
         }
         
         return true
@@ -259,41 +284,82 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
             var jsonDict: [String: AnyObject] = [:]
             var index: [String: AnyObject] = [:]
             var defaultField: [String: AnyObject] = [:]
-            jsonDict["type"] = "text"
             
-            if let indexName = indexName {
-                jsonDict["name"] = indexName as NSString
-            }
+            #if os(Linux)
+                jsonDict["type"] = "text".bridge()
+                
+                if let indexName = indexName {
+                    jsonDict["name"] = indexName.bridge()
+                }
+                
+                if let fields = fields {
+                    index["fields"] = transform(fields: fields)
+                }
+                
+                if let defaultFieldEnabled = defaultFieldEnabled {
+                    defaultField["enabled"] = NSNumber(value: defaultFieldEnabled)
+                }
+                
+                if let defaultFieldAnalyzer = defaultFieldAnalyzer {
+                    defaultField["analyzer"] = defaultFieldAnalyzer.bridge()
+                }
+                
+                if let designDoc = designDoc {
+                    jsonDict["ddoc"] = designDoc.bridge()
+                }
+                
+                if let selector = selector {
+                    index["selector"] = selector.bridge()
+                }
+                
+                if defaultField.count > 0 {
+                    index["default_field"] = defaultField.bridge()
+                }
+                
+                if index.count > 0 {
+                    jsonDict["index"] = index.bridge()
+                }
+                
+                self.jsonData = try NSJSONSerialization.data(withJSONObject:jsonDict.bridge())
+            #else
+                jsonDict["type"] = "text"
+                
+                if let indexName = indexName {
+                    jsonDict["name"] = indexName as NSString
+                }
+                
+                if let fields = fields {
+                    index["fields"] = transform(fields: fields)
+                }
+                
+                if let defaultFieldEnabled = defaultFieldEnabled {
+                    defaultField["enabled"] = defaultFieldEnabled as NSNumber
+                }
+                
+                if let defaultFieldAnalyzer = defaultFieldAnalyzer {
+                    defaultField["analyzer"] = defaultFieldAnalyzer as NSString
+                }
+                
+                if let designDoc = designDoc {
+                    jsonDict["ddoc"] = designDoc as NSString
+                }
+                
+                if let selector = selector {
+                    index["selector"] = selector as NSDictionary
+                }
+                
+                if defaultField.count > 0 {
+                    index["default_field"] = defaultField as NSDictionary
+                }
+                
+                if index.count > 0 {
+                    jsonDict["index"] = index as NSDictionary
+                }
+                
+                self.jsonData = try NSJSONSerialization.data(withJSONObject:jsonDict as NSDictionary)
+            #endif
             
-            if let fields = fields {
-                index["fields"] = transform(fields: fields)
-            }
-            
-            if let defaultFieldEnabled = defaultFieldEnabled {
-                defaultField["enabled"] = defaultFieldEnabled as NSNumber
-            }
 
-            if let defaultFieldAnalyzer = defaultFieldAnalyzer {
-                defaultField["analyzer"] = defaultFieldAnalyzer as NSString
-            }
-            
-            if let designDoc = designDoc {
-                jsonDict["ddoc"] = designDoc as NSString
-            }
-
-            if let selector = selector {
-                index["selector"] = selector as NSDictionary
-            } 
-
-            if defaultField.count > 0 {
-                index["default_field"] = defaultField as NSDictionary
-            }
-
-            if index.count > 0 {
-                jsonDict["index"] = index as NSDictionary
-            }
-
-            self.jsonData = try NSJSONSerialization.data(withJSONObject:jsonDict as NSDictionary)
 
         }
         

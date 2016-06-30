@@ -66,14 +66,12 @@ public class SessionCookieInterceptor: HTTPInterceptor
         }
 
         var ctx = context
-
-        if response.statusCode == 403 || response.statusCode == 401 {
-            ctx.shouldRetry = true
-            self.cookie = nil
-        } else if let cookieHeader = response.allHeaderFields["Set-Cookie"] as? String {
-            cookie = cookieHeader.components(separatedBy: ";").first
-        }
-
+            if response.statusCode == 403 || response.statusCode == 401 {
+                ctx.shouldRetry = true
+                self.cookie = nil
+            } else if let cookieHeader = response.allHeaderFields["Set-Cookie"] as? String {
+                cookie = cookieHeader.components(separatedBy: ";").first
+            }
         return ctx;
     }
 

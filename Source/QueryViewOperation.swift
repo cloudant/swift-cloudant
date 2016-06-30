@@ -257,7 +257,11 @@ public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
     public var data: NSData? {
         if let keys = keys {
             do {
-                let keysDict: NSDictionary = ["keys": keys as NSArray]
+                #if os(Linux)
+                    let keysDict: NSDictionary = ["keys".bridge() : keys.bridge()]
+                #else
+                    let keysDict: NSDictionary = ["keys": keys as NSArray]
+                #endif
                 let keysJson = try NSJSONSerialization.data(withJSONObject: keysDict)
                 return keysJson
             } catch {
