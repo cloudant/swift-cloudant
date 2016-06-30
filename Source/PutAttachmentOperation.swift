@@ -69,7 +69,7 @@ public class PutAttachmentOperation: CouchDatabaseOperation, JsonOperation {
     /**
      The attachment's data.
     */
-    public var data: NSData?
+    public var data: Data?
     
     /**
      The Content type for the attachment such as text/plain, image/jpeg
@@ -117,7 +117,7 @@ public class PutAttachmentOperation: CouchDatabaseOperation, JsonOperation {
         return ["rev": revId!]
     }
     
-    public var httpRequestBody: NSData? {
+    public var httpRequestBody: Data? {
         return data
     }
     

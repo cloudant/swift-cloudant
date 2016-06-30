@@ -254,7 +254,7 @@ public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
         }
     }
 
-    public var data: NSData? {
+    public var data: Data? {
         if let keys = keys {
             do {
                 #if os(Linux)
@@ -262,7 +262,7 @@ public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
                 #else
                     let keysDict: NSDictionary = ["keys": keys as NSArray]
                 #endif
-                let keysJson = try NSJSONSerialization.data(withJSONObject: keysDict)
+                let keysJson = try JSONSerialization.data(withJSONObject: keysDict)
                 return keysJson
             } catch {
                 callCompletionHandler(error: error)
@@ -367,9 +367,9 @@ public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
     }
 
     func convertJson(key: AnyObject) throws -> String {
-        if NSJSONSerialization.isValidJSONObject(key) {
-            let keyJson = try NSJSONSerialization.data(withJSONObject: key)
-            return String(data: keyJson, encoding: NSUTF8StringEncoding)!
+        if JSONSerialization.isValidJSONObject(key) {
+            let keyJson = try JSONSerialization.data(withJSONObject: key)
+            return String(data: keyJson, encoding: .utf8)!
         } else if key is String {
             // we need to quote JSON primitive strings
             return "\"\(key)\""

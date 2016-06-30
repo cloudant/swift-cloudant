@@ -40,7 +40,7 @@ public protocol CouchOperation {
     /**
      The data to send to the CouchDB endpoint.
      */
-    var data: NSData? { get }
+    var data: Data? { get }
     
     
     /**
@@ -53,7 +53,7 @@ public protocol CouchOperation {
      Calls the completionHandler for this operation.
      
      - parameter response: The response received from the server, this should be one of the following types,
-    an `Array`/`NSArray`, `Dictionary`/`NSDictionary` or NSData.
+    an `Array`/`NSArray`, `Dictionary`/`NSDictionary` or Data.
      - parameter httpInfo: Information about the HTTP response.
      - parameter error: The error that occurred, or nil if the request was made successfully.
     */
@@ -61,7 +61,7 @@ public protocol CouchOperation {
     
     /**
      This method is called from the
-     `processResponse(data: NSData?, httpInfo: HttpInfo?, error: ErrorProtocol?)` method,
+     `processResponse(data: Data?, httpInfo: HttpInfo?, error: ErrorProtocol?)` method,
      it will contain the deserialized json response in the event the request returned with a
      2xx status code.
      
@@ -84,7 +84,7 @@ public protocol CouchOperation {
      * processResponse(json:) when a 2xx response code was received and the response is a JSON response.
        This allows an operation to provide additional processing of the JSON.
      */
-    func processResponse(data: NSData?, httpInfo: HTTPInfo?, error: ErrorProtocol?)
+    func processResponse(data: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?)
     
     /**
      Validates the operation has been set up correctly, subclasses should override but call and
@@ -120,7 +120,7 @@ public extension CouchOperation {
     
     public var contentType: String { return "application/json" }
     
-    public var data: NSData? { return nil }
+    public var data: Data? { return nil }
     
     public var parameters: [String: String] { return [:] }
     
@@ -155,7 +155,7 @@ public extension JsonOperation {
         self.completionHandler?(response: response as? Json, httpInfo: httpInfo, error: error)
     }
     
-    public func processResponse(data: NSData?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
+    public func processResponse(data: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
         guard error == nil, let httpInfo = httpInfo
             else {
                 self.callCompletionHandler(error: error!)
@@ -164,13 +164,13 @@ public extension JsonOperation {
         
         do {
             if let data = data {
-                let json = try NSJSONSerialization.jsonObject(with: data) as Any
+                let json = try JSONSerialization.jsonObject(with: data) as Any
                 if httpInfo.statusCode / 100 == 2 {
                     self.processResponse(json: json)
                     self.callCompletionHandler(response: json, httpInfo: httpInfo, error: error)
                 } else {
                     let error = Errors.HTTP(statusCode: httpInfo.statusCode,
-                                            response: String(data: data, encoding: NSUTF8StringEncoding))
+                                            response: String(data: data, encoding: .utf8))
                     self.callCompletionHandler(response: json, httpInfo: httpInfo, error: error)
                 }
             } else {
@@ -180,7 +180,7 @@ public extension JsonOperation {
         } catch {
             let response: String?
             if let data = data {
-                response = String(data: data, encoding: NSUTF8StringEncoding)
+                response = String(data: data, encoding: .utf8)
             } else {
                 response = nil
             }
@@ -202,15 +202,15 @@ public protocol DataOperation: CouchOperation {
      - parameter httpInfo: - Information about the HTTP response.
      - parameter error: - ErrorProtocol instance with information about an error executing the operation.
      */
-    var completionHandler: ((response: NSData?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? { get set }
+    var completionHandler: ((response: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? { get set }
 }
 
 public extension DataOperation {
     public func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
-        self.completionHandler?(response: response as? NSData, httpInfo: httpInfo, error: error)
+        self.completionHandler?(response: response as? Data, httpInfo: httpInfo, error: error)
     }
     
-    public func processResponse(data: NSData?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
+    public func processResponse(data: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
         guard error == nil, let httpInfo = httpInfo
             else {
                 self.callCompletionHandler(error: error!)
@@ -219,7 +219,7 @@ public extension DataOperation {
         if httpInfo.statusCode / 100 == 2 {
             self.completionHandler?(response: data, httpInfo: httpInfo, error: error)
         } else {
-            self.completionHandler?(response: data, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data: data!, encoding: NSUTF8StringEncoding)))
+            self.completionHandler?(response: data, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data: data!, encoding: .utf8)))
         }
     }
 }

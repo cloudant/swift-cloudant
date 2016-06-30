@@ -110,7 +110,7 @@ extension XCTestCase {
     
     func simulateExecutionOf(operation: CouchOperation, httpResponse: HTTPInfo, response: JSONResponse) {
         do {
-            let data = try NSJSONSerialization.data(withJSONObject: response.json)
+            let data = try JSONSerialization.data(withJSONObject: response.json)
             let httpInfo = HTTPInfo(statusCode: 200, headers: [:])
             self.simulateExecutionOf(operation: operation, httpResponse: httpInfo, response: data)
         } catch {
@@ -119,8 +119,8 @@ extension XCTestCase {
 
     }
     
-    func simulateExecutionOf(operation: CouchOperation, httpResponse: HTTPInfo, response: NSData) {
-        dispatch_async(dispatch_get_main_queue()) {
+    func simulateExecutionOf(operation: CouchOperation, httpResponse: HTTPInfo, response: Data) {
+        DispatchQueue.main.async {
             
             do {
                 if !operation.validate() {
@@ -211,7 +211,7 @@ class TestSettings {
     private static var instance: TestSettings?
 
     private init() {
-        let bundle = NSBundle(for: TestSettings.self)
+        let bundle = Bundle(for: TestSettings.self)
 
         let testSettingsPath = bundle.pathForResource("TestSettings", ofType: "plist")
 

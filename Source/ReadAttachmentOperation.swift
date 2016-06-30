@@ -51,7 +51,7 @@ public class ReadAttachmentOperation: CouchDatabaseOperation, DataOperation {
      - parameter httpInfo: - Information about the HTTP response.
      - parameter error: - ErrorProtocol instance with information about an error executing the operation.
      */
-    public var completionHandler: ((response: NSData?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public var completionHandler: ((response: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     
     public var databaseName: String?
     

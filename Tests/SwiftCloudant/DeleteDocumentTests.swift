@@ -26,7 +26,7 @@ class DeleteDocumentTests: XCTestCase {
         super.setUp()
 
         dbName = generateDBName()
-        client = CouchDBClient(url: NSURL(string: url)!, username: username, password: password)
+        client = CouchDBClient(url: URL(string: url)!, username: username, password: password)
         createDatabase(databaseName: dbName!, client: client!)
 
         print("Created database: \(dbName!)")

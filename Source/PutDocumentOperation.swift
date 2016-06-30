@@ -41,7 +41,7 @@ public class PutDocumentOperation: CouchDatabaseOperation, JsonOperation {
         #if os(Linux)
             return databaseName != nil && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body!.bridge())
         #else
-            return databaseName != nil && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body! as NSDictionary)
+            return databaseName != nil && docId != nil && body != nil && JSONSerialization.isValidJSONObject(body! as NSDictionary)
         #endif
     }
 
@@ -49,13 +49,13 @@ public class PutDocumentOperation: CouchDatabaseOperation, JsonOperation {
         return "PUT"
     }
 
-    public var data: NSData? {
+    public var data: Data? {
         get {
             do {
                 #if os(Linux)
                     let data = try NSJSONSerialization.data(withJSONObject: body!.bridge(), options: NSJSONWritingOptions())
                 #else
-                    let data = try NSJSONSerialization.data(withJSONObject: body! as NSDictionary, options: NSJSONWritingOptions())
+                    let data = try JSONSerialization.data(withJSONObject: body! as NSDictionary, options: JSONSerialization.WritingOptions())
                 #endif
                 return data
             } catch {

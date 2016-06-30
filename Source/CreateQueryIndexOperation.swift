@@ -69,14 +69,14 @@ public class CreateJsonQueryIndexOperation: CouchDatabaseOperation, MangoOperati
      */
     public var designDoc: String?
 
-    private var jsonData: NSData?
+    private var jsonData: Data?
     
     
     public var method: String {
         return "POST"
     }
 
-    public var data: NSData? {
+    public var data: Data? {
         return self.jsonData
     }
     
@@ -131,7 +131,7 @@ public class CreateJsonQueryIndexOperation: CouchDatabaseOperation, MangoOperati
         #if os(Linux)
             jsonData = try NSJSONSerialization.data(withJSONObject:jsonDict.bridge())
         #else
-            jsonData = try NSJSONSerialization.data(withJSONObject:jsonDict as NSDictionary)
+            jsonData = try JSONSerialization.data(withJSONObject:jsonDict as NSDictionary)
         #endif
     }
     
@@ -249,8 +249,8 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
      */
     public var designDoc: String?
 
-    private var jsonData : NSData?
-    public  var data: NSData? {
+    private var jsonData : Data?
+    public  var data: Data? {
         return jsonData
     }
     
@@ -271,7 +271,7 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
             #if os(Linux)
                 return NSJSONSerialization.isValidJSONObject(selector.bridge())
             #else
-                return NSJSONSerialization.isValidJSONObject(selector as NSDictionary)
+                return JSONSerialization.isValidJSONObject(selector as NSDictionary)
             #endif
         }
         
@@ -356,7 +356,7 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
                     jsonDict["index"] = index as NSDictionary
                 }
                 
-                self.jsonData = try NSJSONSerialization.data(withJSONObject:jsonDict as NSDictionary)
+                self.jsonData = try JSONSerialization.data(withJSONObject:jsonDict as NSDictionary)
             #endif
             
 

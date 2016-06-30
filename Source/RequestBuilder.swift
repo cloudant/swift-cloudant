@@ -25,7 +25,7 @@ internal protocol HTTPRequestOperation   {
     /**
      The root of url, e.g. `example.cloudant.com`
      */
-    var rootURL: NSURL { get }
+    var rootURL: URL { get }
     
     /**
      The path of the url e.g. `/exampledb/document1/`
@@ -38,12 +38,12 @@ internal protocol HTTPRequestOperation   {
     /**
      The query items to use for the request
      */
-    var queryItems: [NSURLQueryItem] { get }
+    var queryItems: [URLQueryItem] { get }
     
     /**
      The body of the HTTP request or `nil` if there is no data for the request.
      */
-    var httpRequestBody: NSData? { get }
+    var httpRequestBody: Data? { get }
     
     /**
      The content type of the HTTP request payload. This is guranteed to be called
@@ -67,7 +67,7 @@ internal protocol HTTPRequestOperation   {
      - parameter httpInfo: Information about the HTTP response.
      - parameter error: A type representing an error if one occurred or `nil`
      */
-    func processResponse(data: NSData?, httpInfo: HTTPInfo?, error: ErrorProtocol?);
+    func processResponse(data: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?);
 
     var isCancelled: Bool { get }
 
@@ -99,13 +99,14 @@ class OperationRequestBuilder {
     /**
      Builds the NSURLRequest from the operation in the property `operation`
      */
-    func buildRequest() throws -> NSURLRequest {
+    func buildRequest() throws -> URLRequest {
+        
         guard let components = NSURLComponents(url: operation.rootURL, resolvingAgainstBaseURL: false)
         else {
             throw Error.URLGenerationFailed
         }
         components.path = operation.httpPath
-        var queryItems: [NSURLQueryItem] = []
+        var queryItems: [URLQueryItem] = []
 
         if let _ = components.queryItems {
             queryItems.append(contentsOf: components.queryItems!)
@@ -119,7 +120,7 @@ class OperationRequestBuilder {
             throw Error.URLGenerationFailed
         }
 
-        let request = NSMutableURLRequest(url: url)
+        var request = URLRequest(url: url)
         request.cachePolicy = .useProtocolCachePolicy
         request.timeoutInterval = 10.0
         request.httpMethod = operation.httpMethod
