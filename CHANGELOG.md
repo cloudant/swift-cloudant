@@ -1,4 +1,4 @@
-# 0.3.0
+# 0.3.0 (2016-06-30)
 
 - [NEW] New FindDocumentsOperation API.
 - [NEW] New DeleteAttachmentOperation API.
