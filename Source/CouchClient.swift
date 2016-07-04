@@ -23,9 +23,9 @@ public class CouchDBClient {
 
     private let username: String?
     private let password: String?
-    private let rootURL: NSURL
+    private let rootURL: URL
     private let session: InterceptableSession
-    private let queue: NSOperationQueue
+    private let queue: OperationQueue
 
     /**
      Creates a CouchDBClient instance.
@@ -34,11 +34,11 @@ public class CouchDBClient {
      - parameter username: the username to use when authenticating.
      - parameter password: the password to use when authenticating.
      */
-    public init(url: NSURL, username: String?, password: String?) {
+    public init(url: URL, username: String?, password: String?) {
         self.rootURL = url
         self.username = username
         self.password = password
-        queue = NSOperationQueue()
+        queue = OperationQueue()
         let interceptors: [HTTPInterceptor]
 
         if let username = username, let password = password {

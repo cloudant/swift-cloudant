@@ -22,20 +22,20 @@ let testCookieHeaderValue = "AuthSession=cm9vdDo1MEJCRkYwMjq0LO0ylOIwShrgt8y-Ukh
 
 class InterceptorTests: XCTestCase {
     
-    var session: NSURLSession?
+    var session: URLSession?
     
     override func setUp() {
-        let configuration = NSURLSessionConfiguration.ephemeral()
+        let configuration = URLSessionConfiguration.ephemeral()
         configuration.protocolClasses = [CookieSession401.self, CookieSession200.self]
-        session = NSURLSession(configuration: configuration)
+        session = URLSession(configuration: configuration)
     }
 
     func testCookieInterceptorSucessfullGetsCookie() {
         let cookieInterceptor = SessionCookieInterceptor(username: "username", password: "password", session: session!)
 
         // create a context with a request which we can use
-        let url = NSURL(string: "http://username.cloudant.com")!
-        let request = NSMutableURLRequest(url: url)
+        let url = URL(string: "http://username.cloudant.com")!
+        let request = URLRequest(url: url)
 
         var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
 
@@ -53,8 +53,8 @@ class InterceptorTests: XCTestCase {
                                                          session: session!)
 
         // create a context with a request which we can use
-        let url = NSURL(string: "http://username1.cloudant.com")!
-        let request = NSMutableURLRequest(url: url)
+        let url = URL(string: "http://username1.cloudant.com")!
+        let request = URLRequest(url: url)
 
         var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
 
@@ -66,27 +66,27 @@ class InterceptorTests: XCTestCase {
     }
 }
 
-class CookieSessionHTTPURLProtocol: NSURLProtocol {
+class CookieSessionHTTPURLProtocol: URLProtocol {
     
-    override class func canonicalRequest(for request: NSURLRequest) -> NSURLRequest {
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
     }
     
     func sendResponse(statusCode: Int, headers: [String:String] = [:], json: JSONResponse){
         do {
-            let data = try NSJSONSerialization.data(withJSONObject: json.json)
+            let data = try JSONSerialization.data(withJSONObject: json.json)
             self.sendResponse(statusCode: statusCode, headers: headers, data: data)
         } catch {
             
             NSLog("Failed to create NSData for JSONResponse, error:\(error)")
-            self.sendResponse(statusCode: statusCode, headers: headers, data: NSData())
+            self.sendResponse(statusCode: statusCode, headers: headers, data: Data())
             
         }
     }
     
-    func sendResponse(statusCode: Int, headers: [String:String] = [:], data: NSData){
-        dispatch_async(dispatch_queue_create("com.cloudant.cookie.session.protocol", nil)) {
-            let response = NSHTTPURLResponse(url: self.request.url!, statusCode: statusCode, httpVersion: "http/1.1", headerFields: headers)
+    func sendResponse(statusCode: Int, headers: [String:String] = [:], data: Data){
+        DispatchQueue(label: "com.cloudant.cookie.session.protocol", attributes: []).async {
+            let response = HTTPURLResponse(url: self.request.url!, statusCode: statusCode, httpVersion: "http/1.1", headerFields: headers)
             self.client?.urlProtocol(self, didReceive: response!, cacheStoragePolicy: .notAllowed)
             self.client?.urlProtocol(self, didLoad: data)
             self.client?.urlProtocolDidFinishLoading(self)
@@ -101,7 +101,7 @@ class CookieSessionHTTPURLProtocol: NSURLProtocol {
 
 class CookieSession401 : CookieSessionHTTPURLProtocol {
     
-    override class func canInit(with request: NSURLRequest) -> Bool {
+    override class func canInit(with request: URLRequest) -> Bool {
         return request.url!.host! == "username1.cloudant.com"
     }
 
@@ -113,7 +113,7 @@ class CookieSession401 : CookieSessionHTTPURLProtocol {
 
 class CookieSession200 : CookieSessionHTTPURLProtocol {
     
-    override class func canInit(with request: NSURLRequest) -> Bool {
+    override class func canInit(with request: URLRequest) -> Bool {
         return request.url!.host! == "username.cloudant.com"
     }
     

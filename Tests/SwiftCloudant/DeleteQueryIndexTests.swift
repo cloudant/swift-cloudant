@@ -26,7 +26,7 @@ public class DeleteQueryIndexTests: XCTestCase {
     override public func setUp() {
         super.setUp()
         dbName = generateDBName()
-        client = CouchDBClient(url: NSURL(string:self.url)!, username: self.username, password: self.password)
+        client = CouchDBClient(url: URL(string:self.url)!, username: self.username, password: self.password)
     }
 
     override public func tearDown() {

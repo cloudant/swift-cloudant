@@ -29,7 +29,7 @@ public class CreateQueryIndexTests : XCTestCase {
         super.setUp()
         
         dbName = generateDBName()
-        client = CouchDBClient(url: NSURL(string:self.url)!, username: self.username, password: self.password)
+        client = CouchDBClient(url: URL(string:self.url)!, username: self.username, password: self.password)
     }
     
     
@@ -85,7 +85,7 @@ public class CreateQueryIndexTests : XCTestCase {
         
         XCTAssertNotNil(data)
         if let data = data {
-            let json = try NSJSONSerialization.jsonObject(with: data)
+            let json = try JSONSerialization.jsonObject(with: data)
             XCTAssertEqual(["type":"json", "index":["fields" : ["foo"]], "name" : "indexName", "ddoc":"ddoc"] as NSDictionary, json as? NSDictionary)
         }
         
@@ -111,7 +111,7 @@ public class CreateQueryIndexTests : XCTestCase {
         
         XCTAssertNotNil(data)
         if let data = data {
-            let json = try NSJSONSerialization.jsonObject(with: data)
+            let json = try JSONSerialization.jsonObject(with: data)
             XCTAssertEqual(["type":"text", "index" : [ "selector": ["bar" : "foo"], "fields" : [["foo":"string"]], "default_field": ["enabled": true, "analyzer": "english" ]], "name" : "indexName", "ddoc":"ddoc"] as NSDictionary, json as? NSDictionary)
         }
     }
@@ -134,7 +134,7 @@ public class CreateQueryIndexTests : XCTestCase {
         
         XCTAssertNotNil(data)
         if let data = data {
-            let json = try NSJSONSerialization.jsonObject(with: data)
+            let json = try JSONSerialization.jsonObject(with: data)
             XCTAssertEqual(["type":"json", "index":["fields" : ["foo"]], "ddoc":"ddoc"] as NSDictionary, json as? NSDictionary)
         }
     }
@@ -150,7 +150,7 @@ public class CreateQueryIndexTests : XCTestCase {
         
         XCTAssertNotNil(data)
         if let data = data {
-            let json = try NSJSONSerialization.jsonObject(with: data)
+            let json = try JSONSerialization.jsonObject(with: data)
             XCTAssertEqual(["type":"json", "index":["fields" : ["foo"]], "name":"indexName"] as NSDictionary, json as? NSDictionary)
         }
     }
@@ -170,7 +170,7 @@ public class CreateQueryIndexTests : XCTestCase {
         
         XCTAssertNotNil(data)
         if let data = data {
-            let json = try NSJSONSerialization.jsonObject(with: data)
+            let json = try JSONSerialization.jsonObject(with: data)
             XCTAssertEqual(["type":"text", "index" : ["selector":["bar":"foo"], "fields" : [["foo":"string"]], "default_field": ["enabled": true, "analyzer": "english" ]], "ddoc":"ddoc"] as NSDictionary, json as? NSDictionary)
         }
     }
@@ -190,7 +190,7 @@ public class CreateQueryIndexTests : XCTestCase {
         
         XCTAssertNotNil(data)
         if let data = data {
-            let json = try NSJSONSerialization.jsonObject(with: data)
+            let json = try JSONSerialization.jsonObject(with: data)
             XCTAssertEqual(["type":"text", "name": "indexName", "index" : ["selector":["bar":"foo"], "default_field": ["enabled": true, "analyzer": "english" ]], "ddoc":"ddoc"] as NSDictionary, json as? NSDictionary)
         }
     }
@@ -210,7 +210,7 @@ public class CreateQueryIndexTests : XCTestCase {
         
         XCTAssertNotNil(data)
         if let data = data {
-            let json = try NSJSONSerialization.jsonObject(with: data)
+            let json = try JSONSerialization.jsonObject(with: data)
             XCTAssertEqual(["type":"text", "index" : ["selector":["bar":"foo"], "fields" : [["foo":"string"]], "default_field": ["enabled": true, "analyzer": "english" ]], "name":"indexName"] as NSDictionary, json as? NSDictionary)
         }
     }
@@ -230,7 +230,7 @@ public class CreateQueryIndexTests : XCTestCase {
         
         XCTAssertNotNil(data)
         if let data = data {
-            let json = try NSJSONSerialization.jsonObject(with: data)
+            let json = try JSONSerialization.jsonObject(with: data)
             XCTAssertEqual(["type":"text", "index" : ["selector":["bar":"foo"], "fields" : [["foo":"string"]], "default_field": ["enabled": true ]], "ddoc":"ddoc", "name": "indexName"] as NSDictionary, json as? NSDictionary)
         }
     }
@@ -250,7 +250,7 @@ public class CreateQueryIndexTests : XCTestCase {
         
         XCTAssertNotNil(data)
         if let data = data {
-            let json = try NSJSONSerialization.jsonObject(with: data)
+            let json = try JSONSerialization.jsonObject(with: data)
             XCTAssertEqual(["type":"text", "index" : [ "selector":["bar":"foo"],"fields" : [["foo":"string"]], "default_field": ["analyzer": "english" ]], "ddoc":"ddoc", "name": "indexName"] as NSDictionary, json as? NSDictionary)
         }
     }
@@ -270,7 +270,7 @@ public class CreateQueryIndexTests : XCTestCase {
         
         XCTAssertNotNil(data)
         if let data = data {
-            let json = try NSJSONSerialization.jsonObject(with: data)
+            let json = try JSONSerialization.jsonObject(with: data)
             XCTAssertEqual(["type":"text", "index" : [ "fields" : [["foo":"string"]], "default_field": ["enabled": true, "analyzer": "english" ]],"name":"indexName", "ddoc":"ddoc"] as NSDictionary, json as? NSDictionary)
         }
     }

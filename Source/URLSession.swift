@@ -44,14 +44,14 @@ internal protocol InterceptableSessionDelegate {
      Called when the response is received from the server
      - parameter response: The response received from the server
     */
-    func received(response:NSHTTPURLResponse)
+    func received(response:HTTPURLResponse)
     
     /**
     Called when response data is available from the server, may be called multiple times.
      - parameter data: The data received from the server, this may be only a fraction of the data
      the server is sending as part of the response.
     */
-    func received(data: NSData)
+    func received(data: Data)
     
     /**
     Called when the request has completed
@@ -81,12 +81,12 @@ public struct HTTPInterceptorContext {
      The request that will be made, this can be modified to add additional data to the request such
      as session cookie authentication of custom tracking headers.
      */
-    let request: NSMutableURLRequest
+    var request: URLRequest
     /**
      The response that was received from the server. This will be `nil` if the request errored
      or has not yet been made.
      */
-    let response: NSHTTPURLResponse?
+    let response: HTTPURLResponse?
     /**
      A flag that signals to the HTTP layer that it should retry the request.
      */
@@ -97,13 +97,13 @@ public struct HTTPInterceptorContext {
  A class which encapsulates HTTP requests. This class allows requests to be transparently retried.
  */
 public class URLSessionTask {
-    private let request: NSURLRequest
-    private var inProgressTask: NSURLSessionDataTask
-    private let session: NSURLSession
+    private let request: URLRequest
+    private var inProgressTask: URLSessionDataTask
+    private let session: URLSession
     private var remainingRetries: UInt = 10
     private let delegate: InterceptableSessionDelegate
 
-    public var state: NSURLSessionTaskState {
+    public var state: Foundation.URLSessionTask.State {
         get {
             return inProgressTask.state
         }
@@ -116,7 +116,7 @@ public class URLSessionTask {
      - parameter inProgressTask: The NSURLSessionDataTask that is performing the request in NSURLSession.
      - parameter delegate: The delegate for this task.
      */
-    init(session: NSURLSession, request: NSURLRequest, inProgressTask:NSURLSessionDataTask, delegate: InterceptableSessionDelegate) {
+    init(session: URLSession, request: URLRequest, inProgressTask:URLSessionDataTask, delegate: InterceptableSessionDelegate) {
         self.request = request
         self.session = session
         self.delegate = delegate
@@ -141,21 +141,21 @@ public class URLSessionTask {
 /**
  A class to create `URLSessionTask`
  */
-internal class InterceptableSession: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLSessionDataDelegate, NSURLSessionStreamDelegate {
+internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, URLSessionStreamDelegate {
 
-    private lazy var session: NSURLSession = { () -> NSURLSession in
-        let config = NSURLSessionConfiguration.default()
+    private lazy var session: URLSession = { () -> URLSession in
+        let config = URLSessionConfiguration.default()
         #if os(Linux)
             config.httpAdditionalHeaders = ["User-Agent".bridge() : InterceptableSession.userAgent().bridge()]
         #else
             config.httpAdditionalHeaders = ["User-Agent": InterceptableSession.userAgent() as NSString]
         #endif
-        return NSURLSession(configuration: config, delegate: self, delegateQueue: nil) }()
+        return URLSession(configuration: config, delegate: self, delegateQueue: nil) }()
     
     private let interceptors: Array<HTTPInterceptor>
 
     
-    private var taskDict: [NSURLSessionTask: URLSessionTask] = [:]
+    private var taskDict: [Foundation.URLSessionTask: URLSessionTask] = [:]
     
     
     convenience override init() {
@@ -167,7 +167,7 @@ internal class InterceptableSession: NSObject, NSURLSessionDelegate, NSURLSessio
      - parameter delegate: a delegate to use for this session.
      - parameter requestInterceptors: Interceptors to use with this session.
      */
-    init(delegate: NSURLSessionDelegate?, requestInterceptors: Array<HTTPInterceptor>) {
+    init(delegate: URLSessionDelegate?, requestInterceptors: Array<HTTPInterceptor>) {
         interceptors = requestInterceptors
     }
 
@@ -177,15 +177,15 @@ internal class InterceptableSession: NSObject, NSURLSessionDelegate, NSURLSessio
      - parameter delegate: The delegate for the task being created.
      - returns: A `URLSessionTask` representing the task for the `NSURLRequest`
      */
-    internal func dataTask(request: NSURLRequest, delegate: InterceptableSessionDelegate) -> URLSessionTask {
+    internal func dataTask(request: URLRequest, delegate: InterceptableSessionDelegate) -> URLSessionTask {
         // create the underlying task.
-        var ctx = HTTPInterceptorContext(request: request.mutableCopy() as! NSMutableURLRequest, response: nil, shouldRetry: false)
+        var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
         
         for interceptor in interceptors {
             ctx = interceptor.interceptRequest(ctx: ctx)
         }
         
-        let nsTask = self.session.dataTask(with: request.copy() as! NSURLRequest)
+        let nsTask = self.session.dataTask(with: request)
         let task = URLSessionTask(session: session, request: request, inProgressTask: nsTask, delegate: delegate)
         
         self.taskDict[nsTask] = task
@@ -194,7 +194,7 @@ internal class InterceptableSession: NSObject, NSURLSessionDelegate, NSURLSessio
     }
     
     
-    internal func urlSession(_ session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+    internal func urlSession(_ session: URLSession, task: Foundation.URLSessionTask, didCompleteWithError error: NSError?) {
         guard let mTask = taskDict[task]
         else {
                 return
@@ -205,7 +205,7 @@ internal class InterceptableSession: NSObject, NSURLSessionDelegate, NSURLSessio
         taskDict.removeValue(forKey: task)
     }
     
-    internal func urlSession(_ session: NSURLSession, dataTask: NSURLSessionDataTask, didReceive data: NSData) {
+    internal func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         // yay datas
         guard let task = taskDict[dataTask]
         else {
@@ -216,15 +216,16 @@ internal class InterceptableSession: NSObject, NSURLSessionDelegate, NSURLSessio
         task.delegate.received(data: data)
     }
     
-    internal func urlSession(_ session: NSURLSession, dataTask: NSURLSessionDataTask, didReceive response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
+    
+    internal func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: (URLSession.ResponseDisposition) -> Void) {
         // Retrieve the task from the dict.
-        guard let task = taskDict[dataTask], let response = response as? NSHTTPURLResponse
+        guard let task = taskDict[dataTask], let response = response as? HTTPURLResponse
         else {
             completionHandler(.cancel)
             return
         }
         
-        var ctx = HTTPInterceptorContext(request: task.request.mutableCopy() as! NSMutableURLRequest, response: response, shouldRetry: false)
+        var ctx = HTTPInterceptorContext(request: task.request, response: response, shouldRetry: false)
         for interceptor in interceptors {
             ctx = interceptor.interceptResponse(ctx: ctx)
         }
@@ -232,12 +233,12 @@ internal class InterceptableSession: NSObject, NSURLSessionDelegate, NSURLSessio
         if ctx.shouldRetry  && task.remainingRetries > 0 {
             task.remainingRetries -= 1
             // retry the request.
-            ctx = HTTPInterceptorContext(request: task.request.mutableCopy() as! NSMutableURLRequest, response: nil, shouldRetry: false)
+            ctx = HTTPInterceptorContext(request: task.request, response: nil, shouldRetry: false)
             for interceptor in interceptors {
                 ctx = interceptor.interceptRequest(ctx: ctx)
             }
             taskDict.removeValue(forKey: task.inProgressTask)
-            task.inProgressTask = self.session.dataTask(with: ctx.request.copy() as! NSURLRequest)
+            task.inProgressTask = self.session.dataTask(with: ctx.request)
             taskDict[task.inProgressTask] = task
             task.resume()
             
@@ -256,7 +257,7 @@ internal class InterceptableSession: NSObject, NSURLSessionDelegate, NSURLSessio
     }
 
     private class func userAgent() -> String {
-        let processInfo = NSProcessInfo.processInfo()
+        let processInfo = ProcessInfo.processInfo()
         let osVersion = processInfo.operatingSystemVersionString
 
         #if os(iOS)
@@ -268,7 +269,7 @@ internal class InterceptableSession: NSObject, NSURLSessionDelegate, NSURLSessio
         #else
             let platform = "Unknown";
         #endif
-        let frameworkBundle = NSBundle(for: InterceptableSession.self)
+        let frameworkBundle = Bundle(for: InterceptableSession.self)
         var bundleDisplayName = frameworkBundle.objectForInfoDictionaryKey("CFBundleName")
         var bundleVersionString = frameworkBundle.objectForInfoDictionaryKey("CFBundleShortVersionString")
 

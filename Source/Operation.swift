@@ -40,7 +40,7 @@ enum Errors: ErrorProtocol {
 /**
  An NSOperation subclass for executing `CouchOperations`
  */
-public class Operation: NSOperation, HTTPRequestOperation
+public class Operation: Foundation.Operation, HTTPRequestOperation
 {
     
     private let couchOperation: CouchOperation
@@ -102,7 +102,7 @@ public class Operation: NSOperation, HTTPRequestOperation
         }
     }
 
-    internal var rootURL: NSURL = NSURL(string: "http://cloudant.invalid")!
+    internal var rootURL: URL = URL(string: "http://cloudant.invalid")!
 
     internal var httpPath: String {
         return couchOperation.endpoint
@@ -111,12 +111,12 @@ public class Operation: NSOperation, HTTPRequestOperation
         return couchOperation.method
     }
 
-    internal var queryItems: [NSURLQueryItem] {
+    internal var queryItems: [URLQueryItem] {
         get {
-            var items:[NSURLQueryItem] = []
+            var items:[URLQueryItem] = []
             
             for (key, value) in couchOperation.parameters {
-                items.append(NSURLQueryItem(name: key, value: value))
+                items.append(URLQueryItem(name: key, value: value))
             }
             return items
         }
@@ -127,13 +127,13 @@ public class Operation: NSOperation, HTTPRequestOperation
     }
 
     // return nil if there is no body
-    internal var httpRequestBody: NSData? {
+    internal var httpRequestBody: Data? {
         return couchOperation.data
     }
 
     internal var executor: OperationRequestExecutor? = nil
 
-    internal func processResponse(data: NSData?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
+    internal func processResponse(data: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
         couchOperation.processResponse(data: data, httpInfo: httpInfo, error: error)
     }
 

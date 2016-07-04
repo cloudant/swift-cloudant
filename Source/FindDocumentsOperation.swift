@@ -214,8 +214,8 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, Jso
         return "/\(self.databaseName!)/_find"
     }
 
-    private var jsonData: NSData?
-    public var data: NSData? {
+    private var jsonData: Data?
+    public var data: Data? {
         return self.jsonData
     }
 
@@ -237,7 +237,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, Jso
                 return false
             }
         #else
-            if NSJSONSerialization.isValidJSONObject(jsonObj as NSDictionary) {
+            if JSONSerialization.isValidJSONObject(jsonObj as NSDictionary) {
                 self.json = jsonObj
                 return true
             } else {
@@ -352,7 +352,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, Jso
             #if os(Linux)
                 self.jsonData = try NSJSONSerialization.data(withJSONObject: json.bridge())
             #else
-                self.jsonData = try NSJSONSerialization.data(withJSONObject: json as NSDictionary)
+                self.jsonData = try JSONSerialization.data(withJSONObject: json as NSDictionary)
             #endif
         }
     }

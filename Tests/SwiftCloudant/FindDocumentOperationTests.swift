@@ -39,7 +39,7 @@ class FindDocumentOperationTests: XCTestCase {
     override func setUp() {
         super.setUp()
         dbName = generateDBName()
-        client = CouchDBClient(url: NSURL(string:self.url)!, username: self.username, password: self.password)
+        client = CouchDBClient(url: URL(string:self.url)!, username: self.username, password: self.password)
     }
     
     override func tearDown() {
@@ -155,7 +155,7 @@ class FindDocumentOperationTests: XCTestCase {
         if let httpBody = httpBodyOpt {
         
             do {
-                let json = try NSJSONSerialization.jsonObject(with: httpBody, options: NSJSONReadingOptions()) as? [String:NSObject]
+                let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:NSObject]
                 
                 let expected:[String:NSObject] = ["selector":["foo":"bar"],
                                 "fields":["foo","bar"],
@@ -196,7 +196,7 @@ class FindDocumentOperationTests: XCTestCase {
         if let httpBody = httpBodyOpt {
             
             do {
-                let json = try NSJSONSerialization.jsonObject(with: httpBody, options: NSJSONReadingOptions()) as? [String:NSObject]
+                let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:NSObject]
                 
                 let expected:[String:NSObject] = ["selector":["foo":"bar"],
                                                   "sort": [["foo":"asc"]],
@@ -231,7 +231,7 @@ class FindDocumentOperationTests: XCTestCase {
         if let httpBody = httpBodyOpt {
             
             do {
-                let json = try NSJSONSerialization.jsonObject(with: httpBody, options: NSJSONReadingOptions()) as? [String:NSObject]
+                let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:NSObject]
                 
                 let expected:[String:NSObject] = ["selector":["foo":"bar"],
                                                   "sort": [["foo":"desc"]],
@@ -292,7 +292,7 @@ class FindDocumentOperationTests: XCTestCase {
         if let httpBody = httpBodyOpt {
             
             do {
-                let json = try NSJSONSerialization.jsonObject(with: httpBody, options: NSJSONReadingOptions()) as? [String:NSObject]
+                let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:NSObject]
                 
                 let expected:[String:NSObject] = ["selector":["foo":"bar"]]
                 

@@ -43,7 +43,7 @@ public class QueryViewTests: XCTestCase {
     override public func setUp() {
         super.setUp()
         dbName = generateDBName()
-        client = CouchDBClient(url: NSURL(string: url)!, username: username, password: password)
+        client = CouchDBClient(url: URL(string: url)!, username: username, password: password)
     }
 
     override public func tearDown() {
@@ -164,7 +164,7 @@ public class QueryViewTests: XCTestCase {
         XCTAssertEqual("POST", view.method)
         XCTAssertNotNil(view.data)
         XCTAssertEqual("{\"keys\":[\"testkey\",[\"testkey2\",\"testkey3\"]]}",
-            String(data: view.data!, encoding: NSUTF8StringEncoding))
+            String(data: view.data!, encoding: String.Encoding.utf8))
         XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.endpoint)
 
         let expectedQueryItems = ["descending": "true",

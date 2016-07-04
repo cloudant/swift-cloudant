@@ -44,8 +44,8 @@ class OperationRequestExecutor: InterceptableSessionDelegate {
      */
     let operation: HTTPRequestOperation
     
-    let buffer: NSMutableData
-    var response: NSHTTPURLResponse?
+    var buffer: Data
+    var response: HTTPURLResponse?
     /**
      Creates an OperationRequestExecutor.
      - parameter operation: The operation that this OperationRequestExecutor will execute
@@ -53,10 +53,10 @@ class OperationRequestExecutor: InterceptableSessionDelegate {
     init(operation: HTTPRequestOperation) {
         self.operation = operation
         task = nil
-        buffer = NSMutableData()
+        buffer = Data()
     }
     
-    func received(data: NSData) {
+    func received(data: Data) {
         // This class doesn't support streaming of data
         // so we buffer until the request completes 
         // and then we will deliver it to the
@@ -64,7 +64,7 @@ class OperationRequestExecutor: InterceptableSessionDelegate {
         buffer.append(data)
     }
     
-    func received(response: NSHTTPURLResponse) {
+    func received(response: HTTPURLResponse) {
         // Store the response to deliver with the data when the task completes.
         self.response = response
     }

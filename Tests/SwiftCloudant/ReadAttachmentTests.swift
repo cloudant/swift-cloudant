@@ -33,7 +33,7 @@ class ReadAttachmentTests: XCTestCase {
         super.setUp()
         
         dbName = generateDBName()
-        client = CouchDBClient(url: NSURL(string: url)!, username: username, password: password)
+        client = CouchDBClient(url: URL(string: url)!, username: username, password: password)
         createDatabase(databaseName: dbName!, client: client!)
         let createDoc = PutDocumentOperation()
         createDoc.body = createTestDocuments(count: 1).first
@@ -48,7 +48,7 @@ class ReadAttachmentTests: XCTestCase {
         let put = PutAttachmentOperation()
         put.docId = docId
         put.revId = revId
-        put.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
+        put.data = attachment.data(using: String.Encoding.utf8, allowLossyConversion: false)
         put.attachmentName = attachmentName
         put.contentType = "text/plain"
         put.completionHandler = {[weak self] (response, info, error) in
@@ -79,7 +79,7 @@ class ReadAttachmentTests: XCTestCase {
             
             XCTAssertNotNil(data)
             if let data = data {
-                let attxt = NSString(data: data, encoding: NSUTF8StringEncoding)
+                let attxt = String(data: data, encoding: .utf8)
                 XCTAssertEqual(self?.attachment, attxt)
             }
             

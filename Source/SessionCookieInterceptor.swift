@@ -29,7 +29,7 @@ public class SessionCookieInterceptor: HTTPInterceptor
     /**
      The requestBody to use when performing HTTP requests to the `_session` endpoint.
      */
-    let sessionRequestBody: NSData
+    let sessionRequestBody: Data
     /**
      Determines if the `_session` request should be made
      */
@@ -41,20 +41,20 @@ public class SessionCookieInterceptor: HTTPInterceptor
     /**
      The `NSURLSession` to use when making HTTP requests.
      */
-    let urlSession: NSURLSession
+    let urlSession: URLSession
 
     convenience init(username: String, password: String) {
         self.init(username: username,
                   password: password,
-                  session: NSURLSession(configuration: NSURLSessionConfiguration.ephemeral()))
+                  session: URLSession(configuration: URLSessionConfiguration.ephemeral()))
     }
     
-    init(username: String, password: String, session: NSURLSession){
+    init(username: String, password: String, session: URLSession){
         let encodedUsername = username.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics())!
         let encodedPassword = password.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics())!
         
         let payload = "name=\(encodedUsername)&password=\(encodedPassword)"
-        sessionRequestBody = payload.data(using: NSASCIIStringEncoding)!
+        sessionRequestBody = payload.data(using: .ascii)!
         self.urlSession = session
     }
 
@@ -81,7 +81,7 @@ public class SessionCookieInterceptor: HTTPInterceptor
         else {
             return ctx
         }
-
+        var ctx = ctx
         if let cookie = self.cookie {
             // apply the coode
             ctx.request.setValue(cookie, forHTTPHeaderField: "Cookie")
@@ -96,29 +96,25 @@ public class SessionCookieInterceptor: HTTPInterceptor
         return ctx
     }
 
-    private func startNewSession(url: NSURL) -> String? {
+    private func startNewSession(url: URL) -> String? {
         let components = NSURLComponents(url: url, resolvingAgainstBaseURL: false)!
         components.path = "/_session"
 
-        let request = NSMutableURLRequest(url: components.url!)
+        var request = URLRequest(url: components.url!)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         request.httpBody = self.sessionRequestBody
 
-        let semaphoreOpt = dispatch_semaphore_create(0)
+        let semaphore = DispatchSemaphore(value: 0)
         
-        guard let semaphore = semaphoreOpt
-        else {
-            return nil
-        }
         var cookie: String?
  
         let task = self.urlSession.dataTask(with: request) { (data, response, error) -> Void in
 
             // defer semaphore
-            defer { dispatch_semaphore_signal(semaphore) }
+            defer { semaphore.signal() }
 
-            let response = response as? NSHTTPURLResponse
+            let response = response as? HTTPURLResponse
 
             if let error = error {
                 // Network failure, often transient, try again next time around.
@@ -139,7 +135,7 @@ public class SessionCookieInterceptor: HTTPInterceptor
 
                     // Check data sent back before attempting to get the cookie from the headers.
                     do {
-                        let jsonResponse = try NSJSONSerialization.jsonObject(with: data, options: NSJSONReadingOptions())
+                        let jsonResponse = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions())
 
                         // Only check for ok:true, https://issues.apache.org/jira/browse/COUCHDB-1356
                         // means we cannot check that the name returned is the one we sent.
@@ -181,7 +177,9 @@ public class SessionCookieInterceptor: HTTPInterceptor
             }
         }
         task.resume()
-        dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, self.sessionCookieTimeout * Int64(NSEC_PER_SEC)))
+//        TODO wait on sempahore with timeout that mimics the swift 3 pre preview 1 code.
+//        semaphore.wait(timeout: DispatchTime.now(dispatch_time_t(DispatchTime.now, self.sessionCookieTimeout * Int64(NSEC_PER_SEC)))
+        semaphore.wait()
 
         return cookie
 
