@@ -363,9 +363,26 @@ public class QueryViewTests: XCTestCase {
         XCTAssertEqual("GET", view.method)
         XCTAssertNil(view.data)
         XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.endpoint)
-
+	
         let expectedQueryItems = ["stale": "update_after"]
 
+        XCTAssertEqual(expectedQueryItems, view.parameters)
+    }
+    
+    func testViewGeneratesCorrectRequestUpdateSeq() {
+        let view = QueryViewOperation()
+        view.designDoc = "ddoc"
+        view.viewName = "view1"
+        view.databaseName = self.dbName
+        view.updateSeq = true
+        
+        XCTAssert(view.validate())
+        XCTAssertEqual("GET", view.method)
+        XCTAssertNil(view.data)
+        XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.endpoint)
+        
+        let expectedQueryItems = ["update_seq": "true"]
+        
         XCTAssertEqual(expectedQueryItems, view.parameters)
     }
 }

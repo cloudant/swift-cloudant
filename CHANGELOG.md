@@ -1,3 +1,8 @@
+# Unreleased
+
+- [NEW] New `GetAllDocs` API.
+- [BREAKING] `skip` and `limit` properties on `QueryViewOperation` are now `UInt`
+
 # 0.3.2 (2016-07-08)
 
 - [FIXED] Created explicit `Sort` and `TextIndexField` initalizers so they are exposed as public.

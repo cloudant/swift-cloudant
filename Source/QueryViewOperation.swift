@@ -50,7 +50,7 @@ import Foundation
  client.add(view)
  ```
  */
-public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
+public class QueryViewOperation: ViewOperation, JsonOperation {
     
     public init() { }
     
@@ -140,14 +140,14 @@ public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
 
      - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
      */
-    public var limit: Int? = nil
+    public var limit: UInt? = nil
 
     /**
      The number of rows to skip in the view results.
 
      - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
      */
-    public var skip: Int? = nil
+    public var skip: UInt? = nil
 
     /**
      Include the full content of documents in the view results.
@@ -155,6 +155,8 @@ public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
      - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
      */
     public var includeDocs: Bool? = nil
+    
+    public var conflicts: Bool? = nil
 
     /**
      Use the reduce function for the view.
@@ -186,23 +188,6 @@ public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
     public var groupLevel: Int? = nil
 
     /**
-     Acceptable values for allowing stale views with the `stale` property. To disallow stale views use the default `stale=nil`.
-     */
-    public enum Stale: CustomStringConvertible {
-        /// Allow stale views.
-        case Ok
-        /// Allow stale views, but update them immediately after the request.
-        case UpdateAfter
-
-        public var description: String {
-            switch self {
-            case .Ok: return "ok"
-            case .UpdateAfter: return "update_after"
-            }
-        }
-    }
-
-    /**
      Configures the view request to allow the return of stale results, that is allowing the view to return immediately rather than waiting for the view index to build. When this parameter is omitted (i.e. with the default of `stale=nil`) the server will not return stale results.
 
      - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
@@ -210,6 +195,8 @@ public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
      - Warning: This is an advanced option, it should not be used unless you fully understand the outcome of changing the value of this property.
      */
     public var stale: Stale? = nil
+    
+    public var updateSeq: Bool?
 
     /**
      Sets a handler to run for each row retrieved by the view.
@@ -246,14 +233,6 @@ public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
         return true
     }
 
-    public var method: String {
-        if (keys != nil) {
-            return "POST"
-        } else {
-            return "GET"
-        }
-    }
-
     public var data: Data? {
         if let keys = keys {
             do {
@@ -277,46 +256,19 @@ public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
 
     public var parameters: [String: String] {
         get {
-            var items: [String: String] = [:]
+            var items: [String: String] = generateParams()
 
-            if let descending = descending {
-                items["descending"] = "\(descending)"
-            }
-
+            // Add parameters not handled by the protocol.
             if let startKeyJson = startKeyJson {
                 items["startkey"] = startKeyJson
-            }
-
-            if let startKeyDocId = startKeyDocId {
-                items["startkey_docid"] = startKeyDocId
             }
 
             if let endKeyJson = endKeyJson {
                 items["endkey"] =  endKeyJson
             }
 
-            if let endKeyDocId = endKeyDocId {
-                items["endkey_docid"] = "\(endKeyDocId)"
-            }
-
-            if let inclusiveEnd = inclusiveEnd {
-                items["inclusive_end"] = "\(inclusiveEnd)"
-            }
-
             if let keyJson = keyJson {
                 items["key"] = keyJson
-            }
-
-            if let limit = limit {
-                items["limit"] = "\(limit)"
-            }
-
-            if let skip = skip {
-                items["skip"] = "\(skip)"
-            }
-
-            if let includeDocs = includeDocs {
-                items["include_docs"] = "\(includeDocs)"
             }
 
             if let reduce = reduce {
@@ -329,10 +281,6 @@ public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
 
             if let groupLevel = groupLevel {
                 items["group_level"] = "\(groupLevel)"
-            }
-
-            if let stale = stale {
-                items["stale"] = "\(stale)"
             }
 
             return items
@@ -357,25 +305,4 @@ public class QueryViewOperation: CouchDatabaseOperation, JsonOperation {
 
     }
 
-    public func processResponse(json: Any) {
-        if let json = json as? [String: AnyObject] {
-            let rows = json["rows"] as! [[String: AnyObject]]
-            for row: [String: AnyObject] in rows {
-                self.rowHandler?(row: row)
-            }
-        }
-    }
-
-    func convertJson(key: AnyObject) throws -> String {
-        if JSONSerialization.isValidJSONObject(key) {
-            let keyJson = try JSONSerialization.data(withJSONObject: key)
-            return String(data: keyJson, encoding: .utf8)!
-        } else if key is String {
-            // we need to quote JSON primitive strings
-            return "\"\(key)\""
-        } else {
-            // anything else we just try as stringified JSON value
-            return "\(key)"
-        }
-    }
 }
