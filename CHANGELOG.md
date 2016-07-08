@@ -1,3 +1,6 @@
+# Unreleased
+- [FIXED] Created explicit `Sort` and `TextIndexField` initalizers so they are exposed as public.
+
 # 0.3.1 (2016-07-08)
 
 - [FIXED] Fixed scope of members of `Sort` struct, they are now exposed
