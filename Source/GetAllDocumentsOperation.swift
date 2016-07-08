@@ -19,6 +19,7 @@ import Foundation
 /**
  
  An operation to query database for all documents.
+ For info on parameters, view this https://docs.cloudant.com/database.html#get-documents
  
  Example usage:
  ```
