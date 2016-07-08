@@ -25,7 +25,6 @@ import Foundation
  Example usage:
  ```
  let view = QueryViewOperation()
- view.dbName = "example"
  view.designDoc = "exampleDesignDoc"
  view.viewName = "exampleView"
  view.databaseName = "exampledb"
