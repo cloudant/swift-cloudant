@@ -28,7 +28,6 @@ you'll need:
 * Xcode
 * Xcode command line tools
 * Latest Swift 3 development snapshot
-* CocoaPods
 * Homebrew (optional, but useful)
 
 First, download Xcode from the app store or [ADC][adc].
@@ -41,38 +40,27 @@ xcode-select --install
 
 Install homebrew using the [guide on the homebrew site][homebrew].
 
-Install cocoapods using the [guide on their site][cpinstall].
 
 Install Swift 3 development snapshot from [swift.org][swiftorg].
 [adc]: http://developer.apple.com/
 [homebrew]: http://brew.sh
-[cpinstall]: http://guides.cocoapods.org/using/index.html
 [swiftorg]: https://swift.org/download/#snapshots
-
-## Coding guidelines
-
-The house style is [documented](doc/style-guide.md). There's information there on using
-`clang-format` to automatically use the right format.
 
 ## Getting started with the project
 
-The main workspace is `SwiftCloudant.xcworkspace` this is in the root of
-the checkout after `pod install` has been run to setup all the dependancies
-for the project. All development should be completed via this workspace.
+The Swift Package Manager is the default build tool for SwiftCloudant. In order
+to use Xcode as a development envrionment run the command:
+
+```bash
+$ swift swift package generate-xcodeproj
+```
 
 ## Adding files
 
-First you should make sure you add them in the correct place in the project
-structure. All production code goes into `Source` and test code goes into `Test`.
+Production source files are stored in the `Source` tree with tests stored in the
+`Tests` tree.
 
-* `HTTP` for classes which are related to HTTP layer above `NSURLSession`
-*  `Operations` for operations perform tasks such creating a document.
-* `Source` for classes that need to be used in order to successfully
-interact with the database. Such as CDTCouchDBClient.
-
-__NOTE__: Due to the lack of xcode support for Swift Package Manager source
-layouts, the `Source` directory on disk cannot contain folders so the `swift build` command
-can continue to work.
+`Tests/SwiftCloudant` contains all the tests for the `SwiftCloudant` module.
 
 ### Test Configuration
 
@@ -87,17 +75,25 @@ are as follows:
 | TEST_COUCH_PASSWORD | The password to use when accessing the server | `nil`|
 
 
+Note: Since the move to using the SwiftPackageManager test configuration options
+currently do not work. For now tests will only connect to `http://localhost:5984`
 
-### Using Xcode build to run the tests.
+### Running the tests
 
 Run:
 ```bash
 export TOOLCHAINS=swift
-pod update
-xcodebuild -workspace SwiftCloudant.xcworkspace -scheme SwiftCloudant -destination 'platform=iOS Simulator,OS=latest,name=iPhone 6S' test
+swift build
+swift test
 ```
 
-Currently only iOS is supported for testing.
+or if you have a generated xcode project you can use:
+```bash
+export TOOLCHAINS=swift
+xcodebuild -project SwiftCloudant.xcproj -scheme SwiftCloudant test
+```
+
+Currently only OS X / macOS is supported for testing.
 
 __NOTE__: You should also check that any changes made compile using the Swift Package Manager,
 use the command `swift build` in the root of the checkout to compile using the Swift Package Manager.
