@@ -1,4 +1,5 @@
-# Unreleased
+# 0.3.2 (2016-07-08)
+
 - [FIXED] Created explicit `Sort` and `TextIndexField` initalizers so they are exposed as public.
 
 # 0.3.1 (2016-07-08)
