@@ -47,22 +47,21 @@ import SwiftCloudant
 // Create a CouchDBClient
 let cloudantURL = NSURL(string:"https://username.cloudant.com")!
 let client = CouchDBClient(url:cloudantURL, username:"username", password:"password")
-
-// Access a database
-let db = client["database"]
+let dbName = "database"
 
 // Create a document
 let create = PutDocumentOperation()
 create.docId = "doc1"
 create.body = ["hello":"world"]
+create.databaseName = dbName
 create.completionHandler = {(response, httpInfo, error) in
     if let error = error {
-        NSLog("Encountered an error while creating a document. Error:\(error)")
+        print("Encountered an error while creating a document. Error:\(error)")
     } else {
-        NSLog("Created document \(response?["id"]) with revision id \(response?["rev"])");
+        print("Created document \(response?["id"]) with revision id \(response?["rev"])")
     }
 }
-db.add(operation:create)
+client.add(operation:create)
 
 // create an attachment
 let attachment = "This is my awesome essay attachment for my document"
@@ -72,39 +71,42 @@ putAttachment.revId = "1-revisionidhere"
 putAttachment.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
 putAttachment.attachmentName = "myAwesomeAttachment"
 putAttachment.contentType = "text/plain"
+putAttachment.databaseName = dbName
 putAttachment.completionHandler = {(response, info, error) in
-   if let error = error {
-       // handle the error
-   } else {
-       // process successful response
-   }
+if let error = error {
+    print("Encountered an error while creating an attachment. Error:\(error)")
+} else {
+    print("Created attachment \(response?["id"]) with revision id \(response?["rev"])")
 }
-database.add(operation: putAttachment)
+}
+client.add(operation: putAttachment)
 
 // Read a document
 let read = GetDocumentOperation()
 read.docId = "doc1"
+read.databaseName = dbName
 read.completionHandler = { (response, httpInfo, error) in
     if let error = error {
-        NSLog("Encountered an error while reading a document. Error:\(error)";
+        print("Encountered an error while reading a document. Error:\(error)")
     } else {
-        NSLog("Read document: \(response)");
+        print("Read document: \(response)")
     }   
 }
-db.add(operation:read)
+client.add(operation:read)
 
 // Delete a document
 let delete = DeleteDocumentOperation()
 delete.docId = "doc1"
 delete.revId = "1-revisionidhere"
+delete.databaseName = dbName
 delete.completionHandler = {(response, httpInfo, error) in
     if let error = error {
-        NSLog("Encountered an error while deleting a document. Error: \(error)");
+        print("Encountered an error while deleting a document. Error: \(error)")
     } else {
-        NSLog("Document deleted");
+        print("Document deleted")
     }   
 }
-db.add(operation:delete)
+client.add(operation:delete)
 ```
 ## Requirements
 

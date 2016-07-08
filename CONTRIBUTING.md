@@ -52,7 +52,7 @@ The Swift Package Manager is the default build tool for SwiftCloudant. In order
 to use Xcode as a development envrionment run the command:
 
 ```bash
-$ swift swift package generate-xcodeproj
+$ swift package generate-xcodeproj
 ```
 
 ## Adding files
