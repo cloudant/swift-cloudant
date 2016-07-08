@@ -1,3 +1,8 @@
+# 0.3.1 (2016-07-08)
+
+- [FIXED] Fixed scope of members of `Sort` struct, they are now exposed
+  correctly as public.
+
 # 0.3.0 (2016-06-30)
 
 - [NEW] New FindDocumentsOperation API.
