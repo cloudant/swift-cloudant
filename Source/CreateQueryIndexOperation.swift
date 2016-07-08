@@ -144,11 +144,16 @@ public struct TextIndexField {
     /**
      The name of the field
     */
-    let name: String
+    public let name: String
     /**
      The type of field.
      */
-    let type: TextIndexFieldType
+    public let type: TextIndexFieldType
+  
+    public init(name: String, type: TextIndexFieldType) {
+        self.name = name
+        self.type = type
+    }
 }
 
 /**

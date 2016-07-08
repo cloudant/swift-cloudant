@@ -44,6 +44,11 @@ public struct Sort {
      The direction in which to sort.
      */
     public let sort: SortDirection?
+  
+    public init(field: String, sort: SortDirection?) {
+        self.field = field
+        self.sort = sort
+    }
 }
 
 /**
