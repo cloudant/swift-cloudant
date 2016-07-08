@@ -38,8 +38,12 @@ public struct Sort {
     /**
      The field on which to sort
      */
-    let field: String
-    let sort: SortDirection?
+    public let field: String
+    
+    /**
+     The direction in which to sort.
+     */
+    public let sort: SortDirection?
 }
 
 /**
