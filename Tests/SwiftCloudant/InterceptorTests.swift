@@ -39,7 +39,7 @@ class InterceptorTests: XCTestCase {
 
         var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
 
-        ctx = cookieInterceptor.interceptRequest(ctx: ctx)
+        ctx = cookieInterceptor.interceptRequest(in: ctx)
 
         XCTAssertEqual(cookieInterceptor.cookie, testCookieHeaderValue)
         XCTAssertEqual(cookieInterceptor.shouldMakeSessionRequest, true);
@@ -58,7 +58,7 @@ class InterceptorTests: XCTestCase {
 
         var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
 
-        ctx = cookieInterceptor.interceptRequest(ctx: ctx)
+        ctx = cookieInterceptor.interceptRequest(in: ctx)
 
         XCTAssertNil(cookieInterceptor.cookie)
         XCTAssertEqual(cookieInterceptor.shouldMakeSessionRequest, false);

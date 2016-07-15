@@ -35,9 +35,7 @@ public class CreateQueryIndexTests : XCTestCase {
     
     func testCanCreateTextIndexes() {
         let expectation = self.expectation(withDescription: "create text index")
-        let index = CreateTextQueryIndexOperation()
-        index.databaseName = dbName
-        index.completionHandler = { (response, httpStatus, error) in
+        let index = CreateTextQueryIndexOperation(databaseName: dbName!) { (response, httpStatus, error) in
             XCTAssertNotNil(response)
             XCTAssertNotNil(httpStatus)
             if let httpStatus = httpStatus {
@@ -52,10 +50,7 @@ public class CreateQueryIndexTests : XCTestCase {
     
     func testCanCreateJSONIndexes() {
         let expectation = self.expectation(withDescription: "create json Index")
-        let index = CreateJsonQueryIndexOperation()
-        index.databaseName = dbName
-        index.fields = [Sort(field:"foo", sort:nil)]
-        index.completionHandler = { (response, httpStatus, error) in
+        let index = CreateJSONQueryIndexOperation(databaseName: dbName!, fields: [Sort(field:"foo", sort:nil)]) { (response, httpStatus, error) in
             XCTAssertNotNil(response)
             XCTAssertNotNil(httpStatus)
             if let httpStatus = httpStatus {
@@ -69,11 +64,7 @@ public class CreateQueryIndexTests : XCTestCase {
     }
     
     func testJsonIndexRequestProperties() throws {
-        let index = CreateJsonQueryIndexOperation()
-        index.fields = [Sort(field:"foo", sort:nil)]
-        index.indexName = "indexName"
-        index.designDoc = "ddoc"
-        index.databaseName = "dbname"
+        let index = CreateJSONQueryIndexOperation(databaseName: "dbname", name: "indexName", designDocumentID: "ddoc", fields: [Sort(field:"foo", sort:nil)])
         XCTAssert(index.validate())
         try index.serialise()
         XCTAssertEqual("POST", index.method)
@@ -92,14 +83,7 @@ public class CreateQueryIndexTests : XCTestCase {
     }
     
     func testTextIndexRequestProperties() throws {
-        let index = CreateTextQueryIndexOperation()
-        index.fields = [TextIndexField(name: "foo", type: .String)]
-        index.indexName = "indexName"
-        index.designDoc = "ddoc"
-        index.defaultFieldAnalyzer = "english"
-        index.defaultFieldEnabled = true
-        index.selector = ["bar": "foo"]
-        index.databaseName = "dbname"
+        let index = CreateTextQueryIndexOperation(databaseName: "dbname", name: "indexName", designDocumentID: "ddoc", fields:[TextIndexField(name: "foo", type: .string)], defaultFieldAnalyzer: "english", defaultFieldEnabled: true, selector: ["bar": "foo"])
         XCTAssert(index.validate())
         try index.serialise()
         XCTAssertEqual("POST", index.method)
@@ -116,18 +100,8 @@ public class CreateQueryIndexTests : XCTestCase {
         }
     }
     
-    
-    func testJsonValidationMissingFields(){
-        let index = CreateJsonQueryIndexOperation()
-        index.databaseName = "dbName"
-        XCTAssertFalse(index.validate())
-    }
-    
     func testJsonEmitsPresentFieldsMissingIndexName() throws  {
-        let index = CreateJsonQueryIndexOperation()
-        index.fields = [Sort(field:"foo", sort:nil)]
-        index.designDoc = "ddoc"
-        index.databaseName = "dbname"
+        let index = CreateJSONQueryIndexOperation(databaseName: dbName!, designDocumentID: "ddoc", fields: [Sort(field:"foo", sort:nil)])
         XCTAssert(index.validate())
         try index.serialise()
         let data = index.data
@@ -140,10 +114,7 @@ public class CreateQueryIndexTests : XCTestCase {
     }
     
     func testJsonEmitsPresentFieldsMissingddoc() throws {
-        let index = CreateJsonQueryIndexOperation()
-        index.fields = [Sort(field:"foo", sort:nil)]
-        index.indexName = "indexName"
-        index.databaseName = "dbname"
+        let index = CreateJSONQueryIndexOperation(databaseName: dbName!, name: "indexName", fields: [Sort(field:"foo", sort:nil)])
         XCTAssert(index.validate())
         try index.serialise()
         let data = index.data
@@ -156,13 +127,7 @@ public class CreateQueryIndexTests : XCTestCase {
     }
     
     func testTextIndexEmitsPresentFieldsMissingIndexName() throws {
-        let index = CreateTextQueryIndexOperation()
-        index.fields = [TextIndexField(name: "foo", type: .String)]
-        index.designDoc = "ddoc"
-        index.defaultFieldAnalyzer = "english"
-        index.defaultFieldEnabled = true
-        index.selector = ["bar": "foo"]
-        index.databaseName = "dbname"
+        let index = CreateTextQueryIndexOperation(databaseName: "dbname", designDocumentID: "ddoc", fields: [TextIndexField(name: "foo", type: .string)], defaultFieldAnalyzer: "english", defaultFieldEnabled: true, selector: ["bar": "foo"])
         XCTAssert(index.validate())
         try index.serialise()
         // do the json manipulation stuff.
@@ -176,13 +141,7 @@ public class CreateQueryIndexTests : XCTestCase {
     }
     
     func testTextIndexEmitsPresentFieldsMissingFields() throws {
-        let index = CreateTextQueryIndexOperation()
-        index.indexName = "indexName"
-        index.designDoc = "ddoc"
-        index.defaultFieldAnalyzer = "english"
-        index.defaultFieldEnabled = true
-        index.selector = ["bar": "foo"]
-        index.databaseName = "dbname"
+        let index = CreateTextQueryIndexOperation(databaseName: "dbname", designDocumentID: "ddoc", name: "indexName", defaultFieldAnalyzer: "english", defaultFieldEnabled: true, selector: ["bar": "foo"])
         XCTAssert(index.validate())
         try index.serialise()
         // do the json manipulation stuff.
@@ -196,13 +155,7 @@ public class CreateQueryIndexTests : XCTestCase {
     }
     
     func testTextIndexEmitsPresentFieldsMissingddoc() throws {
-        let index = CreateTextQueryIndexOperation()
-        index.fields = [TextIndexField(name: "foo", type: .String)]
-        index.indexName = "indexName"
-        index.defaultFieldAnalyzer = "english"
-        index.defaultFieldEnabled = true
-        index.selector = ["bar": "foo"]
-        index.databaseName = "dbname"
+        let index = CreateTextQueryIndexOperation(databaseName: "dbname", name: "indexName", fields: [TextIndexField(name: "foo", type: .string)], defaultFieldAnalyzer: "english", defaultFieldEnabled: true, selector: ["bar": "foo"]);
         XCTAssert(index.validate())
         try index.serialise()
         // do the json manipulation stuff.
@@ -216,13 +169,7 @@ public class CreateQueryIndexTests : XCTestCase {
     }
     
     func testTextIndexEmitsPresentFieldsMissinganalyzer() throws {
-        let index = CreateTextQueryIndexOperation()
-        index.fields = [TextIndexField(name: "foo", type: .String)]
-        index.designDoc = "ddoc"
-        index.indexName = "indexName"
-        index.defaultFieldEnabled = true
-        index.selector = ["bar": "foo"]
-        index.databaseName = "dbname"
+        let index = CreateTextQueryIndexOperation(databaseName: "dbname", name: "indexName", designDocumentID: "ddoc", fields: [TextIndexField(name: "foo", type: .string)], defaultFieldEnabled: true, selector: ["bar": "foo"])
         XCTAssert(index.validate())
         try index.serialise()
         // do the json manipulation stuff.
@@ -236,13 +183,7 @@ public class CreateQueryIndexTests : XCTestCase {
     }
     
     func testTextIndexEmitsPresentFieldsMissingDefaultFieldEnabled() throws {
-        let index = CreateTextQueryIndexOperation()
-        index.fields = [TextIndexField(name: "foo", type: .String)]
-        index.designDoc = "ddoc"
-        index.defaultFieldAnalyzer = "english"
-        index.indexName = "indexName"
-        index.selector = ["bar": "foo"]
-        index.databaseName = "dbname"
+        let index = CreateTextQueryIndexOperation(databaseName: "dbname", name: "indexName", designDocumentID: "ddoc", fields: [TextIndexField(name: "foo", type: .string)], defaultFieldAnalyzer: "english", selector: ["bar": "foo"])
         XCTAssert(index.validate())
         try index.serialise()
         // do the json manipulation stuff.
@@ -256,13 +197,7 @@ public class CreateQueryIndexTests : XCTestCase {
     }
     
     func testTextIndexEmitsPresentFieldsMissingselector() throws {
-        let index = CreateTextQueryIndexOperation()
-        index.fields = [TextIndexField(name: "foo", type: .String)]
-        index.indexName = "indexName"
-        index.designDoc = "ddoc"
-        index.defaultFieldAnalyzer = "english"
-        index.defaultFieldEnabled = true
-        index.databaseName = "dbname"
+        let index = CreateTextQueryIndexOperation(databaseName: "dbname", name: "indexName", designDocumentID: "ddoc", fields: [TextIndexField(name: "foo", type: .string)], defaultFieldAnalyzer: "english", defaultFieldEnabled: true)
         XCTAssert(index.validate())
         try index.serialise()
         // do the json manipulation stuff.

@@ -16,54 +16,75 @@
 
 import Foundation
 
-public class GetDocumentOperation: CouchDatabaseOperation, JsonOperation {
+/**
+ 
+ Gets a document from a database.
+ 
+ Example useage:
+ 
+ ```
+ let getDoc = GetDocumentOperation(id:"example", databaseName:"exampledb"){ (response, httpInfo, error) in 
+    if let error = error {
+        // handle the error
+    } else {
+        // check the response code to determine if the request was successful.
+    }
+ }
+ ```
+ 
+ */
+public class GetDocumentOperation: CouchDatabaseOperation, JSONOperation {
 
-    public init() { }
+    /**
+     Creates the operation.
+     
+      - parameter id: the id of the document to get from the database.
+      - parameter databaseName : the name of the database which contains the document
+      - parameter includeRevisions : include information about previous revisions of the document
+      - parameter revision: the revision of the document to get
+      - parameter completionHandler: optional handler to run when the operation completes.
+     */
+    public init(id: String, databaseName:String, includeRevisions:Bool? = nil, revision: String? = nil, completionHandler:((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+        self.id = id
+        self.databaseName = databaseName
+        self.includeRevisions = includeRevisions
+        self.revision = revision
+        self.completionHandler = completionHandler
+    }
     
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     
-    public var databaseName: String?
+    public let databaseName: String
     
     /**
      Include all revisions of the document.
-     `true` to include revisions, `false` to not include revisions, leave as `nil` to not emit
-     into the json.
      */
-    public var revs: Bool? = nil
+    public let includeRevisions: Bool?
 
     /**
-     The revision at which you want the document.
-
-     Optional: If omitted CouchDB will return the
-     document it determines is the current winning revision
+     The revision of the document to get.
      */
-    public var revId: String? = nil
+    public let revision: String?
 
     /**
-     The document that this operation will access or modify.
-
-     Must be set before a call can be successfully made.
+     The id of the document that this operation will retrieve.
      */
-    public var docId: String? = nil
-
-    public func validate() -> Bool {
-        return databaseName != nil && docId != nil
-    }
+    public let id: String
 
     public var endpoint: String {
-        return "/\(self.databaseName!)/\(docId!)"
+        return "/\(self.databaseName)/\(id)"
     }
 
     public var parameters: [String:  String] {
         get {
             var items: [String: String] = [:]
 
-            if let revId = revId {
-                items["rev"] = revId
+            if let revision = revision {
+                items["rev"] = revision
             }
 
-            if let revs = revs {
-                items["revs"] = "\(revs)"
+            if let includeRevisions = includeRevisions {
+                items["revs"] = "\(includeRevisions)"
             }
 
             return items

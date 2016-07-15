@@ -16,32 +16,64 @@
 
 import Foundation
 
-public class PutDocumentOperation: CouchDatabaseOperation, JsonOperation {
+/**
+ Creates or updates a document.
+ 
+ Usage example:
+ 
+ ```
+ let create = PutDocumentOperation(id: "example", body: ["hello":"world"], databaseName: "exampleDB") { (response, httpInfo, error) in 
+    if let error = error {
+        // handle the error
+    } else {
+        // successfull request.
+    }
+ }
+ ```
+ 
+ */
+public class PutDocumentOperation: CouchDatabaseOperation, JSONOperation {
     
-    public init() { }
+    /**
+     Creates the operation.
+     
+     - parameter id: the id of the document to create or update
+     - parameter revison: the revison of the document to update.
+     - parameter body: the body of the document
+     - parameter databaseName: the name of the database where the document will be created / updated.
+     - parameter completionHandler: optional handler to run when the operation completes.
+     */
+    public init(id: String, revision: String? = nil, body: [String: AnyObject], databaseName:String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+        self.id = id;
+        self.revision = revision
+        self.body = body
+        self.databaseName = databaseName
+        self.completionHandler = completionHandler
+        
+    }
     
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
-    public var databaseName: String?
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    
+    
+    public let databaseName: String
     /**
      The document that this operation will modify.
-
-     Must be set before a call can be successfully made.
      */
-    public var docId: String? = nil
+    public let id: String
 
     /**
-     If updating a document, set this value to the current revision ID.HTTPInfo
+     The revision of the document being updated or `nil` if this operation is creating a document.
      */
-    public var revId: String? = nil
+    public let revision: String?
 
     /** Body of document. Must be serialisable with NSJSONSerialization */
-    public var body: [String: AnyObject]? = nil
+    public let body: [String: AnyObject]
 
     public func validate() -> Bool {
         #if os(Linux)
-            return databaseName != nil && docId != nil && body != nil && NSJSONSerialization.isValidJSONObject(body!.bridge())
+            return  NSJSONSerialization.isValidJSONObject(body!.bridge())
         #else
-            return databaseName != nil && docId != nil && body != nil && JSONSerialization.isValidJSONObject(body! as NSDictionary)
+            return JSONSerialization.isValidJSONObject(body as NSDictionary)
         #endif
     }
 
@@ -49,35 +81,30 @@ public class PutDocumentOperation: CouchDatabaseOperation, JsonOperation {
         return "PUT"
     }
 
-    public var data: Data? {
-        get {
-            do {
-                #if os(Linux)
-                    let data = try NSJSONSerialization.data(withJSONObject: body!.bridge(), options: NSJSONWritingOptions())
-                #else
-                    let data = try JSONSerialization.data(withJSONObject: body! as NSDictionary, options: JSONSerialization.WritingOptions())
-                #endif
-                return data
-            } catch {
-                return nil
-            }
-        }
-    }
+    public private(set) var data: Data?
 
     public var endpoint: String {
-        return "/\(self.databaseName!)/\(docId!)"
+        return "/\(self.databaseName)/\(id)"
     }
 
     public var parameters: [String: String] {
         get {
             var items:[String:String] = [:]
 
-            if let revId = revId {
-                items["rev"] = revId
+            if let revision = revision {
+                items["rev"] = revision
             }
             
             return items
         }
+    }
+    
+    public func serialise() throws {
+        #if os(Linux)
+            data = try NSJSONSerialization.data(withJSONObject: body.bridge(), options: NSJSONWritingOptions())
+        #else
+             data = try JSONSerialization.data(withJSONObject: body as NSDictionary, options: JSONSerialization.WritingOptions())
+        #endif
     }
 
 }

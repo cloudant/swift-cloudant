@@ -51,19 +51,15 @@ public class QueryViewTests: XCTestCase {
     }
 
     func testViewGeneratesCorrectRequestUsingStartAndEndKeys() throws {
-        let view = QueryViewOperation()
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
-        view.descending = true
-        view.endKey = "endkey"
-        view.includeDocs = true
-        view.inclusiveEnd = true
-        view.limit = 4
-        view.skip = 0
-        view.stale = .Ok
-        view.startKey = "startKey"
-        view.databaseName = self.dbName
-
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!,
+                                      descending: true,
+                                      endKey: "endkey",
+                                      includeDocs: true,
+                                      inclusiveEnd: true,
+                                      limit: 4,
+                                      skip: 0,
+                                      stale: .ok,
+                                      startKey: "startKey")
         XCTAssert(view.validate())
         try view.serialise()
 
@@ -84,18 +80,15 @@ public class QueryViewTests: XCTestCase {
     }
 
     func testViewGeneratesCorrectRequestUsingJsonStartAndEndKeys() throws {
-        let view = QueryViewOperation()
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
-        view.descending = true
-        view.endKey = ["endkey", "endkey2"]
-        view.includeDocs = true
-        view.inclusiveEnd = true
-        view.limit = 4
-        view.skip = 0
-        view.stale = .Ok
-        view.startKey = ["startKey", "startKey2"]
-        view.databaseName = self.dbName
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!,
+                                      descending: true,
+                                      endKey: ["endkey", "endkey2"],
+                                      includeDocs: true,
+                                      inclusiveEnd: true,
+                                      limit: 4,
+                                      skip: 0,
+                                      stale: .ok,
+                                      startKey: ["startKey", "startKey2"])
 
         XCTAssert(view.validate())
         try view.serialise()
@@ -117,17 +110,14 @@ public class QueryViewTests: XCTestCase {
     }
 
     func testViewGeneratesCorrectRequestUsingKey() throws {
-        let view = QueryViewOperation()
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
-        view.descending = true
-        view.key = "testKey"
-        view.includeDocs = true
-        view.inclusiveEnd = true
-        view.limit = 4
-        view.skip = 0
-        view.stale = .Ok
-        view.databaseName = self.dbName
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!,
+                                      descending: true,
+                                      key: "testKey",
+                                      includeDocs: true,
+                                      inclusiveEnd: true,
+                                      limit: 4,
+                                      skip: 0,
+                                      stale: .ok)
 
         XCTAssert(view.validate())
         try view.serialise()
@@ -148,17 +138,14 @@ public class QueryViewTests: XCTestCase {
     }
 
     func testViewGeneratesCorrectRequestUsingKeys() {
-        let view = QueryViewOperation()
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
-        view.descending = true
-        view.keys = ["testkey", ["testkey2", "testkey3"]]
-        view.includeDocs = true
-        view.inclusiveEnd = true
-        view.limit = 4
-        view.skip = 0
-        view.stale = .Ok
-        view.databaseName = self.dbName
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!,
+                                      descending: true,
+            keys: ["testkey", ["testkey2", "testkey3"]],
+            includeDocs : true,
+            inclusiveEnd :true,
+            limit : 4,
+            skip : 0,
+            stale : .ok)
 
         XCTAssert(view.validate())
         XCTAssertEqual("POST", view.method)
@@ -178,13 +165,10 @@ public class QueryViewTests: XCTestCase {
     }
 
     func testViewGeneratesCorrectRequestForReduces() {
-        let view = QueryViewOperation()
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
-        view.group = true
-        view.groupLevel = 3
-        view.reduce = true
-        view.databaseName = self.dbName
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!,
+                                      group : true,
+            groupLevel : 3,
+            reduce : true)
 
         XCTAssert(view.validate())
         XCTAssertEqual("GET", view.method)
@@ -199,25 +183,22 @@ public class QueryViewTests: XCTestCase {
     }
 
     func testViewHandlesResponsesCorrectly() {
-        let view = QueryViewOperation()
-        view.designDoc = "ddoc"
-        view.databaseName = dbName
-        view.viewName = "view1"
+        
 
         var rowCount = 0
         var first = true
         let rowHandler = self.expectation(withDescription: "row handler")
         let completionHandler = self.expectation(withDescription: "completion handler")
-        view.rowHandler = { (row) in
+        
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!,
+                                      rowHandler: { (row) in
             if (first) {
                 rowHandler.fulfill()
                 first = false
             }
             rowCount += 1
             XCTAssertNotNil(row)
-        }
-
-        view.completionHandler = { (response, httpInfo, error) in
+        }) { (response, httpInfo, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(response)
             XCTAssertNotNil(httpInfo)
@@ -230,100 +211,45 @@ public class QueryViewTests: XCTestCase {
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
 
-    func testOperationValidationMissingDDoc() {
-        let view = QueryViewOperation()
-        view.databaseName = "dbname"
-        view.viewName = "view1"
-        XCTAssertFalse(view.validate())
-    }
-
-    func testOperationValidationMissingViewname() {
-        let view = QueryViewOperation()
-        view.databaseName = "dbname"
-        view.designDoc = "ddoc"
-        XCTAssertFalse(view.validate())
-    }
-
     func testOperationValidationReduceOptionsWithReduceFalseGroup() {
-        let view = QueryViewOperation()
-        view.databaseName = "dbname"
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
         // reduce is true by default, so we need to explicitly set to false
-        view.reduce = false
-        view.group = true
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!, reduce: false, group: true)
         XCTAssertFalse(view.validate())
     }
 
     func testOperationValidationReduceOptionsWithReduceFalseGroupLevel() {
-        let view = QueryViewOperation()
-        view.databaseName = "dbname"
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
         // reduce is true by default, so we need to explicitly set to false
-        view.reduce = false
-        view.groupLevel = 3
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!,reduce: false, groupLevel: 3)
         XCTAssertFalse(view.validate())
     }
 
     func testOperationValidationReduceWithReduceGroup() {
-        let view = QueryViewOperation()
-        view.databaseName = "dbname"
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
-        view.group = true
-        view.reduce = true
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!, reduce: true, group: true)
         XCTAssert(view.validate())
     }
 
     func testOperationValidationReduceWithoutReduceGroup() {
-        let view = QueryViewOperation()
-        view.databaseName = "dbname"
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
-        view.group = true
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!, group: true)
         XCTAssert(view.validate())
     }
 
     func testOperationValidationReduceWithReduceGroupLevelWithoutGroup() {
-        let view = QueryViewOperation()
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
-        view.groupLevel = 3
-        view.reduce = true
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!, reduce: true, groupLevel:3)
         XCTAssertFalse(view.validate())
     }
 
     func testOperationValidationKeyAndKeys() {
-        let view = QueryViewOperation()
-        view.databaseName = "dbname"
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
-        view.key = "key"
-        view.keys = ["key1", "key2"]
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!, key: "key", keys: ["key1", "key2"])
         XCTAssertFalse(view.validate())
     }
 
     func testOperationValidationNoCompletionHandlers() {
-        let view = QueryViewOperation()
-        view.databaseName = "dbname"
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!)
         XCTAssert(view.validate())
     }
 
-    func testOperationValidationMissingDBName() {
-        let view = QueryViewOperation()
-        view.viewName = "myView"
-        view.designDoc = "myddoc"
-        XCTAssertFalse(view.validate())
-    }
-
     func testViewGeneratesCorrectRequestStaleDefault() {
-        let view = QueryViewOperation()
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
-        view.databaseName = self.dbName
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!)
 
         XCTAssert(view.validate())
         XCTAssertEqual("GET", view.method)
@@ -336,11 +262,7 @@ public class QueryViewTests: XCTestCase {
     }
 
     func testViewGeneratesCorrectRequestStaleOk() {
-        let view = QueryViewOperation()
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
-        view.databaseName = self.dbName
-        view.stale = .Ok
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!, stale: .ok)
 
         XCTAssert(view.validate())
         XCTAssertEqual("GET", view.method)
@@ -353,11 +275,7 @@ public class QueryViewTests: XCTestCase {
     }
 
     func testViewGeneratesCorrectRequestStaleUpdateAfter() {
-        let view = QueryViewOperation()
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
-        view.databaseName = self.dbName
-        view.stale = .UpdateAfter
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!, stale: .updateAfter)
 
         XCTAssert(view.validate())
         XCTAssertEqual("GET", view.method)
@@ -370,11 +288,7 @@ public class QueryViewTests: XCTestCase {
     }
     
     func testViewGeneratesCorrectRequestUpdateSeq() {
-        let view = QueryViewOperation()
-        view.designDoc = "ddoc"
-        view.viewName = "view1"
-        view.databaseName = self.dbName
-        view.updateSeq = true
+        let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!, includeLastUpdateSequenceNumber: true)
         
         XCTAssert(view.validate())
         XCTAssertEqual("GET", view.method)

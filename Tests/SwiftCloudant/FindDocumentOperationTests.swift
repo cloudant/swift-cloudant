@@ -48,13 +48,12 @@ class FindDocumentOperationTests: XCTestCase {
 
     
     func testInvalidSelector() {
-        let find = FindDocumentsOperation()
-        find.databaseName = dbName
-        find.selector = ["foo":find]
         
+
         let expectation = self.expectation(withDescription: "invalidSelector")
         
-        find.completionHandler = { (response, httpInfo, error) in
+        let find = FindDocumentsOperation(selector: ["foo": client!], databaseName: dbName!)
+        { (response, httpInfo, error) in
             XCTAssertNil(response)
             XCTAssertNil(httpInfo)
             XCTAssertNotNil(error)
@@ -68,17 +67,15 @@ class FindDocumentOperationTests: XCTestCase {
     }
     
     func testCanQueryDocsOnlySelector() {
-        let find = FindDocumentsOperation()
-        find.databaseName = dbName
-        find.selector = ["foo":"bar"]
+        
         
         let firstDocExpectation = self.expectation(withDescription: "1st Doc result")
         let secondDocExpectation = self.expectation(withDescription: "2nd doc result")
         let operationComplete = self.expectation(withDescription: "Operation Complete")
         
         var first = true
-        
-        find.documentFoundHandler = {(document) in
+        let find = FindDocumentsOperation(selector: ["foo":"bar"], databaseName: dbName!,
+                                          documentFoundHandler: {(document) in
             if first {
                 first = false
                 firstDocExpectation.fulfill()
@@ -89,9 +86,7 @@ class FindDocumentOperationTests: XCTestCase {
             XCTAssertNotNil(document)
             // Assert that each document contains 4 JSON properties.
             XCTAssertEqual(4, document.count)
-        }
-        
-        find.completionHandler = { (response, httpInfo, error) in
+        }){ (response, httpInfo, error) in
             XCTAssertNotNil(response)
             XCTAssertNil(response?["bookmark"])
             XCTAssertNotNil(httpInfo)
@@ -107,19 +102,17 @@ class FindDocumentOperationTests: XCTestCase {
     }
     
     func testCanQueryDocsAllValuesSet() {
-        let find = FindDocumentsOperation()
-        find.selector = ["foo":"bar"]
-        find.fields = ["foo","bar"]
-        find.limit = 26
-        find.skip = 1
-        find.sort = [Sort(field: "foo", sort: nil)]
-        find.bookmark = "blah"
-        find.useIndex = "anIndex"
-        find.r = 1
-        find.databaseName = dbName
-        
         let expectation = self.expectation(withDescription: "Find op with all the options")
-        find.completionHandler = { (response, httpInfo, error) in
+        
+        let find = FindDocumentsOperation(selector: ["foo":"bar"], databaseName: dbName!,
+                                          fields:["foo","bar"],
+                                          limit: 26,
+                                          skip: 1,
+                                          sort: [Sort(field: "foo", sort: nil)],
+                                          bookmark: "blah",
+                                          useIndex: "anIndex",
+                                          r: 1)
+        { (response, httpInfo, error) in
             XCTAssertNotNil(response)
             XCTAssertNil(response?["bookmark"])
             XCTAssertNotNil(httpInfo)
@@ -133,16 +126,14 @@ class FindDocumentOperationTests: XCTestCase {
     }
     
     func testOperationRequestPayload() throws {
-        let find = FindDocumentsOperation()
-        find.selector = ["foo":"bar"]
-        find.fields = ["foo","bar"]
-        find.limit = 26
-        find.skip = 1
-        find.sort = [Sort(field: "foo", sort: nil)]
-        find.bookmark = "blah"
-        find.useIndex = "anIndex"
-        find.r = 1
-        find.databaseName = self.dbName
+        let find = FindDocumentsOperation(selector: ["foo":"bar"], databaseName: dbName!,
+                                          fields:["foo","bar"],
+                                          limit: 26,
+                                          skip: 1,
+                                          sort: [Sort(field: "foo", sort: nil)],
+                                          bookmark: "blah",
+                                          useIndex: "anIndex",
+                                          r: 1)
         
         
         XCTAssert(find.validate())
@@ -180,10 +171,8 @@ class FindDocumentOperationTests: XCTestCase {
     }
     
     func testOperationRequestWithSortDirectionAsc() throws {
-        let find = FindDocumentsOperation()
-        find.selector = ["foo":"bar"]
-        find.sort = [Sort(field: "foo", sort: .Asc)]
-        find.databaseName = self.dbName
+        let find = FindDocumentsOperation(selector: ["foo":"bar"], databaseName: dbName!,
+                                          sort:[Sort(field: "foo", sort: .asc)])
         
         
         XCTAssert(find.validate())
@@ -215,10 +204,8 @@ class FindDocumentOperationTests: XCTestCase {
     }
     
     func testOperationRequestWithSortDirectionDesc() throws {
-        let find = FindDocumentsOperation()
-        find.selector = ["foo":"bar"]
-        find.sort = [Sort(field: "foo", sort: .Desc)]
-        find.databaseName = self.dbName
+        let find = FindDocumentsOperation(selector: ["foo":"bar"], databaseName: dbName!,
+                                          sort:[Sort(field: "foo", sort: .desc)])
         
         
         XCTAssert(find.validate())
@@ -250,19 +237,16 @@ class FindDocumentOperationTests: XCTestCase {
     }
     
     func testBookmarkReturnedFromTextQuery() {
-        let find = FindDocumentsOperation()
-        find.selector = ["foo":"bar"]
-        find.fields = ["foo","bar"]
-        find.limit = 26
-        find.skip = 1
-        find.sort = [Sort(field: "foo", sort: nil)]
-        find.bookmark = "blah"
-        find.useIndex = "anIndex"
-        find.r = 1
-        find.databaseName = dbName
-        
         let expectation = self.expectation(withDescription: "Find op with all the options")
-        find.completionHandler = { (response, httpInfo, error) in
+        let find = FindDocumentsOperation(selector: ["foo":"bar"], databaseName: dbName!,
+                                          fields:["foo","bar"],
+                                          limit: 26,
+                                          skip: 1,
+                                          sort: [Sort(field: "foo", sort: nil)],
+                                          bookmark: "blah",
+                                          useIndex: "anIndex",
+                                          r: 1)
+        { (response, httpInfo, error) in
             XCTAssertNotNil(response)
             XCTAssertEqual("blah", response?["bookmark"] as? String)
             XCTAssertNotNil(httpInfo)
@@ -276,9 +260,7 @@ class FindDocumentOperationTests: XCTestCase {
     }
     
     func testValuesOmittedIfNotSet() throws {
-        let find = FindDocumentsOperation()
-        find.selector = ["foo":"bar"]
-        find.databaseName = self.dbName
+        let find = FindDocumentsOperation(selector: ["foo":"bar"], databaseName: dbName!)
         XCTAssert(find.validate())
         try find.serialise()
         

@@ -73,9 +73,7 @@ extension XCTestCase {
     }
 
     func createDatabase(databaseName: String, client: CouchDBClient) -> Void {
-        let create = CreateDatabaseOperation()
-        create.databaseName = databaseName;
-        create.completionHandler = { (response, httpInfo, error) in
+        let create = CreateDatabaseOperation(name: databaseName) { (response, httpInfo, error) in
             XCTAssertNotNil(httpInfo)
             if let httpInfo = httpInfo {
                 XCTAssert(httpInfo.statusCode / 100 == 2)
@@ -88,9 +86,7 @@ extension XCTestCase {
     }
 
     func deleteDatabase(databaseName: String, client: CouchDBClient) -> Void {
-        let delete = DeleteDatabaseOperation()
-        delete.databaseName = databaseName
-        delete.completionHandler = { (response, httpInfo, error) in
+        let delete = DeleteDatabaseOperation(name: databaseName) { (response, httpInfo, error) in
             XCTAssertNotNil(httpInfo)
             if let httpInfo = httpInfo {
                 XCTAssert(httpInfo.statusCode / 100 == 2)
@@ -124,7 +120,7 @@ extension XCTestCase {
             
             do {
                 if !operation.validate() {
-                    operation.callCompletionHandler(error: Errors.ValidationFailed)
+                    operation.callCompletionHandler(error: Operation.Error.validationFailed)
                 }
                 
                 try operation.serialise()

@@ -19,18 +19,25 @@ import Foundation
 /**
  An operation to create a database in a CouchDB instance.
  */
-public class CreateDatabaseOperation: CouchOperation, JsonOperation {
+public class CreateDatabaseOperation: CouchOperation, JSONOperation {
 
-    public init() { }
+    /**
+     Creates the operation.
+     
+     - parameter name: The name of the database this operation will create.
+     - parameter completionHandler: optional handler to call when the operation completes.
+    */
+    public init(name: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+        self.name = name
+        self.completionHandler = completionHandler
+    }
     
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     
     /**
      The name of the database to create.
-
-     This is required to be set before the operation can execute succesfully.
      */
-    public var databaseName: String?
+    public let name: String
 
      public var method: String {
         get {
@@ -40,13 +47,8 @@ public class CreateDatabaseOperation: CouchOperation, JsonOperation {
 
     public var endpoint: String {
         get {
-            // Safe to force unwrap, validation would fail if this is nil
-            return "/\(self.databaseName!)"
+            return "/\(self.name)"
         }
-    }
-
-    public func validate() -> Bool {
-        return  self.databaseName != nil
     }
 
 }

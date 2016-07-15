@@ -23,16 +23,16 @@ public protocol HTTPInterceptor
 {
     /**
      Intercepts the HTTP request. This will only be run once per request.
-     - parameter ctx: the context for the request that is being intercepted.
+     - parameter context: the context for the request that is being intercepted.
      - returns: the context for the next request interceptor to use.
      */
-    func interceptRequest(ctx: HTTPInterceptorContext) -> HTTPInterceptorContext
+    func interceptRequest(in context: HTTPInterceptorContext) -> HTTPInterceptorContext
     /**
      Intercepts the HTTP response. This will only be run once per response.
-     - parameter ctx: the context for the response that is being intercepted.
+     - parameter context: the context for the response that is being intercepted.
      - returns: the context for the next response interceptor to use.
      */
-    func interceptResponse(ctx: HTTPInterceptorContext) -> HTTPInterceptorContext
+    func interceptResponse(in context: HTTPInterceptorContext) -> HTTPInterceptorContext
 }
 
 /**
@@ -64,12 +64,12 @@ internal protocol InterceptableSessionDelegate {
 // only classes can implement HTTPInterceptor due to way polymorphsim is handled.
 public extension HTTPInterceptor {
 
-    public func interceptRequest(ctx: HTTPInterceptorContext) -> HTTPInterceptorContext {
-        return ctx;
+    public func interceptRequest(in context: HTTPInterceptorContext) -> HTTPInterceptorContext {
+        return context;
     }
 
-    public func interceptResponse(ctx: HTTPInterceptorContext) -> HTTPInterceptorContext {
-        return ctx;
+    public func interceptResponse(in context: HTTPInterceptorContext) -> HTTPInterceptorContext {
+        return context;
     }
 }
 
@@ -182,7 +182,7 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
         var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
         
         for interceptor in interceptors {
-            ctx = interceptor.interceptRequest(ctx: ctx)
+            ctx = interceptor.interceptRequest(in: ctx)
         }
         
         let nsTask = self.session.dataTask(with: request)
@@ -227,7 +227,7 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
         
         var ctx = HTTPInterceptorContext(request: task.request, response: response, shouldRetry: false)
         for interceptor in interceptors {
-            ctx = interceptor.interceptResponse(ctx: ctx)
+            ctx = interceptor.interceptResponse(in: ctx)
         }
         
         if ctx.shouldRetry  && task.remainingRetries > 0 {
@@ -235,7 +235,7 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
             // retry the request.
             ctx = HTTPInterceptorContext(request: task.request, response: nil, shouldRetry: false)
             for interceptor in interceptors {
-                ctx = interceptor.interceptRequest(ctx: ctx)
+                ctx = interceptor.interceptRequest(in: ctx)
             }
             taskDict.removeValue(forKey: task.inProgressTask)
             task.inProgressTask = self.session.dataTask(with: ctx.request)

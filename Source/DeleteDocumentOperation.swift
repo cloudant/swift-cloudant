@@ -22,11 +22,7 @@ import Foundation
 
  Example usage:
  ````
- let delete = DeleteDocumentOperation()
- delete.docId = "exampleDocId"
- delete.revId = "1-examplerevid"
- delete.databaseName = "exampledb"
- delete.completionHandler = { (response, httpInfo, error) in
+ let delete = DeleteDocumentOperation(id: "exampleDocId", revision: "1-examplerevid", databaseName: "exampledb") { (response, httpInfo, error) in
     if let error = error {
         NSLog("An error occured attemtping to delete a document")
     } else {
@@ -36,41 +32,46 @@ import Foundation
  client.add(delete)
  ````
  */
-public class DeleteDocumentOperation: CouchDatabaseOperation, JsonOperation {
+public class DeleteDocumentOperation: CouchDatabaseOperation, JSONOperation {
 
-    public init() { }
+    /**
     
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
-    public var databaseName: String?
-
-    /**
-     * The revision of the document to delete
-     *
-     * **Must** be set before an operation can succesfully execute.
+     Creates the operation
+     - parameter id: the ID of the document to delete
+     - parameter revision: the revision of the document to delete.
+     - parameter databaseName: the name of the database which contains the document.
+     - parameter completionHandler: optional handler to run when the operation completes.
      */
-    public var revId: String? = nil
-
-    /**
-     * The id of the document to delete.
-     *
-     * **Must** be set before an operation can succesfully execute.
-     */
-    public var docId: String? = nil
-
-    public func validate() -> Bool {
-        return databaseName != nil  && revId != nil && docId != nil
+    public init(id: String, revision: String, databaseName: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+        self.id = id
+        self.revision = revision
+        self.databaseName = databaseName
+        self.completionHandler = completionHandler
     }
+    
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let databaseName: String
+
+    /**
+    The revision of the document to delete
+     */
+    public let revision: String
+
+    /**
+      The id of the document to delete.
+     */
+    public let id: String
 
     public var method: String {
         return "DELETE"
     }
 
     public var endpoint: String {
-        return "/\(self.databaseName!)/\(docId!)"
+        return "/\(self.databaseName)/\(id)"
     }
 
     public var parameters: [String: String] {
-        return ["rev": revId!]
+        return ["rev": revision]
     }
 
 }

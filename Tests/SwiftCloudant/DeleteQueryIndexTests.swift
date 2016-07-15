@@ -35,12 +35,8 @@ public class DeleteQueryIndexTests: XCTestCase {
 
     func testCanDeleteJSONIndex() {
     	let deleteExpectation = self.expectation(withDescription: "delete json index")
-    	let deleteIndex = DeleteQueryIndexOperation()
-        deleteIndex.databaseName = dbName
-    	deleteIndex.designDoc = "ddoc"
-    	deleteIndex.indexName = "jsonIndex"
-    	deleteIndex.type = .JSON
-    	deleteIndex.completionHandler = {(response, httpStatus, error) in 
+    	let deleteIndex = DeleteQueryIndexOperation(name: "jsonIndex", type: .json, designDocumentID: "ddoc", databaseName: dbName!)
+    	 {(response, httpStatus, error) in
     		XCTAssertNotNil(response)
     		XCTAssertEqual(true, response?["ok"] as? Bool)
     		XCTAssertNotNil(httpStatus)
@@ -56,12 +52,8 @@ public class DeleteQueryIndexTests: XCTestCase {
 
     public func testCanDeleteTextIndex() {
     	let deleteExpectation = self.expectation(withDescription: "delete json index")
-    	let deleteIndex = DeleteQueryIndexOperation()
-        deleteIndex.databaseName = dbName
-    	deleteIndex.designDoc = "ddoc"
-    	deleteIndex.indexName = "textIndex"
-    	deleteIndex.type = .Text
-    	deleteIndex.completionHandler = {(response, httpStatus, error) in 
+    	let deleteIndex = DeleteQueryIndexOperation(name: "textIndex", type: .text, designDocumentID: "ddoc", databaseName: dbName!)
+    	 {(response, httpStatus, error) in 
     		XCTAssertNotNil(response)
     		XCTAssertEqual(true, response?["ok"] as? Bool)
     		XCTAssertNotNil(httpStatus)
@@ -75,47 +67,15 @@ public class DeleteQueryIndexTests: XCTestCase {
     	self.waitForExpectations(withTimeout:10.0, handler:nil)
     }
 
-    public func testValidationMissingDdoc() {
-		let deleteIndex = DeleteQueryIndexOperation()
-        deleteIndex.databaseName = dbName
-    	deleteIndex.indexName = "textIndex"
-    	deleteIndex.type = .Text
-    	XCTAssertFalse(deleteIndex.validate())
-    }
-
-    public func testValidationMissingIndexName() {
-    	let deleteIndex = DeleteQueryIndexOperation()
-        deleteIndex.databaseName = dbName
-    	deleteIndex.designDoc = "ddoc"
-    	deleteIndex.type = .JSON
-    	XCTAssertFalse(deleteIndex.validate())
-    }
-
-    public func testValidationMissingIndexType() {
-    	let deleteIndex = DeleteQueryIndexOperation()
-        deleteIndex.databaseName = dbName
-    	deleteIndex.designDoc = "ddoc"
-    	deleteIndex.indexName = "jsonIndex"
-    	XCTAssertFalse(deleteIndex.validate())
-    }
-
     public func testOperationPropertiesJSONIndex() {
-    	let deleteIndex = DeleteQueryIndexOperation()
-    	deleteIndex.designDoc = "ddoc"
-    	deleteIndex.indexName = "jsonIndex"
-    	deleteIndex.type = .JSON
-    	deleteIndex.databaseName = "dbName"
+    	let deleteIndex = DeleteQueryIndexOperation(name: "jsonIndex", type: .json, designDocumentID: "ddoc", databaseName: "dbName")
     	XCTAssert(deleteIndex.validate())
     	XCTAssertEqual("DELETE", deleteIndex.method)
     	XCTAssertEqual("/dbName/_index/ddoc/json/jsonIndex", deleteIndex.endpoint)
     }
 
     public func testOperationPropertiesTextIndex() {
-    	let deleteIndex = DeleteQueryIndexOperation()
-    	deleteIndex.designDoc = "ddoc"
-    	deleteIndex.indexName = "textIndex"
-    	deleteIndex.type = .Text
-    	deleteIndex.databaseName = "dbName"
+    	let deleteIndex = DeleteQueryIndexOperation(name: "textIndex", type: .text, designDocumentID: "ddoc", databaseName: "dbName")
     	XCTAssert(deleteIndex.validate())
     	XCTAssertEqual("DELETE", deleteIndex.method)
     	XCTAssertEqual("/dbName/_index/ddoc/text/textIndex", deleteIndex.endpoint)

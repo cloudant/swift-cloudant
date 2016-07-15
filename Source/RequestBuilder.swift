@@ -99,7 +99,7 @@ class OperationRequestBuilder {
     /**
      Builds the NSURLRequest from the operation in the property `operation`
      */
-    func buildRequest() throws -> URLRequest {
+    func makeRequest() throws -> URLRequest {
         
         guard let components = NSURLComponents(url: operation.rootURL, resolvingAgainstBaseURL: false)
         else {

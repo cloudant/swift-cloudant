@@ -17,32 +17,14 @@
 import Foundation
 
 /**
-	An enum representing the possible index types for Query.
-*/
-public enum IndexType : String {
-	/**
-		Represents the json index type.
-	*/
-	case JSON = "json"
-	/**
-		Represents the text Index type.
-	*/
-	case Text = "text"
-}
-
-/**
 	An operation to delete a Query index.
-
-	- Requires: The `designDoc`, `indexName` and `type` properties to be set.
 	
 	Example usage:
 	```
-	let deleteIndex = DeleteQueryIndexOperation()
-	deleteIndex.designDoc = "exampleDesignDoc"
-	deleteIndex.indexName = "exampleIndexName"
-	deleteIndex.type = .JSON
-    deleteIndex.databaseName = "exampledb"
-	deleteIndex.completionHandler = {(response, httpInfo, error) in 
+	let deleteIndex = DeleteQueryIndexOperation(name: "exampleIndexName",
+                                                type: .JSON, 
+                                    designDocumentID: "exampleDesignDoc",
+                                        databaseName: "exampledb"){(response, httpInfo, error) in
 		if error != nil {
         	// Example: handle an error by printing a message
         	print("Error")
@@ -52,38 +34,64 @@ public enum IndexType : String {
 	client.add(operation: deleteIndex)
 	```
  */
-public class DeleteQueryIndexOperation: CouchDatabaseOperation, JsonOperation {
+public class DeleteQueryIndexOperation: CouchDatabaseOperation, JSONOperation {
     
-    public init() { }
+    /**
+     An enum representing the possible index types for Query.
+     */
+    public enum `Type` : String {
+        /**
+         Represents the json index type.
+         */
+        case json = "json"
+        /**
+         Represents the text Index type.
+         */
+        case text = "text"
+    }
     
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
-    public var databaseName: String?
+    /**
+    
+     Creates the operation.
+     
+     - parameter name: the name of the index to delete
+     - parameter type: the type of the index that is being deleted.
+     - parameter designDocumentID: the ID of the design document that contains the index.
+     - parameter databaseName: the name of the database that contains the design document.
+     - parameter completionHandler: optional handler to run when the operation completes.
+     */
+    public init(name: String, type: Type, designDocumentID: String, databaseName: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+        self.name = name
+        self.type = type
+        self.designDocumentID = designDocumentID
+        self.databaseName = databaseName
+        self.completionHandler = completionHandler
+    }
+    
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let databaseName: String
 
 	/**
 		The name of the design document which contains the index.
 	 */
-	public var designDoc: String?
+	public let designDocumentID: String
 
 	/**
 		The name of the index to delete.
 	*/
-	public var indexName: String?
+	public let name: String
 
 	/**
 		The type of index e.g. JSON
 	*/
-	public var type: IndexType?
+	public let type: Type
 
 	public var endpoint: String {
-	 	return "/\(self.databaseName!)/_index/\(self.designDoc!)/\(self.type!.rawValue)/\(self.indexName!)"
+	 	return "/\(self.databaseName)/_index/\(self.designDocumentID)/\(self.type.rawValue)/\(self.name)"
 	}
 
 	public var  method: String {
 	 	return "DELETE"
-	}
-
-    public func validate() -> Bool {
-	 	return self.designDoc != nil && self.indexName != nil && self.type != nil && self.databaseName != nil
 	}
 
 }

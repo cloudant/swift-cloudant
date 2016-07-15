@@ -16,24 +16,26 @@
 
 import Foundation
 
-/**
- The direction of Sorting
- */
-public enum SortDirection: String {
-    /**
-     Sort ascending
-     */
-    case Asc = "asc"
-    /**
-     Sort descending
-     */
-    case Desc = "desc"
-}
+
 
 /**
  Specfies how a field should be sorted
  */
 public struct Sort {
+    
+    /**
+     The direction of Sorting
+     */
+    public enum Direction: String {
+        /**
+         Sort ascending
+         */
+        case asc = "asc"
+        /**
+         Sort descending
+         */
+        case desc = "desc"
+    }
 
     /**
      The field on which to sort
@@ -43,9 +45,9 @@ public struct Sort {
     /**
      The direction in which to sort.
      */
-    public let sort: SortDirection?
+    public let sort: Direction?
   
-    public init(field: String, sort: SortDirection?) {
+    public init(field: String, sort: Direction?) {
         self.field = field
         self.sort = sort
     }
@@ -107,15 +109,9 @@ internal extension MangoOperation {
  Usage example:
 
  ```
- let find = FindDocumentsOperation()
- find.selector = ["foo":"bar"]
- find.fields = ["foo"]
- find.sort = [Sort(field: "foo", sort: .Desc)]
- find.databaseName = "exampledb"
- find.documentFoundHanlder = { (document) in
+ let find = FindDocumentsOperation(selector:["foo":"bar"], databaseName: "exampledb", fields: ["foo"], sort: [Sort(field: "foo", sort: .Desc)], documentFoundHandler: { (document) in
     // Do something with the document.
- }
- find.completionHandler = {(response, httpInfo, error) in
+ }) {(response, httpInfo, error) in
     if let error = error {
         // handle the error.
     } else {
@@ -126,92 +122,114 @@ internal extension MangoOperation {
  
  ```
  */
-public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JsonOperation {
+public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSONOperation {
     
-    public init() { }
+    /**
     
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
-    public var databaseName: String?
+     Creates the operation.
+     
+     - parameter selector: the selector to use to select documents in the database.
+     - parameter databaseName: the name of the database the find operation should be performed on.
+     - parameter fields: the fields of a matching document which should be returned in the repsonse.
+     - parameter limit: the maximium number of documents to be returned.
+     - parameter skip: the number of matching documents to skip before returning matching documents.
+     - parameter sort: how to sort the match documents
+     - parameter bookmark: A bookmark from a previous index query, this is only valid for text indexes.
+     - parameter useIndex: Which index to use when matching documents
+     - parameter r: The read quorum for this request.
+     - parameter documentFoundHandler: a handler to call for each document in the response.
+     - parameter completionHandler: optional handler to call when the operations completes.
+    
+     
+     - warning: `r` is an advanced option and is rarely, if ever, needed. It **will** be detrimental to
+     performance.
+     
+     - remark: The `bookmark` option is only valid for text indexes, a `bookmark` is returned from 
+     the server and can be accessed in the completionHandler with the following line: 
+     
+     ````
+     let bookmark = response["bookmark"]
+     ````
+     
+     - seealso: [Query sort syntax](https://docs.cloudant.com/cloudant_query.html#sort-syntax)
+     - seealso: [Selector syntax](https://docs.cloudant.com/cloudant_query.html#selector-syntax)
+    
+     */
+    public init(selector: [String: AnyObject],
+            databaseName: String,
+                  fields: [String]? = nil,
+                   limit: UInt? = nil,
+                    skip: UInt? = nil,
+                    sort: [Sort]? = nil,
+                bookmark: String? = nil,
+                useIndex:String? = nil,
+                       r: UInt? = nil,
+    documentFoundHandler: ((document: [String: AnyObject]) -> Void)? = nil,
+       completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+        self.selector = selector
+        self.databaseName = databaseName
+        self.fields = fields
+        self.limit = limit
+        self.skip = skip
+        self.sort = sort
+        self.bookmark = bookmark
+        self.useIndex = useIndex;
+        self.r = r
+        self.documentFoundHandler = documentFoundHandler
+        self.completionHandler = completionHandler
+    }
+    
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let databaseName: String
     
     /**
      The selector for the query, as a dictionary representation. See
      [the Cloudant documentation](https://docs.cloudant.com/cloudant_query.html#selector-syntax)
      for syntax information.
-
-     Required: This needs to be set before the operation can successfully run.
      */
-    public var selector: [String: AnyObject]?;
+    public let selector: [String: AnyObject]?;
 
     /**
      The fields to include in the results.
-
-     - Note: Optional: if the property is unset this parameter will
-     not be included in the request and the server default will apply.
      */
-    public var fields: [String]?
+    public let fields: [String]?
 
     /**
      The number maximium number of documents to return.
-
-     - Note: Optional, if the property is unset this parameter will
-      not be included in the request and the server default will apply.
      */
-    public var limit: Int?
+    public let limit: UInt?
 
     /**
      Skip the first _n_ results, where _n_ is specified by skip.
-
-     - Note: Optional, if the property is unset this parameter will not be
-     included in the request and the server default will apply.
      */
-    public var skip: Int?
+    public let skip: UInt?
 
     /**
      An array that indicates how to sort the results.
-     
-     - SeeAlso: [Query sort syntax](https://docs.cloudant.com/cloudant_query.html#sort-syntax)
-
-     - Note: Optional, if the property is unset this parameter will not be included
-     in the request and the server default will apply.
      */
-    public var sort: [Sort]?
+    public let sort: [Sort]?
 
     /**
      A string that enables you to specify which page of results you require.
-
-     - Note: Optional, if the property is unset this parameter will not be included
-     in the request and the server default will apply.
-
-     - Remark: This is only valid for text indexes.
      */
-    public var bookmark: String?
+    public let bookmark: String?
 
     /**
      A specific index to run the query against.
-
-     - Note: Optional, if the property is unset this parameter will not be
-     included in the request and the server default will apply.
      */
-    public var useIndex: String?
+    public let useIndex: String?
 
     /**
      The read quorum for this request.
-
-     - Note: Optional, if the property is unset this parameter will not be included
-     in the request and the server default will apply.
-
-     - warning: This is an advanced option and is rarely, if ever, needed. It will be detrimental to
-     performance.
-
      */
-    public var r: Int?
+    public let r: UInt?
 
     /**
      Handler to run for each document retrived from the database matching the query.
 
      - parameter document: a document matching the query.
      */
-    public var documentFoundHandler: ((document: [String: AnyObject]) -> Void)?
+    public let documentFoundHandler: ((document: [String: AnyObject]) -> Void)?
 
     private var json: [String: AnyObject]?
 
@@ -220,7 +238,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, Jso
     }
 
     public var endpoint: String {
-        return "/\(self.databaseName!)/_find"
+        return "/\(self.databaseName)/_find"
     }
 
     private var jsonData: Data?
@@ -229,14 +247,6 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, Jso
     }
 
     public func validate() -> Bool {
-        if databaseName == nil  {
-            return false
-        }
-        
-        if self.selector == nil {
-            return false
-        }
-
         let jsonObj = createJsonDict()
         #if os(Linux)
             if NSJSONSerialization.isValidJSONObject(jsonObj.bridge()) {

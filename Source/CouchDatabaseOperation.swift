@@ -25,5 +25,5 @@ public protocol CouchDatabaseOperation: CouchOperation {
     /**
         The name of the database that the operation will be operating on.
     */
-    var databaseName: String? { get set }
+    var databaseName: String { get }
 }

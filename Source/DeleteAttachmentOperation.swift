@@ -20,75 +20,68 @@ import Foundation
  
  An Operation to delete an attachment from a document.
  
- - Requires: All properties defined on this operation to be set.
- 
  Example usage:
  ```
- let deleteAttachment = DeleteAttachmentOperation()
- deleteAttachment.docId = docId
- deleteAttachment.revId = revId
- deleteAttachment.attachmentName = "myAwesomeAttachment"
- deleteAttachment.databaseName = "exampledb"
- deleteAttachment.completionHandler = {(response, info, error) in
- if let error = error {
- // handle the error
- } else {
- // process successful response
- }
+ let deleteAttachment = DeleteAttachmentOperation(name: "myAwesomeAttachment",
+                                            documentID: "exampleDocId",
+                                             revision: "1-arevision",
+                                          databaseName: "exampledb"){(response, info, error) in
+    if let error = error {
+    // handle the error
+    } else {
+    // process successful response
+    }
  }
  client.add(operation: deleteAttachment)
  ```
  
  */
-public class DeleteAttachmentOperation: CouchDatabaseOperation, JsonOperation {
-    
-    public init() { }
-    
-    public var databaseName: String?
-    
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+public class DeleteAttachmentOperation: CouchDatabaseOperation, JSONOperation {
     
     /**
-     The id of the document that the attachment is attached to.
+    
+     Creates the operation
+    
+     - parameter name : The name of the attachment to delete
+     - parameter documentID : the ID of the document that the attachment is attached to.
+     - parameter revision : the revision of the document that the attachment is attached to.
+     - parameter databaseName : the name of the database that the contains the attachment.
+     - parameter completionHandler: optional handler to run when the operation completes.
+     */
+    public init(name: String, documentID: String, revision: String, databaseName: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+        self.name = name
+        self.documentID = documentID
+        self.revision = revision
+        self.databaseName = databaseName
+        self.completionHandler = completionHandler
+    }
+    
+    public let databaseName: String
+    
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    
+    /**
+     The ID of the document that the attachment is attached to.
      
      */
-    public var docId: String?
+    public let documentID: String
     
     /**
      The revision of the document that the attachment is attached to.
      */
-    public var revId: String?
+    public let revision: String
     
     /**
      The name of the attachment.
      */
-    public var attachmentName: String?
-    
-    public func validate() -> Bool {
-        if self.databaseName == nil {
-            return false
-        }
-        if docId == nil {
-            return false
-        }
-        
-        if revId == nil {
-            return false
-        }
-        
-        if attachmentName == nil {
-            return false
-        }
-        
-        return true
-    }
+    public let name: String
     
     public var endpoint: String {
-        return "/\(self.databaseName!)/\(docId!)/\(attachmentName!)"
+        return "/\(self.databaseName)/\(documentID)/\(name)"
     }
     
     public var parameters: [String: String] {
-        return ["rev": revId!]
+        return ["rev": revision]
     }
     
     public var method: String {

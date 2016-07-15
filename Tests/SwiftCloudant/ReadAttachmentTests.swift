@@ -35,26 +35,19 @@ class ReadAttachmentTests: XCTestCase {
         dbName = generateDBName()
         client = CouchDBClient(url: URL(string: url)!, username: username, password: password)
         createDatabase(databaseName: dbName!, client: client!)
-        let createDoc = PutDocumentOperation()
-        createDoc.body = createTestDocuments(count: 1).first
-        createDoc.docId = docId
-        createDoc.completionHandler = {[weak self] (response, info, error) in
+        let createDoc = PutDocumentOperation(id: docId, body: createTestDocuments(count: 1).first!, databaseName: dbName!) {[weak self] (response, info, error) in
             self?.revId = response?["rev"] as? String
         }
-        createDoc.databaseName = dbName
         client?.add(operation: createDoc).waitUntilFinished()
         
         
-        let put = PutAttachmentOperation()
-        put.docId = docId
-        put.revId = revId
-        put.data = attachment.data(using: String.Encoding.utf8, allowLossyConversion: false)
-        put.attachmentName = attachmentName
-        put.contentType = "text/plain"
-        put.completionHandler = {[weak self] (response, info, error) in
+        let put = PutAttachmentOperation(name: attachmentName, contentType: "text/plain", data: attachment.data(using: String.Encoding.utf8, allowLossyConversion: false)!,
+            documentID: docId,
+            revision: revId!,
+            databaseName: dbName!
+        ) {[weak self] (response, info, error) in
             self?.revId = response?["rev"] as? String
         }
-        put.databaseName = dbName
         client?.add(operation: put).waitUntilFinished()
     }
     
@@ -66,11 +59,7 @@ class ReadAttachmentTests: XCTestCase {
     
     func testReadAttachment() {
         let expectation = self.expectation(withDescription: "read attachment")
-        let read = ReadAttachmentOperation()
-        read.docId = docId
-        read.revId = revId
-        read.attachmentName = attachmentName
-        read.completionHandler = {[weak self] (data, info, error) in
+        let read = ReadAttachmentOperation(name: attachmentName, documentID: docId, databaseName: dbName!) {[weak self] (data, info, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(info)
             if let info = info {
@@ -85,55 +74,17 @@ class ReadAttachmentTests: XCTestCase {
             
             expectation.fulfill()
         }
-        read.databaseName = dbName
         client?.add(operation: read)
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
     
     func testReadAttachmentProperties() {
-        let read = ReadAttachmentOperation()
-        read.docId = docId
-        read.revId = revId
-        read.attachmentName = attachmentName
-        read.databaseName = dbName
+        let read = ReadAttachmentOperation(name: attachmentName, documentID: docId, revision: revId, databaseName: dbName!)
         XCTAssert(read.validate())
         XCTAssertEqual("GET", read.method)
         XCTAssertEqual("/\(dbName!)/\(docId)/\(attachmentName)", read.endpoint)
         XCTAssertEqual(["rev": revId!], read.parameters)
         XCTAssertNil(read.data)
     }
-    
-    func testReadAttachmentValidationMissingDocId() {
-        let read = ReadAttachmentOperation()
-        read.revId = revId
-        read.attachmentName = attachmentName
-        read.databaseName = dbName
-        XCTAssertFalse(read.validate())
-    }
-    
-    func testReadAttachmentValidationMissingRevId() {
-        let read = ReadAttachmentOperation()
-        read.docId = docId
-        read.attachmentName = attachmentName
-        read.databaseName = dbName
-        XCTAssertFalse(read.validate())
-    }
-    
-    func testReadAttachmentValidationMissingAttachmentName() {
-        let read = ReadAttachmentOperation()
-        read.docId = docId
-        read.revId = revId
-        read.databaseName = dbName
-        XCTAssertFalse(read.validate())
-    }
-    
-    func testReadAttachmentValidationMissingdbName() {
-        let read = ReadAttachmentOperation()
-        read.docId = docId
-        read.revId = revId
-        read.attachmentName = attachmentName
-        XCTAssertFalse(read.validate())
-    }
-    
     
 }

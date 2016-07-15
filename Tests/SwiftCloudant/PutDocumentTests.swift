@@ -37,11 +37,7 @@ class PutDocumentTests: XCTestCase {
 
     func testSaveDocument() {
         let putExpectation = self.expectation(withDescription: "Put Document expectation")
-        let put = PutDocumentOperation()
-        put.databaseName = dbName
-        put.docId = "Doc1"
-        put.body = ["hello": "world"]
-        put.completionHandler = { (response, httpInfo, error) in
+        let put = PutDocumentOperation(id: "Doc1", body:["hello": "world"], databaseName: dbName!) { (response, httpInfo, error) in
             putExpectation.fulfill()
             XCTAssertEqual("Doc1", response?["id"] as? String)
             XCTAssertNotNil(response?["rev"])

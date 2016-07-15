@@ -16,32 +16,31 @@
 
 import Foundation
 
-
-/**
- A enum of errors which could be returned.
- */
-enum Errors: ErrorProtocol {
-    /**
-     Validation of operation settings failed.
-     */
-    case ValidationFailed
-
-    /**
-     The JSON format wasn't what we expected.
-     */
-    case UnexpectedJSONFormat(statusCode: Int, response: String?)
-
-    /**
-     An unexpected HTTP status code (e.g. 4xx or 5xx) was received.
-     */
-    case HTTP(statusCode: Int, response: String?)
-};
-
 /**
  An NSOperation subclass for executing `CouchOperations`
  */
 public class Operation: Foundation.Operation, HTTPRequestOperation
 {
+    
+    /**
+     A enum of errors which could be returned.
+     */
+    enum Error: ErrorProtocol {
+        /**
+         Validation of operation settings failed.
+         */
+        case validationFailed
+        
+        /**
+         The JSON format wasn't what we expected.
+         */
+        case unexpectedJSONFormat(statusCode: Int, response: String?)
+        
+        /**
+         An unexpected HTTP status code (e.g. 4xx or 5xx) was received.
+         */
+        case http(statusCode: Int, response: String?)
+    };
     
     private let couchOperation: CouchOperation
     
@@ -146,7 +145,7 @@ public class Operation: Foundation.Operation, HTTPRequestOperation
             }
 
             if !couchOperation.validate() {
-                couchOperation.callCompletionHandler(error: Errors.ValidationFailed)
+                couchOperation.callCompletionHandler(error: Error.validationFailed)
                 isFinished = true
                 return
             }
