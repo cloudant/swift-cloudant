@@ -50,11 +50,7 @@ let client = CouchDBClient(url:cloudantURL, username:"username", password:"passw
 let dbName = "database"
 
 // Create a document
-let create = PutDocumentOperation()
-create.docId = "doc1"
-create.body = ["hello":"world"]
-create.databaseName = dbName
-create.completionHandler = {(response, httpInfo, error) in
+let create = PutDocumentOperation(id: "doc1", body: ["hello":"world"], databaseName: dbName) {(response, httpInfo, error) in
     if let error = error {
         print("Encountered an error while creating a document. Error:\(error)")
     } else {
@@ -65,27 +61,22 @@ client.add(operation:create)
 
 // create an attachment
 let attachment = "This is my awesome essay attachment for my document"
-let putAttachment = PutAttachmentOperation()
-putAttachment.docId = "doc1"
-putAttachment.revId = "1-revisionidhere"
-putAttachment.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
-putAttachment.attachmentName = "myAwesomeAttachment"
-putAttachment.contentType = "text/plain"
-putAttachment.databaseName = dbName
-putAttachment.completionHandler = {(response, info, error) in
-if let error = error {
-    print("Encountered an error while creating an attachment. Error:\(error)")
-} else {
-    print("Created attachment \(response?["id"]) with revision id \(response?["rev"])")
-}
-}
+let putAttachment = PutAttachmentOperation(name: "myAwesomeAttachment",
+    contentType:"text/plain",
+    data: attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false),
+    documentID: "doc1"
+    revision: "1-revisionidhere",
+    databaseName: dbName) { (response, info, error) in
+        if let error = error {
+            print("Encountered an error while creating an attachment. Error:\(error)")
+        } else {
+            print("Created attachment \(response?["id"]) with revision id \(response?["rev"])")
+        }       
+    }   
 client.add(operation: putAttachment)
 
 // Read a document
-let read = GetDocumentOperation()
-read.docId = "doc1"
-read.databaseName = dbName
-read.completionHandler = { (response, httpInfo, error) in
+let read = GetDocumentOperation(id: "doc1", databaseName: dbName) { (response, httpInfo, error) in
     if let error = error {
         print("Encountered an error while reading a document. Error:\(error)")
     } else {
@@ -95,11 +86,9 @@ read.completionHandler = { (response, httpInfo, error) in
 client.add(operation:read)
 
 // Delete a document
-let delete = DeleteDocumentOperation()
-delete.docId = "doc1"
-delete.revId = "1-revisionidhere"
-delete.databaseName = dbName
-delete.completionHandler = {(response, httpInfo, error) in
+let delete = DeleteDocumentOperation(id: "doc1",
+    revision: "1-revisionidhere",
+    databaseName: dbName) { (response, httpInfo, error) in
     if let error = error {
         print("Encountered an error while deleting a document. Error: \(error)")
     } else {
