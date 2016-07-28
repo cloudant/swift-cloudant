@@ -1,7 +1,10 @@
-# Unreleased
+# 0.4.0 (2016-07-28)
 
 - [NEW] New `GetAllDocs` API.
 - [BREAKING] `skip` and `limit` properties on `QueryViewOperation` are now `UInt`
+- [BREAKING] All APIs have changed to match the API guidelines laid down by the
+  swift community. To see the full list of APIs which have changed, see
+  [issue #96](https://github.com/cloudant/swift-cloudant/issues/96)
 
 # 0.3.2 (2016-07-08)
 
