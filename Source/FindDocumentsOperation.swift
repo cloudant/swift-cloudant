@@ -165,7 +165,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
                 useIndex:String? = nil,
                        r: UInt? = nil,
     documentFoundHandler: ((document: [String: AnyObject]) -> Void)? = nil,
-       completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+       completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
         self.selector = selector
         self.databaseName = databaseName
         self.fields = fields
@@ -179,7 +179,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
         self.completionHandler = completionHandler
     }
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
     public let databaseName: String
     
     /**
@@ -385,7 +385,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
         }
     }
     
-    public func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
+    public func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: Error?) {
         self.completionHandler?(response: response as? [String: AnyObject], httpInfo: httpInfo, error: error)
     }
 

@@ -34,6 +34,8 @@ import Foundation
  
  */
 public class GetAllDatabasesOperation : CouchOperation, JSONOperation {
+    public typealias Json = [AnyObject]
+
     
     /**
      
@@ -43,7 +45,7 @@ public class GetAllDatabasesOperation : CouchOperation, JSONOperation {
      - parameter completionHander: optional handler to call when the operation completes.
      */
     public init(databaseHandler: ((databaseName: String) -> Void)? = nil,
-        completionHandler:((response: [AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+        completionHandler:((response: [AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
     
         self.databaseHandler = databaseHandler
         self.completionHandler = completionHandler
@@ -56,7 +58,7 @@ public class GetAllDatabasesOperation : CouchOperation, JSONOperation {
      */
     public let databaseHandler: ((databaseName: String) -> Void)?
     
-    public let completionHandler: ((response: [AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: [AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
     
     public var endpoint: String {
         return "/_all_dbs"

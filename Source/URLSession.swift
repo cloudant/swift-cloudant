@@ -57,7 +57,7 @@ internal protocol InterceptableSessionDelegate {
     Called when the request has completed
      - parameter error: The error that occurred when making the request if any.
     */
-    func completed(error: ErrorProtocol?)
+    func completed(error: Swift.Error?)
 }
 
 // extension that implements default behvaiour, this does have limitations, for example
@@ -144,7 +144,7 @@ public class URLSessionTask {
 internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, URLSessionStreamDelegate {
 
     private lazy var session: URLSession = { () -> URLSession in
-        let config = URLSessionConfiguration.default()
+        let config = URLSessionConfiguration.default
         #if os(Linux)
             config.httpAdditionalHeaders = ["User-Agent".bridge() : InterceptableSession.userAgent().bridge()]
         #else
@@ -194,7 +194,7 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
     }
     
     
-    internal func urlSession(_ session: URLSession, task: Foundation.URLSessionTask, didCompleteWithError error: NSError?) {
+    internal func urlSession(_ session: URLSession, task: Foundation.URLSessionTask, didCompleteWithError error: Error?) {
         guard let mTask = taskDict[task]
         else {
                 return
@@ -257,7 +257,7 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
     }
 
     private class func userAgent() -> String {
-        let processInfo = ProcessInfo.processInfo()
+        let processInfo = ProcessInfo.processInfo
         let osVersion = processInfo.operatingSystemVersionString
 
         #if os(iOS)
@@ -270,8 +270,8 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
             let platform = "Unknown";
         #endif
         let frameworkBundle = Bundle(for: InterceptableSession.self)
-        var bundleDisplayName = frameworkBundle.objectForInfoDictionaryKey("CFBundleName")
-        var bundleVersionString = frameworkBundle.objectForInfoDictionaryKey("CFBundleShortVersionString")
+        var bundleDisplayName = frameworkBundle.object(forInfoDictionaryKey: "CFBundleName")
+        var bundleVersionString = frameworkBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString")
 
         if bundleDisplayName == nil {
             bundleDisplayName = "SwiftCloudant"

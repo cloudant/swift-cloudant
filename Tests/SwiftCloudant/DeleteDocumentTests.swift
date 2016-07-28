@@ -38,7 +38,7 @@ class DeleteDocumentTests: XCTestCase {
     }
 
     func testDocumentCanBeDeleted() {
-        let expectation = self.expectation(withDescription: "Delete document")
+        let expectation = self.expectation(description: "Delete document")
         
         let create = PutDocumentOperation(id: "testId",
                                         body: ["hello": "world"],
@@ -64,12 +64,12 @@ class DeleteDocumentTests: XCTestCase {
         
         client?.add(operation: nsCreate)
 
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
 
     }
 
     func testDeleteDocumentOpCompletesWithoutCallback() {
-        let expectation = self.expectation(withDescription: "Delete document")
+        let expectation = self.expectation(description: "Delete document")
  
         let create = PutDocumentOperation(id: "testId",
                                         body: ["hello": "world"],
@@ -99,6 +99,6 @@ class DeleteDocumentTests: XCTestCase {
 
         client?.add(operation: create)
 
-        self.waitForExpectations(withTimeout: 100.0, handler: nil)
+        self.waitForExpectations(timeout: 100.0, handler: nil)
     }
 }

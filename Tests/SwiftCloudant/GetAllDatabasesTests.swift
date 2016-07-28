@@ -38,7 +38,7 @@ public class GetAllDatabasesTest : XCTestCase {
     }
     
     public func testListAllDbs(){
-        let expectation =  self.expectation(withDescription: "all_dbs")
+        let expectation =  self.expectation(description: "all_dbs")
         let list = GetAllDatabasesOperation(databaseHandler:
         { (dbName) in
             if dbName.hasPrefix("_"){
@@ -73,7 +73,7 @@ public class GetAllDatabasesTest : XCTestCase {
         }
         client?.add(operation: list)
         
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
         
     }
     

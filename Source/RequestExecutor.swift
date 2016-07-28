@@ -69,7 +69,7 @@ class OperationRequestExecutor: InterceptableSessionDelegate {
         self.response = response
     }
     
-    func completed(error: ErrorProtocol?) {
+    func completed(error: Error?) {
         self.task = nil // allow task to be deallocated.
         
         // task has completed, handle the operation canceling etc.

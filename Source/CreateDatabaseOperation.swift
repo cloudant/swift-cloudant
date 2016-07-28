@@ -27,12 +27,12 @@ public class CreateDatabaseOperation: CouchOperation, JSONOperation {
      - parameter name: The name of the database this operation will create.
      - parameter completionHandler: optional handler to call when the operation completes.
     */
-    public init(name: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+    public init(name: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
         self.name = name
         self.completionHandler = completionHandler
     }
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
     
     /**
      The name of the database to create.

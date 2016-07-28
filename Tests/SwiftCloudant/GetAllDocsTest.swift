@@ -71,16 +71,16 @@ class GetAllDocsTest: XCTestCase {
                                           endKey: endKey,
                                           includeDocs: includeDocs,
                                           conflicts: conflicts,
-                                          inclusiveEnd:inclusiveEnd,
-                                          keys:keys,
                                           key: key,
-                                          skip:skip,
+                                          keys:keys,
                                           limit: limit,
-                                          startKey: startKey,
+                                          skip:skip,
                                           startKeyDocumentID: startKeyDocId,
                                           endKeyDocumentID: endKeyDocId,
                                           stale: stale,
+                                          startKey: startKey,
                                           includeLastUpdateSequenceNumber: updateSeq,
+                                          inclusiveEnd:inclusiveEnd,
                                           rowHandler: rowHandler
                                           )  { (response, httpInfo, error) in
                                                 //do nothing.
@@ -520,7 +520,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testEndToEndRequest() throws {
-        let expectation = self.expectation(withDescription: "AllDocs request")
+        let expectation = self.expectation(description: "AllDocs request")
         
                 var docCount = 0
         
@@ -539,12 +539,12 @@ class GetAllDocsTest: XCTestCase {
         
         client?.add(operation: allDocs)
         
-        self.waitForExpectations(withTimeout: 10.0)
+        self.waitForExpectations(timeout: 10.0)
     }
     
     func testDocumentPayload(){
-        let expectation = self.expectation(withDescription: "AllDocs request")
-        let rowHandler = self.expectation(withDescription: "doc handler")
+        let expectation = self.expectation(description: "AllDocs request")
+        let rowHandler = self.expectation(description: "doc handler")
         
         let allDocs = GetAllDocsOperation(databaseName: dbName, rowHandler: { doc in
             XCTAssertEqual(["hello": "world"] as NSDictionary, doc)
@@ -562,7 +562,7 @@ class GetAllDocsTest: XCTestCase {
         
         simulateOkResponseFor(operation: allDocs, jsonResponse: ["rows":[["hello":"world"]]])
         
-        self.waitForExpectations(withTimeout: 10.0)
+        self.waitForExpectations(timeout: 10.0)
     }  
 
 }

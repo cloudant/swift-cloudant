@@ -43,7 +43,7 @@ public class PutDocumentOperation: CouchDatabaseOperation, JSONOperation {
      - parameter databaseName: the name of the database where the document will be created / updated.
      - parameter completionHandler: optional handler to run when the operation completes.
      */
-    public init(id: String, revision: String? = nil, body: [String: AnyObject], databaseName:String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+    public init(id: String, revision: String? = nil, body: [String: AnyObject], databaseName:String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
         self.id = id;
         self.revision = revision
         self.body = body
@@ -52,7 +52,7 @@ public class PutDocumentOperation: CouchDatabaseOperation, JSONOperation {
         
     }
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
     
     
     public let databaseName: String

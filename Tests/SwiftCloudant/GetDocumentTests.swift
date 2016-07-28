@@ -42,7 +42,7 @@ class GetDocumentTests: XCTestCase {
     func testPutDocument() {
         let data = createTestDocuments(count: 1)
 
-        let putDocumentExpectation = expectation(withDescription: "put document")
+        let putDocumentExpectation = expectation(description: "put document")
         let client = CouchDBClient(url: URL(string: url)!, username: username, password: password)
 
         let put = PutDocumentOperation(id: UUID().uuidString.lowercased(),
@@ -58,14 +58,14 @@ class GetDocumentTests: XCTestCase {
 
         client.add(operation: put)
 
-        waitForExpectations(withTimeout: 10.0, handler: nil)
+        waitForExpectations(timeout: 10.0, handler: nil)
     }
 
     func testGetDocument() {
         let data = createTestDocuments(count: 1)
-        let getDocumentExpectation = expectation(withDescription: "get document")
+        let getDocumentExpectation = expectation(description: "get document")
 
-        let putDocumentExpectation = self.expectation(withDescription: "put document")
+        let putDocumentExpectation = self.expectation(description: "put document")
         let id = UUID().uuidString.lowercased()
         let put = PutDocumentOperation(id: id,
                                        body: data[0],
@@ -92,16 +92,16 @@ class GetDocumentTests: XCTestCase {
         client?.add(operation: nsPut)
         nsPut.waitUntilFinished()
 
-        waitForExpectations(withTimeout: 10.0, handler: nil)
+        waitForExpectations(timeout: 10.0, handler: nil)
     }
 
     func testGetDocumentUsingDBAdd() {
         let data = createTestDocuments(count: 1)
-        let getDocumentExpectation = expectation(withDescription: "get document")
+        let getDocumentExpectation = expectation(description: "get document")
         let client = CouchDBClient(url: URL(string: url)!, username: username, password: password)
 
         let id = UUID().uuidString.lowercased()
-        let putDocumentExpectation = self.expectation(withDescription: "put document")
+        let putDocumentExpectation = self.expectation(description: "put document")
         let put = PutDocumentOperation(id: id,
                                        body: data[0],
                                        databaseName: dbName!) { (response, httpInfo, operationError) in
@@ -132,6 +132,6 @@ class GetDocumentTests: XCTestCase {
 
         client.add(operation: get)
 
-        waitForExpectations(withTimeout: 10.0, handler: nil)
+        waitForExpectations(timeout: 10.0, handler: nil)
     }
 }

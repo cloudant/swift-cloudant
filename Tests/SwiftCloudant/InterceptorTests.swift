@@ -25,7 +25,7 @@ class InterceptorTests: XCTestCase {
     var session: URLSession?
     
     override func setUp() {
-        let configuration = URLSessionConfiguration.ephemeral()
+        let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [CookieSession401.self, CookieSession200.self]
         session = URLSession(configuration: configuration)
     }

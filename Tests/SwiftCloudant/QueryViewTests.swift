@@ -53,13 +53,13 @@ public class QueryViewTests: XCTestCase {
     func testViewGeneratesCorrectRequestUsingStartAndEndKeys() throws {
         let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!,
                                       descending: true,
+                                      startKey: "startKey",
                                       endKey: "endkey",
-                                      includeDocs: true,
                                       inclusiveEnd: true,
                                       limit: 4,
                                       skip: 0,
-                                      stale: .ok,
-                                      startKey: "startKey")
+                                      includeDocs: true,
+                                      stale: .ok)
         XCTAssert(view.validate())
         try view.serialise()
 
@@ -82,13 +82,13 @@ public class QueryViewTests: XCTestCase {
     func testViewGeneratesCorrectRequestUsingJsonStartAndEndKeys() throws {
         let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!,
                                       descending: true,
+                                      startKey: ["startKey", "startKey2"],
                                       endKey: ["endkey", "endkey2"],
-                                      includeDocs: true,
                                       inclusiveEnd: true,
                                       limit: 4,
                                       skip: 0,
-                                      stale: .ok,
-                                      startKey: ["startKey", "startKey2"])
+                                      includeDocs: true,
+                                      stale: .ok)
 
         XCTAssert(view.validate())
         try view.serialise()
@@ -112,11 +112,11 @@ public class QueryViewTests: XCTestCase {
     func testViewGeneratesCorrectRequestUsingKey() throws {
         let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!,
                                       descending: true,
-                                      key: "testKey",
-                                      includeDocs: true,
                                       inclusiveEnd: true,
+                                      key: "testKey",
                                       limit: 4,
                                       skip: 0,
+                                      includeDocs: true,
                                       stale: .ok)
 
         XCTAssert(view.validate())
@@ -140,11 +140,11 @@ public class QueryViewTests: XCTestCase {
     func testViewGeneratesCorrectRequestUsingKeys() {
         let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!,
                                       descending: true,
-            keys: ["testkey", ["testkey2", "testkey3"]],
-            includeDocs : true,
-            inclusiveEnd :true,
-            limit : 4,
-            skip : 0,
+                                      inclusiveEnd :true,
+                                      keys: ["testkey", ["testkey2", "testkey3"]],
+                                      limit : 4,
+                                      skip : 0,
+                                      includeDocs : true,
             stale : .ok)
 
         XCTAssert(view.validate())
@@ -166,9 +166,9 @@ public class QueryViewTests: XCTestCase {
 
     func testViewGeneratesCorrectRequestForReduces() {
         let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!,
+                                      reduce : true,
                                       group : true,
-            groupLevel : 3,
-            reduce : true)
+                                      groupLevel : 3)
 
         XCTAssert(view.validate())
         XCTAssertEqual("GET", view.method)
@@ -187,8 +187,8 @@ public class QueryViewTests: XCTestCase {
 
         var rowCount = 0
         var first = true
-        let rowHandler = self.expectation(withDescription: "row handler")
-        let completionHandler = self.expectation(withDescription: "completion handler")
+        let rowHandler = self.expectation(description: "row handler")
+        let completionHandler = self.expectation(description: "completion handler")
         
         let view = QueryViewOperation(name: "view1", designDocumentID: "ddoc", databaseName: self.dbName!,
                                       rowHandler: { (row) in
@@ -208,7 +208,7 @@ public class QueryViewTests: XCTestCase {
             completionHandler.fulfill()
         }
         self.simulateOkResponseFor(operation: view, jsonResponse:JSONResponse(dictionary:response))
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
     }
 
     func testOperationValidationReduceOptionsWithReduceFalseGroup() {

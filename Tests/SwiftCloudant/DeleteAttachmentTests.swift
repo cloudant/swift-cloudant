@@ -70,7 +70,7 @@ class DeleteAttachmentTests : XCTestCase {
     }
     
     func testDeleteAttachment(){
-        let deleteExpectation = self.expectation(withDescription: "Delete expectation")
+        let deleteExpectation = self.expectation(description: "Delete expectation")
         let delete = DeleteAttachmentOperation(name: "myAwesomeAttachment", documentID: docId, revision: revId!, databaseName: dbName!)
          { (response, info, error) in
             XCTAssertNil(error)
@@ -82,7 +82,7 @@ class DeleteAttachmentTests : XCTestCase {
             deleteExpectation.fulfill()
         }
         client?.add(operation: delete)
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
     }
     
     func testDeleteAttachmentHTTPOperationProperties(){

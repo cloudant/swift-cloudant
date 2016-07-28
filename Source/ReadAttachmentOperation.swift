@@ -46,7 +46,7 @@ public class ReadAttachmentOperation: CouchDatabaseOperation, DataOperation {
      - parameter databaseName: the name of the database that the attachment is stored in.
      - parameter completionHAndler: optional handler to run when the operation completes.
      */
-    public init(name: String, documentID: String, revision: String? = nil, databaseName: String, completionHandler: ((response: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+    public init(name: String, documentID: String, revision: String? = nil, databaseName: String, completionHandler: ((response: Data?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
     
         self.name = name
         self.documentID = documentID
@@ -62,7 +62,7 @@ public class ReadAttachmentOperation: CouchDatabaseOperation, DataOperation {
      - parameter httpInfo: - Information about the HTTP response.
      - parameter error: - ErrorProtocol instance with information about an error executing the operation.
      */
-    public let completionHandler: ((response: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: Data?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
     
     public let databaseName: String
     
