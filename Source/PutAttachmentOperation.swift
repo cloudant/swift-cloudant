@@ -20,105 +20,89 @@ import Foundation
  
  An Operation to add an attachment to a document.
  
- - Requires: All properties defined on this operation to be set.
- 
  Example usage:
  ```
  let attachment = "This is my awesome essay attachment for my document"
- let putAttachment = PutAttachmentOperation()
- putAttachment.docId = docId
- putAttachment.revId = revId
- putAttachment.data = attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false)
- putAttachment.attachmentName = "myAwesomeAttachment"
- putAttachment.contentType = "text/plain"
- putAttachment.databaseName = "exampledb"
- putAttachment.completionHandler = {(response, info, error) in
-    if let error = error {
-        // handle the error
-    } else {
-        // process successful response
-    }
- }
+ let putAttachment = PutAttachmentOperation(name: "myAwsomeAttachment",
+                                     contentType: "text/plain",
+                                            data: attachment.data(using: .utf8, allowLossyConversion: false)
+                                      documentID: docId
+                                           revID: revID
+                                    databaseName: "exampledb") {(response, info, error) in
+                                                                        if let error = error {
+                                                                            // handle the error
+                                                                        } else {
+                                                                            // process successful response
+                                                                        }
+                                                                }
  client.add(operation: putAttachment)
  ```
  
  */
-public class PutAttachmentOperation: CouchDatabaseOperation, JsonOperation {
+public class PutAttachmentOperation: CouchDatabaseOperation, JSONOperation {
     
-    public init() { }
+    /**
+     Creates the operation.
+     
+     - parameter name: The name of the attachment to upload.
+     - parameter contentType: The content type of the attachment e.g. text/plain.
+     - parameter data: The attachment's data.
+     - parameter documentID: the ID of the document to attach the attachment to.
+     - parameter revision: the revision of the document to attach the attachment to.
+     - parameter databaseName: The name of the database that the document is stored in.
+     - parameter completionHandler: optional handler to run when the operation completes.
+     */
+    public init(name: String, contentType: String, data: Data, documentID: String, revision: String, databaseName: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
     
-    public var databaseName: String?
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+        self.name = name
+        self.documentID = documentID
+        self.revision = revision
+        self.databaseName = databaseName
+        self.contentType = contentType
+        self.data = data
+        self.completionHandler = completionHandler
+        
+    }
+    
+    public let databaseName: String
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     
     /**
      The id of the document that the attachment should be attached to.
      
      */
-    public var docId: String?
+    public let documentID: String
     
     /**
      The revision of the document that the attachment should be attached to.
     */
-    public var revId: String?
+    public let revision: String
     
     /**
      The name of the attachment.
      */
-    public var attachmentName: String?
+    public let name: String
     
     /**
      The attachment's data.
     */
-    public var data: Data?
+    public let data: Data?
     
     /**
      The Content type for the attachment such as text/plain, image/jpeg
      */
-    public var contentType: String?
-    
-    
-    public func validate() -> Bool {
-        if databaseName == nil {
-            return false
-        }
-        
-        if data == nil {
-            return false
-        }
-        
-        if contentType == nil {
-            return false
-        }
-        
-        if attachmentName == nil {
-            return false
-        }
-        
-        if docId == nil {
-            return false
-        }
-        
-        if revId == nil {
-            return false
-        }
-        
-        return true
-    }
+    public let contentType: String
     
     public var method: String {
         return "PUT"
     }
     
     public var endpoint: String {
-        return "/\(self.databaseName!)/\(docId!)/\(attachmentName!)"
+        return "/\(self.databaseName)/\(documentID)/\(name)"
     }
     
     public var parameters: [String: String] {
-        return ["rev": revId!]
-    }
-    
-    public var httpRequestBody: Data? {
-        return data
+        return ["rev": revision]
     }
     
 }

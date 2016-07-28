@@ -24,11 +24,9 @@ import Foundation
 
  Example usage:
  ```
- let view = QueryViewOperation()
- view.dbName = "example"
- view.designDoc = "exampleDesignDoc"
- view.viewName = "exampleView"
- view.databaseName = "exampledb"
+ let view = QueryViewOperation(name: "exampleView",
+                     designDocument: "exampleDesignDoc",
+                       databaseName: "exampledb")
 
  // Set a row handler to process each returned row
  view.rowHandler = {(row) in
@@ -50,129 +48,133 @@ import Foundation
  client.add(view)
  ```
  */
-public class QueryViewOperation: ViewOperation, JsonOperation {
+public class QueryViewOperation: ViewOperation, JSONOperation {
     
-    public init() { }
-    
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
-    public var databaseName: String?
-
     /**
-     The name of the design document which contains the view.
-
-     - Note: must be set for a query view operation to successfully run.
-     */
-    public var designDoc: String? = nil
-
-    /**
-     The name of the view to query.
-
-     - Note: must be set for a query view operation to successfully run.
-     */
-    public var viewName: String? = nil
-
-    /**
-     Return the result rows in 'descending by key' order.
-
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
-     */
-    public var descending: Bool? = nil
-
-    /**
-     Return key/value result rows starting from the specified key.
-
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
-     */
-    public var startKey: AnyObject? = nil
-
-    /**
-     Used in conjunction with startKey to further restrict the starting row for
+     Creates the operation
+     
+     - parameter name: the name of the view to query
+     - parameter designDocument: the ID of the design document which contains the view
+     - parameter databaseName: the name of database where the design document is stored
+     - parameter descending: Sort the results in descending order.
+     - parameter startKey: The key from where to start returning results.
+     - parameter startKeyDocumentID: Used in conjunction with startKey to further restrict the starting row for
      cases where two documents emit the same key. Specifying the doc ID allows
      the view to return result rows from the specified start key and document.
-
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
-     */
-    public var startKeyDocId: String? = nil
-
-    /**
-     Stop the view returning result rows when the specified key is reached.
-
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
-     */
-    public var endKey: AnyObject? = nil
-
-    /**
-     Used in conjunction with endKey to further restrict the ending row for cases
+     - parameter endKey: Stop the view returning result rows when the specified key is reached.
+     - parameter endKeyDocumentID: Used in conjunction with endKey to further restrict the ending row for cases
      where two documents emit the same key. Specifying the doc ID allows the view
      to return result rows up to the specified end key and document.
-
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
+     - parameter inclusiveEnd: include the endKey in the returned result.
+     - parameter key: return only rows matching the provided key
+     - parameter keys: return only rows matching one of the provided keys.
+     - parmeter limit: the number of rows the response should be limited to
+     - parameter skip: the number of rows matching the query that should be skipped before returning results.
+     - parameter includeDocs: Include the document body in the response.
+     - parameter conflicts: Include information on documents which are in a conflicted state.
+     - parameter reduce: Use the reduce function of the view.
+     - parameter group: Group the results of a reduce based on their keys.
+     - parameter groupLevel: Control view aggregation of complex keys by setting the number of 
+     elements of the key array to use for grouping reduce results.
+     - parameter stale: Whether stale views are ok, or should be updated after the response is returned.
+     - parameter includeLastUpdateSequenceNumber: Include the squence number from which the view was last built.
+     - parameter rowHandler: optional handler to call for each row in the response.
+     - parameter completionHandler: optional handler to call when the operation completes.
+     
+     - warning: `stale` is an advanced option, it should not be used unless you fully understand the outcome of changing the value of this property.
+     - warning: The option `key` and `keys` cannot be used together.
+     - warning: The `group` option is only valid when a `reduce` function is used.
+     - warning: The `groupLevel` option is only valid if `group` is `true`.
+     
      */
-    public var endKeyDocId: String? = nil
-
-    /**
-     Include result rows with the specified `endKey`.
-
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
-     */
-    public var inclusiveEnd: Bool? = nil
-
-    /**
-     Return only result rows that match the specified key.
-
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
-
-     - Warning: Cannot be used with `keys` option.
-     */
-    public var key: AnyObject? = nil
-
-    /**
-     Return only result rows that match the specified keys.
-
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
-
-     - Warning: Cannot be used with `key` option.
-     */
-    public var keys: Array<AnyObject>? = nil
-
-    /**
-     Limit the number of result rows returned from the view.
-
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
-     */
-    public var limit: UInt? = nil
-
-    /**
-     The number of rows to skip in the view results.
-
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
-     */
-    public var skip: UInt? = nil
-
-    /**
-     Include the full content of documents in the view results.
-
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
-     */
-    public var includeDocs: Bool? = nil
+    public init(name: String,
+                designDocumentID: String,
+                databaseName:String,
+                descending: Bool? = nil,
+                startKey: AnyObject? = nil,
+                startKeyDocumentID:String? = nil,
+                endKey: AnyObject? = nil,
+                endKeyDocumentID: String? = nil,
+                inclusiveEnd:Bool? = nil,
+                key:AnyObject? = nil,
+                keys:[AnyObject]? = nil,
+                limit:UInt? = nil,
+                skip:UInt? = nil,
+                includeDocs:Bool? = nil,
+                conflicts:Bool? = nil,
+                reduce:Bool? = nil,
+                group:Bool? = nil,
+                groupLevel:UInt? = nil,
+                stale:Stale? = nil,
+                includeLastUpdateSequenceNumber: Bool? = nil,
+                rowHandler:((row: [String: AnyObject]) -> Void)? = nil,
+                completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+        self.databaseName = databaseName
+        self.name = name
+        self.designDocumentID = designDocumentID
+        self.descending = descending
+        self.startKey = startKey
+        self.startKeyDocumentID = startKeyDocumentID
+        self.endKey = endKey
+        self.endKeyDocumentID = endKeyDocumentID
+        self.inclusiveEnd = inclusiveEnd
+        self.key = key
+        self.keys = keys
+        self.limit = limit
+        self.skip = skip
+        self.includeDocs = includeDocs
+        self.conflicts = conflicts
+        self.reduce = reduce
+        self.group = group
+        self.groupLevel = groupLevel
+        self.stale = stale
+        self.includeLastUpdateSequenceNumber = includeLastUpdateSequenceNumber
+        self.rowHandler = rowHandler
+        self.completionHandler = completionHandler
+    }
     
-    public var conflicts: Bool? = nil
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    
+    public let databaseName: String
+
+
+    public let designDocumentID: String
+
+    public let name: String
+
+    public let descending: Bool?
+
+    public let startKey: AnyObject?
+
+    public let startKeyDocumentID: String?
+
+    public let endKey: AnyObject?
+
+    public let endKeyDocumentID: String?
+
+    public let inclusiveEnd: Bool?
+
+    public let key: AnyObject?
+
+    public let keys: Array<AnyObject>?
+
+    public let limit: UInt?
+
+    public let skip: UInt?
+
+    public let includeDocs: Bool?
+    
+    public let conflicts: Bool?
 
     /**
      Use the reduce function for the view.
-
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
      */
-    public var reduce: Bool? = nil
+    public let reduce: Bool?
 
     /**
      Group the results of a reduce based on their keys.
-
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
-
-     - Warning: Only valid when a `reduce` function is used.
      */
-    public var group: Bool? = nil
+    public let group: Bool?
 
     /**
      Control view aggregation of complex keys by setting the number of elements of the key array to use for grouping reduce results.
@@ -181,40 +183,24 @@ public class QueryViewOperation: ViewOperation, JsonOperation {
      * `view.groupLevel = 3` would produce rows of the form `{ "key" : ["A", "B", "C"], "value" : n }` where `n` is the count of documents with key `["A", "B", "C"]
      * `view.groupLevel = 1` would produces rows of the form `{ "key" : ["A"], "value" : m }` where `m` is the aggregated count of all keys with "A" as the first element
 
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
 
-     - Warning: Only valid if `group` is `true`
      */
-    public var groupLevel: Int? = nil
+    public let groupLevel: UInt?
 
-    /**
-     Configures the view request to allow the return of stale results, that is allowing the view to return immediately rather than waiting for the view index to build. When this parameter is omitted (i.e. with the default of `stale=nil`) the server will not return stale results.
 
-     - Note: Optional, if the property is unset this parameter will be omitted from the request and the server default will apply.
-     - SeeAlso: `Stale` for descriptions of the available values for allowing stale views.
-     - Warning: This is an advanced option, it should not be used unless you fully understand the outcome of changing the value of this property.
-     */
-    public var stale: Stale? = nil
+    public let stale: Stale?
     
-    public var updateSeq: Bool?
+    public let includeLastUpdateSequenceNumber: Bool?
 
     /**
      Sets a handler to run for each row retrieved by the view.
 
      - parameter row: dictionary of the JSON data from the view row
      */
-    public var rowHandler: ((row: [String: AnyObject]) -> Void)?
+    public let rowHandler: ((row: [String: AnyObject]) -> Void)?
 
     public func validate() -> Bool {
-        
-        if databaseName == nil {
-            return false
-        }
-        
-        // Design doc and view name must be set
-        if designDoc == nil || viewName == nil {
-            return false
-        }
+
         // Only one of key or keys can be used
         if key != nil && keys != nil {
             return false
@@ -251,12 +237,12 @@ public class QueryViewOperation: ViewOperation, JsonOperation {
     }
 
     public var endpoint: String {
-        return "/\(self.databaseName!)/_design/\(designDoc!)/_view/\(viewName!)"
+        return "/\(self.databaseName)/_design/\(designDocumentID)/_view/\(name)"
     }
 
     public var parameters: [String: String] {
         get {
-            var items: [String: String] = generateParams()
+            var items: [String: String] = makeParams()
 
             // Add parameters not handled by the protocol.
             if let startKeyJson = startKeyJson {
@@ -293,14 +279,14 @@ public class QueryViewOperation: ViewOperation, JsonOperation {
 
     public  func serialise() throws {
         if let key = key {
-            keyJson = try convertJson(key: key)
+            keyJson = try jsonValue(for: key)
         }
         if let endKey = endKey {
-            endKeyJson = try convertJson(key: endKey)
+            endKeyJson = try jsonValue(for: endKey)
         }
 
         if let startKey = startKey {
-            startKeyJson = try convertJson(key: startKey)
+            startKeyJson = try jsonValue(for: startKey)
         }
 
     }

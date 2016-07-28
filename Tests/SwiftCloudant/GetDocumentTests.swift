@@ -45,12 +45,9 @@ class GetDocumentTests: XCTestCase {
         let putDocumentExpectation = expectation(withDescription: "put document")
         let client = CouchDBClient(url: URL(string: url)!, username: username, password: password)
 
-        let put = PutDocumentOperation()
-        put.databaseName = dbName
-        put.body = data[0]
-        put.docId = UUID().uuidString.lowercased()
-
-        put.completionHandler = { (response, httpInfo, error) in
+        let put = PutDocumentOperation(id: UUID().uuidString.lowercased(),
+                                     body: data[0],
+                             databaseName: dbName!) { (response, httpInfo, error) in
             putDocumentExpectation.fulfill()
             XCTAssertNil(error)
             XCTAssertNotNil(response)
@@ -69,13 +66,12 @@ class GetDocumentTests: XCTestCase {
         let getDocumentExpectation = expectation(withDescription: "get document")
 
         let putDocumentExpectation = self.expectation(withDescription: "put document")
-        let put = PutDocumentOperation()
-        put.body = data[0]
-        put.docId = UUID().uuidString.lowercased()
-        put.databaseName = self.dbName
-        put.completionHandler = { (response, httpInfo, operationError) in
+        let id = UUID().uuidString.lowercased()
+        let put = PutDocumentOperation(id: id,
+                                       body: data[0],
+                                       databaseName: dbName!) { (response, httpInfo, operationError) in
             putDocumentExpectation.fulfill()
-            XCTAssertEqual(put.docId, response?["id"] as? String);
+            XCTAssertEqual(id, response?["id"] as? String);
             XCTAssertNotNil(response?["rev"])
             XCTAssertNil(operationError)
             XCTAssertNotNil(httpInfo)
@@ -83,11 +79,7 @@ class GetDocumentTests: XCTestCase {
                 XCTAssertTrue(httpInfo.statusCode / 100 == 2)
             }
 
-            let get = GetDocumentOperation()
-            get.docId = put.docId
-            get.databaseName = self.dbName
-
-            get.completionHandler = { (response, httpInfo, error) in
+            let get = GetDocumentOperation(id: id, databaseName: self.dbName!) { (response, httpInfo, error) in
                 getDocumentExpectation.fulfill()
                 XCTAssertNil(error)
                 XCTAssertNotNil(response)
@@ -108,14 +100,13 @@ class GetDocumentTests: XCTestCase {
         let getDocumentExpectation = expectation(withDescription: "get document")
         let client = CouchDBClient(url: URL(string: url)!, username: username, password: password)
 
+        let id = UUID().uuidString.lowercased()
         let putDocumentExpectation = self.expectation(withDescription: "put document")
-        let put = PutDocumentOperation()
-        put.databaseName = dbName
-        put.body = data[0]
-        put.docId = UUID().uuidString.lowercased()
-        put.completionHandler = { (response, httpInfo, operationError) in
+        let put = PutDocumentOperation(id: id,
+                                       body: data[0],
+                                       databaseName: dbName!) { (response, httpInfo, operationError) in
             putDocumentExpectation.fulfill()
-            XCTAssertEqual(put.docId, response?["id"] as? String);
+            XCTAssertEqual(id, response?["id"] as? String);
             XCTAssertNotNil(response?["rev"])
             XCTAssertNil(operationError)
             XCTAssertNotNil(httpInfo)
@@ -129,11 +120,7 @@ class GetDocumentTests: XCTestCase {
         client.add(operation: nsPut)
         nsPut.waitUntilFinished()
 
-        let get = GetDocumentOperation()
-        get.docId = put.docId
-        get.databaseName = self.dbName
-
-        get.completionHandler = { (response, httpInfo, error) in
+        let get = GetDocumentOperation(id: put.id, databaseName: self.dbName!) { (response, httpInfo, error) in
             getDocumentExpectation.fulfill()
             XCTAssertNil(error)
             XCTAssertNotNil(response)

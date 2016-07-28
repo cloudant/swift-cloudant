@@ -39,115 +39,66 @@ class DeleteDocumentTests: XCTestCase {
 
     func testDocumentCanBeDeleted() {
         let expectation = self.expectation(withDescription: "Delete document")
-        let delete = DeleteDocumentOperation()
-        delete.completionHandler = { (response, httpInfo, error) in
-            expectation.fulfill()
-            XCTAssertNotNil(httpInfo)
-            if let httpInfo = httpInfo {
-                XCTAssert(httpInfo.statusCode / 100 == 2)
-            }
-            XCTAssertNil(error)
-            XCTAssertEqual(true, response?["ok"] as? Bool)
-        }
-
-        let create = PutDocumentOperation()
-        create.docId = "testId"
-        create.body = ["hello": "world"]
-        create.completionHandler = { (response, httpInfo, error) in
-            delete.revId = response?["rev"] as? String
-            delete.docId = response?["id"] as? String
-        }
         
-        create.databaseName = dbName
-        delete.databaseName = dbName
+        let create = PutDocumentOperation(id: "testId",
+                                        body: ["hello": "world"],
+                                databaseName: dbName!){[weak self] (response, httpInfo, error) in
+            
+            let delete = DeleteDocumentOperation(id: response?["id"] as! String,
+                                                 revision: response?["rev"] as! String,
+                                                 databaseName: self!.dbName!)
+            { (response, httpInfo, error) in
+                expectation.fulfill()
+                XCTAssertNotNil(httpInfo)
+                if let httpInfo = httpInfo {
+                    XCTAssert(httpInfo.statusCode / 100 == 2)
+                }
+                XCTAssertNil(error)
+                XCTAssertEqual(true, response?["ok"] as? Bool)
+            }
+            self?.client?.add(operation: delete)
+
+        }
 
         let nsCreate = Operation(couchOperation: create)
-        let nsDelete = Operation(couchOperation: delete)
-        nsDelete.addDependency(nsCreate)
         
         client?.add(operation: nsCreate)
-        client?.add(operation: nsDelete)
 
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
-
-    }
-
-    func testDeleteDocumentOpFailsValidationWhenRevIdIsMissing() {
-
-        
-        let expectation = self.expectation(withDescription: "Delete document")
-        let delete = DeleteDocumentOperation()
-        delete.databaseName = dbName
-        delete.docId = "testDocId"
-        delete.completionHandler = { (response, httpInfo, error) in
-            expectation.fulfill()
-            XCTAssertNil(httpInfo)
-            XCTAssertNotNil(error)
-        }
-
-        client?.add(operation: delete)
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
-
-    }
-
-    func testDeleteDocumentOpFailsValidationWhenDocIdIsMissing() {
-
-        let expectation = self.expectation(withDescription: "Delete document")
-        let delete = DeleteDocumentOperation()
-        delete.databaseName = dbName
-        delete.docId = "testDocId"
-        delete.completionHandler = { (response, httpInfo, error) in
-            expectation.fulfill()
-            XCTAssertNil(response)
-            XCTAssertNil(httpInfo)
-            XCTAssertNotNil(error)
-        }
-
-        client?.add(operation: delete)
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
 
     }
 
     func testDeleteDocumentOpCompletesWithoutCallback() {
         let expectation = self.expectation(withDescription: "Delete document")
-        let delete = DeleteDocumentOperation()
-        delete.databaseName = dbName
-        delete.completionHandler = { (response, httpInfo, error) in
-            XCTAssertNotNil(httpInfo)
-            if let httpInfo = httpInfo {
-                XCTAssert(httpInfo.statusCode / 100 == 2)
+ 
+        let create = PutDocumentOperation(id: "testId",
+                                        body: ["hello": "world"],
+                                databaseName: dbName!) { [weak self](response, httpInfo, error) in
+            
+            let delete = DeleteDocumentOperation(id: response?["id"] as! String, revision: response!["rev"] as! String, databaseName: self!.dbName!)
+            { [weak self](response, httpInfo, error) in
+                XCTAssertNotNil(httpInfo)
+                if let httpInfo = httpInfo {
+                    XCTAssert(httpInfo.statusCode / 100 == 2)
+                }
+                XCTAssertNil(error)
+                
+                let get = GetDocumentOperation(id: "testId", databaseName: self!.dbName!)
+                { (response, httpInfo, error) in
+                    expectation.fulfill()
+                    XCTAssertNotNil(response)
+                    XCTAssertNotNil(error)
+                }
+                self?.client?.add(operation: get)
             }
-            XCTAssertNil(error)
+            self?.client?.add(operation: delete)
+            
         }
 
-        let create = PutDocumentOperation()
-        create.docId = "testId"
-        create.body = ["hello": "world"]
-        create.databaseName = dbName
-        create.completionHandler = { (response, httpInfo, error) in
-            delete.revId = response?["rev"] as? String
-            delete.docId = response?["id"] as? String
-        }
 
-        let get = GetDocumentOperation()
-        get.docId = "testId"
-        get.databaseName = dbName
-        get.completionHandler = { (response, httpInfo, error) in
-            expectation.fulfill()
-            XCTAssertNotNil(response)
-            XCTAssertNotNil(error)
-        }
-        
-        let nsDelete = Operation(couchOperation: delete)
-        let nsCreate = Operation(couchOperation: create)
-        let nsGet = Operation(couchOperation: get)
-        nsDelete.addDependency(nsCreate)
-        nsGet.addDependency(nsDelete)
 
-        client?.add(operation: nsCreate)
-        client?.add(operation: nsDelete)
-        client?.add(operation: nsGet)
+        client?.add(operation: create)
 
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+        self.waitForExpectations(withTimeout: 100.0, handler: nil)
     }
 }

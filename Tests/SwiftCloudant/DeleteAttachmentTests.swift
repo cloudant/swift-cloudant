@@ -31,26 +31,24 @@ class DeleteAttachmentTests : XCTestCase {
         dbName = generateDBName()
         client = CouchDBClient(url: URL(string: url)!, username: username, password: password)
         createDatabase(databaseName: dbName!, client: client!)
-        let createDoc = PutDocumentOperation()
-        createDoc.body = createTestDocuments(count: 1).first
-        createDoc.docId = docId
-        createDoc.completionHandler = {[weak self] (response, info, error) in
+        let createDoc = PutDocumentOperation(id: docId,
+                                           body: createTestDocuments(count: 1).first!,
+                                   databaseName: dbName!){[weak self] (response, info, error) in
             self?.revId = response?["rev"] as? String
         }
-        createDoc.databaseName = dbName
         let nsCreate = Operation(couchOperation: createDoc)
         client?.add(operation: nsCreate)
         nsCreate.waitUntilFinished()
         
         let attachment = "This is my awesome essay attachment for my document"
-        let put = PutAttachmentOperation()
-        put.docId = docId
-        put.revId = revId
-        put.data = attachment.data(using: String.Encoding.utf8, allowLossyConversion: false)
-        put.attachmentName = "myAwesomeAttachment"
-        put.contentType = "text/plain"
-        put.databaseName = dbName
-        put.completionHandler = {[weak self] (response, info, error) in
+        let put = PutAttachmentOperation(name: "myAwesomeAttachment",
+                                  contentType: "text/plain",
+                                         data: attachment.data(using: String.Encoding.utf8, allowLossyConversion: false)!,
+                                   documentID: docId,
+                                        revision: revId!,
+                                  databaseName: dbName!
+                                         )
+        {[weak self] (response, info, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(info)
             if let info = info {
@@ -73,12 +71,8 @@ class DeleteAttachmentTests : XCTestCase {
     
     func testDeleteAttachment(){
         let deleteExpectation = self.expectation(withDescription: "Delete expectation")
-        let delete = DeleteAttachmentOperation()
-        delete.docId = docId
-        delete.revId = revId
-        delete.attachmentName = "myAwesomeAttachment"
-        delete.databaseName = self.dbName
-        delete.completionHandler = { (response, info, error) in
+        let delete = DeleteAttachmentOperation(name: "myAwesomeAttachment", documentID: docId, revision: revId!, databaseName: dbName!)
+         { (response, info, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(info)
             if let info = info {
@@ -91,36 +85,8 @@ class DeleteAttachmentTests : XCTestCase {
         self.waitForExpectations(withTimeout: 10.0, handler: nil)
     }
     
-    func testDeleteAttachmentValidationMissingId() {
-        let delete = DeleteAttachmentOperation()
-        delete.revId = revId
-        delete.attachmentName = "myAwesomeAttachment"
-        delete.databaseName = self.dbName
-        XCTAssertFalse(delete.validate())
-    }
-    
-    func testDeleteAttachmentValidationMissingRev() {
-        let delete = DeleteAttachmentOperation()
-        delete.docId = docId
-        delete.attachmentName = "myAwesomeAttachment"
-        delete.databaseName = self.dbName
-        XCTAssertFalse(delete.validate())
-    }
-    
-    func testDeleteAttachmentValidationMissingName() {
-        let delete = DeleteAttachmentOperation()
-        delete.docId = docId
-        delete.revId = revId
-        delete.databaseName = self.dbName
-        XCTAssertFalse(delete.validate())
-    }
-    
     func testDeleteAttachmentHTTPOperationProperties(){
-        let delete = DeleteAttachmentOperation()
-        delete.docId = docId
-        delete.revId = revId
-        delete.attachmentName = "myAwesomeAttachment"
-        delete.databaseName = self.dbName
+        let delete = DeleteAttachmentOperation(name: "myAwesomeAttachment", documentID: docId, revision: revId!, databaseName: dbName!)
         XCTAssertTrue(delete.validate())
         XCTAssertEqual(["rev": revId!], delete.parameters)
         XCTAssertEqual("/\(self.dbName!)/\(docId)/myAwesomeAttachment", delete.endpoint)

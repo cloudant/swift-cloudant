@@ -58,7 +58,7 @@ public class SessionCookieInterceptor: HTTPInterceptor
         self.urlSession = session
     }
 
-    public func interceptResponse(context: HTTPInterceptorContext) -> HTTPInterceptorContext {
+    public func interceptResponse(in context: HTTPInterceptorContext) -> HTTPInterceptorContext {
 
         guard let response = context.response
         else {
@@ -75,13 +75,13 @@ public class SessionCookieInterceptor: HTTPInterceptor
         return ctx;
     }
 
-    public func interceptRequest(ctx: HTTPInterceptorContext) -> HTTPInterceptorContext {
+    public func interceptRequest(in context: HTTPInterceptorContext) -> HTTPInterceptorContext {
         // if we shouldn't make the request just return th ctx
         guard shouldMakeSessionRequest
         else {
-            return ctx
+            return context
         }
-        var ctx = ctx
+        var ctx = context
         if let cookie = self.cookie {
             // apply the coode
             ctx.request.setValue(cookie, forHTTPHeaderField: "Cookie")

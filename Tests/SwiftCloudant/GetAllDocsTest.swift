@@ -30,10 +30,13 @@ class GetAllDocsTest: XCTestCase {
         client = CouchDBClient(url: URL(string: url)!, username: username, password: password)
         createDatabase(databaseName: dbName, client: client!)
         for doc in createTestDocuments(count: 10) {
-            let putDoc = PutDocumentOperation()
-            putDoc.databaseName = dbName
-            putDoc.body = doc
-            client?.add(operation: putDoc)
+            let putDoc = PutDocumentOperation(id: UUID().uuidString.lowercased(), body: doc, databaseName: dbName) { response, httpInfo, error in
+                XCTAssertNotNil(response)
+                XCTAssertNotNil(httpInfo)
+                XCTAssertNil(error)
+            
+            }
+            client?.add(operation: putDoc).waitUntilFinished()
         }
     }
     
@@ -45,29 +48,43 @@ class GetAllDocsTest: XCTestCase {
         print("Deleted database: \(dbName)")
     }
     
-    func createAllDocsOperation() -> GetAllDocsOperation {
-        let allDocs = GetAllDocsOperation()
-        allDocs.databaseName = dbName
-        allDocs.descending = true
-        allDocs.endKey = "endKey"
-        allDocs.includeDocs = true
-        allDocs.conflicts = true
-        allDocs.inclusiveEnd = true
-        allDocs.keys = ["keys","keys"]
-        allDocs.skip = 0
-        allDocs.limit = 25
-        allDocs.startKey = "startKey"
-        allDocs.startKeyDocId = "startKeyDocId"
-        allDocs.endKeyDocId = "endKeyDocId"
-        allDocs.stale = .Ok
-        allDocs.updateSeq = true
-        
-        allDocs.completionHandler = { (response, httpInfo, error) in
-            //do nothing.
+    func createAllDocsOperation(descending: Bool? = true,
+                                endKey: String? = "endKey",
+                                includeDocs: Bool? = true,
+                                conflicts: Bool? = true,
+                                inclusiveEnd: Bool? = true,
+                                keys: [String]? = ["keys", "keys"],
+                                key: String? = nil,
+                                skip: UInt? = 0,
+                                limit: UInt? = 25,
+                                startKey: String? = "startKey",
+                                startKeyDocId: String? = "startKeyDocId",
+                                endKeyDocId: String? = "endKeyDocId",
+                                stale: Stale? = .ok,
+                                updateSeq: Bool? = true,
+                                rowHandler: ((doc: [String:AnyObject]) -> Void) = { (doc) in
+        // do nothing
         }
-        allDocs.rowHandler = { (doc) in
-            // do nothing
-        }
+        ) -> GetAllDocsOperation {
+        let allDocs = GetAllDocsOperation(databaseName: dbName,
+                                          descending: descending,
+                                          endKey: endKey,
+                                          includeDocs: includeDocs,
+                                          conflicts: conflicts,
+                                          inclusiveEnd:inclusiveEnd,
+                                          keys:keys,
+                                          key: key,
+                                          skip:skip,
+                                          limit: limit,
+                                          startKey: startKey,
+                                          startKeyDocumentID: startKeyDocId,
+                                          endKeyDocumentID: endKeyDocId,
+                                          stale: stale,
+                                          includeLastUpdateSequenceNumber: updateSeq,
+                                          rowHandler: rowHandler
+                                          )  { (response, httpInfo, error) in
+                                                //do nothing.
+                                            }
 
         return allDocs
     }
@@ -87,34 +104,13 @@ class GetAllDocsTest: XCTestCase {
                 "update_seq": "true"]
     }
     
-    func testAllDocsValidationMissingDBName(){
-        let allDocs = GetAllDocsOperation()
-        allDocs.completionHandler = { (response, httpInfo, error) in
-            //do nothing.
-        }
-        allDocs.rowHandler = { (doc) in
-            // do nothing
-        }
-        XCTAssertFalse(allDocs.validate())
-    }
-    
     func testAllDocsValidationAllFieldsPresent(){
-        let allDocs = createAllDocsOperation()
-        allDocs.key = "myKey"
-        
-        allDocs.completionHandler = { (response, httpInfo, error) in
-            //do nothing.
-        }
-        allDocs.rowHandler = { (doc) in
-            // do nothing
-        }
+        let allDocs = createAllDocsOperation(key: "myKey")
         XCTAssertFalse(allDocs.validate())
     }
     
     func testValidationConfictsWithoutDocs(){
-        let allDocs = GetAllDocsOperation()
-        allDocs.databaseName = dbName
-        allDocs.conflicts = true
+        let allDocs = GetAllDocsOperation(databaseName: dbName, conflicts: true)
         XCTAssertFalse(allDocs.validate())
     }
     
@@ -145,8 +141,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateRequestAscending() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.descending = nil
+        let allDocs = createAllDocsOperation(descending: nil)
         
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
@@ -174,9 +169,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateReuqestWithoutEndKey() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.endKey = nil
-        
+        let allDocs = createAllDocsOperation(endKey: nil)
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
         
@@ -203,9 +196,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateReuqestWithoutDocs() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.includeDocs = nil
-        allDocs.conflicts = nil
+        let allDocs = createAllDocsOperation(includeDocs: nil, conflicts:nil)
         
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
@@ -235,8 +226,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateRequestWithoutConflicts() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.conflicts = nil
+        let allDocs = createAllDocsOperation(conflicts: nil)
         
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
@@ -264,8 +254,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateRequestWitoutInclusiveEnd() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.inclusiveEnd = nil
+        let allDocs = createAllDocsOperation(inclusiveEnd: nil)
         
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
@@ -293,8 +282,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateRequestWithoutKey() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.key = nil
+        let allDocs = createAllDocsOperation(key: nil)
         
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
@@ -322,9 +310,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateRequestWithoutKeysWithKey() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.keys = nil
-        allDocs.key = "mykey"
+        let allDocs = createAllDocsOperation(keys: nil, key: "mykey")
         
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
@@ -339,8 +325,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateRequestWithoutSkip() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.skip = nil
+        let allDocs = createAllDocsOperation(skip: nil)
         
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
@@ -368,8 +353,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateRequestWithoutLimit() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.limit = nil
+        let allDocs = createAllDocsOperation(limit: nil)
         
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
@@ -397,8 +381,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateRequestWithoutStartKey() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.startKey = nil
+        let allDocs = createAllDocsOperation(startKey: nil)
         
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
@@ -426,8 +409,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateRequestWithoutStartKeyDocId() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.startKeyDocId = nil
+        let allDocs = createAllDocsOperation(startKeyDocId: nil)
         
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
@@ -455,8 +437,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateRequestWithoutEndKeyDocId() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.endKeyDocId = nil
+        let allDocs = createAllDocsOperation(endKeyDocId: nil)
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
         
@@ -483,8 +464,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateRequestWithoutStale() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.stale = nil
+        let allDocs = createAllDocsOperation(stale: nil)
         
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
@@ -512,8 +492,7 @@ class GetAllDocsTest: XCTestCase {
     }
     
     func testGenerateRequestUpdateAfter() throws {
-        let allDocs = createAllDocsOperation()
-        allDocs.stale = .UpdateAfter
+        let allDocs = createAllDocsOperation(stale: .updateAfter)
         
         XCTAssert(allDocs.validate())
         try allDocs.serialise()
@@ -543,13 +522,11 @@ class GetAllDocsTest: XCTestCase {
     func testEndToEndRequest() throws {
         let expectation = self.expectation(withDescription: "AllDocs request")
         
-        let allDocs = GetAllDocsOperation();
-        allDocs.databaseName = dbName
-        var docCount = 0
-        allDocs.rowHandler = { _ in
+                var docCount = 0
+        
+        let allDocs = GetAllDocsOperation(databaseName: dbName, rowHandler: { _ in
             docCount += 1
-        }
-        allDocs.completionHandler = { response, info, error in
+        }){ response, info, error in
         
             XCTAssertNil(error)
             XCTAssertNotNil(info)
@@ -569,14 +546,10 @@ class GetAllDocsTest: XCTestCase {
         let expectation = self.expectation(withDescription: "AllDocs request")
         let rowHandler = self.expectation(withDescription: "doc handler")
         
-        let allDocs = GetAllDocsOperation();
-        allDocs.databaseName = dbName
-        
-        allDocs.rowHandler = { doc in
+        let allDocs = GetAllDocsOperation(databaseName: dbName, rowHandler: { doc in
             XCTAssertEqual(["hello": "world"] as NSDictionary, doc)
             rowHandler.fulfill()
-        }
-        allDocs.completionHandler = { response, info, error in
+        }) { response, info, error in
             
             XCTAssertNil(error)
             XCTAssertNotNil(info)

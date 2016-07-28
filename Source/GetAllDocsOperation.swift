@@ -20,66 +20,120 @@ import Foundation
  
  Example usage:
  ```
- let allDocs = GetAllDocsOperation()
- allDocs.databaseName = "exampleDB"
- allDocs.docHandler = { doc in 
-    print("Got document: \(doc)")
- }
- allDocs.completionHandler = { response, info, error in 
-    if let error = error {
-        // handle error
-    } else {
-        // handle successful response
-    }
+ let allDocs = GetAllDocsOperation(databaseName: "exampleDB",
+        rowHandler: { doc in
+            print("Got document: \(doc)")
+        }) { response, info, error in
+                if let error = error {
+                    // handle error
+                } else {
+                    // handle successful response
+            }
  }
  client.add(operation: allDocs)
  ```
  */
-public class GetAllDocsOperation : CouchOperation, ViewOperation, JsonOperation {
+public class GetAllDocsOperation : CouchOperation, ViewOperation, JSONOperation {
     
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     
-    public var rowHandler: ((row: [String: AnyObject]) -> Void)?
+    public let rowHandler: ((row: [String: AnyObject]) -> Void)?
     
-    public var databaseName: String?
+    public let databaseName: String
     
-    public var descending: Bool?
+    public let descending: Bool?
     
-    public var endKey: String?
+    public let endKey: String?
     
-    public var includeDocs: Bool?
+    public let includeDocs: Bool?
     
-    public var conflicts: Bool?
+    public let conflicts: Bool?
 
-    public var inclusiveEnd: Bool?
+    public let inclusiveEnd: Bool?
 
-    public var key: String?
+    public let key: String?
     
-    public var keys: [String]?
+    public let keys: [String]?
     
-    public var limit: UInt?
+    public let limit: UInt?
     
-    public var skip: UInt?
+    public let skip: UInt?
     
-    public var startKeyDocId: String?
+    public let startKeyDocumentID: String?
     
-    public var endKeyDocId: String?
+    public let endKeyDocumentID: String?
     
-    public var stale: Stale?
+    public let stale: Stale?
     
-    public var startKey: String?
+    public let startKey: String?
     
-    public var updateSeq: Bool?
+    public let includeLastUpdateSequenceNumber: Bool?
     
-    public init(){}
+    /**
+     Creates the operation
+     
+     - parameter databaseName: The name of the database from which to get all the documents.
+     - parameter descending: Should the documents be sorted in descending order.
+     - parameter endKey: When this document ID is hit stop returning results.
+     - parameter includeDocs: Include document content in the response.
+     - parameter conflicts: Include infomration about conflicted revisions.
+     - parameter key: Return the document with the specified ID.
+     - parameter keys: Return the documents with the soecified IDs.
+     - parameter limit: The number of documents the repsonse should be limited to.
+     - parameter skip: the number of documents that should be skipped before returning results.
+     - parameter startKeyDocumentID: the document ID from which to start the response.
+     - parameter endKeyDocumentID: the document ID at which to to stop retuning results.
+     - parameter includeLastUpdateSequenceNumber: Include the sequence number at which the view was last updated.
+     - parameter inclusiveEnd: Detmerines if the `endKey` and `endKeyDocId` should be included when returning documents.
+     - parameter stale: Whether stale views are ok, or should be updated after the response is returned.
+     - parameter startKey: the document ID from where to start returning documents.
+     - parameter rowHandler: a handler to call for each row returned from the view.
+     - parameter completionHandler: optional handler to call when the operation completes.
+     
+     - warning: `stale` is an advanced option, it should not be used unless you fully understand the outcome of changing the value of this property.
+     - warning: The option `key` and `keys` cannot be used together.
+     */
+    public init(databaseName: String,
+                descending: Bool? = nil,
+                endKey: String? = nil,
+                includeDocs: Bool? = nil,
+                conflicts: Bool? = nil,
+                key: String? = nil,
+                keys: [String]? = nil,
+                limit: UInt? = nil,
+                skip: UInt? = nil,
+                startKeyDocumentID: String? = nil,
+                endKeyDocumentID: String? = nil,
+                stale: Stale? = nil,
+                startKey: String? = nil,
+                includeLastUpdateSequenceNumber: Bool? = nil,
+                inclusiveEnd: Bool? = nil,
+                rowHandler: ((row: [String: AnyObject]) -> Void)? = nil,
+                completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil){
+        
+        self.databaseName = databaseName
+        self.descending = descending
+        self.endKey = endKey
+        self.includeDocs = includeDocs
+        self.conflicts = conflicts
+        self.key = key
+        self.keys = keys
+        self.limit = limit
+        self.skip = skip
+        self.startKeyDocumentID = startKeyDocumentID
+        self.stale = stale
+        self.startKey = startKey
+        self.includeLastUpdateSequenceNumber = includeLastUpdateSequenceNumber
+        self.endKeyDocumentID = endKeyDocumentID
+        self.rowHandler = rowHandler
+        self.completionHandler = completionHandler
+        self.inclusiveEnd = inclusiveEnd
+    }
     
     private var jsonData: Data?
     
     
     public func validate() -> Bool {
-        if databaseName == nil {
-            return false
-        }
         
         if conflicts != nil && includeDocs != true {
             return false
@@ -93,12 +147,12 @@ public class GetAllDocsOperation : CouchOperation, ViewOperation, JsonOperation 
     }
     
     public var endpoint: String {
-        return "/\(databaseName!)/_all_docs"
+        return "/\(databaseName)/_all_docs"
     }
     
     public var parameters: [String : String] {
         get {
-            var params:[String: String] = generateParams()
+            var params:[String: String] = makeParams()
             
             if let endKeyJson = endKeyJson {
                 params["endkey"] = endKeyJson
@@ -126,14 +180,14 @@ public class GetAllDocsOperation : CouchOperation, ViewOperation, JsonOperation 
         }
         
         if let key = key {
-            keyJson = try convertJson(key: key)
+            keyJson = try jsonValue(for: key)
         }
         if let endKey = endKey {
-            endKeyJson = try convertJson(key: endKey)
+            endKeyJson = try jsonValue(for: endKey)
         }
         
         if let startKey = startKey {
-            startKeyJson = try convertJson(key: startKey)
+            startKeyJson = try jsonValue(for: startKey)
         }
     }
     

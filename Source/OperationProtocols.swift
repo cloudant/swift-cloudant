@@ -126,13 +126,15 @@ public extension CouchOperation {
     
     public var method: String { return "GET" }
     
+    public func validate() -> Bool { return true }
+    
 }
 
 /**
     Marks an operation as a JSON Operation. It will provide response 
     processing for operations.
  */
-public protocol JsonOperation: CouchOperation {
+public protocol JSONOperation: CouchOperation {
     
     /**
      The Json type that is expected. This should only be a type that can be returned from `NSJSONSeralization`
@@ -146,10 +148,10 @@ public protocol JsonOperation: CouchOperation {
      - parameter httpInfo: - Information about the HTTP response.
      - parameter error: - ErrorProtocol instance with information about an error executing the operation.
      */
-    var completionHandler: ((response: Json?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? { get set }
+    var completionHandler: ((response: Json?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? { get }
 }
 
-public extension JsonOperation {
+public extension JSONOperation {
     
     public func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
         self.completionHandler?(response: response as? Json, httpInfo: httpInfo, error: error)
@@ -169,12 +171,12 @@ public extension JsonOperation {
                     self.processResponse(json: json)
                     self.callCompletionHandler(response: json, httpInfo: httpInfo, error: error)
                 } else {
-                    let error = Errors.HTTP(statusCode: httpInfo.statusCode,
+                    let error = Operation.Error.http(statusCode: httpInfo.statusCode,
                                             response: String(data: data, encoding: .utf8))
                     self.callCompletionHandler(response: json, httpInfo: httpInfo, error: error)
                 }
             } else {
-                let error = Errors.HTTP(statusCode: httpInfo.statusCode, response: nil)
+                let error = Operation.Error.http(statusCode: httpInfo.statusCode, response: nil)
                 self.callCompletionHandler(response: nil, httpInfo: httpInfo, error: error)
             }
         } catch {
@@ -184,7 +186,7 @@ public extension JsonOperation {
             } else {
                 response = nil
             }
-            let error = Errors.UnexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response)
+            let error = Operation.Error.unexpectedJSONFormat(statusCode: httpInfo.statusCode, response: response)
             self.callCompletionHandler(response: nil, httpInfo: httpInfo, error: error)
         }
     }
@@ -202,7 +204,7 @@ public protocol DataOperation: CouchOperation {
      - parameter httpInfo: - Information about the HTTP response.
      - parameter error: - ErrorProtocol instance with information about an error executing the operation.
      */
-    var completionHandler: ((response: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? { get set }
+    var completionHandler: ((response: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? { get }
 }
 
 public extension DataOperation {
@@ -219,7 +221,7 @@ public extension DataOperation {
         if httpInfo.statusCode / 100 == 2 {
             self.completionHandler?(response: data, httpInfo: httpInfo, error: error)
         } else {
-            self.completionHandler?(response: data, httpInfo: httpInfo, error: Errors.HTTP(statusCode: httpInfo.statusCode, response: String(data: data!, encoding: .utf8)))
+            self.completionHandler?(response: data, httpInfo: httpInfo, error: Operation.Error.http(statusCode: httpInfo.statusCode, response: String(data: data!, encoding: .utf8)))
         }
     }
 }

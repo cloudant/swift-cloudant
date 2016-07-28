@@ -18,19 +18,38 @@ import Foundation
 
 /**
  Deletes a database from a CouchDB instance
+ 
+ Usage example:
+ 
+ ```
+ let deleteDB = DeleteDatabaseOperation(name: "exampleDB") { (response, httpInfo, error) in 
+ 
+    if let error = error {
+        // handle the error
+    } else {
+        // check the response code to determine if the operaton was successful.
+    }
+ }
  */
-public class DeleteDatabaseOperation: CouchOperation, JsonOperation {
+public class DeleteDatabaseOperation: CouchOperation, JSONOperation {
 
-    public init() { }
+    /**
+     Creates the operation
+     
+     - parameter name: the name of the database to delete.
+     - completionHandler: optional handler to reun when the operation completes.
+     */
+    public init(name: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+        self.name = name;
+        self.completionHandler = completionHandler
+    }
     
-    public var completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     
     /**
      The name of the database to delete.
-
-     This must be set before an operation can complete sucessfully
      */
-    public var databaseName: String? = nil
+    public let name: String
 
      public var method: String {
         get {
@@ -40,13 +59,8 @@ public class DeleteDatabaseOperation: CouchOperation, JsonOperation {
 
      public var endpoint: String {
         get {
-            // Safe to force unwrap, validation would fail if this is nil
-            return "/\(self.databaseName!)"
+            return "/\(self.name)"
         }
-    }
-
-    public func validate() -> Bool {
-        return self.databaseName != nil
     }
 
 }

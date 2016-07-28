@@ -24,25 +24,36 @@ import Foundation
  Example usage:
  
  ```
- let read = ReadAttachmentOperation()
- read.docId = docId
- read.revId = revId
- read.attachmentName = attachmentName
- read.databaseName = dbName
- read.readAttachmentCompletionHandler = {(data, info, error) in 
+ let read = ReadAttachmentOperation(name: attachmentName, documentID: docID, databaseName: dbName){ (data, info, error) in
     if let error = error {
         // handle the error
     } else {
         // process the successful response
     }
  }
- database.add(operation:read)
+ client.add(operation:read)
  ```
  */
  
 public class ReadAttachmentOperation: CouchDatabaseOperation, DataOperation {
     
-    public init() { }
+    /**
+     Creates the operation.
+     
+     - parameter name: the name of the attachment to read from the server
+     - parameter documentID: the ID of the document that the attachment is attached to 
+     - parameter revision: the revision of the document that the attachment is attached to, or `nil` for latest.
+     - parameter databaseName: the name of the database that the attachment is stored in.
+     - parameter completionHAndler: optional handler to run when the operation completes.
+     */
+    public init(name: String, documentID: String, revision: String? = nil, databaseName: String, completionHandler: ((response: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+    
+        self.name = name
+        self.documentID = documentID
+        self.revision = revision
+        self.databaseName = databaseName
+        self.completionHandler = completionHandler
+    }
     
     /**
      Sets a completion handler to run when the operation completes.
@@ -51,54 +62,40 @@ public class ReadAttachmentOperation: CouchDatabaseOperation, DataOperation {
      - parameter httpInfo: - Information about the HTTP response.
      - parameter error: - ErrorProtocol instance with information about an error executing the operation.
      */
-    public var completionHandler: ((response: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
     
-    public var databaseName: String?
+    public let databaseName: String
     
     /**
      The id of the document that the attachment should be attached to.
      */
-    public var docId: String?
+    public let documentID: String
     
     /**
      The revision of the document that the attachment should be attached to.
      */
-    public var revId: String?
+    public let revision: String?
     
     /**
      The name of the attachment.
      */
-    public var attachmentName: String?
-    
-    public func validate() -> Bool {
-        if self.databaseName == nil {
-            return false
-        }
-        if docId == nil {
-            return false
-        }
-        
-        if revId == nil {
-            return false
-        }
-        
-        if attachmentName == nil {
-            return false
-        }
-        
-        return true
-    }
+    public let name: String
     
     public var method: String {
         return "GET"
     }
     
     public var endpoint: String {
-        return "/\(self.databaseName!)/\(docId!)/\(attachmentName!)"
+        return "/\(self.databaseName)/\(documentID)/\(name)"
     }
     
     public var parameters: [String: String] {
-        return ["rev": revId!]
+        
+        if let revision = self.revision {
+            return ["rev": revision]
+        } else {
+            return [:]
+        }
     }
     
     

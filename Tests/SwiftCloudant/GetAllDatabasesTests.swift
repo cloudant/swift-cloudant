@@ -39,15 +39,15 @@ public class GetAllDatabasesTest : XCTestCase {
     
     public func testListAllDbs(){
         let expectation =  self.expectation(withDescription: "all_dbs")
-        let list = GetAllDatabasesOperation()
-        list.databaseHandler = { (dbName) in
+        let list = GetAllDatabasesOperation(databaseHandler:
+        { (dbName) in
             if dbName.hasPrefix("_"){
                 return
             }
             XCTAssertNotNil(dbName)
             XCTAssertEqual(self.dbName!, dbName)
-        }
-        list.completionHandler = { (response, httpInfo, error ) in
+        })
+        { (response, httpInfo, error ) in
             XCTAssertNil(error)
             XCTAssertNotNil(response)
             XCTAssertNotNil(httpInfo)
