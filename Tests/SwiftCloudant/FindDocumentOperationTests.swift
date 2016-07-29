@@ -50,7 +50,7 @@ class FindDocumentOperationTests: XCTestCase {
     func testInvalidSelector() {
         
 
-        let expectation = self.expectation(withDescription: "invalidSelector")
+        let expectation = self.expectation(description: "invalidSelector")
         
         let find = FindDocumentsOperation(selector: ["foo": client!], databaseName: dbName!)
         { (response, httpInfo, error) in
@@ -62,16 +62,16 @@ class FindDocumentOperationTests: XCTestCase {
 
         client?.add(operation: find)
         
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
         
     }
     
     func testCanQueryDocsOnlySelector() {
         
         
-        let firstDocExpectation = self.expectation(withDescription: "1st Doc result")
-        let secondDocExpectation = self.expectation(withDescription: "2nd doc result")
-        let operationComplete = self.expectation(withDescription: "Operation Complete")
+        let firstDocExpectation = self.expectation(description: "1st Doc result")
+        let secondDocExpectation = self.expectation(description: "2nd doc result")
+        let operationComplete = self.expectation(description: "Operation Complete")
         
         var first = true
         let find = FindDocumentsOperation(selector: ["foo":"bar"], databaseName: dbName!,
@@ -97,12 +97,12 @@ class FindDocumentOperationTests: XCTestCase {
         
         self.simulateOkResponseFor(operation: find, jsonResponse: JSONResponse(dictionary: response))
         
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
 
     }
     
     func testCanQueryDocsAllValuesSet() {
-        let expectation = self.expectation(withDescription: "Find op with all the options")
+        let expectation = self.expectation(description: "Find op with all the options")
         
         let find = FindDocumentsOperation(selector: ["foo":"bar"], databaseName: dbName!,
                                           fields:["foo","bar"],
@@ -122,7 +122,7 @@ class FindDocumentOperationTests: XCTestCase {
         }
         
         self.simulateOkResponseFor(operation: find, jsonResponse: JSONResponse(dictionary: response))
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
     }
     
     func testOperationRequestPayload() throws {
@@ -237,7 +237,7 @@ class FindDocumentOperationTests: XCTestCase {
     }
     
     func testBookmarkReturnedFromTextQuery() {
-        let expectation = self.expectation(withDescription: "Find op with all the options")
+        let expectation = self.expectation(description: "Find op with all the options")
         let find = FindDocumentsOperation(selector: ["foo":"bar"], databaseName: dbName!,
                                           fields:["foo","bar"],
                                           limit: 26,
@@ -256,7 +256,7 @@ class FindDocumentOperationTests: XCTestCase {
         }
         
         self.simulateOkResponseFor(operation: find, jsonResponse: ["bookmark":"blah", "docs":[]])
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
     }
     
     func testValuesOmittedIfNotSet() throws {

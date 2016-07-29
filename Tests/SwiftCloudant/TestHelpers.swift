@@ -135,7 +135,7 @@ extension XCTestCase {
     }
 }
 
-struct JSONResponse: ArrayLiteralConvertible, DictionaryLiteralConvertible {
+struct JSONResponse: ExpressibleByArrayLiteral, ExpressibleByDictionaryLiteral {
     
     let array: NSArray?
     let dictionary: NSDictionary?
@@ -209,7 +209,7 @@ class TestSettings {
     private init() {
         let bundle = Bundle(for: TestSettings.self)
 
-        let testSettingsPath = bundle.pathForResource("TestSettings", ofType: "plist")
+        let testSettingsPath = bundle.path(forResource: "TestSettings", ofType: "plist")
 
         if let testSettingsPath = testSettingsPath,
             let settingsDict = NSDictionary(contentsOfFile: testSettingsPath) as? [String: AnyObject] {

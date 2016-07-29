@@ -51,7 +51,7 @@ public class CreateJSONQueryIndexOperation: CouchDatabaseOperation, MangoOperati
             designDocumentID: String? = nil,
                         name: String? = nil,
                       fields: [Sort],
-                              completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+                              completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
         self.databaseName = databaseName
         self.fields = fields
         self.designDocumentID = designDocumentID
@@ -61,7 +61,7 @@ public class CreateJSONQueryIndexOperation: CouchDatabaseOperation, MangoOperati
     
     public let databaseName: String
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
     
     /**
      The name of the index.
@@ -222,7 +222,7 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
          defaultFieldEnabled: Bool? = nil,
                     selector: [String:AnyObject]? = nil,
                    designDocumentID: String? = nil,
-           completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+           completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
         self.databaseName = databaseName
         self.completionHandler = completionHandler
         self.name = name
@@ -234,7 +234,7 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
     }
     
     public let databaseName: String
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
     
     /**
      The name of the index

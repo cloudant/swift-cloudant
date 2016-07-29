@@ -35,7 +35,7 @@ class CreateDatabaseTests: XCTestCase {
     }
 
     func testCreateUsingPut() {
-        let createExpectation = self.expectation(withDescription: "create database")
+        let createExpectation = self.expectation(description: "create database")
 
         let create = CreateDatabaseOperation(name: self.dbName!) { (response, httpInfo, error) in
             createExpectation.fulfill()
@@ -48,7 +48,7 @@ class CreateDatabaseTests: XCTestCase {
 
         client?.add(operation: create)
 
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
     }
 
 }

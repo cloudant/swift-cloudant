@@ -58,7 +58,7 @@ class ReadAttachmentTests: XCTestCase {
     }
     
     func testReadAttachment() {
-        let expectation = self.expectation(withDescription: "read attachment")
+        let expectation = self.expectation(description: "read attachment")
         let read = ReadAttachmentOperation(name: attachmentName, documentID: docId, databaseName: dbName!) {[weak self] (data, info, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(info)
@@ -75,7 +75,7 @@ class ReadAttachmentTests: XCTestCase {
             expectation.fulfill()
         }
         client?.add(operation: read)
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
     }
     
     func testReadAttachmentProperties() {

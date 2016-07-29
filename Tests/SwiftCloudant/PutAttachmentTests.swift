@@ -49,7 +49,7 @@ class PutAttachmentTests : XCTestCase {
     
     
     func testPutAttachment() {
-        let putExpect = self.expectation(withDescription: "put attachment")
+        let putExpect = self.expectation(description: "put attachment")
         let put = self.createPutAttachmentOperation()
             {(response, info, error) in
             XCTAssertNil(error)
@@ -63,7 +63,7 @@ class PutAttachmentTests : XCTestCase {
         }
         client?.add(operation: put)
         
-        self.waitForExpectations(withTimeout: 10.0, handler: nil)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
         
     }
     
@@ -77,7 +77,7 @@ class PutAttachmentTests : XCTestCase {
         XCTAssertEqual(put.contentType, put.contentType)
     }
 
-    func createPutAttachmentOperation(completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) -> PutAttachmentOperation {
+    func createPutAttachmentOperation(completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) -> PutAttachmentOperation {
         let attachment = "This is my awesome essay attachment for my document"
         let put = PutAttachmentOperation(name: "myAwesomeAttachment",
                                   contentType: "text/plain",

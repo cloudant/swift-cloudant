@@ -34,7 +34,7 @@ public class DeleteQueryIndexTests: XCTestCase {
     }
 
     func testCanDeleteJSONIndex() {
-    	let deleteExpectation = self.expectation(withDescription: "delete json index")
+    	let deleteExpectation = self.expectation(description: "delete json index")
     	let deleteIndex = DeleteQueryIndexOperation(name: "jsonIndex", type: .json, designDocumentID: "ddoc", databaseName: dbName!)
     	 {(response, httpStatus, error) in
     		XCTAssertNotNil(response)
@@ -47,11 +47,11 @@ public class DeleteQueryIndexTests: XCTestCase {
     		deleteExpectation.fulfill()
     	}
     	self.simulateOkResponseFor(operation: deleteIndex)
-    	self.waitForExpectations(withTimeout:10.0, handler:nil)
+    	self.waitForExpectations(timeout:10.0, handler:nil)
     }
 
     public func testCanDeleteTextIndex() {
-    	let deleteExpectation = self.expectation(withDescription: "delete json index")
+    	let deleteExpectation = self.expectation(description: "delete json index")
     	let deleteIndex = DeleteQueryIndexOperation(name: "textIndex", type: .text, designDocumentID: "ddoc", databaseName: dbName!)
     	 {(response, httpStatus, error) in 
     		XCTAssertNotNil(response)
@@ -64,7 +64,7 @@ public class DeleteQueryIndexTests: XCTestCase {
     		deleteExpectation.fulfill()
     	}
     	self.simulateOkResponseFor(operation: deleteIndex)
-    	self.waitForExpectations(withTimeout:10.0, handler:nil)
+    	self.waitForExpectations(timeout:10.0, handler:nil)
     }
 
     public func testOperationPropertiesJSONIndex() {

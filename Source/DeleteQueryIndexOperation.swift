@@ -60,7 +60,7 @@ public class DeleteQueryIndexOperation: CouchDatabaseOperation, JSONOperation {
      - parameter databaseName: the name of the database that contains the design document.
      - parameter completionHandler: optional handler to run when the operation completes.
      */
-    public init(name: String, type: Type, designDocumentID: String, databaseName: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+    public init(name: String, type: Type, designDocumentID: String, databaseName: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
         self.name = name
         self.type = type
         self.designDocumentID = designDocumentID
@@ -68,7 +68,7 @@ public class DeleteQueryIndexOperation: CouchDatabaseOperation, JSONOperation {
         self.completionHandler = completionHandler
     }
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
     public let databaseName: String
 
 	/**

@@ -25,7 +25,7 @@ public class Operation: Foundation.Operation, HTTPRequestOperation
     /**
      A enum of errors which could be returned.
      */
-    enum Error: ErrorProtocol {
+    enum Error: Swift.Error {
         /**
          Validation of operation settings failed.
          */
@@ -132,7 +132,7 @@ public class Operation: Foundation.Operation, HTTPRequestOperation
 
     internal var executor: OperationRequestExecutor? = nil
 
-    internal func processResponse(data: Data?, httpInfo: HTTPInfo?, error: ErrorProtocol?) {
+    internal func processResponse(data: Data?, httpInfo: HTTPInfo?, error: Swift.Error?) {
         couchOperation.processResponse(data: data, httpInfo: httpInfo, error: error)
     }
 

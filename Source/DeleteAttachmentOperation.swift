@@ -48,7 +48,7 @@ public class DeleteAttachmentOperation: CouchDatabaseOperation, JSONOperation {
      - parameter databaseName : the name of the database that the contains the attachment.
      - parameter completionHandler: optional handler to run when the operation completes.
      */
-    public init(name: String, documentID: String, revision: String, databaseName: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+    public init(name: String, documentID: String, revision: String, databaseName: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
         self.name = name
         self.documentID = documentID
         self.revision = revision
@@ -58,7 +58,7 @@ public class DeleteAttachmentOperation: CouchDatabaseOperation, JSONOperation {
     
     public let databaseName: String
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
     
     /**
      The ID of the document that the attachment is attached to.

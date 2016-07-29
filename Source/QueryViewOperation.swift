@@ -108,7 +108,7 @@ public class QueryViewOperation: ViewOperation, JSONOperation {
                 stale:Stale? = nil,
                 includeLastUpdateSequenceNumber: Bool? = nil,
                 rowHandler:((row: [String: AnyObject]) -> Void)? = nil,
-                completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)? = nil) {
+                completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
         self.databaseName = databaseName
         self.name = name
         self.designDocumentID = designDocumentID
@@ -133,7 +133,7 @@ public class QueryViewOperation: ViewOperation, JSONOperation {
         self.completionHandler = completionHandler
     }
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: ErrorProtocol?) -> Void)?
+    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
     
     public let databaseName: String
 

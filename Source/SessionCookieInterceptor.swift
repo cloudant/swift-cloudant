@@ -46,12 +46,12 @@ public class SessionCookieInterceptor: HTTPInterceptor
     convenience init(username: String, password: String) {
         self.init(username: username,
                   password: password,
-                  session: URLSession(configuration: URLSessionConfiguration.ephemeral()))
+                  session: URLSession(configuration: URLSessionConfiguration.ephemeral))
     }
     
     init(username: String, password: String, session: URLSession){
-        let encodedUsername = username.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics())!
-        let encodedPassword = password.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics())!
+        let encodedUsername = username.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics)!
+        let encodedPassword = password.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics)!
         
         let payload = "name=\(encodedUsername)&password=\(encodedPassword)"
         sessionRequestBody = payload.data(using: .ascii)!
@@ -139,8 +139,7 @@ public class SessionCookieInterceptor: HTTPInterceptor
 
                         // Only check for ok:true, https://issues.apache.org/jira/browse/COUCHDB-1356
                         // means we cannot check that the name returned is the one we sent.
-                        guard let ok = jsonResponse["ok"] as? NSNumber where
-                        ok.boolValue
+                        guard let ok = jsonResponse["ok"] as? NSNumber, ok.boolValue
                         else {
                             NSLog("Response did not contain ok:true, bailing")
                             return

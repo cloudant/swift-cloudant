@@ -36,7 +36,7 @@ class PutDocumentTests: XCTestCase {
     }
 
     func testSaveDocument() {
-        let putExpectation = self.expectation(withDescription: "Put Document expectation")
+        let putExpectation = self.expectation(description: "Put Document expectation")
         let put = PutDocumentOperation(id: "Doc1", body:["hello": "world"], databaseName: dbName!) { (response, httpInfo, error) in
             putExpectation.fulfill()
             XCTAssertEqual("Doc1", response?["id"] as? String)
@@ -49,7 +49,7 @@ class PutDocumentTests: XCTestCase {
         }
         client?.add(operation: put)
 
-        self.waitForExpectations(withTimeout: 10) { (_) in
+        self.waitForExpectations(timeout: 10) { (_) in
 
         }
 
