@@ -62,7 +62,7 @@ class GetAllDocsTest: XCTestCase {
                                 endKeyDocId: String? = "endKeyDocId",
                                 stale: Stale? = .ok,
                                 updateSeq: Bool? = true,
-                                rowHandler: (([String:Any]) -> Void) = { (doc) in
+                                rowHandler: @escaping (([String:Any]) -> Void) = { (doc) in
         // do nothing
         }
         ) -> GetAllDocsOperation {

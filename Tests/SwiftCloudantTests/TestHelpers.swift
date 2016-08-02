@@ -94,7 +94,7 @@ extension XCTestCase {
             }
             XCTAssertNil(error)
         }
-        client.add(operation: delete)
+        client.add(operation: delete).waitUntilFinished()
     }
     
     func simulateCreatedResponseFor(operation: CouchOperation, jsonResponse: JSONResponse = ["ok": true, "rev": "1-thisisarevision"]) {
