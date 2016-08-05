@@ -91,13 +91,13 @@ public class QueryViewOperation: ViewOperation, JSONOperation {
                 designDocumentID: String,
                 databaseName:String,
                 descending: Bool? = nil,
-                startKey: AnyObject? = nil,
+                startKey: Any? = nil,
                 startKeyDocumentID:String? = nil,
-                endKey: AnyObject? = nil,
+                endKey: Any? = nil,
                 endKeyDocumentID: String? = nil,
                 inclusiveEnd:Bool? = nil,
-                key:AnyObject? = nil,
-                keys:[AnyObject]? = nil,
+                key:Any? = nil,
+                keys:[Any]? = nil,
                 limit:UInt? = nil,
                 skip:UInt? = nil,
                 includeDocs:Bool? = nil,
@@ -107,8 +107,8 @@ public class QueryViewOperation: ViewOperation, JSONOperation {
                 groupLevel:UInt? = nil,
                 stale:Stale? = nil,
                 includeLastUpdateSequenceNumber: Bool? = nil,
-                rowHandler:((row: [String: AnyObject]) -> Void)? = nil,
-                completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
+                rowHandler:(([String: Any]) -> Void)? = nil,
+                completionHandler: (( [String : Any]?, HTTPInfo?, Error?) -> Void)? = nil) {
         self.databaseName = databaseName
         self.name = name
         self.designDocumentID = designDocumentID
@@ -133,7 +133,7 @@ public class QueryViewOperation: ViewOperation, JSONOperation {
         self.completionHandler = completionHandler
     }
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
+    public let completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)?
     
     public let databaseName: String
 
@@ -144,19 +144,19 @@ public class QueryViewOperation: ViewOperation, JSONOperation {
 
     public let descending: Bool?
 
-    public let startKey: AnyObject?
+    public let startKey: Any?
 
     public let startKeyDocumentID: String?
 
-    public let endKey: AnyObject?
+    public let endKey: Any?
 
     public let endKeyDocumentID: String?
 
     public let inclusiveEnd: Bool?
 
-    public let key: AnyObject?
+    public let key: Any?
 
-    public let keys: Array<AnyObject>?
+    public let keys: [Any]?
 
     public let limit: UInt?
 
@@ -197,7 +197,7 @@ public class QueryViewOperation: ViewOperation, JSONOperation {
 
      - parameter row: dictionary of the JSON data from the view row
      */
-    public let rowHandler: ((row: [String: AnyObject]) -> Void)?
+    public let rowHandler: (([String: Any]) -> Void)?
 
     public func validate() -> Bool {
 
@@ -223,9 +223,9 @@ public class QueryViewOperation: ViewOperation, JSONOperation {
         if let keys = keys {
             do {
                 #if os(Linux)
-                    let keysDict: NSDictionary = ["keys".bridge() : keys.bridge()]
+                    let keysDict = ["keys".bridge() : keys.bridge()]
                 #else
-                    let keysDict: NSDictionary = ["keys": keys as NSArray]
+                    let keysDict = ["keys": keys]
                 #endif
                 let keysJson = try JSONSerialization.data(withJSONObject: keysDict)
                 return keysJson

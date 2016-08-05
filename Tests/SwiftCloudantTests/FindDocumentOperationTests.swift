@@ -20,7 +20,7 @@ import XCTest
 class FindDocumentOperationTests: XCTestCase {
     var client: CouchDBClient? = nil;
     var dbName: String? = nil
-    let response = [    "docs" : [
+    let response:[String: [[String: Any]]] = [    "docs" : [
         [
             "_id" : "2",
             "_rev" : "1-9f0e70c7592b2e88c055c51afc2ec6fd",
@@ -148,7 +148,7 @@ class FindDocumentOperationTests: XCTestCase {
             do {
                 let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:NSObject]
                 
-                let expected:[String:NSObject] = ["selector":["foo":"bar"],
+                let expected:[String:Any] = ["selector":["foo":"bar"],
                                 "fields":["foo","bar"],
                                 "limit": 26,
                                 "skip": 1,
@@ -159,9 +159,9 @@ class FindDocumentOperationTests: XCTestCase {
                                 ]
                 
                 if let json = json {
-                    XCTAssertEqual(expected , json, "Expected: \(expected) but was \(json)")
+                    XCTAssertEqual(expected as NSDictionary, json as NSDictionary, "Expected: \(expected) but was \(json)")
                } else {
-                   XCTFail("Json could not be deseralised to the type [String:AnyObject]")
+                   XCTFail("Json could not be deseralised to the type [String:Any]")
                 }
             
             } catch {
@@ -187,14 +187,14 @@ class FindDocumentOperationTests: XCTestCase {
             do {
                 let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:NSObject]
                 
-                let expected:[String:NSObject] = ["selector":["foo":"bar"],
+                let expected:[String: Any] = ["selector":["foo":"bar"],
                                                   "sort": [["foo":"asc"]],
                 ]
                 
                 if let json = json {
-                    XCTAssertEqual(expected , json, "Expected: \(expected) but was \(json)")
+                    XCTAssertEqual(expected as NSDictionary, json as NSDictionary, "Expected: \(expected) but was \(json)")
                 } else {
-                    XCTFail("Json could not be deseralised to the type [String:AnyObject]")
+                    XCTFail("Json could not be deseralised to the type [String:Any]")
                 }
                 
             } catch {
@@ -220,14 +220,14 @@ class FindDocumentOperationTests: XCTestCase {
             do {
                 let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:NSObject]
                 
-                let expected:[String:NSObject] = ["selector":["foo":"bar"],
+                let expected:[String: Any] = ["selector":["foo":"bar"],
                                                   "sort": [["foo":"desc"]],
                                                   ]
                 
                 if let json = json {
-                    XCTAssertEqual(expected , json, "Expected: \(expected) but was \(json)")
+                    XCTAssertEqual(expected as NSDictionary , json as NSDictionary, "Expected: \(expected) but was \(json)")
                 } else {
-                    XCTFail("Json could not be deseralised to the type [String:AnyObject]")
+                    XCTFail("Json could not be deseralised to the type [String:Any]")
                 }
                 
             } catch {
@@ -255,7 +255,8 @@ class FindDocumentOperationTests: XCTestCase {
             
         }
         
-        self.simulateOkResponseFor(operation: find, jsonResponse: ["bookmark":"blah", "docs":[]])
+        let docs:[[String:Any]] = []
+        self.simulateOkResponseFor(operation: find, jsonResponse: ["bookmark":"blah", "docs":docs])
         self.waitForExpectations(timeout: 10.0, handler: nil)
     }
     
@@ -276,12 +277,12 @@ class FindDocumentOperationTests: XCTestCase {
             do {
                 let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:NSObject]
                 
-                let expected:[String:NSObject] = ["selector":["foo":"bar"]]
+                let expected:[String:Any] = ["selector":["foo":"bar"]]
                 
                 if let json = json {
-                    XCTAssertEqual(expected , json, "Expected: \(expected) but was \(json)")
+                    XCTAssertEqual(expected as NSDictionary, json as NSDictionary, "Expected: \(expected) but was \(json)")
                 } else {
-                    XCTFail("Json could not be deseralised to the type [String:AnyObject]")
+                    XCTFail("Json could not be deseralised to the type [String:Any]")
                 }
                 
             } catch {

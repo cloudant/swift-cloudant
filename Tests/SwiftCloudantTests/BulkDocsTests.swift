@@ -23,7 +23,7 @@ class BulkDocsTests : XCTestCase {
     
     var dbName: String? = nil
     var client: CouchDBClient? = nil
-    let docs:[[String:AnyObject]] = [["hello":"world"], ["foo": "bar"]]
+    let docs:[[String:Any]] = [["hello":"world"], ["foo": "bar"]]
     
     override func setUp() {
         super.setUp()
@@ -71,7 +71,10 @@ class BulkDocsTests : XCTestCase {
             
             let requestJson = try JSONSerialization.jsonObject(with: data) as! NSDictionary
             
-            XCTAssertEqual(["docs":[["hello":"world"],["foo":"bar"]], "new_edits":false, "all_or_nothing":true] as NSDictionary, requestJson)
+            
+            let expected: [String: Any] = ["docs":[["hello":"world"],["foo":"bar"]], "new_edits":false, "all_or_nothing":true]
+            
+            XCTAssertEqual(expected as NSDictionary, requestJson)
         }
     }
    
@@ -90,7 +93,8 @@ class BulkDocsTests : XCTestCase {
             
             let requestJson = try JSONSerialization.jsonObject(with: data) as! NSDictionary
             
-            XCTAssertEqual(["docs":[["hello":"world"],["foo":"bar"]], "new_edits":false] as NSDictionary, requestJson)
+            let expected: [String: Any] = ["docs":[["hello":"world"],["foo":"bar"]], "new_edits":false]
+            XCTAssertEqual(expected as NSDictionary, requestJson)
         }
     }
     
@@ -109,7 +113,8 @@ class BulkDocsTests : XCTestCase {
             
             let requestJson = try JSONSerialization.jsonObject(with: data) as! NSDictionary
             
-            XCTAssertEqual(["docs":[["hello":"world"],["foo":"bar"]], "all_or_nothing":true] as NSDictionary, requestJson)
+            let expected: [String: Any] = ["docs":[["hello":"world"],["foo":"bar"]], "all_or_nothing":true]
+            XCTAssertEqual(expected as NSDictionary, requestJson)
         }
     }
     

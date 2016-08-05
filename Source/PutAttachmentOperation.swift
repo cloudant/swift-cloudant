@@ -52,7 +52,7 @@ public class PutAttachmentOperation: CouchDatabaseOperation, JSONOperation {
      - parameter databaseName: The name of the database that the document is stored in.
      - parameter completionHandler: optional handler to run when the operation completes.
      */
-    public init(name: String, contentType: String, data: Data, documentID: String, revision: String, databaseName: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
+    public init(name: String, contentType: String, data: Data, documentID: String, revision: String, databaseName: String, completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)? = nil) {
     
         self.name = name
         self.documentID = documentID
@@ -65,7 +65,7 @@ public class PutAttachmentOperation: CouchDatabaseOperation, JSONOperation {
     }
     
     public let databaseName: String
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
+    public let completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)?
     
     /**
      The id of the document that the attachment should be attached to.

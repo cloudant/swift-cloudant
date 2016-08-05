@@ -43,7 +43,7 @@ public class PutDocumentOperation: CouchDatabaseOperation, JSONOperation {
      - parameter databaseName: the name of the database where the document will be created / updated.
      - parameter completionHandler: optional handler to run when the operation completes.
      */
-    public init(id: String, revision: String? = nil, body: [String: AnyObject], databaseName:String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
+    public init(id: String, revision: String? = nil, body: [String: Any], databaseName:String, completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)? = nil) {
         self.id = id;
         self.revision = revision
         self.body = body
@@ -52,7 +52,7 @@ public class PutDocumentOperation: CouchDatabaseOperation, JSONOperation {
         
     }
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
+    public let completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)?
     
     
     public let databaseName: String
@@ -67,13 +67,13 @@ public class PutDocumentOperation: CouchDatabaseOperation, JSONOperation {
     public let revision: String?
 
     /** Body of document. Must be serialisable with NSJSONSerialization */
-    public let body: [String: AnyObject]
+    public let body: [String: Any]
 
     public func validate() -> Bool {
         #if os(Linux)
             return  NSJSONSerialization.isValidJSONObject(body!.bridge())
         #else
-            return JSONSerialization.isValidJSONObject(body as NSDictionary)
+            return JSONSerialization.isValidJSONObject(body)
         #endif
     }
 
@@ -103,7 +103,7 @@ public class PutDocumentOperation: CouchDatabaseOperation, JSONOperation {
         #if os(Linux)
             data = try NSJSONSerialization.data(withJSONObject: body.bridge(), options: NSJSONWritingOptions())
         #else
-             data = try JSONSerialization.data(withJSONObject: body as NSDictionary, options: JSONSerialization.WritingOptions())
+             data = try JSONSerialization.data(withJSONObject: body)
         #endif
     }
 

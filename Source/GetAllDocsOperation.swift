@@ -34,12 +34,12 @@ import Foundation
  ```
  */
 public class GetAllDocsOperation : CouchOperation, ViewOperation, JSONOperation {
-    public typealias Json = [String : AnyObject]
+    public typealias Json = [String : Any]
 
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
+    public let completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)?
     
-    public let rowHandler: ((row: [String: AnyObject]) -> Void)?
+    public let rowHandler: (([String: Any]) -> Void)?
     
     public let databaseName: String
     
@@ -110,8 +110,8 @@ public class GetAllDocsOperation : CouchOperation, ViewOperation, JSONOperation 
                 startKey: String? = nil,
                 includeLastUpdateSequenceNumber: Bool? = nil,
                 inclusiveEnd: Bool? = nil,
-                rowHandler: ((row: [String: AnyObject]) -> Void)? = nil,
-                completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil){
+                rowHandler: (([String: Any]) -> Void)? = nil,
+                completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)? = nil){
         
         self.databaseName = databaseName
         self.descending = descending

@@ -97,11 +97,11 @@ public struct HTTPInterceptorContext {
  A class which encapsulates HTTP requests. This class allows requests to be transparently retried.
  */
 public class URLSessionTask {
-    private let request: URLRequest
-    private var inProgressTask: URLSessionDataTask
-    private let session: URLSession
-    private var remainingRetries: UInt = 10
-    private let delegate: InterceptableSessionDelegate
+    fileprivate let request: URLRequest
+    fileprivate var inProgressTask: URLSessionDataTask
+    fileprivate let session: URLSession
+    fileprivate var remainingRetries: UInt = 10
+    fileprivate let delegate: InterceptableSessionDelegate
 
     public var state: Foundation.URLSessionTask.State {
         get {
@@ -148,7 +148,7 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
         #if os(Linux)
             config.httpAdditionalHeaders = ["User-Agent".bridge() : InterceptableSession.userAgent().bridge()]
         #else
-            config.httpAdditionalHeaders = ["User-Agent": InterceptableSession.userAgent() as NSString]
+            config.httpAdditionalHeaders = [("User-Agent" as NSString) as AnyHashable: InterceptableSession.userAgent()]
         #endif
         return URLSession(configuration: config, delegate: self, delegateQueue: nil) }()
     
@@ -216,8 +216,7 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
         task.delegate.received(data: data)
     }
     
-    
-    internal func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: (URLSession.ResponseDisposition) -> Void) {
+    internal func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
         // Retrieve the task from the dict.
         guard let task = taskDict[dataTask], let response = response as? HTTPURLResponse
         else {

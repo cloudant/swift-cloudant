@@ -62,7 +62,7 @@ class GetAllDocsTest: XCTestCase {
                                 endKeyDocId: String? = "endKeyDocId",
                                 stale: Stale? = .ok,
                                 updateSeq: Bool? = true,
-                                rowHandler: ((doc: [String:AnyObject]) -> Void) = { (doc) in
+                                rowHandler: (([String:Any]) -> Void) = { (doc) in
         // do nothing
         }
         ) -> GetAllDocsOperation {
@@ -130,7 +130,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -156,7 +157,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -183,7 +185,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -212,7 +215,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -241,7 +245,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -269,7 +274,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -297,7 +303,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -340,7 +347,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -368,7 +376,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -396,7 +405,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -424,7 +434,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -451,7 +462,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -479,7 +491,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -507,7 +520,8 @@ class GetAllDocsTest: XCTestCase {
             let requestData = try JSONSerialization.jsonObject(with: data) as? [String: [String]]
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
-                XCTAssertEqual(["keys":["keys","keys"]], requestData)
+                let expected:[String:[String]] = ["keys":["keys","keys"]]
+                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
                 
             }
         }
@@ -547,7 +561,8 @@ class GetAllDocsTest: XCTestCase {
         let rowHandler = self.expectation(description: "doc handler")
         
         let allDocs = GetAllDocsOperation(databaseName: dbName, rowHandler: { doc in
-            XCTAssertEqual(["hello": "world"] as NSDictionary, doc)
+            let expected:[String:String] = ["hello":"world"]
+            XCTAssertEqual(expected as NSDictionary, doc as NSDictionary)
             rowHandler.fulfill()
         }) { response, info, error in
             

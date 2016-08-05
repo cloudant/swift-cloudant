@@ -132,17 +132,17 @@ public protocol ViewOperation : CouchDatabaseOperation {
      
      - parameter row: dictionary of the JSON data from the view row
      */
-    var rowHandler: ((row: [String: AnyObject]) -> Void)? { get }
+    var rowHandler: (([String: Any]) -> Void)? { get }
     
 }
 
 public extension ViewOperation {
     
     public func processResponse(json: Any) {
-        if let json = json as? [String: AnyObject] {
-            let rows = json["rows"] as! [[String: AnyObject]]
-            for row: [String: AnyObject] in rows {
-                self.rowHandler?(row: row)
+        if let json = json as? [String: Any] {
+            let rows = json["rows"] as! [[String: Any]]
+            for row: [String: Any] in rows {
+                self.rowHandler?(row)
             }
         }
     }
@@ -218,7 +218,7 @@ public extension ViewOperation {
         return items
     }
     
-    func jsonValue(for key: AnyObject) throws -> String {
+    func jsonValue(for key: Any) throws -> String {
         if JSONSerialization.isValidJSONObject(key) {
             let keyJson = try JSONSerialization.data(withJSONObject: key)
             return String(data: keyJson, encoding: .utf8)!
