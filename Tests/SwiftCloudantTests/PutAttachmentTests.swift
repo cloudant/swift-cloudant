@@ -77,7 +77,7 @@ class PutAttachmentTests : XCTestCase {
         XCTAssertEqual(put.contentType, put.contentType)
     }
 
-    func createPutAttachmentOperation(completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) -> PutAttachmentOperation {
+    func createPutAttachmentOperation(completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)? = nil) -> PutAttachmentOperation {
         let attachment = "This is my awesome essay attachment for my document"
         let put = PutAttachmentOperation(name: "myAwesomeAttachment",
                                   contentType: "text/plain",

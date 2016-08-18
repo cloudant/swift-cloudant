@@ -64,22 +64,22 @@ internal extension MangoOperation {
     /**
         Transform an Array of Sort into a Array in the form of Sort Syntax.
     */
-    internal func transform(sortArray: [Sort]) -> [AnyObject] {
+    internal func transform(sortArray: [Sort]) -> [Any] {
         
-        var transformed: [AnyObject] = []
+        var transformed: [Any] = []
         for s in sortArray {
             if let sort = s.sort {
                 let dict = [s.field: sort.rawValue]
                 #if os(Linux)
                     transformed.append(dict.bridge())
                 #else
-                    transformed.append(dict as NSDictionary)
+                    transformed.append(dict)
                 #endif
             } else {
                 #if os(Linux)
                     transformed.append(s.field.bridge())
                 #else
-                    transformed.append(s.field as NSString)
+                    transformed.append(s.field)
                 #endif
             }
         }
@@ -90,7 +90,7 @@ internal extension MangoOperation {
     /**
         Transform an array of TextIndexField into an Array in the form of Lucene field definitions.
     */
-    internal func transform(fields: [TextIndexField]) -> NSArray {
+    internal func transform(fields: [TextIndexField]) -> [[String:String]] {
         var array: [[String:String]] = []
 
         for field in fields {
@@ -100,7 +100,7 @@ internal extension MangoOperation {
         #if os(Linux)
             return array.bridge()
         #else
-            return array as NSArray
+            return array
         #endif
     }
 }
@@ -155,7 +155,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
      - seealso: [Selector syntax](https://docs.cloudant.com/cloudant_query.html#selector-syntax)
     
      */
-    public init(selector: [String: AnyObject],
+    public init(selector: [String: Any],
             databaseName: String,
                   fields: [String]? = nil,
                    limit: UInt? = nil,
@@ -164,8 +164,8 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
                 bookmark: String? = nil,
                 useIndex:String? = nil,
                        r: UInt? = nil,
-    documentFoundHandler: ((document: [String: AnyObject]) -> Void)? = nil,
-       completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
+    documentFoundHandler: (([String: Any]) -> Void)? = nil,
+       completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)? = nil) {
         self.selector = selector
         self.databaseName = databaseName
         self.fields = fields
@@ -179,7 +179,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
         self.completionHandler = completionHandler
     }
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
+    public let completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)?
     public let databaseName: String
     
     /**
@@ -187,7 +187,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
      [the Cloudant documentation](https://docs.cloudant.com/cloudant_query.html#selector-syntax)
      for syntax information.
      */
-    public let selector: [String: AnyObject]?;
+    public let selector: [String: Any]?;
 
     /**
      The fields to include in the results.
@@ -229,9 +229,9 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
 
      - parameter document: a document matching the query.
      */
-    public let documentFoundHandler: ((document: [String: AnyObject]) -> Void)?
+    public let documentFoundHandler: (([String: Any]) -> Void)?
 
-    private var json: [String: AnyObject]?
+    private var json: [String: Any]?
 
     public var method: String {
         return "POST"
@@ -256,7 +256,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
                 return false
             }
         #else
-            if JSONSerialization.isValidJSONObject(jsonObj as NSDictionary) {
+            if JSONSerialization.isValidJSONObject(jsonObj) {
                 self.json = jsonObj
                 return true
             } else {
@@ -266,9 +266,9 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
 
     }
     
-    private func createJsonDict() -> [String: AnyObject] {
+    private func createJsonDict() -> [String: Any] {
         // build the body dict, we will store this to save compute cycles.
-        var jsonObj: [String: AnyObject] = [:]
+        var jsonObj: [String: Any] = [:]
         #if os(Linux)
             if let selector = self.selector {
                 jsonObj["selector"] = selector.bridge()
@@ -303,57 +303,57 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
             }
         #else
             if let selector = self.selector {
-                jsonObj["selector"] = selector as NSDictionary
+                jsonObj["selector"] = selector
             }
             
             if let limit = self.limit {
-                jsonObj["limit"] = limit as NSNumber
+                jsonObj["limit"] = limit
             }
             
             if let skip = self.skip {
-                jsonObj["skip"] = skip as NSNumber
+                jsonObj["skip"] = skip
             }
             
             if let r = self.r {
-                jsonObj["r"] = r as NSNumber
+                jsonObj["r"] = r
             }
             
             if let sort = self.sort {
-                jsonObj["sort"] = transform(sortArray: sort) as NSArray
+                jsonObj["sort"] = transform(sortArray: sort)
             }
             
             if let fields = self.fields {
-                jsonObj["fields"] = fields as NSArray
+                jsonObj["fields"] = fields
             }
             
             if let bookmark = self.bookmark {
-                jsonObj["bookmark"] = bookmark as NSString
+                jsonObj["bookmark"] = bookmark
             }
             
             if let useIndex = self.useIndex {
-                jsonObj["use_index"] = useIndex as NSString
+                jsonObj["use_index"] = useIndex
             }
         #endif
 
         return jsonObj
     }
 
-    internal class func transform(sortArray: [Sort]) -> [AnyObject] {
+    internal class func transform(sortArray: [Sort]) -> [Any] {
 
-        var transfomed: [AnyObject] = []
+        var transfomed: [Any] = []
         for s in sortArray {
             if let sort = s.sort {
                 let dict = [s.field: sort.rawValue]
                 #if os(Linux)
                     transfomed.append(dict.bridge())
                 #else
-                    transfomed.append(dict as NSDictionary)
+                    transfomed.append(dict )
                 #endif
             } else {
                 #if os(Linux)
                     transfomed.append(s.field.bridge())
                 #else
-                    transfomed.append(s.field as NSString)
+                    transfomed.append(s.field)
                 #endif
             }
         }
@@ -377,16 +377,16 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
     }
 
     public func processResponse(json: Any) {
-        if let json = json as? [String: AnyObject],
-           let docs = json["docs"] as? [[String: AnyObject]] { // Array of [String:AnyObject]
-            for doc: [String: AnyObject] in docs {
-                self.documentFoundHandler?(document: doc)
+        if let json = json as? [String: Any],
+           let docs = json["docs"] as? [[String: Any]] { // Array of [String:Any]
+            for doc: [String: Any] in docs {
+                self.documentFoundHandler?(doc)
             }
         }
     }
     
     public func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: Error?) {
-        self.completionHandler?(response: response as? [String: AnyObject], httpInfo: httpInfo, error: error)
+        self.completionHandler?(response as? [String: Any], httpInfo, error)
     }
 
 

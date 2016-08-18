@@ -38,16 +38,16 @@ import Foundation
  */
 public class PutBulkDocsOperation : CouchDatabaseOperation, JSONOperation {
     
-    public typealias Json = [[String: AnyObject]]
+    public typealias Json = [[String: Any]]
 
     public let databaseName: String
     
-    public let completionHandler: ((response: [[String:AnyObject]]?, httpInfo:HTTPInfo?, error:Error?) -> Void)?
+    public let completionHandler: (([[String:Any]]?, HTTPInfo?, Error?) -> Void)?
     
     /**
      The documents that make up this request.
     */
-    public let documents: [[String:AnyObject]]
+    public let documents: [[String:Any]]
     
     /**
      If false, CouchDB will not assign documents new revision IDs. This option is normally
@@ -72,10 +72,10 @@ public class PutBulkDocsOperation : CouchDatabaseOperation, JSONOperation {
      - parameter completionHandler: Optional handler to call when the operation completes.
      */
     public init(databaseName: String,
-                documents:[[String:AnyObject]],
+                documents:[[String:Any]],
                 newEdits: Bool? = nil,
                 allOrNothing: Bool? = nil,
-                completionHandler: ((response: [[String:AnyObject]]?, httpInfo:HTTPInfo?, error:Error?) -> Void)? = nil){
+                completionHandler: (([[String:Any]]?, HTTPInfo?, Error?) -> Void)? = nil){
         self.databaseName = databaseName
         self.documents = documents
         self.newEdits = newEdits
@@ -95,7 +95,7 @@ public class PutBulkDocsOperation : CouchDatabaseOperation, JSONOperation {
     private var jsonData: Data?
     
     public func serialise() throws {
-        var request:[String:AnyObject] = ["docs":documents]
+        var request:[String: Any] = ["docs":documents]
         
         if let newEdits = newEdits {
             request["new_edits"] = newEdits

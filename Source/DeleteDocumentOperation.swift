@@ -42,14 +42,14 @@ public class DeleteDocumentOperation: CouchDatabaseOperation, JSONOperation {
      - parameter databaseName: the name of the database which contains the document.
      - parameter completionHandler: optional handler to run when the operation completes.
      */
-    public init(id: String, revision: String, databaseName: String, completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
+    public init(id: String, revision: String, databaseName: String, completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)? = nil) {
         self.id = id
         self.revision = revision
         self.databaseName = databaseName
         self.completionHandler = completionHandler
     }
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
+    public let completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)?
     public let databaseName: String
 
     /**

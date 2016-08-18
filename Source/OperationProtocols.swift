@@ -148,13 +148,13 @@ public protocol JSONOperation: CouchOperation {
      - parameter httpInfo: - Information about the HTTP response.
      - parameter error: - ErrorProtocol instance with information about an error executing the operation.
      */
-    var completionHandler: ((response: Json?, httpInfo: HTTPInfo?, error: Swift.Error?) -> Void)? { get }
+    var completionHandler: ((Json?, HTTPInfo?, Swift.Error?) -> Void)? { get }
 }
 
 public extension JSONOperation {
     
     public func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: Swift.Error?) {
-        self.completionHandler?(response: response as? Json, httpInfo: httpInfo, error: error)
+        self.completionHandler?(response as? Json, httpInfo, error)
     }
     
     public func processResponse(data: Data?, httpInfo: HTTPInfo?, error: Swift.Error?) {
@@ -166,7 +166,7 @@ public extension JSONOperation {
         
         do {
             if let data = data {
-                let json = try JSONSerialization.jsonObject(with: data) as Any
+                let json = try JSONSerialization.jsonObject(with: data)
                 if httpInfo.statusCode / 100 == 2 {
                     self.processResponse(json: json)
                     self.callCompletionHandler(response: json, httpInfo: httpInfo, error: error)
@@ -204,12 +204,12 @@ public protocol DataOperation: CouchOperation {
      - parameter httpInfo: - Information about the HTTP response.
      - parameter error: - ErrorProtocol instance with information about an error executing the operation.
      */
-    var completionHandler: ((response: Data?, httpInfo: HTTPInfo?, error: Swift.Error?) -> Void)? { get }
+    var completionHandler: ((Data?, HTTPInfo?, Swift.Error?) -> Void)? { get }
 }
 
 public extension DataOperation {
     public func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: Swift.Error?) {
-        self.completionHandler?(response: response as? Data, httpInfo: httpInfo, error: error)
+        self.completionHandler?(response as? Data, httpInfo, error)
     }
     
     public func processResponse(data: Data?, httpInfo: HTTPInfo?, error: Swift.Error?) {
@@ -219,9 +219,9 @@ public extension DataOperation {
                 return
         }
         if httpInfo.statusCode / 100 == 2 {
-            self.completionHandler?(response: data, httpInfo: httpInfo, error: error)
+            self.completionHandler?(data, httpInfo, error)
         } else {
-            self.completionHandler?(response: data, httpInfo: httpInfo, error: Operation.Error.http(statusCode: httpInfo.statusCode, response: String(data: data!, encoding: .utf8)))
+            self.completionHandler?(data, httpInfo, Operation.Error.http(statusCode: httpInfo.statusCode, response: String(data: data!, encoding: .utf8)))
         }
     }
 }

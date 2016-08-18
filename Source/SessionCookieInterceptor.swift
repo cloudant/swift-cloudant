@@ -135,14 +135,15 @@ public class SessionCookieInterceptor: HTTPInterceptor
 
                     // Check data sent back before attempting to get the cookie from the headers.
                     do {
-                        let jsonResponse = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions())
 
                         // Only check for ok:true, https://issues.apache.org/jira/browse/COUCHDB-1356
                         // means we cannot check that the name returned is the one we sent.
-                        guard let ok = jsonResponse["ok"] as? NSNumber, ok.boolValue
+                        guard let jsonResponse = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                              let ok = jsonResponse["ok"] as? NSNumber,
+                              ok.boolValue
                         else {
-                            NSLog("Response did not contain ok:true, bailing")
-                            return
+                                NSLog("Response did not contain ok:true, bailing")
+                                return
                         }
 
                         guard let cookieHeader = response.allHeaderFields["Set-Cookie"] as? String

@@ -22,23 +22,28 @@ public class QueryViewTests: XCTestCase {
 
     var dbName: String? = nil
     var client: CouchDBClient?
-    let response = ["offset": 0,
-                    "rows": [["id": "3-tiersalmonspinachandavocadoterrine",
-                              "key": "3-tier salmon, spinach and avocado terrine",
-                              "value": ["3-tier salmon, spinach and avocado terrine"]],
-                             ["id": "Aberffrawcake",
-                              "key": "Aberffraw cake",
-                              "value": ["Aberffraw cake"]],
-                             ["id": "Adukiandorangecasserole-microwave",
-                              "key": "Aduki and orange casserole - microwave",
-                              "value": ["Aduki and orange casserole - microwave"]],
-                             ["id": "Aioli-garlicmayonnaise",
-                              "key": "Aioli - garlic mayonnaise",
-                              "value": ["Aioli - garlic mayonnaise"]],
-                             ["id": "Alabamapeanutchicken",
-                              "key": "Alabama peanut chicken",
-                              "value": ["Alabama peanut chicken"]]],
+    lazy var response:[String: Any] = {() -> [String:Any] in
+        
+        let rows:[[String:Any]] = [["id": "3-tiersalmonspinachandavocadoterrine",
+                     "key": "3-tier salmon, spinach and avocado terrine",
+                     "value": ["3-tier salmon, spinach and avocado terrine"]],
+                    ["id": "Aberffrawcake",
+                     "key": "Aberffraw cake",
+                     "value": ["Aberffraw cake"]],
+                    ["id": "Adukiandorangecasserole-microwave",
+                     "key": "Aduki and orange casserole - microwave",
+                     "value": ["Aduki and orange casserole - microwave"]],
+                    ["id": "Aioli-garlicmayonnaise",
+                     "key": "Aioli - garlic mayonnaise",
+                     "value": ["Aioli - garlic mayonnaise"]],
+                    ["id": "Alabamapeanutchicken",
+                     "key": "Alabama peanut chicken",
+                     "value": ["Alabama peanut chicken"]]]
+        
+           return ["offset": 0,
+                    "rows": rows,
                     "total_rows": 2667]
+    }()
 
     override public func setUp() {
         super.setUp()
@@ -256,7 +261,7 @@ public class QueryViewTests: XCTestCase {
         XCTAssertNil(view.data)
         XCTAssertEqual("/\(self.dbName!)/_design/ddoc/_view/view1", view.endpoint)
 
-        let expectedQueryItems = [:]
+        let expectedQueryItems:[String:String] = [:]
 
         XCTAssertEqual(expectedQueryItems, view.parameters)
     }

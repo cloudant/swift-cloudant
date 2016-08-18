@@ -34,7 +34,7 @@ import Foundation
  
  */
 public class GetDocumentOperation: CouchDatabaseOperation, JSONOperation {
-    public typealias Json = [String: AnyObject]
+    public typealias Json = [String: Any]
 
 
     /**
@@ -46,7 +46,7 @@ public class GetDocumentOperation: CouchDatabaseOperation, JSONOperation {
       - parameter revision: the revision of the document to get
       - parameter completionHandler: optional handler to run when the operation completes.
      */
-    public init(id: String, databaseName:String, includeRevisions:Bool? = nil, revision: String? = nil, completionHandler:((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
+    public init(id: String, databaseName:String, includeRevisions:Bool? = nil, revision: String? = nil, completionHandler:(([String : Any]?, HTTPInfo?, Error?) -> Void)? = nil) {
         self.id = id
         self.databaseName = databaseName
         self.includeRevisions = includeRevisions
@@ -54,7 +54,7 @@ public class GetDocumentOperation: CouchDatabaseOperation, JSONOperation {
         self.completionHandler = completionHandler
     }
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
+    public let completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)?
     
     public let databaseName: String
     

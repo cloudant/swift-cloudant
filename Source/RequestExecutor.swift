@@ -84,7 +84,11 @@ class OperationRequestExecutor: InterceptableSessionDelegate {
             #if os(Linux)
                 httpInfo = HTTPInfo(statusCode: response.statusCode, headers: response.allHeaderFields)
             #else
-                httpInfo = HTTPInfo(statusCode: response.statusCode, headers: response.allHeaderFields as! [String: String])
+                var headers:[String: String] = [:]
+                for (key, value) in response.allHeaderFields {
+                    headers["\(key)"] = "\(value)"
+                }
+                httpInfo = HTTPInfo(statusCode: response.statusCode, headers: headers)
             #endif
         } else {
             httpInfo = nil

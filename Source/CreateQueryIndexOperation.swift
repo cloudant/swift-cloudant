@@ -51,7 +51,7 @@ public class CreateJSONQueryIndexOperation: CouchDatabaseOperation, MangoOperati
             designDocumentID: String? = nil,
                         name: String? = nil,
                       fields: [Sort],
-                              completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
+                              completionHandler: (( [String : Any]?, HTTPInfo?, Error?) -> Void)? = nil) {
         self.databaseName = databaseName
         self.fields = fields
         self.designDocumentID = designDocumentID
@@ -61,7 +61,7 @@ public class CreateJSONQueryIndexOperation: CouchDatabaseOperation, MangoOperati
     
     public let databaseName: String
     
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
+    public let completionHandler: (( [String : Any]?, HTTPInfo?, Error?) -> Void)?
     
     /**
      The name of the index.
@@ -99,16 +99,16 @@ public class CreateJSONQueryIndexOperation: CouchDatabaseOperation, MangoOperati
         #if os(Linux)
             var jsonDict: [String:AnyObject] = ["type": "json".bridge()]
         #else
-            var jsonDict: [String:AnyObject] = ["type": "json"]
+            var jsonDict: [String: Any] = ["type": "json"]
         #endif
 
-        var index: [String: AnyObject] = [:]
+        var index: [String: Any] = [:]
         #if os(Linux)
             index["fields"] = transform(sortArray: fields).bridge()
             jsonDict["index"] = index.bridge()
         #else
-            index["fields"] = transform(sortArray: fields) as NSArray
-            jsonDict["index"] = index as NSDictionary
+            index["fields"] = transform(sortArray: fields)
+            jsonDict["index"] = index
         #endif
             
         
@@ -117,7 +117,7 @@ public class CreateJSONQueryIndexOperation: CouchDatabaseOperation, MangoOperati
             #if os(Linux)
                 jsonDict["name"] = name.bridge()
             #else
-                jsonDict["name"] = name as NSString
+                jsonDict["name"] = name
             #endif
         }
 
@@ -125,14 +125,14 @@ public class CreateJSONQueryIndexOperation: CouchDatabaseOperation, MangoOperati
             #if os(Linux)
                 jsonDict["ddoc"] = designDocumentID.bridge()
             #else
-                jsonDict["ddoc"] = designDocumentID as NSString
+                jsonDict["ddoc"] = designDocumentID
             #endif
         }
 
         #if os(Linux)
             jsonData = try NSJSONSerialization.data(withJSONObject:jsonDict.bridge())
         #else
-            jsonData = try JSONSerialization.data(withJSONObject:jsonDict as NSDictionary)
+            jsonData = try JSONSerialization.data(withJSONObject: jsonDict)
         #endif
     }
     
@@ -211,7 +211,7 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
      used when using the `$text` operator in queries.
      - parameter defaultFieldAnalyzerEnabled: Determines if the default field should be enabled.
      - parameter selector: A selector which documents should match before being indexed.
-     - paerameter designDocumentID : the ID of the design document where the index should be saved, 
+     - parameter designDocumentID : the ID of the design document where the index should be saved,
      if `nil` the server will create a new design document with a generated ID.
      - parameter completionHandler: optional handler to run when the operation completes.
      */
@@ -220,9 +220,9 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
                       fields: [TextIndexField]? = nil,
         defaultFieldAnalyzer: String? = nil,
          defaultFieldEnabled: Bool? = nil,
-                    selector: [String:AnyObject]? = nil,
+                    selector: [String:Any]? = nil,
                    designDocumentID: String? = nil,
-           completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)? = nil) {
+           completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)? = nil) {
         self.databaseName = databaseName
         self.completionHandler = completionHandler
         self.name = name
@@ -234,7 +234,7 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
     }
     
     public let databaseName: String
-    public let completionHandler: ((response: [String : AnyObject]?, httpInfo: HTTPInfo?, error: Error?) -> Void)?
+    public let completionHandler: ((_ response: [String : Any]?, _ httpInfo: HTTPInfo?, _ error: Error?) -> Void)?
     
     /**
      The name of the index
@@ -262,7 +262,7 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
     /**
      The selector that limits the documents in the index.
      */
-    public let selector: [String: AnyObject]?
+    public let selector: [String: Any]?
     
     /**
      The name of the design doc this index should be included with
@@ -298,9 +298,9 @@ public class CreateTextQueryIndexOperation: CouchDatabaseOperation, MangoOperati
     public func serialise() throws {
 
         do {
-            var jsonDict: [String: AnyObject] = [:]
-            var index: [String: AnyObject] = [:]
-            var defaultField: [String: AnyObject] = [:]
+            var jsonDict: [String: Any] = [:]
+            var index: [String: Any] = [:]
+            var defaultField: [String: Any] = [:]
             
             #if os(Linux)
                 jsonDict["type"] = "text".bridge()

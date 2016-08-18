@@ -59,10 +59,10 @@ extension XCTestCase {
 
     }
 
-    func createTestDocuments(count: Int) -> [[String: AnyObject]] {
-        var docs = [[String: AnyObject]]()
+    func createTestDocuments(count: Int) -> [[String: Any]] {
+        var docs = [[String: Any]]()
         for _ in 1 ... count {
-            docs.append(["data": NSUUID().uuidString.lowercased() as NSString])
+            docs.append(["data": NSUUID().uuidString.lowercased()])
         }
 
         return docs
@@ -133,33 +133,35 @@ extension XCTestCase {
             
         }
     }
+    
 }
 
 struct JSONResponse: ExpressibleByArrayLiteral, ExpressibleByDictionaryLiteral {
     
-    let array: NSArray?
-    let dictionary: NSDictionary?
+    let array: [Any]?
+    let dictionary: [String:Any]?
     
-    init(arrayLiteral:AnyObject...){
-        array = NSArray(arrayLiteral: arrayLiteral)
+    init(arrayLiteral:Any...){
+        
+        array = Array<Any>(arrayLiteral: arrayLiteral)
         dictionary = nil
     }
     
-    init(dictionaryLiteral elements: (String, AnyObject)...){
+    init(dictionaryLiteral elements: (String, Any)...){
         array = nil
-        let mutableDict = NSMutableDictionary()
+        var mutableDict: [String:Any] = [:]
         for (key, value) in elements {
-            mutableDict.setValue(value, forKey: key)
+            mutableDict[key] = value
         }
-        dictionary = NSDictionary(dictionary: mutableDict)
+        dictionary = mutableDict
     }
     
-    init(dictionary: [String:AnyObject]){
-        self.dictionary = dictionary as NSDictionary
+    init(dictionary: [String: Any]){
+        self.dictionary = dictionary
         self.array = nil
     }
     
-    var json: AnyObject {
+    var json: Any {
         get {
             if let array = array {
                 return array
@@ -169,7 +171,7 @@ struct JSONResponse: ExpressibleByArrayLiteral, ExpressibleByDictionaryLiteral {
                 return dictionary
             }
             
-            return NSDictionary() // return empty dict just in case all else fails.
+            return Dictionary<String,Any>() // return empty dict just in case all else fails.
         }
     }
 
@@ -203,7 +205,7 @@ extension Array where Element: NSURLQueryItem {
 
 class TestSettings {
 
-    private let settings: [String: AnyObject];
+    fileprivate let settings: [String: Any];
     private static var instance: TestSettings?
 
     private init() {
@@ -212,7 +214,7 @@ class TestSettings {
         let testSettingsPath = bundle.path(forResource: "TestSettings", ofType: "plist")
 
         if let testSettingsPath = testSettingsPath,
-            let settingsDict = NSDictionary(contentsOfFile: testSettingsPath) as? [String: AnyObject] {
+            let settingsDict = NSDictionary(contentsOfFile: testSettingsPath) as? [String: Any] {
                 settings = settingsDict
         } else {
                 settings = [:]
