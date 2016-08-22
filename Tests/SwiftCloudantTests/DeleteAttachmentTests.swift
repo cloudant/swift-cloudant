@@ -83,6 +83,25 @@ class DeleteAttachmentTests : XCTestCase {
         }
         client?.add(operation: delete)
         self.waitForExpectations(timeout: 10.0, handler: nil)
+        
+        let getExpectation = self.expectation(description: "Get deleted Attachment")
+        
+        //make sure that the attachment has been deleted.
+        let get = ReadAttachmentOperation(name: "myAwesomeAttachment", documentID: docId, databaseName: dbName!){
+            (response, info, error) in
+            XCTAssertNotNil(error)
+            XCTAssertNotNil(info)
+            XCTAssertNotNil(response)
+            
+            if let info = info {
+                XCTAssertEqual(404, info.statusCode)
+            }
+            getExpectation.fulfill()
+        }
+        
+        client?.add(operation: get)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
+        
     }
     
     func testDeleteAttachmentHTTPOperationProperties(){
