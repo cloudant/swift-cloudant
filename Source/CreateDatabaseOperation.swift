@@ -18,6 +18,18 @@ import Foundation
 
 /**
  An operation to create a database in a CouchDB instance.
+ 
+ Example usage:
+ ```
+ let createDB = CreateDatabaseOperation(name: "exampleDB") { (response, info, error) in
+     if let error = error {
+         // handle the error case
+     } else {
+        //handle sucessful creation.
+     }
+ 
+ }
+ client.add(operation: createDB)
  */
 public class CreateDatabaseOperation: CouchOperation, JSONOperation {
 
