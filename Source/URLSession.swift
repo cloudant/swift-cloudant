@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import Dispatch
 
 /**
  A protocol which denotes a HTTP interceptor.
@@ -94,6 +95,43 @@ public struct HTTPInterceptorContext {
 }
 
 /**
+ Configuration for `InterceptableSession`
+ */
+internal struct InterceptableSessionConfiguration {
+    /**
+     The maximum number of retries the session should make before returning the result of an HTTP request
+     */
+    internal var maxRetries: UInt
+    /**
+     The number of times to back off from making requests when a 429 response is encountered
+     */
+    internal var backOffRetries: UInt
+    /**
+     Should the session back off, if false the session will not back off and retry automatically.
+     */
+    internal var shouldBackOff: Bool
+    
+    /** 
+     The initial value to use when backing off.
+    */
+    internal var initialBackOff: DispatchTimeInterval
+    
+    internal var requestInterceptors: [HTTPInterceptor]
+    
+    init(maxRetries: UInt = 10, shouldBackOff:Bool,
+         backOffRetries: UInt = 3,
+         initialBackOff: DispatchTimeInterval = .milliseconds(250),
+         requestInterceptors: [HTTPInterceptor] = []){
+        
+        self.maxRetries = maxRetries
+        self.shouldBackOff = shouldBackOff
+        self.backOffRetries = backOffRetries
+        self.initialBackOff = initialBackOff
+        self.requestInterceptors = requestInterceptors
+    }
+}
+
+/**
  A class which encapsulates HTTP requests. This class allows requests to be transparently retried.
  */
 public class URLSessionTask {
@@ -101,6 +139,7 @@ public class URLSessionTask {
     fileprivate var inProgressTask: URLSessionDataTask
     fileprivate let session: URLSession
     fileprivate var remainingRetries: UInt = 10
+    fileprivate var remainingBackOffRetries: UInt = 3
     fileprivate let delegate: InterceptableSessionDelegate
 
     public var state: Foundation.URLSessionTask.State {
@@ -143,7 +182,7 @@ public class URLSessionTask {
  */
 internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, URLSessionStreamDelegate {
 
-    private lazy var session: URLSession = { () -> URLSession in
+    internal lazy var session: URLSession = { () -> URLSession in
         let config = URLSessionConfiguration.default
         #if os(Linux)
             config.httpAdditionalHeaders = ["User-Agent".bridge() : InterceptableSession.userAgent().bridge()]
@@ -157,9 +196,13 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
     
     private var taskDict: [Foundation.URLSessionTask: URLSessionTask] = [:]
     
+    private let delegateQueue = DispatchQueue(label: "com.cloudant.swift.interceptable.session.delegate", attributes: .concurrent)
+    
+    private let configuration: InterceptableSessionConfiguration
     
     convenience override init() {
-        self.init(delegate: nil, requestInterceptors: [])
+        self.init(delegate: nil, configuration: InterceptableSessionConfiguration(shouldBackOff: false))
+        
     }
 
     /**
@@ -167,8 +210,9 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
      - parameter delegate: a delegate to use for this session.
      - parameter requestInterceptors: Interceptors to use with this session.
      */
-    init(delegate: URLSessionDelegate?, requestInterceptors: Array<HTTPInterceptor>) {
-        interceptors = requestInterceptors
+    init(delegate: URLSessionDelegate?, configuration: InterceptableSessionConfiguration) {
+        interceptors = configuration.requestInterceptors
+        self.configuration = configuration
     }
 
     /**
@@ -187,6 +231,8 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
         
         let nsTask = self.session.dataTask(with: request)
         let task = URLSessionTask(session: session, request: request, inProgressTask: nsTask, delegate: delegate)
+        task.remainingRetries = configuration.maxRetries
+        task.remainingBackOffRetries = configuration.backOffRetries
         
         self.taskDict[nsTask] = task
         
@@ -219,34 +265,55 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
     internal func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
         // Retrieve the task from the dict.
         guard let task = taskDict[dataTask], let response = response as? HTTPURLResponse
-        else {
-            completionHandler(.cancel)
-            return
+            else {
+                completionHandler(.cancel)
+                return
         }
         
         var ctx = HTTPInterceptorContext(request: task.request, response: response, shouldRetry: false)
-        for interceptor in interceptors {
+        for interceptor in self.interceptors {
             ctx = interceptor.interceptResponse(in: ctx)
         }
         
-        if ctx.shouldRetry  && task.remainingRetries > 0 {
-            task.remainingRetries -= 1
-            // retry the request.
-            ctx = HTTPInterceptorContext(request: task.request, response: nil, shouldRetry: false)
-            for interceptor in interceptors {
-                ctx = interceptor.interceptRequest(in: ctx)
-            }
-            taskDict.removeValue(forKey: task.inProgressTask)
-            task.inProgressTask = self.session.dataTask(with: ctx.request)
-            taskDict[task.inProgressTask] = task
-            task.resume()
+        let deadline: DispatchWallTime
+        if let statusCode = ctx.response?.statusCode,
+            statusCode == 429 && self.configuration.shouldBackOff && task.remainingBackOffRetries > 0 && task.remainingRetries > 0 {
+            task.remainingBackOffRetries -= 1
             
-            completionHandler(.cancel)
+            var backOffTime:DispatchTimeInterval = configuration.initialBackOff
+            for _ in 0...(configuration.backOffRetries - task.remainingBackOffRetries ) {
+                backOffTime = backOffTime * 2
+            }
+            deadline = DispatchWallTime.now() + backOffTime
+            ctx.shouldRetry = true // make sure we retry.
+            
         } else {
-            // pass the result back to the delegate.
-            task.delegate.received(response: response)
-            completionHandler(.allow)
+            deadline = DispatchWallTime.now()
         }
+        
+        self.delegateQueue.asyncAfter(wallDeadline: deadline) {
+            
+            if ctx.shouldRetry  && task.remainingRetries > 0 {
+                task.remainingRetries -= 1
+                // retry the request.
+                ctx = HTTPInterceptorContext(request: task.request, response: nil, shouldRetry: false)
+                for interceptor in self.interceptors {
+                    ctx = interceptor.interceptRequest(in: ctx)
+                }
+                self.taskDict.removeValue(forKey: task.inProgressTask)
+                task.inProgressTask = self.session.dataTask(with: ctx.request)
+                self.taskDict[task.inProgressTask] = task
+                task.resume()
+                
+                completionHandler(.cancel)
+            } else {
+                // pass the result back to the delegate.
+                task.delegate.received(response: response)
+                completionHandler(.allow)
+            }
+        }
+
+        
     }
     
     
@@ -283,4 +350,19 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
 
     }
 
+}
+
+fileprivate extension DispatchTimeInterval {
+    static fileprivate func *(interval: DispatchTimeInterval, multiple: Int) -> DispatchTimeInterval {
+        switch (interval){
+        case .microseconds(let value):
+            return .microseconds(value * multiple)
+        case .milliseconds(let value):
+            return .milliseconds(value * multiple)
+        case .nanoseconds(let value):
+            return .nanoseconds(value * multiple)
+        case .seconds(let value):
+            return .seconds(value * multiple)
+        }
+    }
 }
