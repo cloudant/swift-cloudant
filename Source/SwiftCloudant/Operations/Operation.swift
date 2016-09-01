@@ -62,9 +62,13 @@ public class Operation: Foundation.Operation, HTTPRequestOperation
         }
         set {
             if mExecuting != newValue {
-                willChangeValue(forKey: "isExecuting")
+                #if !os(Linux)
+                    willChangeValue(forKey: "isExecuting")
+                #endif
                 mExecuting = newValue
-                didChangeValue(forKey: "isExecuting")
+                #if !os(Linux)
+                    didChangeValue(forKey: "isExecuting")
+                #endif
             }
         }
     }
@@ -76,9 +80,13 @@ public class Operation: Foundation.Operation, HTTPRequestOperation
         }
         set {
             if mFinished != newValue {
-                willChangeValue(forKey: "isFinished")
+                #if !os(Linux)
+                    willChangeValue(forKey: "isFinished")
+                #endif
                 mFinished = newValue
-                didChangeValue(forKey: "isFinished")
+                #if !os(Linux)
+                    didChangeValue(forKey: "isFinished")
+                #endif
             }
         }
     }

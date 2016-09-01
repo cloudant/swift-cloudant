@@ -19,6 +19,13 @@ import XCTest
 @testable import SwiftCloudant
 
 class DeleteDocumentTests: XCTestCase {
+    
+    static var allTests = {
+        return [
+            ("testDocumentCanBeDeleted", testDocumentCanBeDeleted),
+            ("testDeleteDocumentOpCompletesWithoutCallback",testDeleteDocumentOpCompletesWithoutCallback)]
+    }()
+    
     var dbName: String? = nil
     var client: CouchDBClient? = nil
 

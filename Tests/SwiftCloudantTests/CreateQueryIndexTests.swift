@@ -21,6 +21,22 @@ import XCTest
 
 public class CreateQueryIndexTests : XCTestCase {
     
+    static var allTests = {
+        return [
+            ("testCanCreateTextIndexes", testCanCreateTextIndexes),
+            ("testCanCreateJSONIndexes",testCanCreateJSONIndexes),
+            ("testJsonIndexRequestProperties",testJsonIndexRequestProperties),
+            ("testTextIndexRequestProperties",testTextIndexRequestProperties),
+            ("testJsonEmitsPresentFieldsMissingIndexName",testJsonEmitsPresentFieldsMissingIndexName),
+            ("testJsonEmitsPresentFieldsMissingddoc", testJsonEmitsPresentFieldsMissingddoc),
+            ("testTextIndexEmitsPresentFieldsMissingIndexName", testTextIndexEmitsPresentFieldsMissingIndexName),
+            ("testTextIndexEmitsPresentFieldsMissingFields", testTextIndexEmitsPresentFieldsMissingFields),
+            ("testTextIndexEmitsPresentFieldsMissingddoc", testTextIndexEmitsPresentFieldsMissingddoc),
+            ("testTextIndexEmitsPresentFieldsMissingddoc",testTextIndexEmitsPresentFieldsMissingddoc),
+            ("testTextIndexEmitsPresentFieldsMissingDefaultFieldEnabled", testTextIndexEmitsPresentFieldsMissingDefaultFieldEnabled),
+            ("testTextIndexEmitsPresentFieldsMissingDefaultFieldEnabled",testTextIndexEmitsPresentFieldsMissingDefaultFieldEnabled)]
+    }()
+    
     var client: CouchDBClient? = nil;
     var dbName: String? = nil
     

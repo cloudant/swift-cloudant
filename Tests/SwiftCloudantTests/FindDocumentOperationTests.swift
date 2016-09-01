@@ -14,10 +14,23 @@
 //  and limitations under the License.
 //
 
+import Foundation
 import XCTest
 @testable import SwiftCloudant
 
 class FindDocumentOperationTests: XCTestCase {
+    
+    static var allTests = {
+        return [
+            ("testInvalidSelector", testInvalidSelector),
+            ("testCanQueryDocsOnlySelector",testCanQueryDocsOnlySelector),
+            ("testCanQueryDocsAllValuesSet",testCanQueryDocsAllValuesSet),
+            ("testCanQueryDocsAllValuesSet",testOperationRequestWithSortDirectionAsc),
+            ("testOperationRequestWithSortDirectionDesc",testOperationRequestWithSortDirectionDesc),
+            ("testBookmarkReturnedFromTextQuery",testBookmarkReturnedFromTextQuery),
+            ("testValuesOmittedIfNotSet",testValuesOmittedIfNotSet),]
+    }()
+    
     var client: CouchDBClient? = nil;
     var dbName: String? = nil
     let response:[String: [[String: Any]]] = [    "docs" : [

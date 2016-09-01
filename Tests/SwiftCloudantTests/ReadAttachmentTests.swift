@@ -21,6 +21,12 @@ import XCTest
 
 class ReadAttachmentTests: XCTestCase {
     
+    static var allTests = {
+        return [
+            ("testReadAttachment", testReadAttachment),
+            ("testReadAttachmentProperties", testReadAttachmentProperties)]
+    }()
+    
     var dbName: String? = nil
     var client: CouchDBClient? = nil
     let docId: String = "PutAttachmentTests"

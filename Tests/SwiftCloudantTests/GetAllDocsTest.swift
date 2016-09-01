@@ -14,12 +14,35 @@
 //  and limitations under the License.
 //
 
-
+import Foundation
 import XCTest
 @testable import SwiftCloudant
 
 class GetAllDocsTest: XCTestCase {
-
+    
+    static var allTests = {
+        return [
+            ("testAllDocsValidationAllFieldsPresent", testAllDocsValidationAllFieldsPresent),
+            ("testValidationConfictsWithoutDocs",testValidationConfictsWithoutDocs),
+            ("testGenerateCorrectRequestAllOptions",testGenerateCorrectRequestAllOptions),
+            ("testGenerateRequestAscending",testGenerateRequestAscending),
+            ("testGenerateReuqestWithoutEndKey",testGenerateReuqestWithoutEndKey),
+            ("testGenerateReuqestWithoutDocs",testGenerateReuqestWithoutDocs),
+            ("testGenerateRequestWithoutConflicts",testGenerateRequestWithoutConflicts),
+            ("testGenerateRequestWitoutInclusiveEnd",testGenerateRequestWitoutInclusiveEnd),
+            ("testGenerateRequestWithoutKey",testGenerateRequestWithoutKey),
+            ("testGenerateRequestWithoutKeysWithKey",testGenerateRequestWithoutKeysWithKey),
+            ("testGenerateRequestWithoutSkip",testGenerateRequestWithoutSkip),
+            ("testGenerateRequestWithoutLimit",testGenerateRequestWithoutLimit),
+            ("testGenerateRequestWithoutStartKey",testGenerateRequestWithoutStartKey),
+            ("testGenerateRequestWithoutStartKeyDocId",testGenerateRequestWithoutStartKeyDocId),
+            ("testGenerateRequestWithoutEndKeyDocId",testGenerateRequestWithoutEndKeyDocId),
+            ("testGenerateRequestWithoutStale",testGenerateRequestWithoutStale),
+            ("testGenerateRequestUpdateAfter",testGenerateRequestUpdateAfter),
+            ("testEndToEndRequest",testEndToEndRequest),
+            ("testDocumentPayload",testDocumentPayload),]
+    }()
+    
     lazy var dbName: String = { return self.generateDBName()}()
     var client: CouchDBClient? = nil
     
@@ -34,7 +57,7 @@ class GetAllDocsTest: XCTestCase {
                 XCTAssertNotNil(response)
                 XCTAssertNotNil(httpInfo)
                 XCTAssertNil(error)
-            
+                
             }
             client?.add(operation: putDoc).waitUntilFinished()
         }
@@ -82,10 +105,10 @@ class GetAllDocsTest: XCTestCase {
                                           includeLastUpdateSequenceNumber: updateSeq,
                                           inclusiveEnd:inclusiveEnd,
                                           rowHandler: rowHandler
-                                          )  { (response, httpInfo, error) in
-                                                //do nothing.
-                                            }
-
+        )  { (response, httpInfo, error) in
+            //do nothing.
+        }
+        
         return allDocs
     }
     

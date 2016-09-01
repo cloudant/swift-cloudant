@@ -16,7 +16,23 @@
 
 import XCTest
 
-import SwiftCloudantTestSuite
+@testable import SwiftCloudantTests
 
-var tests: [XCTestCaseEntry] = [SwiftCloudantTestSuite.allTests()]
-XCTMain(tests)
+XCTMain( [
+testCase(CreateDatabaseTests.allTests),
+testCase(PutAttachmentTests.allTests),
+testCase(CreateQueryIndexTests.allTests),
+testCase(DeleteAttachmentTests.allTests),
+testCase(GetDocumentTests.allTests),
+testCase(InterceptorTests.allTests),
+testCase(ReadAttachmentTests.allTests),
+testCase(QueryViewTests.allTests),
+testCase(GetAllDatabasesTest.allTests),
+testCase(DeleteDocumentTests.allTests),
+testCase(GetAllDocsTest.allTests),
+testCase(InterceptableSessionTests.allTests),
+testCase(DeleteQueryIndexTests.allTests),
+testCase(FindDocumentOperationTests.allTests),
+testCase(BulkDocsTests.allTests),
+testCase(PutDocumentTests.allTests)])
+// XCTMain(tests)

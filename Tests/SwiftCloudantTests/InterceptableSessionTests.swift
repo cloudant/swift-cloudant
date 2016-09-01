@@ -24,6 +24,14 @@ let testCookieHeaderValue = "AuthSession=cm9vdDo1MEJCRkYwMjq0LO0ylOIwShrgt8y-Ukh
 
 class InterceptableSessionTests : XCTestCase {
     
+    static var allTests = {
+        return [
+            ("testInterceptableSessionBacksOff", testInterceptableSessionBacksOff),
+            ("testInterceptableSessionBackOffMax",testInterceptableSessionBackOffMax),
+            ("test429ConfiguredViaClient",test429ConfiguredViaClient),
+            ("testInterceptableSessionNoBackOff",testInterceptableSessionNoBackOff),
+            ("testBackSetHigherThanAllowedRetries",testBackSetHigherThanAllowedRetries),]
+    }()
     
     
     lazy var sessionConfig = {() -> URLSessionConfiguration in
