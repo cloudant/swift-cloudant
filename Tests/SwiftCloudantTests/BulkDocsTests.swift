@@ -21,6 +21,16 @@ import XCTest
 
 class BulkDocsTests : XCTestCase {
     
+    static var allTests = {
+        return [
+            ("testValidationOnlyDocs", testValidationOnlyDocs),
+            ("testValidationAllOrNothing",testValidationAllOrNothing),
+            ("testGeneratedPayloadAllOptions",testGeneratedPayloadAllOptions),
+            ("testGeneratedPayloadNewEdits",testGeneratedPayloadNewEdits),
+            ("testGeneratedPayloadAllOrNothing",testGeneratedPayloadAllOrNothing),
+            ("testCompleteRequest",testCompleteRequest),]
+    }()
+    
     var dbName: String? = nil
     var client: CouchDBClient? = nil
     let docs:[[String:Any]] = [["hello":"world"], ["foo": "bar"]]

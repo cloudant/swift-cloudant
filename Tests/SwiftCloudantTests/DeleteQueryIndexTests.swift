@@ -19,7 +19,16 @@ import XCTest
 @testable import SwiftCloudant
 
 public class DeleteQueryIndexTests: XCTestCase {
-	var client: CouchDBClient? = nil
+	
+    static var allTests = {
+        return [
+            ("testCanDeleteJSONIndex", testCanDeleteJSONIndex),
+            ("testCanDeleteTextIndex",testCanDeleteTextIndex),
+            ("testOperationPropertiesJSONIndex",testOperationPropertiesJSONIndex),
+            ("testOperationPropertiesTextIndex",testOperationPropertiesTextIndex),]
+    }()
+    
+    var client: CouchDBClient? = nil
     var dbName: String? = nil
     
     

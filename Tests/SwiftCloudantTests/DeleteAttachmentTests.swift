@@ -20,6 +20,12 @@ import XCTest
 
 class DeleteAttachmentTests : XCTestCase {
     
+    static var allTests = {
+        return [
+            ("testDeleteAttachment", testDeleteAttachment),
+            ("testDeleteAttachmentHTTPOperationProperties",testDeleteAttachmentHTTPOperationProperties),]
+    }()
+    
     var dbName: String? = nil
     var client: CouchDBClient? = nil
     let docId: String = "PutAttachmentTests"

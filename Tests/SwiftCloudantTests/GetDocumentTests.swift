@@ -20,6 +20,13 @@ import XCTest
 
 class GetDocumentTests: XCTestCase {
 
+    static var allTests = {
+        return [
+            ("testPutDocument", testPutDocument),
+            ("testGetDocument", testGetDocument),
+            ("testGetDocumentUsingDBAdd", testGetDocumentUsingDBAdd)]
+    }()
+    
     var dbName: String? = nil
     var client: CouchDBClient? = nil
 

@@ -70,11 +70,7 @@ public class PutDocumentOperation: CouchDatabaseOperation, JSONOperation {
     public let body: [String: Any]
 
     public func validate() -> Bool {
-        #if os(Linux)
-            return  NSJSONSerialization.isValidJSONObject(body!.bridge())
-        #else
-            return JSONSerialization.isValidJSONObject(body)
-        #endif
+        return JSONSerialization.isValidJSONObject(body)
     }
 
     public var method: String {
@@ -113,11 +109,7 @@ public class PutDocumentOperation: CouchDatabaseOperation, JSONOperation {
     }
     
     public func serialise() throws {
-        #if os(Linux)
-            data = try NSJSONSerialization.data(withJSONObject: body.bridge(), options: NSJSONWritingOptions())
-        #else
-             data = try JSONSerialization.data(withJSONObject: body)
-        #endif
+        data = try JSONSerialization.data(withJSONObject: body)
     }
 
 }

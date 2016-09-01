@@ -21,6 +21,10 @@ import XCTest
 
 public class GetAllDatabasesTest : XCTestCase {
     
+    static var allTests = {
+        return [
+            ("testListAllDbs", testListAllDbs),]
+    }()
     
     var dbName: String? = nil
     var client: CouchDBClient?
