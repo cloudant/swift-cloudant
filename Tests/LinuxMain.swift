@@ -34,5 +34,5 @@ testCase(InterceptableSessionTests.allTests),
 testCase(DeleteQueryIndexTests.allTests),
 testCase(FindDocumentOperationTests.allTests),
 testCase(BulkDocsTests.allTests),
-testCase(PutDocumentTests.allTests)])
-// XCTMain(tests)
+testCase(PutDocumentTests.allTests),
+testCase(GetChangesTests.allTests),])

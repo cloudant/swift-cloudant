@@ -23,6 +23,23 @@ import XCTest
 
 class GetChangesTests : XCTestCase {
     
+    static var allTests = {
+        return [
+            ("testChangesFeedDefaults", testChangesFeedDefaults),
+            ("testChangesFeedMixedQuery",testChangesFeedMixedQuery),
+            ("testRequestPropertiesDocIds",testRequestPropertiesDocIds),
+            ("testRequestPropertiesConflicts",testRequestPropertiesConflicts),
+            ("testRequestPropertiesDescending",testRequestPropertiesDescending),
+            ("testRequestPropertiesFilter",testRequestPropertiesFilter),
+            ("testRequestPropertiesIncludeDocs",testRequestPropertiesIncludeDocs),
+            ("testRequestPropertiesincludeAttachments",testRequestPropertiesincludeAttachments),
+            ("testRequestPropertiesIncludeAttachmentInfo",testRequestPropertiesIncludeAttachmentInfo),
+            ("testRequestPropertiesLimit",testRequestPropertiesLimit),
+            ("testReuqestPropertiesSince",testReuqestPropertiesSince),
+            ("testRequestPropertiesStyle",testRequestPropertiesStyle),
+            ("testRequestPropertiesView",testRequestPropertiesView),]
+    }()
+    
     var dbName: String? = nil
     var client: CouchDBClient? = nil
     
