@@ -20,52 +20,6 @@ import XCTest
 
 let testCookieHeaderValue = "AuthSession=cm9vdDo1MEJCRkYwMjq0LO0ylOIwShrgt8y-UkhI-c6BGw";
 
-class InterceptorTests: XCTestCase {
-    
-    var session: URLSession?
-    
-    override func setUp() {
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.protocolClasses = [CookieSession401.self, CookieSession200.self]
-        session = URLSession(configuration: configuration)
-    }
-
-    func testCookieInterceptorSucessfullGetsCookie() {
-        let cookieInterceptor = SessionCookieInterceptor(username: "username", password: "password", session: session!)
-
-        // create a context with a request which we can use
-        let url = URL(string: "http://username.cloudant.com")!
-        let request = URLRequest(url: url)
-
-        var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
-
-        ctx = cookieInterceptor.interceptRequest(in: ctx)
-
-        XCTAssertEqual(cookieInterceptor.cookie, testCookieHeaderValue)
-        XCTAssertEqual(cookieInterceptor.shouldMakeSessionRequest, true);
-        XCTAssertEqual(ctx.request.value(forHTTPHeaderField: "Cookie"), testCookieHeaderValue)
-
-    }
-
-    func testCookieInterceptorHandles401 () {
-        let cookieInterceptor = SessionCookieInterceptor(username: "username",
-                                                         password: "password",
-                                                         session: session!)
-
-        // create a context with a request which we can use
-        let url = URL(string: "http://username1.cloudant.com")!
-        let request = URLRequest(url: url)
-
-        var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
-
-        ctx = cookieInterceptor.interceptRequest(in: ctx)
-
-        XCTAssertNil(cookieInterceptor.cookie)
-        XCTAssertEqual(cookieInterceptor.shouldMakeSessionRequest, false);
-        XCTAssertNil(ctx.request.value(forHTTPHeaderField: "Cookie"))
-    }
-}
-
 class CookieSessionHTTPURLProtocol: URLProtocol {
     
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {

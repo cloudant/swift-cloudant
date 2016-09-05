@@ -18,25 +18,6 @@ import Foundation
 import Dispatch
 
 /**
- A protocol which denotes a HTTP interceptor.
- */
-public protocol HTTPInterceptor
-{
-    /**
-     Intercepts the HTTP request. This will only be run once per request.
-     - parameter context: the context for the request that is being intercepted.
-     - returns: the context for the next request interceptor to use.
-     */
-    func interceptRequest(in context: HTTPInterceptorContext) -> HTTPInterceptorContext
-    /**
-     Intercepts the HTTP response. This will only be run once per response.
-     - parameter context: the context for the response that is being intercepted.
-     - returns: the context for the next response interceptor to use.
-     */
-    func interceptResponse(in context: HTTPInterceptorContext) -> HTTPInterceptorContext
-}
-
-/**
     A delegate for receiving data and responses from a URL task.
  */
 internal protocol InterceptableSessionDelegate {
@@ -59,19 +40,6 @@ internal protocol InterceptableSessionDelegate {
      - parameter error: The error that occurred when making the request if any.
     */
     func completed(error: Swift.Error?)
-}
-
-// extension that implements default behvaiour, this does have limitations, for example
-// only classes can implement HTTPInterceptor due to way polymorphsim is handled.
-public extension HTTPInterceptor {
-
-    public func interceptRequest(in context: HTTPInterceptorContext) -> HTTPInterceptorContext {
-        return context;
-    }
-
-    public func interceptResponse(in context: HTTPInterceptorContext) -> HTTPInterceptorContext {
-        return context;
-    }
 }
 
 /**
@@ -116,18 +84,14 @@ internal struct InterceptableSessionConfiguration {
     */
     internal var initialBackOff: DispatchTimeInterval
     
-    internal var requestInterceptors: [HTTPInterceptor]
-    
     init(maxRetries: UInt = 10, shouldBackOff:Bool,
          backOffRetries: UInt = 3,
-         initialBackOff: DispatchTimeInterval = .milliseconds(250),
-         requestInterceptors: [HTTPInterceptor] = []){
+         initialBackOff: DispatchTimeInterval = .milliseconds(250)){
         
         self.maxRetries = maxRetries
         self.shouldBackOff = shouldBackOff
         self.backOffRetries = backOffRetries
         self.initialBackOff = initialBackOff
-        self.requestInterceptors = requestInterceptors
     }
 }
 
@@ -191,9 +155,6 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
         #endif
         return URLSession(configuration: config, delegate: self, delegateQueue: nil) }()
     
-    private let interceptors: Array<HTTPInterceptor>
-
-    
     private var taskDict: [Foundation.URLSessionTask: URLSessionTask] = [:]
     
     private let delegateQueue = DispatchQueue(label: "com.cloudant.swift.interceptable.session.delegate", attributes: .concurrent)
@@ -208,10 +169,8 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
     /**
      Creates an Interceptable session
      - parameter delegate: a delegate to use for this session.
-     - parameter requestInterceptors: Interceptors to use with this session.
      */
     init(delegate: URLSessionDelegate?, configuration: InterceptableSessionConfiguration) {
-        interceptors = configuration.requestInterceptors
         self.configuration = configuration
     }
 
@@ -222,13 +181,6 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
      - returns: A `URLSessionTask` representing the task for the `NSURLRequest`
      */
     internal func dataTask(request: URLRequest, delegate: InterceptableSessionDelegate) -> URLSessionTask {
-        // create the underlying task.
-        var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
-        
-        for interceptor in interceptors {
-            ctx = interceptor.interceptRequest(in: ctx)
-        }
-        
         let nsTask = self.session.dataTask(with: request)
         let task = URLSessionTask(session: session, request: request, inProgressTask: nsTask, delegate: delegate)
         task.remainingRetries = configuration.maxRetries
@@ -269,48 +221,31 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
                 completionHandler(.cancel)
                 return
         }
-        
-        var ctx = HTTPInterceptorContext(request: task.request, response: response, shouldRetry: false)
-        for interceptor in self.interceptors {
-            ctx = interceptor.interceptResponse(in: ctx)
-        }
+
         
         let deadline: DispatchWallTime
-        if let statusCode = ctx.response?.statusCode,
-            statusCode == 429 && self.configuration.shouldBackOff && task.remainingBackOffRetries > 0 && task.remainingRetries > 0 {
+        if response.statusCode == 429 && self.configuration.shouldBackOff && task.remainingBackOffRetries > 0 && task.remainingRetries > 0 {
             task.remainingBackOffRetries -= 1
+            task.remainingRetries -= 1
             
             var backOffTime:DispatchTimeInterval = configuration.initialBackOff
             for _ in 0...(configuration.backOffRetries - task.remainingBackOffRetries ) {
                 backOffTime = backOffTime * 2
             }
             deadline = DispatchWallTime.now() + backOffTime
-            ctx.shouldRetry = true // make sure we retry.
+            
+            self.taskDict.removeValue(forKey: task.inProgressTask)
+            task.inProgressTask = self.session.dataTask(with: task.request)
+            self.taskDict[task.inProgressTask] = task
+            completionHandler(.cancel)
+            
+            self.delegateQueue.asyncAfter(wallDeadline: deadline) {
+                task.resume()
+            }
             
         } else {
-            deadline = DispatchWallTime.now()
-        }
-        
-        self.delegateQueue.asyncAfter(wallDeadline: deadline) {
-            
-            if ctx.shouldRetry  && task.remainingRetries > 0 {
-                task.remainingRetries -= 1
-                // retry the request.
-                ctx = HTTPInterceptorContext(request: task.request, response: nil, shouldRetry: false)
-                for interceptor in self.interceptors {
-                    ctx = interceptor.interceptRequest(in: ctx)
-                }
-                self.taskDict.removeValue(forKey: task.inProgressTask)
-                task.inProgressTask = self.session.dataTask(with: ctx.request)
-                self.taskDict[task.inProgressTask] = task
-                task.resume()
-                
-                completionHandler(.cancel)
-            } else {
-                // pass the result back to the delegate.
-                task.delegate.received(response: response)
-                completionHandler(.allow)
-            }
+            task.delegate.received(response: response)
+            completionHandler(.allow)
         }
 
         
