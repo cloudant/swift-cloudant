@@ -88,13 +88,11 @@ public class CouchDBClient {
         self.password = password
         queue = OperationQueue()
         
-        // NOTE: TODO: With the removal of interceptors, authentication no longer works.
-        // this will be added back in when cookie support is added to underlying 
-        // InterceptableSession, maybe it should get renamed too?
-        
         let sessionConfiguration = InterceptableSessionConfiguration(shouldBackOff: configuration.shouldBackOff,
                                                                      backOffRetries: configuration.backOffAttempts,
-                                                                     initialBackOff: configuration.initialBackOff)
+                                                                     initialBackOff: configuration.initialBackOff,
+                                                                     username: username,
+                                                                     password: password)
         
         self.session = InterceptableSession(delegate: nil, configuration: sessionConfiguration)
 
