@@ -1,3 +1,17 @@
+# 0.6.0 (2016-09-16)
+
+- [NEW] Support for Swift 3.0 Release for Darwin Platforms.
+- [NEW] New `PutBulkDocsOperation` API.
+- [NEW] Support for backing off when a 429 status code is encountered, optionally enabled by using
+   `ClientConfiguration` struct.
+- [NEW] New `GetChangesOperation` API.
+- [NEW] New `ViewPager` API.
+- [FIXED] Correctly handle differences between CouchDb and Cloudant for cookie expiration.
+
+# 0.5.0 
+
+- [NEW] Support Swift SNAPSHOT 2016-07-26
+
 # 0.4.0 (2016-07-28)
 
 - [NEW] New `GetAllDocs` API.
