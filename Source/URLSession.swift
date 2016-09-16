@@ -18,25 +18,6 @@ import Foundation
 import Dispatch
 
 /**
- A protocol which denotes a HTTP interceptor.
- */
-public protocol HTTPInterceptor
-{
-    /**
-     Intercepts the HTTP request. This will only be run once per request.
-     - parameter context: the context for the request that is being intercepted.
-     - returns: the context for the next request interceptor to use.
-     */
-    func interceptRequest(in context: HTTPInterceptorContext) -> HTTPInterceptorContext
-    /**
-     Intercepts the HTTP response. This will only be run once per response.
-     - parameter context: the context for the response that is being intercepted.
-     - returns: the context for the next response interceptor to use.
-     */
-    func interceptResponse(in context: HTTPInterceptorContext) -> HTTPInterceptorContext
-}
-
-/**
     A delegate for receiving data and responses from a URL task.
  */
 internal protocol InterceptableSessionDelegate {
@@ -59,19 +40,6 @@ internal protocol InterceptableSessionDelegate {
      - parameter error: The error that occurred when making the request if any.
     */
     func completed(error: Swift.Error?)
-}
-
-// extension that implements default behvaiour, this does have limitations, for example
-// only classes can implement HTTPInterceptor due to way polymorphsim is handled.
-public extension HTTPInterceptor {
-
-    public func interceptRequest(in context: HTTPInterceptorContext) -> HTTPInterceptorContext {
-        return context;
-    }
-
-    public func interceptResponse(in context: HTTPInterceptorContext) -> HTTPInterceptorContext {
-        return context;
-    }
 }
 
 /**
@@ -98,6 +66,7 @@ public struct HTTPInterceptorContext {
  Configuration for `InterceptableSession`
  */
 internal struct InterceptableSessionConfiguration {
+    
     /**
      The maximum number of retries the session should make before returning the result of an HTTP request
      */
@@ -116,31 +85,41 @@ internal struct InterceptableSessionConfiguration {
     */
     internal var initialBackOff: DispatchTimeInterval
     
-    internal var requestInterceptors: [HTTPInterceptor]
+    internal var username: String?
+    
+    internal var password: String?
     
     init(maxRetries: UInt = 10, shouldBackOff:Bool,
          backOffRetries: UInt = 3,
          initialBackOff: DispatchTimeInterval = .milliseconds(250),
-         requestInterceptors: [HTTPInterceptor] = []){
+         username: String? = nil,
+         password: String? = nil ){
         
         self.maxRetries = maxRetries
         self.shouldBackOff = shouldBackOff
         self.backOffRetries = backOffRetries
         self.initialBackOff = initialBackOff
-        self.requestInterceptors = requestInterceptors
+        self.username = username
+        self.password = password
     }
 }
 
 /**
  A class which encapsulates HTTP requests. This class allows requests to be transparently retried.
  */
-public class URLSessionTask {
+internal class URLSessionTask {
     fileprivate let request: URLRequest
     fileprivate var inProgressTask: URLSessionDataTask
     fileprivate let session: URLSession
     fileprivate var remainingRetries: UInt = 10
     fileprivate var remainingBackOffRetries: UInt = 3
     fileprivate let delegate: InterceptableSessionDelegate
+    
+    //This  is for caching before delivering the response to the delegate in the event a 401/403 is
+    // encountered.
+    fileprivate var response: HTTPURLResponse? = nil
+    // Caching of the data before being delivered to the delegate in the event of a 401/403 response.
+    fileprivate var data: Data? = nil
 
     public var state: Foundation.URLSessionTask.State {
         get {
@@ -189,16 +168,21 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
         #else
             config.httpAdditionalHeaders = [("User-Agent" as NSString) as AnyHashable: InterceptableSession.userAgent()]
         #endif
+        config.httpCookieAcceptPolicy = .onlyFromMainDocumentDomain
+        config.httpCookieStorage = .shared
         return URLSession(configuration: config, delegate: self, delegateQueue: nil) }()
-    
-    private let interceptors: Array<HTTPInterceptor>
-
     
     private var taskDict: [Foundation.URLSessionTask: URLSessionTask] = [:]
     
     private let delegateQueue = DispatchQueue(label: "com.cloudant.swift.interceptable.session.delegate", attributes: .concurrent)
     
     private let configuration: InterceptableSessionConfiguration
+    
+    private var isFirstRequest:Bool = true
+    
+    private let sessionRequestBody: Data? // This will be the body sent to _session.
+    
+    private var shouldMakeCookieRequest: Bool = true
     
     convenience override init() {
         self.init(delegate: nil, configuration: InterceptableSessionConfiguration(shouldBackOff: false))
@@ -208,11 +192,20 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
     /**
      Creates an Interceptable session
      - parameter delegate: a delegate to use for this session.
-     - parameter requestInterceptors: Interceptors to use with this session.
+     - parameter configuration: The configuration for this session.
      */
     init(delegate: URLSessionDelegate?, configuration: InterceptableSessionConfiguration) {
-        interceptors = configuration.requestInterceptors
         self.configuration = configuration
+        
+        if let username = configuration.username, let password = configuration.password {
+            let encodedUsername = username.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics)!
+            let encodedPassword = password.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics)!
+            
+            let payload = "name=\(encodedUsername)&password=\(encodedPassword)"
+            sessionRequestBody = payload.data(using: .ascii)!
+        } else {
+            sessionRequestBody = nil;
+        }
     }
 
     /**
@@ -222,13 +215,16 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
      - returns: A `URLSessionTask` representing the task for the `NSURLRequest`
      */
     internal func dataTask(request: URLRequest, delegate: InterceptableSessionDelegate) -> URLSessionTask {
-        // create the underlying task.
-        var ctx = HTTPInterceptorContext(request: request, response: nil, shouldRetry: false)
         
-        for interceptor in interceptors {
-            ctx = interceptor.interceptRequest(in: ctx)
+        // Only request another cookie **if** cookie auth is enabled **and** it is the first request
+        // for this session, renewals will be handled as tasks complete.
+        if let _ = sessionRequestBody, let url = request.url, self.isFirstRequest {
+            self.isFirstRequest = false
+            requestCookie(url: url)
         }
         
+        
+        // create the underlying task.
         let nsTask = self.session.dataTask(with: request)
         let task = URLSessionTask(session: session, request: request, inProgressTask: nsTask, delegate: delegate)
         task.remainingRetries = configuration.maxRetries
@@ -245,78 +241,200 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
         else {
                 return
         }
+      
         
-        mTask.delegate.completed(error: error)
-        // remove the task from the dict so it can be released.
-        taskDict.removeValue(forKey: task)
+        // We need to dispatch onto the delegate queue because
+        // otherwise we block the delegate queue for the underlying URLSession
+        // which will cause 10 minute dead lock whenever we need to renew the cookie.
+        // The entire method content is dispatched the seperate delegate queue because this also allows
+        // a larger amount of work to be carried out through completion handlers for
+        // opertions that will be driven the `completed` delegate method. It is safe to dispatch
+        // to our delegate queue because it is a concurrent queue, so blocking for a cookie request
+        // will not result in a blocked client.
+        self.delegateQueue.async {
+            
+            // we have a caached response and data, we need to inspect the data to see if we need to renew
+            // the cookie.
+            if let response = mTask.response, let data = mTask.data {
+                let json = try? JSONSerialization.jsonObject(with: data)
+                if let json =  json as? [String: Any],
+                    let  errorMessage = json["error"] as? String,
+                    ( errorMessage == "credentials_expired" || response.statusCode == 401 ) { // only 403 may have this message.
+                    // we need to get a new cookie and retry the request.
+                    self.requestCookie(url: mTask.request.url!)
+                    
+                    //clear the task cache
+                    mTask.data = nil;
+                    mTask.response = nil;
+                    
+                    let nsTask = self.session.dataTask(with: mTask.request)
+                    self.taskDict[nsTask] = mTask
+                    mTask.inProgressTask = nsTask
+                    nsTask.resume()
+                    return
+                }
+                
+                // unless we return out, we deliver the cached response and data.
+                mTask.delegate.received(response: response)
+                mTask.delegate.received(data: data)
+                
+            }
+            
+            
+            mTask.delegate.completed(error: error)
+            // remove the task from the dict so it can be released.
+            self.taskDict.removeValue(forKey: task)
+        }
     }
     
     internal func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        // yay datas
         guard let task = taskDict[dataTask]
         else {
             // perhaps we should also cancel the task if we fail to look it up.
             return
         }
         
-        task.delegate.received(data: data)
+        // if the cached response is present in the task, then we need 
+        // cache the data being reccieved from the server, otherwise pass it on.
+        if let _ = task.response {
+            if let _ = task.data {
+                task.data?.append(data)
+            } else {
+                task.data = data
+            }
+        } else {
+            task.delegate.received(data: data)
+        }
     }
     
     internal func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
         // Retrieve the task from the dict.
         guard let task = taskDict[dataTask], let response = response as? HTTPURLResponse
             else {
-                completionHandler(.cancel)
+                completionHandler(.allow)
                 return
         }
         
-        var ctx = HTTPInterceptorContext(request: task.request, response: response, shouldRetry: false)
-        for interceptor in self.interceptors {
-            ctx = interceptor.interceptResponse(in: ctx)
-        }
-        
-        let deadline: DispatchWallTime
-        if let statusCode = ctx.response?.statusCode,
-            statusCode == 429 && self.configuration.shouldBackOff && task.remainingBackOffRetries > 0 && task.remainingRetries > 0 {
-            task.remainingBackOffRetries -= 1
+        if task.remainingRetries > 0 {
             
-            var backOffTime:DispatchTimeInterval = configuration.initialBackOff
-            for _ in 0...(configuration.backOffRetries - task.remainingBackOffRetries ) {
-                backOffTime = backOffTime * 2
-            }
-            deadline = DispatchWallTime.now() + backOffTime
-            ctx.shouldRetry = true // make sure we retry.
-            
-        } else {
-            deadline = DispatchWallTime.now()
-        }
-        
-        self.delegateQueue.asyncAfter(wallDeadline: deadline) {
-            
-            if ctx.shouldRetry  && task.remainingRetries > 0 {
+            if response.statusCode == 429 && self.configuration.shouldBackOff && task.remainingBackOffRetries > 0 {
+                task.remainingBackOffRetries -= 1
                 task.remainingRetries -= 1
-                // retry the request.
-                ctx = HTTPInterceptorContext(request: task.request, response: nil, shouldRetry: false)
-                for interceptor in self.interceptors {
-                    ctx = interceptor.interceptRequest(in: ctx)
+                
+                let deadline: DispatchWallTime
+                
+                var backOffTime:DispatchTimeInterval = configuration.initialBackOff
+                // calculate the doubling back off.
+                for _ in 0...(configuration.backOffRetries - task.remainingBackOffRetries ) {
+                    backOffTime = backOffTime * 2
                 }
+                deadline = DispatchWallTime.now() + backOffTime
+                
+                // backing off cancel the current request and then make the next one,
+                // retry the request.
                 self.taskDict.removeValue(forKey: task.inProgressTask)
-                task.inProgressTask = self.session.dataTask(with: ctx.request)
+                task.inProgressTask = self.session.dataTask(with: task.request)
                 self.taskDict[task.inProgressTask] = task
-                task.resume()
                 
                 completionHandler(.cancel)
+                
+                self.delegateQueue.asyncAfter(wallDeadline: deadline) {
+                    task.resume()
+                }
+                
+            } else if  response.statusCode == 401 || response.statusCode == 403 {
+                // response delivery needs to be delayed.
+                // if the 401 or 403 are the results of the cookie being expired, the request will be repeated
+                task.response = response
+                completionHandler(.allow)
             } else {
-                // pass the result back to the delegate.
+                
+                // request was successful, URL Session will save cookies we can send the response straight through
                 task.delegate.received(response: response)
                 completionHandler(.allow)
             }
+        } else {
+            //URL Session will save cookies we can send the response straight through
+            task.delegate.received(response: response)
+            completionHandler(.allow)
         }
-
         
     }
     
-    
+    /**
+     Makes a synchronous request to the `_session` endpoint to start a session with the server.
+     This function will wait 600 seconds
+     */
+    private func requestCookie(url: URL) {
+        
+        guard shouldMakeCookieRequest else { return }
+        
+        let components = NSURLComponents(url: url, resolvingAgainstBaseURL: false)!
+        components.path = "/_session"
+        
+        
+        var request = URLRequest(url: components.url!)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        request.httpBody = sessionRequestBody
+        
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let task = self.session.dataTask(with: request, completionHandler: { (data1, response, error) in
+            
+            //defer the semaphore.
+            defer {semaphore.signal()}
+            
+            guard let data = data1, let response = response as? HTTPURLResponse, error == nil
+                else  {
+                    // failed to get the cookie should log something probably.
+                    NSLog("Failed to get response from server")
+                    return
+            }
+            
+            if response.statusCode / 100 == 2{
+            
+                do {
+                    // Only check for ok:true, https://issues.apache.org/jira/browse/COUCHDB-1356
+                    // means we cannot check that the name returned is the one we sent.
+                    if let json = try JSONSerialization.jsonObject(with: data) as? [String : Any]{
+                        if let ok = json["ok"] as? Bool, ok {
+                            // everything seems to match up here,
+                            // URL Session will save cookies we can send the response straight through
+                            NSLog("Cookie request successful")
+                        } else {
+                            NSLog("ok:true was not present in response dict, despite 2xx status code.")
+                        }
+                        
+                    } else {
+                        // we didn't get ok true, but got a successful response odd state, 
+                        // probably best to log it and make it so we don't request the cookie again.
+                        NSLog("Cookie request failed, response was not a JSON dictionary")
+                    }
+                    
+                } catch {
+                    // log the error from the deserialisation, this is an odd state, we should
+                    // probably not make cookie request again.
+                    NSLog("Failed to deserialise the _session response")
+                }
+                
+            } else if response.statusCode / 100 == 5 {
+                NSLog("Received 500 for server for _session reqiest.")
+            } else if response.statusCode == 401 {
+                // creds error.
+                self.shouldMakeCookieRequest = false
+                NSLog("Credentials are incorrect, cookie authentication will not be attempted again for this session");
+            } else {
+                self.shouldMakeCookieRequest = false
+                NSLog("Could not get cookie form the server, received status code: \(response.statusCode)")
+            }
+        })
+        task.resume()
+        // we should wait for the task to come back before continuting.
+        // we also don't really care if it timed out maybe we should?.
+        let _ = semaphore.wait(wallTimeout: DispatchWallTime.now() + .seconds(600))
+    }
 
     deinit {
         self.session.finishTasksAndInvalidate()
@@ -349,7 +467,6 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
         return "\(bundleDisplayName!)/\(bundleVersionString!)/\(platform)/\(osVersion))"
 
     }
-
 }
 
 fileprivate extension DispatchTimeInterval {

@@ -87,19 +87,12 @@ public class CouchDBClient {
         self.username = username
         self.password = password
         queue = OperationQueue()
-        let interceptors: [HTTPInterceptor]
-
-        if let username = username, let password = password {
-            let cookieInterceptor = SessionCookieInterceptor(username: username, password: password)
-            interceptors = [cookieInterceptor]
-        } else {
-            interceptors = []
-        }
         
         let sessionConfiguration = InterceptableSessionConfiguration(shouldBackOff: configuration.shouldBackOff,
                                                                      backOffRetries: configuration.backOffAttempts,
                                                                      initialBackOff: configuration.initialBackOff,
-                                                              requestInterceptors: interceptors)
+                                                                     username: username,
+                                                                     password: password)
         
         self.session = InterceptableSession(delegate: nil, configuration: sessionConfiguration)
 
