@@ -60,7 +60,7 @@ $ swift package generate-xcodeproj
 Production source files are stored in the `Source` tree with tests stored in the
 `Tests` tree.
 
-`Tests/SwiftCloudant` contains all the tests for the `SwiftCloudant` module.
+`Tests/SwiftCloudantTests` contains all the tests for the `SwiftCloudant` module.
 
 ### Test Configuration
 
