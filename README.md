@@ -1,6 +1,6 @@
 # swift-cloudant
 
-**This is an experimental Cloudant client library written in Swift. It is not supported.**
+**SwiftCloudant is not currently supported.**
 
 **Applications use swift-cloudant to store, index and query remote
 JSON data on Cloudant or CouchDB.**
