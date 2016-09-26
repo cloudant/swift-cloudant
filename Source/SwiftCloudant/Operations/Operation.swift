@@ -174,6 +174,9 @@ public class Operation: Foundation.Operation, HTTPRequestOperation
         self.executor = nil // break the cycle.
         self.isExecuting = false
         self.isFinished = true
+        #if os(Linux)
+            self.finish()
+        #endif
     }
 
     final override public func cancel() {
