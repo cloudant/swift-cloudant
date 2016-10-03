@@ -1,7 +1,5 @@
 # swift-cloudant
 
-**SwiftCloudant is not currently supported.**
-
 **Applications use swift-cloudant to store, index and query remote
 JSON data on Cloudant or CouchDB.**
 
@@ -19,11 +17,35 @@ This is an early-release version of the library, with support for the following 
 - Getting documents by doc ID.
 - Updating and deleting documents.
 - Creating and deleting databases.
-
+- Changes Feed operations
+- Creating, updating and deleting of attachments.
+- Querying views.
+- Creating, deleting and querying indexes.
 
 We will be rounding out the feature set in upcoming releases.
 
 **Currently it does not support being called from Objective-C.**
+
+## Support
+
+`SwiftCloudant` is supported, however since it is an early release it is
+on a "best effort" basis.
+
+### Platforms
+
+Currently Swift Cloudant suppports:
+
+- macOS
+
+
+Swift Cloudant is unsupported on:
+
+- iOS (should work, but hasn't been tested)
+- tvOS
+- watchOS
+- Linux (see issue [#121][linux] for progress updates)
+
+[linux]:https://github.com/cloudant/swift-cloudant/issues/121
 
 ## Using in your project
 
