@@ -1,4 +1,7 @@
 # swift-cloudant
+[![Version](http://cocoapod-badges.herokuapp.com/v/SwiftCloudant/badge.png)](http://cocoadocs.org/docsets/SwiftCloudant)
+[![Platform](http://cocoapod-badges.herokuapp.com/p/CDTDatastore/SwiftCloudant.png)](http://cocoadocs.org/docsets/SwiftCloudant)
+[![Build Status](https://travis-ci.org/cloudant/swift-cloudant.png?branch=master)](https://travis-ci.org/cloudant/swift-cloudant)
 
 **Applications use swift-cloudant to store, index and query remote
 JSON data on Cloudant or CouchDB.**
