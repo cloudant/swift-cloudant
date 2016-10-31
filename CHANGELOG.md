@@ -1,3 +1,8 @@
+# Unreleased
+
+- [FIXED] Resolved issue where an infinite retry loop would be triggered if
+  a `401: Forbidden` response was always received from an endpoint.
+
 # 0.6.0 (2016-09-16)
 
 - [NEW] Support for Swift 3.0 Release for Darwin Platforms.
@@ -8,7 +13,7 @@
 - [NEW] New `ViewPager` API.
 - [FIXED] Correctly handle differences between CouchDb and Cloudant for cookie expiration.
 
-# 0.5.0 
+# 0.5.0
 
 - [NEW] Support Swift SNAPSHOT 2016-07-26
 

@@ -217,6 +217,23 @@ class InterceptableSessionTests : XCTestCase {
         XCTAssertNotNil(cookie)
     }
     
+    func testSessionHandlesEndpointConstant401() throws {
+        let session = InterceptableSession(delegate: nil, configuration: InterceptableSessionConfiguration(shouldBackOff:true, username:"username", password:"password"))
+        session.session = URLSession(configuration: sessionConfig, delegate: session, delegateQueue: nil)
+        
+        // create a context with a request which we can use
+        let url = URL(string: "http://username1.cloudant.com")!
+        let request = URLRequest(url: url)
+        
+        let expectation = self.expectation(description: "10 401 requests/responses")
+        let delegate = RequestDelegate(expectation: expectation)
+        let task = session.dataTask(request: request, delegate: delegate)
+        XCTAssertEqual(10, remainingTotalRetries(for: task))
+        task.resume()
+        self.waitForExpectations(timeout: 10.0)
+        XCTAssertEqual(401, delegate.response?.statusCode)
+        XCTAssertEqual(0, remainingTotalRetries(for: task))
+    }
     
     func testSessionHandlesCookie401 () throws {
         
@@ -491,7 +508,7 @@ class CookieSession401 : InterceptableSessionURLProtocol {
     }
     
     override func startLoading() {
-        sendResponse(statusCode: 401, json: [:])
+        sendResponse(statusCode: 401, json: ["error":"unauthorized"])
     }
     
 }
