@@ -259,8 +259,10 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
                 let json = try? JSONSerialization.jsonObject(with: data)
                 if let json =  json as? [String: Any],
                     let  errorMessage = json["error"] as? String,
-                    ( errorMessage == "credentials_expired" || response.statusCode == 401 ) { // only 403 may have this message.
+                    ( errorMessage == "credentials_expired" || response.statusCode == 401 ),
+                    mTask.remainingRetries > 0 { // only 403 may have this message.
                     // we need to get a new cookie and retry the request.
+                    mTask.remainingRetries -= 1
                     self.requestCookie(url: mTask.request.url!)
                     
                     //clear the task cache
