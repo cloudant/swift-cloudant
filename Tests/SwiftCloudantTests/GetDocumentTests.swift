@@ -120,7 +120,7 @@ class GetDocumentTests: XCTestCase {
         client.add(operation: nsPut)
         nsPut.waitUntilFinished()
 
-        let get = GetDocumentOperation(id: put.id, databaseName: self.dbName!) { (response, httpInfo, error) in
+        let get = GetDocumentOperation(id: put.id!, databaseName: self.dbName!) { (response, httpInfo, error) in
             getDocumentExpectation.fulfill()
             XCTAssertNil(error)
             XCTAssertNotNil(response)
