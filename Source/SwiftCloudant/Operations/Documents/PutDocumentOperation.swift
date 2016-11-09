@@ -37,13 +37,13 @@ public class PutDocumentOperation: CouchDatabaseOperation, JSONOperation {
     /**
      Creates the operation.
      
-     - parameter id: the id of the document to create or update
-     - parameter revison: the revison of the document to update.
+     - parameter id: the id of the document to create or update, or nil if the server should generate an ID.
+     - parameter revision: the revision of the document to update, or `nil` if it is a create.
      - parameter body: the body of the document
      - parameter databaseName: the name of the database where the document will be created / updated.
      - parameter completionHandler: optional handler to run when the operation completes.
      */
-    public init(id: String, revision: String? = nil, body: [String: Any], databaseName:String, completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)? = nil) {
+    public init(id: String? = nil, revision: String? = nil, body: [String: Any], databaseName:String, completionHandler: (([String : Any]?, HTTPInfo?, Error?) -> Void)? = nil) {
         self.id = id;
         self.revision = revision
         self.body = body
@@ -59,7 +59,7 @@ public class PutDocumentOperation: CouchDatabaseOperation, JSONOperation {
     /**
      The document that this operation will modify.
      */
-    public let id: String
+    public let id: String?
 
     /**
      The revision of the document being updated or `nil` if this operation is creating a document.
@@ -78,13 +78,26 @@ public class PutDocumentOperation: CouchDatabaseOperation, JSONOperation {
     }
 
     public var method: String {
-        return "PUT"
+        get {
+            if let _ = id {
+                return "PUT"
+            } else {
+                return "POST"
+            }
+        }
     }
 
     public private(set) var data: Data?
 
     public var endpoint: String {
-        return "/\(self.databaseName)/\(id)"
+        get {
+            if let id = id {
+                return "/\(self.databaseName)/\(id)"
+            } else {
+                return "/\(self.databaseName)"
+            }
+        }
+        
     }
 
     public var parameters: [String: String] {

@@ -54,4 +54,75 @@ class PutDocumentTests: XCTestCase {
         }
 
     }
+    
+    func testSaveDocumentWithoutId() {
+        let putExpectation = self.expectation(description: "Put Document expectation")
+        let put = PutDocumentOperation(body:["hello": "world"], databaseName: dbName!) { (response, httpInfo, error) in
+            putExpectation.fulfill()
+            XCTAssertNotNil(response?["id"] as? String)
+            XCTAssertNotNil(response?["rev"])
+            XCTAssertNotNil(httpInfo)
+            if let httpInfo = httpInfo {
+                XCTAssertEqual(2, httpInfo.statusCode / 100)
+            }
+            
+        }
+        client?.add(operation: put)
+        
+        self.waitForExpectations(timeout: 10) { (_) in
+            
+        }
+    }
+    
+    func testOperationRequestMissingId() throws {
+        let put = PutDocumentOperation(body:["hello": "world"], databaseName: dbName!)
+        XCTAssertTrue(put.validate())
+        XCTAssertEqual(put.method, "POST")
+        XCTAssertEqual(put.endpoint, "/\(self.dbName!)")
+        XCTAssertEqual([:] as [String:String], put.parameters)
+        try put.serialise()
+        
+        let json = try JSONSerialization.jsonObject(with: put.data!) as? [String:String]
+        
+        if let json = json {
+            XCTAssertEqual(["hello":"world"], json)
+        }else {
+            XCTFail("JSON data was nil")
+        }
+    }
+    
+    func testOperationRequestWithId() throws {
+        let put = PutDocumentOperation(id: "doc1", body:["hello": "world"], databaseName: dbName!)
+        XCTAssertTrue(put.validate())
+        XCTAssertEqual(put.method, "PUT")
+        XCTAssertEqual(put.endpoint, "/\(self.dbName!)/doc1")
+        XCTAssertEqual([:] as [String:String], put.parameters)
+        try put.serialise()
+        
+        let json = try JSONSerialization.jsonObject(with: put.data!) as? [String:String]
+        
+        if let json = json {
+            XCTAssertEqual(["hello":"world"], json)
+        }else {
+            XCTFail("JSON data was nil")
+        }
+    }
+    
+    func testOperationRequestWithRev() throws {
+        let put = PutDocumentOperation(id: "doc1", revision:"1-rev", body:["hello": "world"], databaseName: dbName!)
+        XCTAssertTrue(put.validate())
+        XCTAssertEqual(put.method, "PUT")
+        XCTAssertEqual(put.endpoint, "/\(self.dbName!)/doc1")
+        XCTAssertEqual(["rev":"1-rev"] as [String:String], put.parameters)
+        try put.serialise()
+        
+        let json = try JSONSerialization.jsonObject(with: put.data!) as? [String:String]
+        
+        if let json = json {
+            XCTAssertEqual(["hello":"world"], json)
+        }else {
+            XCTFail("JSON data was nil")
+        }
+    }
+    
 }
