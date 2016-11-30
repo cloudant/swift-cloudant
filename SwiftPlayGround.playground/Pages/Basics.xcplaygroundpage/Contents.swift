@@ -21,7 +21,6 @@ import SwiftCloudant
 
  
  */
-
 let client = CouchDBClient(url: URL(string: "http://localhost:5984")!, username: nil, password: nil)
 //let account = "example"
 //let username = "example"
@@ -36,8 +35,9 @@ let client = CouchDBClient(url: URL(string: "http://localhost:5984")!, username:
  construct the struct directly.
 */
 let db =  client.database("test")
-
 /*:
+ 
+ ### Creating a Database
  
  To create the database on the server, call `create()` it will throw an error if the database exists or could not be created. Each database function
  will return a tuple of the response and `HTTPInfo` struct which contrains HTTP information such as response code and headers.
@@ -54,8 +54,9 @@ if httpInfo.statusCode == 201 {
 } else if httpInfo.statusCode == 202 {
     print("DB Creation request accepted, it may take some time to complete")
 }
-
 /*:
+ 
+ ### Deleting a Database.
  
  To delete a datbase the `delete` method is called on the `Database` struct.
  
@@ -74,10 +75,11 @@ if httpInfo.statusCode == 201 {
  
  */
 defer { try? db.delete() }
-
 /*:
  
  ## Acessing Data
+ 
+ ### Creating a Document
  
  Saving a document to Cloudant is straight forward, pass the document in its entirity to the `database.save` method which will create or update
  a document on the server depending on the content of the document. Omitting the `_id` field will cause CouchDB / Cloudant to generate an 
@@ -94,6 +96,9 @@ defer { try? db.delete() }
 let (response, _) = try db.save(document: ["_id": "test", "hello":"world"])
 
 /*:
+ 
+ ### Reading a Document
+ 
  Retriving a document from the server is again straight forward. All is required is the ID of the document
  to fetch from the database. The doc property below is the full document (exlcuding attachments) at the current 
  "winning" revision.
@@ -102,6 +107,7 @@ let (response, _) = try db.save(document: ["_id": "test", "hello":"world"])
  */
 var (doc, _) = try db.get(document: "test")
 
+//: ### Updating a Document
 //: To update a document you call save with the modified document, it **must** contain the _id and _rev fields for the document to 
 //: be updated successfully.
 //: - Note: If the `_rev` field is missing, the operation will generate a conflict error on the server.
@@ -110,6 +116,7 @@ var (doc, _) = try db.get(document: "test")
 doc["foo"] = "bar"
 let (updated, _) = try db.save(document: doc)
 
+//: ### Deleting a Document.
 //: To delete a document from the database only the id and revision of the document is required. Any "leaf" revision can be deleted from
 //: the database.
 //: - callout("Leaf" Revisions): A leaf revision is a revision which is revision which does not have an ancestor revision.
