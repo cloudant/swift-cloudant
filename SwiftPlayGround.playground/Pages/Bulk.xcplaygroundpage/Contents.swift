@@ -3,13 +3,34 @@
 import Foundation
 import SwiftCloudant
 
-//: ## Bulk Operations.
+let client = CouchDBClient(url: URL(string: "http://localhost:5984")!, username: nil, password: nil)
+let db = client.database("test")
+try? db.create()
+defer {
+    try? db.delete()
+}
 
-//: It is also possible to load the database with documents in bulk. This is perfered if there is a number of documents that need to be created,
+//: ## Bulk 
+//: ### Bulk Writes.
+//: It is also possible to load the database with documents in bulk. This is perfered if there is a large number of documents that need to be created,
 //: updated or deleted.
-//: Note: When deleting documents through the bulk API, the document will need to contain `_deleted` top level key and it needs to be set to true
+//: - Note: When deleting documents through the bulk API, the document will need to contain `_deleted` top level key and it needs to be set to true
 //: for the document to be deleted.
 try db.bulk(documents: generateDocuments(count: 50))
+
+/*:
+ ### Reading documents in Bulk.
+ 
+ If all the documents of the database need to be read, this can be doe with an all docs call.
+ 
+ - example: If you wish to get the raw response with all documents for other processing call with 
+ no parameters.
+ `db.allDocuments()`
+ */
+try db.allDocuments {
+    print($0)
+}
+
 
 /*:
  If a specific record needs to be found in the database but the document ID is not known, the document can be found using `find` whichs invokes
