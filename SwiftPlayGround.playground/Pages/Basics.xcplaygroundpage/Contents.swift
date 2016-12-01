@@ -16,7 +16,7 @@ import SwiftCloudant
  
     ` let client = CouchDBClient(url: URL("http://localhost:5984")!, username: nil, password: nil)`
  
- * callout(Reconmendation): It is reconmended that interaction with cloudant in production is through the use of API keys.
+ * callout(Recommendation): It is recommended that interaction with cloudant in production is through the use of API keys.
  It is important to note however that API keys cannot create or delete databases.
 
  

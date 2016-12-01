@@ -3,7 +3,13 @@ import SwiftCloudant
 
 public extension Database {
     
+
     
+    /// Creates a JSON query index.
+    ///
+    /// - Parameter fields: The fields to index.
+    /// - Returns: The http information reccived from the server
+    /// - Throws: If an error occured creating the index.
     public func createIndex(fields: [Sort]) throws -> HTTPInfo {
         var http: HTTPInfo?
         var error: Swift.Error?
@@ -23,6 +29,12 @@ public extension Database {
         }
     }
     
+    
+    /// Finds documents in the database which match the provided selector.
+    ///
+    /// - Parameter selector: The selector to use when matching documents
+    /// - Returns: A tuple of `docs` the documents found (relates to the
+    /// - Throws: If error occured performing the query on the server.
     public func find(selector: [String:Any]) throws -> (docs: [[String:Any]], respone:[String:Any], httpInfo: HTTPInfo){
         
         

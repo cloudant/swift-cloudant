@@ -2,6 +2,7 @@
 
 import Foundation
 import SwiftCloudant
+import Darwin
 
 let client = CouchDBClient(url: URL(string: "http://localhost:5984")!, username: nil, password: nil)
 let db = client.database("test")
@@ -25,7 +26,7 @@ try db.bulk(documents: generateDocuments(count: 50))
  
  - example: If you wish to get the raw response with all documents for other processing call with 
  no parameters.
- `db.allDocuments()`
+ `let (rows, response, info) = try db.allDocuments()`
  */
 try db.allDocuments {
     print($0)
@@ -33,41 +34,59 @@ try db.allDocuments {
 
 
 /*:
- If a specific record needs to be found in the database but the document ID is not known, the document can be found using `find` whichs invokes
+ 
+ ### Query
+ 
+ If a specific record(s) needs to be found in the database but the document ID is not known, the document can be found using `find` whichs invokes
  the (Mango) Query function of the server (CouchDB 2.0 / Cloudant only).
  
- Although Query works without first creating an index, it is reconmended for faster response times to create a index for the fields
+ Although Query works without first creating an index, it is recommended for faster response times to create a index for the fields
  that you are using for the query.
+ 
+  - Important: It is possible to query for documents without creating an index, however this is signficantly slower than using an index. It is **recommended**
+  to create an index for queries used by your application in production.
+ 
+ For this example, we will create an index for the field `number` with an ascending sort.
  */
 do {
-    try db.createIndex(fields: [Sort(field: "foo", sort: .asc)])
+    try db.createIndex(fields: [Sort(field: "number", sort: .asc)])
 } catch {
     print(error)
 }
+
 /*:
- The above creates a JSON index, for the field "foo" with a ascending sort. With the index created we can now use it to query for the documents
- which has the field `foo` set to the value `bar`
+ With the Index created, we can now query the data set with better performance than we could without the index. For our query, the document which contains the field "number" with the random value
+ generated. `["number": value]` is shorthand for `["number":[["$eq": value]]`, both queries will return the same results.
  */
 
-let selector = ["foo":"bar"]
+let value = arc4random_uniform(51)
+let selector = ["number":value]
 let queryResult = try db.find(selector: selector)
+
 for document in queryResult.docs {
     print(document)
 }
 
 /*:
- Views can also be used to get documents in bulk from the server in addition to this view can be used to
+ ### Views
+ 
+ Views can also be used to get documents in bulk from the server, however views also contain the ability to reduce the results into a single value.
+ Views are contained with design documents. Design Documents are regular documents, but the contain special fields for defining views amongst other things.
+ Design Documents can be created using the normal document manipulation methods, but their id needs to be prefixed with `_design/`.
  */
 let viewDoc:[String: Any] = ["_id":"_design/testview", "views": ["test": ["map":"function(doc){ emit(doc._id, doc.number);}"]]]
-
-
 let (viewResponse, _) = try db.save(document: viewDoc)
+
+
+/*:
+ #### Querying Views
+ 
+ For a simplistic view query which returns all the rows in the view only requires the name of the view and the design document in which it is located.
+ */
 let viewResp = try db.queryView(name: "test", designDocumentID: "testview")
 for row in viewResp.rows {
     print(row)
 }
-
-
 
 
 //: [Next](@next)
