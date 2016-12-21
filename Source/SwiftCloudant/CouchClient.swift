@@ -22,41 +22,41 @@ import Dispatch
  */
 public struct ClientConfiguration {
     /**
-     Should the client back off when a 429 response is encountered. Backing off will result 
+     Should the client back off when a 429 response is encountered. Backing off will result
      in the client retrying the request at a later time.
      */
     public var shouldBackOff: Bool
     /**
      The number of attempts the client should make to back off and get a successful response
      from server.
-     
+
      - Note: The maximum is hard limited by the client to 10 retries.
      */
     public var backOffAttempts: UInt
-    
+
     /**
      The initial value to use when backing off.
-     
+
      - Remark: The client uses a doubling back off when a 429 reponse is encountered, so care is required when selecting
      the initial back off value and the number of attempts to back off and successfully retreive a response from the server.
      */
     public var initialBackOff:DispatchTimeInterval
-    
+
     /**
      Creates an ClientConfiguration
      - parameter shouldBackOff: Should the client automatically back off.
-     - parameter backOffAttempts: The number of attempts the client should make to back off and 
+     - parameter backOffAttempts: The number of attempts the client should make to back off and
      get a successful response. Default 3.
      - parameter initialBackOff: The time to wait before retrying when the first 429 response is received,
      this value will be doubled for each subsequent back off
-     
+
      */
     public init(shouldBackOff: Bool, backOffAttempts: UInt = 3, initialBackOff: DispatchTimeInterval =  .milliseconds(250)){
         self.shouldBackOff = shouldBackOff
         self.backOffAttempts = backOffAttempts
         self.initialBackOff = initialBackOff
     }
-    
+
 }
 
 
@@ -65,11 +65,12 @@ public struct ClientConfiguration {
  */
 public class CouchDBClient {
 
-    private let username: String?
-    private let password: String?
-    private let rootURL: URL
     private let session: InterceptableSession
     private let queue: OperationQueue
+
+    internal let username: String?
+    internal let password: String?
+    internal let rootURL: URL
 
     /**
      Creates a CouchDBClient instance.
@@ -87,13 +88,13 @@ public class CouchDBClient {
         self.username = username
         self.password = password
         queue = OperationQueue()
-        
+
         let sessionConfiguration = InterceptableSessionConfiguration(shouldBackOff: configuration.shouldBackOff,
                                                                      backOffRetries: configuration.backOffAttempts,
                                                                      initialBackOff: configuration.initialBackOff,
                                                                      username: username,
                                                                      password: password)
-        
+
         self.session = InterceptableSession(delegate: nil, configuration: sessionConfiguration)
 
     }
@@ -110,7 +111,7 @@ public class CouchDBClient {
         self.add(operation: cOp)
         return cOp
     }
-    
+
     /**
      Adds an operation to the queue to be executed.
      - parameter operation: the operation to add to the queue.
@@ -121,4 +122,83 @@ public class CouchDBClient {
         queue.addOperation(operation)
     }
 
+}
+
+/**
+ Extension for loading Cloud Foundry service configuration.
+ */
+public extension CouchDBClient {
+
+    /**
+     A enum of errors which could be returned.
+     */
+    public enum Error: Swift.Error {
+
+        /**
+         Failed to decode VCAP_SERVICES environment variable as JSON.
+         */
+        case invalidVCAP
+
+        /**
+         Missing VCAP_SERVICES environment variable.
+         */
+        case missingVCAP
+
+        /**
+         Missing Cloudant service from VCAP_SERVICES environment variable.
+         */
+        case missingCloudantService
+
+        /**
+         Instance name is required.
+         */
+        case instanceNameRquired
+    }
+
+    /**
+     Creates a CouchDBClient instance using credentials from the Cloud Foundry environment variable.
+
+     - parameter vcapServices: contents of VCAP_SERVICES environment variable.
+     - parameter instanceName: Bluemix service instance name.
+     - parameter configuration: configuration options for the client.
+     */
+    public convenience init(vcapServices: String, instanceName: String? = nil, configuration: ClientConfiguration = ClientConfiguration(shouldBackOff: false)) throws {
+        var cloudantService: [String:Any]? = nil
+
+        guard let data = vcapServices.data(using: .utf8),
+            let app = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] else {
+            throw Error.invalidVCAP
+        }
+
+        guard let services = app["cloudantNoSQLDB"] as? [[String: Any]] else {
+            throw Error.missingCloudantService
+        }
+
+        if instanceName == nil {
+            if services.count == 1 {
+                cloudantService = services.first!
+            } else {
+                throw Error.instanceNameRquired
+            }
+        } else {
+            for service in services {
+                if instanceName == service["name"] as? String {
+                    cloudantService = service
+                    break
+                }
+            }
+        }
+
+        guard let cloudant = cloudantService else {
+            throw Error.missingCloudantService
+        }
+
+        if let credentials = cloudant["credentials"] as? [String: Any],
+            let urlStr = credentials["url"] as? String,
+            let url = URL(string: urlStr) {
+            self.init(url: url, username: url.user, password: url.password, configuration: configuration)
+        } else {
+            throw Error.invalidVCAP
+        }
+    }
 }
