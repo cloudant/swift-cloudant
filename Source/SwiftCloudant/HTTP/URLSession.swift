@@ -161,6 +161,9 @@ internal class URLSessionTask {
  */
 internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, URLSessionStreamDelegate {
 
+    // This is lazy because of swift init rules. We can't use self for the delegate until super.init is called, but we
+    // can't call super.init until all properties have been initialised. To get around this we lazily create the
+    // URLSession instance when it is required.
     internal lazy var session: URLSession = { () -> URLSession in
         let config = URLSessionConfiguration.default
         #if os(Linux)
@@ -439,7 +442,9 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
     }
 
     deinit {
-        self.session.finishTasksAndInvalidate()
+        if !isFirstRequest {
+            self.session.finishTasksAndInvalidate()
+        }
     }
 
     private class func userAgent() -> String {
