@@ -210,16 +210,30 @@ class TestSettings {
     private static var instance: TestSettings?
 
     private init() {
-        let bundle = Bundle(for: TestSettings.self)
-
-        let testSettingsPath = bundle.path(forResource: "TestSettings", ofType: "plist")
-
-        if let testSettingsPath = testSettingsPath,
-            let settingsDict = NSDictionary(contentsOfFile: testSettingsPath) as? [String: Any] {
-                settings = settingsDict
-        } else {
-                settings = [:]
+        // load the settings from the evnvironment this is a workaround while we cannot
+        // specify files to be part of the bundle for loading test cases.
+        let keys = ["TEST_COUCH_URL",  "TEST_COUCH_USERNAME", "TEST_COUCH_PASSWORD"]
+        let filtered = ProcessInfo.processInfo.environment.filter {
+            return keys.contains($0.key)
         }
+        
+        var tempSettings: [String:Any] = [:]
+        for (key, value) in filtered {
+            tempSettings[key] = value
+        }
+        self.settings = tempSettings
+        
+        // uncomment this when it is possible to bundle files with SPM.
+//        let bundle = Bundle(for: TestSettings.self)
+//
+//        let testSettingsPath = bundle.path(forResource: "TestSettings", ofType: "plist")
+//
+//        if let testSettingsPath = testSettingsPath,
+//            let settingsDict = NSDictionary(contentsOfFile: testSettingsPath) as? [String: Any] {
+//                settings = settingsDict
+//        } else {
+//                settings = [:]
+//        }
     }
 
     class func getInstance() -> TestSettings {
