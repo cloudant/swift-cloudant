@@ -39,13 +39,16 @@ public class GetAllDatabasesTest : XCTestCase {
     
     public func testListAllDbs(){
         let expectation =  self.expectation(description: "all_dbs")
+        var found = false
         let list = GetAllDatabasesOperation(databaseHandler:
         { (dbName) in
             if dbName.hasPrefix("_"){
                 return
             }
             XCTAssertNotNil(dbName)
-            XCTAssertEqual(self.dbName!, dbName)
+            if self.dbName! == dbName {
+                found = true
+            }
         })
         { (response, httpInfo, error ) in
             XCTAssertNil(error)
@@ -58,13 +61,10 @@ public class GetAllDatabasesTest : XCTestCase {
                 let expected: [String] = [self.dbName!]
                 
                 // we need to filter the dbs responses to remove system databases, ones prefixed with _
-                if let responseDBs = response as? [String] {
-                    
-                   let filtered =  responseDBs.filter({ (dbName) -> Bool in
-                        return !dbName.hasPrefix("_")
-                    })
-                    
-                    XCTAssertEqual(expected, filtered)
+                if response is [String] {
+                    XCTAssertTrue(expected.contains(self.dbName!))
+                } else {
+                    XCTFail("response is not an array [String]")
                 }
                 
             }
@@ -74,6 +74,7 @@ public class GetAllDatabasesTest : XCTestCase {
         client?.add(operation: list)
         
         self.waitForExpectations(timeout: 10.0, handler: nil)
+        XCTAssertTrue(found, "Did not find database \(self.dbName!) in a call to the database handler")
         
     }
     
