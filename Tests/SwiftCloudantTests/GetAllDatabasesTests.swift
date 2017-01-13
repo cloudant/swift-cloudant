@@ -60,7 +60,6 @@ public class GetAllDatabasesTest : XCTestCase {
             if let response = response {
                 let expected: [String] = [self.dbName!]
                 
-                // we need to filter the dbs responses to remove system databases, ones prefixed with _
                 if response is [String] {
                     XCTAssertTrue(expected.contains(self.dbName!))
                 } else {
