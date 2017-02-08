@@ -1,0 +1,4 @@
+use_frameworks!
+target 'SwiftCloudantTests' do
+  pod 'XCTest-Gherkin'
+end
