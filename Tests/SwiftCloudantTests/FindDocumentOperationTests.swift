@@ -159,7 +159,7 @@ class FindDocumentOperationTests: XCTestCase {
         if let httpBody = httpBodyOpt {
         
             do {
-                let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:NSObject]
+                let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:Any]
                 
                 let expected:[String:Any] = ["selector":["foo":"bar"],
                                 "fields":["foo","bar"],
@@ -198,7 +198,7 @@ class FindDocumentOperationTests: XCTestCase {
         if let httpBody = httpBodyOpt {
             
             do {
-                let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:NSObject]
+                let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:Any]
                 
                 let expected:[String: Any] = ["selector":["foo":"bar"],
                                                   "sort": [["foo":"asc"]],
@@ -231,7 +231,7 @@ class FindDocumentOperationTests: XCTestCase {
         if let httpBody = httpBodyOpt {
             
             do {
-                let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:NSObject]
+                let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:Any]
                 
                 let expected:[String: Any] = ["selector":["foo":"bar"],
                                                   "sort": [["foo":"desc"]],
@@ -288,7 +288,7 @@ class FindDocumentOperationTests: XCTestCase {
         if let httpBody = httpBodyOpt {
             
             do {
-                let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:NSObject]
+                let json = try JSONSerialization.jsonObject(with: httpBody, options: JSONSerialization.ReadingOptions()) as? [String:Any]
                 
                 let expected:[String:Any] = ["selector":["foo":"bar"]]
                 
