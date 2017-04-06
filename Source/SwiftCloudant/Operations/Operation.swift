@@ -62,13 +62,9 @@ public class Operation: Foundation.Operation, HTTPRequestOperation
         }
         set {
             if mExecuting != newValue {
-                #if !os(Linux)
-                    willChangeValue(forKey: "isExecuting")
-                #endif
+                willChangeValue(forKey: "isExecuting")
                 mExecuting = newValue
-                #if !os(Linux)
-                    didChangeValue(forKey: "isExecuting")
-                #endif
+                didChangeValue(forKey: "isExecuting")
             }
         }
     }
@@ -80,13 +76,9 @@ public class Operation: Foundation.Operation, HTTPRequestOperation
         }
         set {
             if mFinished != newValue {
-                #if !os(Linux)
-                    willChangeValue(forKey: "isFinished")
-                #endif
+                willChangeValue(forKey: "isFinished")
                 mFinished = newValue
-                #if !os(Linux)
-                    didChangeValue(forKey: "isFinished")
-                #endif
+                didChangeValue(forKey: "isFinished")
             }
         }
     }
@@ -174,9 +166,6 @@ public class Operation: Foundation.Operation, HTTPRequestOperation
         self.executor = nil // break the cycle.
         self.isExecuting = false
         self.isFinished = true
-        #if os(Linux)
-            self.finish()
-        #endif
     }
 
     final override public func cancel() {
