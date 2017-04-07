@@ -261,7 +261,7 @@ public class ViewPager {
     /**
      A container for the current state of pagination
      */
-    private struct State {
+    fileprivate struct State {
         var lastEndKey: Any?
         var lastEndKeyDocID: String?
         
