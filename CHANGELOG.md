@@ -1,5 +1,11 @@
 # Unreleased
 
+# 0.7.0 (2017-04-10)
+
+- [NEW] Implement convenience init for creating client from VCAP services metadata.
+- [NEW] Allow server to generate document IDs if they are set as `nil` in the documents being saved.
+- [FIXED] Access level warning in the ViewPager class.
+- [FIXED] Crash on deallocate for unused client.
 - [FIXED] Resolved issue where an infinite retry loop would be triggered if
   a `401: Forbidden` response was always received from an endpoint.
 
