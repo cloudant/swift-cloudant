@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "SwiftCloudant"
-  s.version      = "0.6.0"
+  s.version      = "0.7.0"
   s.summary      = "SwiftCloudant is a client library for  Apache CouchDB / IBM Cloudant from Swift 3"
 
   s.description  = <<-DESC
