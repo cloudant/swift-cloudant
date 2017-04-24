@@ -458,8 +458,8 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
             let platform = "Unknown";
         #endif
 
-        var bundleDisplayName: String = "SwiftCloudant"
-        var bundleVersionString: String = "Unknown"
+        var bundleDisplayName = "SwiftCloudant"
+        var bundleVersionString = "0.6.0"
 
         #if !os(Linux)
             // Bundle(for:) is not yet supported on Linux
