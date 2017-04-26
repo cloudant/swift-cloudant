@@ -172,7 +172,7 @@ class FindDocumentOperationTests: XCTestCase {
                                 ]
                 
                 if let json = json {
-                    XCTAssertEqual(expected as NSDictionary, json as NSDictionary, "Expected: \(expected) but was \(json)")
+                    XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: json), "Expected: \(expected) but was \(json)")
                } else {
                    XCTFail("Json could not be deseralised to the type [String:Any]")
                 }
@@ -205,7 +205,7 @@ class FindDocumentOperationTests: XCTestCase {
                 ]
                 
                 if let json = json {
-                    XCTAssertEqual(expected as NSDictionary, json as NSDictionary, "Expected: \(expected) but was \(json)")
+                    XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: json), "Expected: \(expected) but was \(json)")
                 } else {
                     XCTFail("Json could not be deseralised to the type [String:Any]")
                 }
@@ -238,7 +238,7 @@ class FindDocumentOperationTests: XCTestCase {
                                                   ]
                 
                 if let json = json {
-                    XCTAssertEqual(expected as NSDictionary , json as NSDictionary, "Expected: \(expected) but was \(json)")
+                    XCTAssertEqual(NSDictionary(dictionary: expected) , NSDictionary(dictionary: json), "Expected: \(expected) but was \(json)")
                 } else {
                     XCTFail("Json could not be deseralised to the type [String:Any]")
                 }
@@ -293,7 +293,7 @@ class FindDocumentOperationTests: XCTestCase {
                 let expected:[String:Any] = ["selector":["foo":"bar"]]
                 
                 if let json = json {
-                    XCTAssertEqual(expected as NSDictionary, json as NSDictionary, "Expected: \(expected) but was \(json)")
+                    XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: json), "Expected: \(expected) but was \(json)")
                 } else {
                     XCTFail("Json could not be deseralised to the type [String:Any]")
                 }
