@@ -154,7 +154,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -181,7 +181,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -209,7 +209,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -239,7 +239,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -269,7 +269,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -298,7 +298,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -327,7 +327,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -371,7 +371,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -400,7 +400,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -429,7 +429,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -458,7 +458,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -486,7 +486,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -515,7 +515,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -544,7 +544,7 @@ class GetAllDocsTest: XCTestCase {
             if let requestData = requestData {
                 XCTAssertNotNil(requestData)
                 let expected:[String:[String]] = ["keys":["keys","keys"]]
-                XCTAssertEqual(expected as NSDictionary, requestData as NSDictionary)
+                XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestData))
                 
             }
         }
@@ -585,7 +585,7 @@ class GetAllDocsTest: XCTestCase {
         
         let allDocs = GetAllDocsOperation(databaseName: dbName, rowHandler: { doc in
             let expected:[String:String] = ["hello":"world"]
-            XCTAssertEqual(expected as NSDictionary, doc as NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: doc))
             rowHandler.fulfill()
         }) { response, info, error in
             

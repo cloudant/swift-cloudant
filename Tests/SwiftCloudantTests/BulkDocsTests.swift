@@ -84,7 +84,7 @@ class BulkDocsTests : XCTestCase {
             
             let expected: [String: Any] = ["docs":[["hello":"world"],["foo":"bar"]], "new_edits":false, "all_or_nothing":true]
             
-            XCTAssertEqual(expected as NSDictionary, requestJson as NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestJson))
         }
     }
    
@@ -104,7 +104,7 @@ class BulkDocsTests : XCTestCase {
             let requestJson = try JSONSerialization.jsonObject(with: data) as! [String: Any]
             
             let expected: [String: Any] = ["docs":[["hello":"world"],["foo":"bar"]], "new_edits":false]
-            XCTAssertEqual(expected as NSDictionary, requestJson as NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestJson))
         }
     }
     
@@ -124,7 +124,7 @@ class BulkDocsTests : XCTestCase {
             let requestJson = try JSONSerialization.jsonObject(with: data) as! [String: Any]
             
             let expected: [String: Any] = ["docs":[["hello":"world"],["foo":"bar"]], "all_or_nothing":true]
-            XCTAssertEqual(expected as NSDictionary, requestJson as NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: requestJson))
         }
     }
     
