@@ -14,6 +14,7 @@
 //  and limitations under the License.
 //
 
+import Dispatch
 import Foundation
 import XCTest
 @testable import SwiftCloudant
