@@ -166,7 +166,7 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
     // URLSession instance when it is required.
     internal lazy var session: URLSession = { () -> URLSession in
         let config = URLSessionConfiguration.default
-        config.httpAdditionalHeaders = [("User-Agent" as NSString) as AnyHashable: InterceptableSession.userAgent()]
+        config.httpAdditionalHeaders = ["User-Agent" as AnyHashable: InterceptableSession.userAgent()]
         config.httpCookieAcceptPolicy = .onlyFromMainDocumentDomain
         config.httpCookieStorage = .shared
         
