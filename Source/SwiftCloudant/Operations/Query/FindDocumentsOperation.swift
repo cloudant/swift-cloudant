@@ -289,7 +289,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
         for s in sortArray {
             if let sort = s.sort {
                 let dict = [s.field: sort.rawValue]
-                transfomed.append(dict )
+                transfomed.append(dict)
             } else {
                 transfomed.append(s.field)
             }
