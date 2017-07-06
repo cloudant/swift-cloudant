@@ -21,6 +21,22 @@ import XCTest
 
 public class CreateQueryIndexTests : XCTestCase {
     
+    static var allTests = {
+        return [
+            ("testCanCreateTextIndexes", testCanCreateTextIndexes),
+            ("testCanCreateJSONIndexes",testCanCreateJSONIndexes),
+            ("testJsonIndexRequestProperties",testJsonIndexRequestProperties),
+            ("testTextIndexRequestProperties",testTextIndexRequestProperties),
+            ("testJsonEmitsPresentFieldsMissingIndexName",testJsonEmitsPresentFieldsMissingIndexName),
+            ("testJsonEmitsPresentFieldsMissingddoc", testJsonEmitsPresentFieldsMissingddoc),
+            ("testTextIndexEmitsPresentFieldsMissingIndexName", testTextIndexEmitsPresentFieldsMissingIndexName),
+            ("testTextIndexEmitsPresentFieldsMissingFields", testTextIndexEmitsPresentFieldsMissingFields),
+            ("testTextIndexEmitsPresentFieldsMissingddoc", testTextIndexEmitsPresentFieldsMissingddoc),
+            ("testTextIndexEmitsPresentFieldsMissingddoc",testTextIndexEmitsPresentFieldsMissingddoc),
+            ("testTextIndexEmitsPresentFieldsMissingDefaultFieldEnabled", testTextIndexEmitsPresentFieldsMissingDefaultFieldEnabled),
+            ("testTextIndexEmitsPresentFieldsMissingDefaultFieldEnabled",testTextIndexEmitsPresentFieldsMissingDefaultFieldEnabled)]
+    }()
+    
     var client: CouchDBClient? = nil;
     var dbName: String? = nil
     
@@ -78,7 +94,7 @@ public class CreateQueryIndexTests : XCTestCase {
         if let data = data {
             let json = try JSONSerialization.jsonObject(with: data)
             let expected: [String :Any] = ["type":"json", "index":["fields" : ["foo"]], "name" : "indexName", "ddoc":"ddoc"]
-            XCTAssertEqual(expected as NSDictionary , json as? NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: json as! [AnyHashable: Any]))
         }
         
     }
@@ -100,7 +116,7 @@ public class CreateQueryIndexTests : XCTestCase {
             let defaultField: [String: Any] = ["enabled": true, "analyzer": "english" ]
             let index: [String: Any] =   [ "selector": ["bar" : "foo"], "fields" : [["foo":"string"]], "default_field": defaultField]
             let expected: [String :Any] = ["type":"text","index": index, "name" : "indexName", "ddoc":"ddoc"]
-            XCTAssertEqual(expected as NSDictionary, json as? NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: json as! [AnyHashable: Any]))
         }
     }
     
@@ -114,7 +130,7 @@ public class CreateQueryIndexTests : XCTestCase {
         if let data = data {
             let json = try JSONSerialization.jsonObject(with: data)
             let expected: [String: Any] = ["type":"json", "index":["fields" : ["foo"]], "ddoc":"ddoc"]
-            XCTAssertEqual(expected as NSDictionary, json as? NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: json as! [AnyHashable: Any]))
         }
     }
     
@@ -128,7 +144,7 @@ public class CreateQueryIndexTests : XCTestCase {
         if let data = data {
             let json = try JSONSerialization.jsonObject(with: data)
             let expected: [String: Any] = ["type":"json", "index":["fields" : ["foo"]], "name":"indexName"]
-            XCTAssertEqual(expected as NSDictionary, json as? NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: json as! [AnyHashable: Any]))
         }
     }
     
@@ -145,7 +161,7 @@ public class CreateQueryIndexTests : XCTestCase {
             let defaultField: [String:Any] = ["enabled": true, "analyzer": "english" ]
             let index: [String: Any] = ["selector":["bar":"foo"], "fields" : [["foo":"string"]], "default_field": defaultField ]
             let expected: [String: Any] = ["type":"text", "index" : index , "ddoc":"ddoc"]
-            XCTAssertEqual(expected as NSDictionary, json as? NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: json as! [AnyHashable: Any]))
         }
     }
     
@@ -162,7 +178,7 @@ public class CreateQueryIndexTests : XCTestCase {
             let defaultIndex:[String:Any] = ["enabled": true, "analyzer": "english" ]
             let index: [String: Any] = ["selector":["bar":"foo"], "default_field":defaultIndex ]
             let expected: [String: Any] = ["type":"text", "name": "indexName", "index" :index , "ddoc":"ddoc"]
-            XCTAssertEqual(expected as NSDictionary, json as? NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: json as! [AnyHashable: Any]))
         }
     }
     
@@ -179,7 +195,7 @@ public class CreateQueryIndexTests : XCTestCase {
             let defaultField: [String:Any] = ["enabled": true, "analyzer": "english" ]
             let index: [String:Any]  = ["selector":["bar":"foo"], "fields" : [["foo":"string"]], "default_field": defaultField ]
             let expected: [String:Any] = ["type":"text", "index" :index , "name":"indexName"]
-            XCTAssertEqual(expected as NSDictionary, json as? NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: json as! [AnyHashable: Any]))
         }
     }
     
@@ -195,7 +211,7 @@ public class CreateQueryIndexTests : XCTestCase {
             let json = try JSONSerialization.jsonObject(with: data)
             let index: [String:Any] = ["selector":["bar":"foo"], "fields" : [["foo":"string"]], "default_field": ["enabled": true ]]
             let expected: [String: Any] = ["type":"text", "index" : index, "ddoc":"ddoc", "name": "indexName"]
-            XCTAssertEqual(expected as NSDictionary, json as? NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: json as! [AnyHashable: Any]))
         }
     }
     
@@ -211,7 +227,7 @@ public class CreateQueryIndexTests : XCTestCase {
             let json = try JSONSerialization.jsonObject(with: data)
             let index: [String: Any] = [ "selector":["bar":"foo"],"fields" : [["foo":"string"]], "default_field": ["analyzer": "english" ]]
             let expected: [String: Any] = ["type":"text", "index" : index, "ddoc":"ddoc", "name": "indexName"]
-            XCTAssertEqual(expected as NSDictionary, json as? NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: json as! [AnyHashable: Any]))
         }
     }
     
@@ -228,7 +244,7 @@ public class CreateQueryIndexTests : XCTestCase {
             let defaultField:[String: Any] = ["enabled": true, "analyzer": "english" ]
             let index: [String: Any] = [ "fields" : [["foo":"string"]], "default_field": defaultField ]
             let expected: [String: Any] = ["type":"text", "index" : index,"name":"indexName", "ddoc":"ddoc"]
-            XCTAssertEqual(expected as NSDictionary, json as? NSDictionary)
+            XCTAssertEqual(NSDictionary(dictionary: expected), NSDictionary(dictionary: json as! [AnyHashable: Any]))
         }
     }
     

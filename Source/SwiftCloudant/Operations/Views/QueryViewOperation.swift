@@ -222,11 +222,7 @@ public class QueryViewOperation: ViewOperation, JSONOperation {
     public var data: Data? {
         if let keys = keys {
             do {
-                #if os(Linux)
-                    let keysDict = ["keys".bridge() : keys.bridge()]
-                #else
-                    let keysDict = ["keys": keys]
-                #endif
+                let keysDict = ["keys": keys]
                 let keysJson = try JSONSerialization.data(withJSONObject: keysDict)
                 return keysJson
             } catch {

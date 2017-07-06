@@ -20,6 +20,27 @@ import XCTest
 
 public class QueryViewTests: XCTestCase {
 
+    static var allTests = {
+        return [
+            ("testViewGeneratesCorrectRequestUsingStartAndEndKeys", testViewGeneratesCorrectRequestUsingStartAndEndKeys),
+            ("testViewGeneratesCorrectRequestUsingJsonStartAndEndKeys",testViewGeneratesCorrectRequestUsingJsonStartAndEndKeys),
+            ("testViewGeneratesCorrectRequestUsingKey",testViewGeneratesCorrectRequestUsingKey),
+            ("testViewGeneratesCorrectRequestUsingKeys",testViewGeneratesCorrectRequestUsingKeys),
+            ("testViewGeneratesCorrectRequestForReduces",testViewGeneratesCorrectRequestForReduces),
+            ("testViewHandlesResponsesCorrectly",testViewHandlesResponsesCorrectly),
+            ("testOperationValidationReduceOptionsWithReduceFalseGroup",testOperationValidationReduceOptionsWithReduceFalseGroup),
+            ("testOperationValidationReduceOptionsWithReduceFalseGroupLevel",testOperationValidationReduceOptionsWithReduceFalseGroupLevel),
+            ("testOperationValidationReduceWithReduceGroup",testOperationValidationReduceWithReduceGroup),
+            ("testOperationValidationReduceWithoutReduceGroup",testOperationValidationReduceWithoutReduceGroup),
+            ("testOperationValidationReduceWithReduceGroupLevelWithoutGroup",testOperationValidationReduceWithReduceGroupLevelWithoutGroup),
+            ("testOperationValidationKeyAndKeys",testOperationValidationKeyAndKeys),
+            ("testOperationValidationNoCompletionHandlers",testOperationValidationNoCompletionHandlers),
+            ("testViewGeneratesCorrectRequestStaleDefault",testViewGeneratesCorrectRequestStaleDefault),
+            ("testViewGeneratesCorrectRequestStaleOk",testViewGeneratesCorrectRequestStaleOk),
+            ("testViewGeneratesCorrectRequestStaleUpdateAfter",testViewGeneratesCorrectRequestStaleUpdateAfter),
+            ("testViewGeneratesCorrectRequestUpdateSeq",testViewGeneratesCorrectRequestUpdateSeq),]
+    }()
+    
     var dbName: String? = nil
     var client: CouchDBClient?
     lazy var response:[String: Any] = {() -> [String:Any] in

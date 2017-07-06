@@ -79,7 +79,7 @@ class ViewPagingTests : XCTestCase {
                 if isFirst {
                     firstPage = page
                 } else {
-                    XCTAssertNotEqual(firstPage as NSDictionary, page as NSDictionary)
+                    XCTAssertNotEqual(NSDictionary(dictionary: firstPage), NSDictionary(dictionary: page))
                 }
                 
                 let ids = self.extractIDs(from: page)
@@ -140,7 +140,7 @@ class ViewPagingTests : XCTestCase {
                     isSecond = true
                     return .next
                 } else if isSecond {
-                    XCTAssertNotEqual(firstPage as NSDictionary, page as NSDictionary)
+                    XCTAssertNotEqual(NSDictionary(dictionary: firstPage), NSDictionary(dictionary: page))
                     isSecond = false
                     return .previous
                 } else {
@@ -190,7 +190,7 @@ class ViewPagingTests : XCTestCase {
                 if isFirst {
                     firstPage = page
                 } else {
-                    XCTAssertNotEqual(firstPage as NSDictionary, page as NSDictionary)
+                    XCTAssertNotEqual( NSDictionary(dictionary: firstPage), NSDictionary(dictionary: page))
                 }
                 
                 let ids = self.extractIDs(from: page)
@@ -251,7 +251,7 @@ class ViewPagingTests : XCTestCase {
                     isSecond = true
                     return .next
                 } else if isSecond {
-                    XCTAssertNotEqual(firstPage as NSDictionary, page as NSDictionary)
+                    XCTAssertNotEqual(NSDictionary(dictionary: firstPage), NSDictionary(dictionary: page))
                     isSecond = false
                     return .previous
                 } else {
@@ -314,7 +314,7 @@ class ViewPagingTests : XCTestCase {
                 
                 for row in rows {
                     XCTAssertFalse(previousRows.contains {
-                        ($0 as NSDictionary).isEqual(to: row as NSDictionary)
+                        NSDictionary(dictionary: $0).isEqual(to: row)
                     })
                 }
                 
@@ -413,7 +413,7 @@ class ViewPagingTests : XCTestCase {
             XCTAssertNotNil(page)
             XCTAssertNotNil(token)
             if let page = page {
-                XCTAssertEqual(previousRows as NSArray, page["rows"] as? NSArray )
+                XCTAssertEqual(NSArray(array: previousRows), NSArray(array: page["rows"] as! [Any]))
             }
             
             tokenPageExpectation.fulfill()
@@ -491,7 +491,7 @@ class ViewPagingTests : XCTestCase {
             XCTAssertNotNil(page)
             XCTAssertNotNil(token)
             if let page = page {
-                XCTAssertEqual(previousRows as NSArray, page["rows"] as? NSArray )
+                XCTAssertEqual(NSArray(array: previousRows),  NSArray(array: page["rows"] as! [Any] ))
             }
             
             tokenPageExpectation.fulfill()
@@ -553,7 +553,7 @@ class ViewPagingTests : XCTestCase {
             XCTAssertNotNil(page)
             XCTAssertNotNil(token)
             if let page = page {
-                XCTAssertEqual(previousRows as NSArray, page["rows"] as? NSArray )
+                XCTAssertEqual(NSArray(array: previousRows),  NSArray(array: page["rows"] as! [Any] ))
             }
             
             tokenPageExpectation.fulfill()
@@ -632,7 +632,7 @@ class ViewPagingTests : XCTestCase {
             XCTAssertNotNil(page)
             XCTAssertNotNil(token)
             if let page = page {
-                XCTAssertEqual(previousRows as NSArray, page["rows"] as? NSArray )
+                XCTAssertEqual(NSArray(array: previousRows),  NSArray(array: page["rows"] as! [Any] ))
             }
             
             tokenPageExpectation.fulfill()

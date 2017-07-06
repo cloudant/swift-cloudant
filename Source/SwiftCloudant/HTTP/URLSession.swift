@@ -166,13 +166,10 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
     // URLSession instance when it is required.
     internal lazy var session: URLSession = { () -> URLSession in
         let config = URLSessionConfiguration.default
-        #if os(Linux)
-            config.httpAdditionalHeaders = ["User-Agent".bridge() : InterceptableSession.userAgent().bridge()]
-        #else
-            config.httpAdditionalHeaders = [("User-Agent" as NSString) as AnyHashable: InterceptableSession.userAgent()]
-        #endif
+        config.httpAdditionalHeaders = ["User-Agent" as AnyHashable: InterceptableSession.userAgent()]
         config.httpCookieAcceptPolicy = .onlyFromMainDocumentDomain
         config.httpCookieStorage = .shared
+        
         return URLSession(configuration: config, delegate: self, delegateQueue: nil) }()
     
     private var taskDict: [Foundation.URLSessionTask: URLSessionTask] = [:]
@@ -460,18 +457,18 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
         #else
             let platform = "Unknown";
         #endif
-        let frameworkBundle = Bundle(for: InterceptableSession.self)
-        var bundleDisplayName = frameworkBundle.object(forInfoDictionaryKey: "CFBundleName")
-        var bundleVersionString = frameworkBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString")
 
-        if bundleDisplayName == nil {
-            bundleDisplayName = "SwiftCloudant"
-        }
-        if bundleVersionString == nil {
-            bundleVersionString = "Unknown"
-        }
+        var bundleDisplayName = "SwiftCloudant"
+        var bundleVersionString = "0.7.0"
 
-        return "\(bundleDisplayName!)/\(bundleVersionString!)/\(platform)/\(osVersion))"
+        #if !os(Linux)
+            // Bundle(for:) is not yet supported on Linux
+            let frameworkBundle = Bundle(for: InterceptableSession.self)
+            bundleDisplayName = frameworkBundle.object(forInfoDictionaryKey: "CFBundleName") as! String
+            bundleVersionString = frameworkBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+        #endif
+
+        return "\(bundleDisplayName)/\(bundleVersionString)/\(platform)/\(osVersion))"
 
     }
 }

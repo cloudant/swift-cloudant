@@ -19,6 +19,12 @@ import XCTest
 @testable import SwiftCloudant
 
 class PutDocumentTests: XCTestCase {
+    
+    static var allTests = {
+        return [
+            ("testSaveDocument", testSaveDocument),]
+    }()
+    
     var client: CouchDBClient? = nil;
     var dbName: String? = nil
 

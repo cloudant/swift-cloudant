@@ -20,6 +20,10 @@ import XCTest
 
 class CreateDatabaseTests: XCTestCase {
 
+    static var allTests = {
+        return [
+            ("testCreateUsingPut", testCreateUsingPut),]
+    }()
     var dbName: String? = nil
     var client: CouchDBClient? = nil
 

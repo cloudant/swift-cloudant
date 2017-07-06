@@ -70,17 +70,9 @@ internal extension MangoOperation {
         for s in sortArray {
             if let sort = s.sort {
                 let dict = [s.field: sort.rawValue]
-                #if os(Linux)
-                    transformed.append(dict.bridge())
-                #else
-                    transformed.append(dict)
-                #endif
+                transformed.append(dict)
             } else {
-                #if os(Linux)
-                    transformed.append(s.field.bridge())
-                #else
                     transformed.append(s.field)
-                #endif
             }
         }
         
@@ -97,11 +89,7 @@ internal extension MangoOperation {
             array.append([field.name: field.type.rawValue])
         }
 
-        #if os(Linux)
-            return array.bridge()
-        #else
-            return array
-        #endif
+        return array
     }
 }
 
@@ -248,93 +236,50 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
 
     public func validate() -> Bool {
         let jsonObj = createJsonDict()
-        #if os(Linux)
-            if NSJSONSerialization.isValidJSONObject(jsonObj.bridge()) {
-                self.json = jsonObj
-                return true
-            } else {
-                return false
-            }
-        #else
-            if JSONSerialization.isValidJSONObject(jsonObj) {
-                self.json = jsonObj
-                return true
-            } else {
-                return false;
-            }
-        #endif
+        if JSONSerialization.isValidJSONObject(jsonObj) {
+            self.json = jsonObj
+            return true
+        } else {
+            return false;
+        }
 
     }
     
     private func createJsonDict() -> [String: Any] {
         // build the body dict, we will store this to save compute cycles.
         var jsonObj: [String: Any] = [:]
-        #if os(Linux)
-            if let selector = self.selector {
-                jsonObj["selector"] = selector.bridge()
-            }
-            
-            if let limit = self.limit {
-                jsonObj["limit"] = NSNumber(value: limit)
-            }
-            
-            if let skip = self.skip {
-                jsonObj["skip"] = NSNumber(value: skip)
-            }
-            
-            if let r = self.r {
-                jsonObj["r"] = NSNumber(value: r)
-            }
-            
-            if let sort = self.sort {
-                jsonObj["sort"] = transform(sortArray: sort).bridge()
-            }
-            
-            if let fields = self.fields {
-                jsonObj["fields"] = fields.bridge()
-            }
-            
-            if let bookmark = self.bookmark {
-                jsonObj["bookmark"] = bookmark.bridge()
-            }
-            
-            if let useIndex = self.useIndex {
-                jsonObj["use_index"] = useIndex.bridge()
-            }
-        #else
-            if let selector = self.selector {
-                jsonObj["selector"] = selector
-            }
-            
-            if let limit = self.limit {
-                jsonObj["limit"] = limit
-            }
-            
-            if let skip = self.skip {
-                jsonObj["skip"] = skip
-            }
-            
-            if let r = self.r {
-                jsonObj["r"] = r
-            }
-            
-            if let sort = self.sort {
-                jsonObj["sort"] = transform(sortArray: sort)
-            }
-            
-            if let fields = self.fields {
-                jsonObj["fields"] = fields
-            }
-            
-            if let bookmark = self.bookmark {
-                jsonObj["bookmark"] = bookmark
-            }
-            
-            if let useIndex = self.useIndex {
-                jsonObj["use_index"] = useIndex
-            }
-        #endif
-
+        if let selector = self.selector {
+            jsonObj["selector"] = selector
+        }
+        
+        if let limit = self.limit {
+            jsonObj["limit"] = limit
+        }
+        
+        if let skip = self.skip {
+            jsonObj["skip"] = skip
+        }
+        
+        if let r = self.r {
+            jsonObj["r"] = r
+        }
+        
+        if let sort = self.sort {
+            jsonObj["sort"] = transform(sortArray: sort)
+        }
+        
+        if let fields = self.fields {
+            jsonObj["fields"] = fields
+        }
+        
+        if let bookmark = self.bookmark {
+            jsonObj["bookmark"] = bookmark
+        }
+        
+        if let useIndex = self.useIndex {
+            jsonObj["use_index"] = useIndex
+        }
+        
         return jsonObj
     }
 
@@ -344,17 +289,9 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
         for s in sortArray {
             if let sort = s.sort {
                 let dict = [s.field: sort.rawValue]
-                #if os(Linux)
-                    transfomed.append(dict.bridge())
-                #else
-                    transfomed.append(dict )
-                #endif
+                transfomed.append(dict)
             } else {
-                #if os(Linux)
-                    transfomed.append(s.field.bridge())
-                #else
-                    transfomed.append(s.field)
-                #endif
+                transfomed.append(s.field)
             }
         }
 
@@ -368,11 +305,7 @@ public class FindDocumentsOperation: CouchDatabaseOperation, MangoOperation, JSO
         }
  
         if let json = self.json {
-            #if os(Linux)
-                self.jsonData = try NSJSONSerialization.data(withJSONObject: json.bridge())
-            #else
-                self.jsonData = try JSONSerialization.data(withJSONObject: json as NSDictionary)
-            #endif
+            self.jsonData = try JSONSerialization.data(withJSONObject: json)
         }
     }
 
