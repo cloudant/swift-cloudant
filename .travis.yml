@@ -4,8 +4,6 @@ script:
   - swift build && swift test
 
 matrix:
-  allow_failures:
-    - os: linux
   include:
     - os: linux
       dist: trusty
