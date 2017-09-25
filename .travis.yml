@@ -19,6 +19,8 @@ matrix:
           - gunzip swift-3.0-RELEASE-ubuntu14.04.tar.gz
           - tar -xvf swift-3.0-RELEASE-ubuntu14.04.tar
           - export PATH=${PWD}/swift-3.0-RELEASE-ubuntu14.04/usr/bin:"${PATH}"
+      after_script:
+          - cat /var/log/couchdb/couch.log
     - os: osx
       language: objective-c
       osx_image: xcode9
