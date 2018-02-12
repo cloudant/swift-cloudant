@@ -464,8 +464,12 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
         #if !os(Linux)
             // Bundle(for:) is not yet supported on Linux
             let frameworkBundle = Bundle(for: InterceptableSession.self)
-            bundleDisplayName = frameworkBundle.object(forInfoDictionaryKey: "CFBundleName") as! String
-            bundleVersionString = frameworkBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+            if let name = frameworkBundle.object(forInfoDictionaryKey: "CFBundleName") as? String {
+                bundleDisplayName = name
+            }
+            if let version = frameworkBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
+                bundleVersionString = version
+            }
         #endif
 
         return "\(bundleDisplayName)/\(bundleVersionString)/\(platform)/\(osVersion))"
