@@ -1,5 +1,10 @@
 # Unreleased
 
+# 0.7.1 (2018-03-12)
+
+- [FIXED] Set the default swift language version to 3.2
+- [FIXED] Fixed warning for non-exhaustive switch statement.
+
 # 0.7.0 (2017-04-10)
 
 - [NEW] Implement convenience init for creating client from VCAP services metadata.
