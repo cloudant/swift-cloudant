@@ -458,17 +458,7 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
             let platform = "Unknown";
         #endif
 
-        var bundleDisplayName = "SwiftCloudant"
-        var bundleVersionString = "0.7.0"
-
-        #if !os(Linux)
-            // Bundle(for:) is not yet supported on Linux
-            let frameworkBundle = Bundle(for: InterceptableSession.self)
-            bundleDisplayName = frameworkBundle.object(forInfoDictionaryKey: "CFBundleName") as! String
-            bundleVersionString = frameworkBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-        #endif
-
-        return "\(bundleDisplayName)/\(bundleVersionString)/\(platform)/\(osVersion))"
+        return "SwiftCloudant/\(CouchDBClient.version)/\(platform)/\(osVersion))"
 
     }
 }

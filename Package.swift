@@ -1,4 +1,5 @@
-// swift-tools-version:3.1
+// swift-tools-version:3.2
+
 //  Copyright (c) 2016 IBM Corp.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
@@ -9,6 +10,8 @@
 //  either express or implied. See the License for the specific language governing permissions
 //  and limitations under the License.
 //
+
+
 import PackageDescription
 
 let package = Package(
