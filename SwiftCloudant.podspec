@@ -25,5 +25,5 @@ Pod::Spec.new do |s|
 
   s.source = { :git => "https://github.com/cloudant/swift-cloudant.git", :tag => s.version.to_s}
   s.source_files  = "Classes", "Source/**/*.swift"
-
+  s.swift_version = '3.2'
 end
