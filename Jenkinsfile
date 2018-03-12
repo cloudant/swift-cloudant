@@ -20,10 +20,7 @@ def buildAndTest(nodeLabel) {
       withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'clientlibs-test', usernameVariable: 'TEST_COUCH_USERNAME', passwordVariable: 'TEST_COUCH_PASSWORD']]) {
         withEnv(["TEST_COUCH_URL=https://clientlibs-test.cloudant.com"]) {
           sh 'swift build'
-          // Workaround Xcode 9 issues with 'swift test' command failing
-          sh 'swift package generate-xcodeproj'
-          sh 'xcodebuild -project SwiftCloudant.xcodeproj -scheme SwiftCloudant-Package test'
-          // sh 'swift test'
+          sh 'swift test'
         }
       }
   }
