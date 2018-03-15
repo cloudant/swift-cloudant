@@ -1,8 +1,6 @@
 # Unreleased
 
-# 0.7.1 (2018-03-12)
-
-- [FIXED] Set the default swift language version to 3.2
+- [FIXED] Set the default Swift language version in the SwiftCloudant.podspec to 3.1
 - [FIXED] Fixed warning for non-exhaustive switch statement.
 
 # 0.7.0 (2017-04-10)

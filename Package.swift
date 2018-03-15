@@ -1,4 +1,4 @@
-// swift-tools-version:3.2
+// swift-tools-version:3.1
 
 //  Copyright (c) 2016 IBM Corp.
 //
