@@ -474,6 +474,8 @@ fileprivate extension DispatchTimeInterval {
             return .nanoseconds(value * multiple)
         case .seconds(let value):
             return .seconds(value * multiple)
+        case .never:
+            return .never
         }
     }
 }
