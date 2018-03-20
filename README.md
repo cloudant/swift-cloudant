@@ -36,9 +36,10 @@ on a "best effort" basis.
 
 ### Platforms
 
-Currently Swift Cloudant suppports:
+Currently Swift Cloudant supports:
 
 - macOS
+- Linux (with Swift 4.x; known [issue #176](https://github.com/cloudant/swift-cloudant/issues/176) with `GetChangesOperation`).
 
 
 Swift Cloudant is unsupported on:
@@ -46,9 +47,6 @@ Swift Cloudant is unsupported on:
 - iOS (should work, but hasn't been tested)
 - tvOS
 - watchOS
-- Linux (see issue [#121][linux] for progress updates)
-
-[linux]:https://github.com/cloudant/swift-cloudant/issues/121
 
 ## Using in your project
 

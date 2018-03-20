@@ -1,7 +1,10 @@
-# Unreleased
+# 0.8.0 (2018-03-20)
 
-- [FIXED] Set the default Swift language version in the SwiftCloudant.podspec to 3.1
+- [NEW] Runs on Swift 4.x on Linux with some limitations (see note).
+- [FIXED] Set the default Swift language version in the SwiftCloudant.podspec to 3.1.
 - [FIXED] Fixed warning for non-exhaustive switch statement.
+- [NOTE] The `GetChangesOperation` is not currently supported by the Linux platform,
+  see [issue #176](https://github.com/cloudant/swift-cloudant/issues/176).
 
 # 0.7.0 (2017-04-10)
 
