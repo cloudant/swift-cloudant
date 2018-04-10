@@ -39,7 +39,9 @@ on a "best effort" basis.
 Currently Swift Cloudant supports:
 
 - macOS
-- Linux (with Swift 4.x; known [issue #176](https://github.com/cloudant/swift-cloudant/issues/176) with `GetChangesOperation`).
+- Linux (with Swift 4.x); known issues from the Swift Linux runtime:
+    - [issue #176](https://github.com/cloudant/swift-cloudant/issues/176) with `GetChangesOperation`.
+    - [issue #178](https://github.com/cloudant/swift-cloudant/issues/178) authentication fails because cookies are not saved.
 
 
 Swift Cloudant is unsupported on:
