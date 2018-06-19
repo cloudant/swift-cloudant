@@ -29,5 +29,5 @@ Got a 400 bad request
 - Version(s) that are affected by this issue.
     > 2.0.2
 - Swift version and platform
-    >3.0.1 Linux
+    > 3.0.1 Linux
 -->
