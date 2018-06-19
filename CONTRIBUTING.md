@@ -1,6 +1,19 @@
 # Contributing
 
-## Developer Certificate of Origin
+## Issues
+
+Please [read these guidelines](http://ibm.biz/cdt-issue-guide) before opening an issue.
+If you still need to open an issue then we ask that you complete the template as
+fully as possible.
+
+## Pull requests
+
+We welcome pull requests, but ask contributors to keep in mind the following:
+
+* Only PRs with the template completed will be accepted
+* We will not accept PRs for user specific functionality
+
+### Developer Certificate of Origin
 
 In order for us to accept pull-requests, the contributor must sign-off a
 [Developer Certificate of Origin (DCO)](DCO1.1.txt). This clarifies the
@@ -13,47 +26,47 @@ Please read the agreement and acknowledge it by ticking the appropriate box in t
 
 - [x] Tick to sign-off your agreement to the Developer Certificate of Origin (DCO) 1.1
 
-## Setting up your environment
+## General information
 
-You have probably got most of these set up already, but starting from scratch
-you'll need:
-
-* Xcode
-* Xcode command line tools
-* Latest Swift 3 development snapshot
-* Homebrew (optional, but useful)
-
-First, download Xcode from the app store or [ADC][adc].
-
-When this is installed, install the command line tools. The simplest way is:
-
-```bash
-xcode-select --install
-```
-
-Install homebrew using the [guide on the homebrew site][homebrew].
-
-
-Install Swift 3 development snapshot from [swift.org][swiftorg].
-[adc]: http://developer.apple.com/
-[homebrew]: http://brew.sh
-[swiftorg]: https://swift.org/download/#snapshots
-
-## Getting started with the project
-
-The Swift Package Manager is the default build tool for SwiftCloudant. In order
-to use Xcode as a development envrionment run the command:
-
-```bash
-$ swift package generate-xcodeproj
-```
-
-## Adding files
+### Adding files
 
 Production source files are stored in the `Source` tree with tests stored in the
 `Tests` tree.
 
 `Tests/SwiftCloudantTests` contains all the tests for the `SwiftCloudant` module.
+
+## Requirements
+
+Starting from scratch you'll need:
+
+* Xcode
+* Xcode command line tools
+* [Swift 3 or 4](https://swift.org/getting-started/#installing-swift)
+
+First, download Xcode from the app store or [ADC][adc].
+
+When this is installed, install the command line tools. The simplest way is:
+
+```sh
+xcode-select --install
+```
+
+### Getting started with the project
+
+The Swift Package Manager is the default build tool for SwiftCloudant. In order
+to use Xcode as a development envrionment run the command:
+
+```sh
+$ swift package generate-xcodeproj
+```
+
+## Building
+
+```sh
+swift build
+```
+
+## Testing
 
 ### Test Configuration
 
@@ -90,16 +103,3 @@ Currently only OS X / macOS is supported for testing.
 
 __NOTE__: You should also check that any changes made compile using the Swift Package Manager,
 use the command `swift build` in the root of the checkout to compile using the Swift Package Manager.
-
-## Contributing your changes
-
-We follow a fairly standard procedure:
-
-* Fork the swift-cloudant repo into your own account, clone to your machine.
-    * Create a branch with your changes on (git checkout -b my-new-feature)
-    * Make sure to update the CHANGELOG and CONTRIBUTORS before sending a PR.
-    * All contributions must include tests.
-* Try to follow the style of the code around the code you are adding -- the project contains source code from a few places with slightly differing styles.
-* Commit your changes (git commit -am 'Add some feature')
-* Push to the branch (git push origin my-new-feature)
-* Issue a PR for this to our repo.
