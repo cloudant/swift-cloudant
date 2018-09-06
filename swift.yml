@@ -1,0 +1,7 @@
+version: '3'
+services:
+  swift-cloudant:
+    command: bash -c "cd swift-cloudant && swift build && swift test"
+    image: swift:5.0
+    volumes:
+      - ./:/swift-cloudant

@@ -1,0 +1,9 @@
+version: '3'
+services:
+  couchdb:
+    image: apache/couchdb:2
+  swift-cloudant:
+    depends_on:
+      - couchdb
+    environment:
+      - SERVER_URL=http://couchdb:5984

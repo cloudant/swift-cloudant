@@ -26,7 +26,7 @@ extension XCTestCase {
     var url: String {
         get {
             let defaultURL = "http://localhost:5984"
-            if let url = TestSettings.getInstance().settings["TEST_COUCH_URL"] as? String {
+            if let url = TestSettings.getInstance().settings["SERVER_URL"] as? String {
                 if url.isEmpty {
                     return defaultURL
                 }
@@ -40,7 +40,7 @@ extension XCTestCase {
 
     var username: String? {
         get {
-            let username = TestSettings.getInstance().settings["TEST_COUCH_USERNAME"] as? String
+            let username = TestSettings.getInstance().settings["SERVER_USER"] as? String
             if username != nil && username!.isEmpty {
                 return nil;
             } else {
@@ -51,7 +51,7 @@ extension XCTestCase {
 
     var password: String? {
         get {
-            let password = TestSettings.getInstance().settings["TEST_COUCH_PASSWORD"] as? String
+            let password = TestSettings.getInstance().settings["SERVER_PASSWORD"] as? String
             if password != nil && password!.isEmpty {
                 return nil
             } else {
@@ -213,7 +213,7 @@ class TestSettings {
     private init() {
         // load the settings from the evnvironment this is a workaround while we cannot
         // specify files to be part of the bundle for loading test cases.
-        let keys = ["TEST_COUCH_URL",  "TEST_COUCH_USERNAME", "TEST_COUCH_PASSWORD"]
+        let keys = ["SERVER_URL",  "SERVER_USER", "SERVER_PASSWORD"]
         let filtered = ProcessInfo.processInfo.environment.filter {
             return keys.contains($0.key)
         }
