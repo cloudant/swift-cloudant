@@ -28,10 +28,10 @@ def buildAndTest(nodeLabel) {
           sh 'sudo apt-get install -y build-essential git libcurl3 libblocksruntime-dev clang libicu-dev uuid-dev'
           sh 'wget -q -O - https://swift.org/keys/all-keys.asc | gpg --import -'
           sh 'gpg --keyserver hkp://pool.sks-keyservers.net --refresh-keys Swift'
-          sh 'wget https://swift.org/builds/swift-4.2-convergence/ubuntu1404/swift-4.2-CONVERGENCE/swift-4.2-CONVERGENCE-ubuntu14.04.tar.gz'
-          sh 'gunzip swift-4.2-CONVERGENCE-ubuntu14.04.tar.gz'
-          sh 'tar -xvf swift-4.2-CONVERGENCE-ubuntu14.04.tar'
-          swiftPath = './swift-4.2-CONVERGENCE-ubuntu14.04/usr/bin/'
+          sh 'wget https://swift.org/builds/development/ubuntu1404/swift-DEVELOPMENT-SNAPSHOT-2018-09-04-a/swift-DEVELOPMENT-SNAPSHOT-2018-09-04-a-ubuntu14.04.tar.gz'
+          sh 'gunzip swift-DEVELOPMENT-SNAPSHOT-2018-09-04-a-ubuntu14.04.tar.gz'
+          sh 'tar -xvf swift-DEVELOPMENT-SNAPSHOT-2018-09-04-a-ubuntu14.04.tar'
+          swiftPath = './swift-DEVELOPMENT-SNAPSHOT-2018-09-04-a-ubuntu14.04/usr/bin/'
         }
         sh "${swiftPath}swift build"
         sh "${swiftPath}swift test"
