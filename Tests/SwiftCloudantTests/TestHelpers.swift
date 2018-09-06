@@ -195,7 +195,7 @@ extension Array where Element: NSURLQueryItem {
         }
 
         for queryItem in self {
-            if let index = to.index(of: queryItem) {
+            if let index = to.firstIndex(of: queryItem) {
                 to.remove(at: index)
             } else {
                 return false
