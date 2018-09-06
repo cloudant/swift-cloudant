@@ -15,29 +15,41 @@
  */
 
 def buildAndTest(nodeLabel) {
+  def buildAndTestScript = {
+
+  }
   node(nodeLabel) {
-      checkout scm
-      withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'clientlibs-test', usernameVariable: 'TEST_COUCH_USERNAME', passwordVariable: 'TEST_COUCH_PASSWORD']]) {
-        withEnv(["TEST_COUCH_URL=https://clientlibs-test.cloudant.com"]) {
-          sh 'swift build'
-          sh 'swift test'
+    checkout scm
+    withCredentials([usernamePassword(credentialsId: 'clientlibs-test', usernameVariable: 'TEST_COUCH_USERNAME', passwordVariable: 'TEST_COUCH_PASSWORD')]) {
+      withEnv(["TEST_COUCH_URL=https://clientlibs-test.cloudant.com"]) {
+        def swiftPath=''
+        if (nodeLabel == null) {
+          sh 'sudo apt-get update'
+          sh 'sudo apt-get install -y build-essential git libcurl3 libblocksruntime-dev clang libicu-dev uuid-dev'
+          sh 'wget -q -O - https://swift.org/keys/all-keys.asc | gpg --import -'
+          sh 'gpg --keyserver hkp://pool.sks-keyservers.net --refresh-keys Swift'
+          sh 'wget https://swift.org/builds/swift-4.2-convergence/ubuntu1404/swift-4.2-CONVERGENCE/swift-4.2-CONVERGENCE-ubuntu14.04.tar.gz'
+          sh 'gunzip swift-4.2-CONVERGENCE-ubuntu14.04.tar.gz'
+          sh 'tar -xvf swift-4.2-CONVERGENCE-ubuntu14.04.tar'
+          swiftPath = './swift-4.2-CONVERGENCE-ubuntu14.04/usr/bin/'
         }
+        sh "${swiftPath}swift build"
+        sh "${swiftPath}swift test"
       }
+    }
   }
 }
 
 
 stage('QA') {
-    parallel(
-        Mac:
-        {
-          buildAndTest("macos")
-        }
-        // Uncomment for Linux Testing Support
-        // ,
-        // Linux:
-        // {
-        //     buildAndTest(null)
-        // }
-    )
-  }
+  parallel(
+    Mac:
+    {
+      buildAndTest("macos")
+    },
+    Linux:
+    {
+      buildAndTest(null)
+    }
+  )
+}
