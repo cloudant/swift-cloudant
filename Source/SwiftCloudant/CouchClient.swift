@@ -3,7 +3,7 @@
 //  SwiftCloudant
 //
 //  Created by Rhys Short on 03/03/2016.
-//  Copyright (c) 2016 IBM Corp.
+//  Copyright © 2016, 2019 IBM Corp. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 //  except in compliance with the License. You may obtain a copy of the License at
@@ -135,7 +135,7 @@ public extension CouchDBClient {
     /**
      A enum of errors which could be returned.
      */
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
 
         /**
          Failed to decode VCAP_SERVICES environment variable as JSON.
@@ -165,7 +165,7 @@ public extension CouchDBClient {
      - parameter instanceName: Bluemix service instance name.
      - parameter configuration: configuration options for the client.
      */
-    public convenience init(vcapServices: String, instanceName: String? = nil, configuration: ClientConfiguration = ClientConfiguration(shouldBackOff: false)) throws {
+    convenience init(vcapServices: String, instanceName: String? = nil, configuration: ClientConfiguration = ClientConfiguration(shouldBackOff: false)) throws {
         var cloudantService: [String:Any]? = nil
 
         guard let data = vcapServices.data(using: .utf8),

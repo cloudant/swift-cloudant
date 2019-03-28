@@ -1,6 +1,6 @@
-// swift-tools-version:3.1
+// swift-tools-version:5.0
 
-//  Copyright (c) 2016 IBM Corp.
+//  Copyright © 2016, 2019 IBM Corp. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 //  except in compliance with the License. You may obtain a copy of the License at
@@ -15,5 +15,18 @@
 import PackageDescription
 
 let package = Package(
-  name: "SwiftCloudant"
+  name: "SwiftCloudant",
+  products: [
+      .library(
+        name: "SwiftCloudant", 
+        targets: ["SwiftCloudant"]),
+  ],
+  targets: [
+      .target(
+          name: "SwiftCloudant"),
+      .testTarget(
+          name: "SwiftCloudantTests",
+          dependencies: ["SwiftCloudant"])
+  ],
+  swiftLanguageVersions: [.v4_2, .v5]
 )

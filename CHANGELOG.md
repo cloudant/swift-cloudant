@@ -1,3 +1,9 @@
+# Unreleased
+
+- [UPGRADED] Minimum Swift language version to 4.2.
+- [UPGRADED] Swift tools version and package manifest to version 5.0.
+- [BREAKING CHANGE] Projects using older Swift tool and language versions will not work with versions newer than 0.8.0.
+
 # 0.8.0 (2018-03-20)
 
 - [NEW] Runs on Swift 4.x on Linux with some limitations (see note).

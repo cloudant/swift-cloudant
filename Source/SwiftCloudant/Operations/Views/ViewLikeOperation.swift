@@ -4,7 +4,7 @@
 //
 //  Created by Rhys Short on 06/07/2016.
 //
-//  Copyright (c) 2016 IBM Corp.
+//  Copyright © 2016, 2019 IBM Corp. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 //  except in compliance with the License. You may obtain a copy of the License at
@@ -138,7 +138,7 @@ public protocol ViewOperation : CouchDatabaseOperation {
 
 public extension ViewOperation {
     
-    public func processResponse(json: Any) {
+    func processResponse(json: Any) {
         if let json = json as? [String: Any] {
             let rows = json["rows"] as! [[String: Any]]
             for row: [String: Any] in rows {
@@ -147,7 +147,7 @@ public extension ViewOperation {
         }
     }
     
-    public var method: String {
+    var method: String {
         get {
             if keys != nil {
                 return "POST"
