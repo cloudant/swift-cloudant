@@ -1,4 +1,4 @@
-// swift-tools-version:3.1
+// swift-tools-version:5.0
 
 //  Copyright (c) 2016 IBM Corp.
 //
@@ -15,5 +15,13 @@
 import PackageDescription
 
 let package = Package(
-  name: "SwiftCloudant"
+  name: "SwiftCloudant",
+  targets: [
+      .target(
+          name: "SwiftCloudant"),
+      .testTarget(
+          name: "SwiftCloudantTests",
+          dependencies: ["SwiftCloudant"])
+  ]
 )
+

@@ -1,3 +1,8 @@
+# Unreleased
+
+- [NEW] Runs on Swift Tools 5.0
+- [FIXED] Set the default Swift language version in the SwiftCloudant.podspec to 4.2.
+
 # 0.8.0 (2018-03-20)
 
 - [NEW] Runs on Swift 4.x on Linux with some limitations (see note).
