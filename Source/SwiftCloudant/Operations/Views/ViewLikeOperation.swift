@@ -138,7 +138,7 @@ public protocol ViewOperation : CouchDatabaseOperation {
 
 public extension ViewOperation {
     
-    public func processResponse(json: Any) {
+    func processResponse(json: Any) {
         if let json = json as? [String: Any] {
             let rows = json["rows"] as! [[String: Any]]
             for row: [String: Any] in rows {
@@ -147,7 +147,7 @@ public extension ViewOperation {
         }
     }
     
-    public var method: String {
+    var method: String {
         get {
             if keys != nil {
                 return "POST"

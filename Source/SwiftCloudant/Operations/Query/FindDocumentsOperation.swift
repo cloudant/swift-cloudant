@@ -64,7 +64,7 @@ internal extension MangoOperation {
     /**
         Transform an Array of Sort into a Array in the form of Sort Syntax.
     */
-    internal func transform(sortArray: [Sort]) -> [Any] {
+    func transform(sortArray: [Sort]) -> [Any] {
         
         var transformed: [Any] = []
         for s in sortArray {
@@ -82,7 +82,7 @@ internal extension MangoOperation {
     /**
         Transform an array of TextIndexField into an Array in the form of Lucene field definitions.
     */
-    internal func transform(fields: [TextIndexField]) -> [[String:String]] {
+    func transform(fields: [TextIndexField]) -> [[String:String]] {
         var array: [[String:String]] = []
 
         for field in fields {

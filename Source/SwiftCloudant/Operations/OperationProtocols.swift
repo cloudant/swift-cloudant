@@ -108,25 +108,25 @@ public extension CouchOperation {
      Calls the completion handler for the operation with the specified error.
      Subclasses need to override this to call the completion handler they have defined.
      */
-    public func callCompletionHandler(error: Swift.Error) {
+    func callCompletionHandler(error: Swift.Error) {
         self.callCompletionHandler(response: nil, httpInfo: nil, error: error)
     }
     
     // default implementation of serialise, does nothing.
-    public func serialise() throws { return }
+    func serialise() throws { return }
     
     // default implementation, does nothing.
-    public func processResponse(json: Any) { return }
+    func processResponse(json: Any) { return }
     
-    public var contentType: String { return "application/json" }
+    var contentType: String { return "application/json" }
     
-    public var data: Data? { return nil }
+    var data: Data? { return nil }
     
-    public var parameters: [String: String] { return [:] }
+    var parameters: [String: String] { return [:] }
     
-    public var method: String { return "GET" }
+    var method: String { return "GET" }
     
-    public func validate() -> Bool { return true }
+    func validate() -> Bool { return true }
     
 }
 
@@ -153,11 +153,11 @@ public protocol JSONOperation: CouchOperation {
 
 public extension JSONOperation {
     
-    public func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: Swift.Error?) {
+    func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: Swift.Error?) {
         self.completionHandler?(response as? Json, httpInfo, error)
     }
     
-    public func processResponse(data: Data?, httpInfo: HTTPInfo?, error: Swift.Error?) {
+    func processResponse(data: Data?, httpInfo: HTTPInfo?, error: Swift.Error?) {
         guard error == nil, let httpInfo = httpInfo
             else {
                 self.callCompletionHandler(error: error!)
@@ -208,11 +208,11 @@ public protocol DataOperation: CouchOperation {
 }
 
 public extension DataOperation {
-    public func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: Swift.Error?) {
+    func callCompletionHandler(response: Any?, httpInfo: HTTPInfo?, error: Swift.Error?) {
         self.completionHandler?(response as? Data, httpInfo, error)
     }
     
-    public func processResponse(data: Data?, httpInfo: HTTPInfo?, error: Swift.Error?) {
+    func processResponse(data: Data?, httpInfo: HTTPInfo?, error: Swift.Error?) {
         guard error == nil, let httpInfo = httpInfo
             else {
                 self.callCompletionHandler(error: error!)

@@ -135,7 +135,7 @@ public extension CouchDBClient {
     /**
      A enum of errors which could be returned.
      */
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
 
         /**
          Failed to decode VCAP_SERVICES environment variable as JSON.
@@ -165,7 +165,7 @@ public extension CouchDBClient {
      - parameter instanceName: Bluemix service instance name.
      - parameter configuration: configuration options for the client.
      */
-    public convenience init(vcapServices: String, instanceName: String? = nil, configuration: ClientConfiguration = ClientConfiguration(shouldBackOff: false)) throws {
+    convenience init(vcapServices: String, instanceName: String? = nil, configuration: ClientConfiguration = ClientConfiguration(shouldBackOff: false)) throws {
         var cloudantService: [String:Any]? = nil
 
         guard let data = vcapServices.data(using: .utf8),

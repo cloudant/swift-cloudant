@@ -464,7 +464,7 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
 }
 
 fileprivate extension DispatchTimeInterval {
-    static fileprivate func *(interval: DispatchTimeInterval, multiple: Int) -> DispatchTimeInterval {
+    static func *(interval: DispatchTimeInterval, multiple: Int) -> DispatchTimeInterval {
         switch (interval){
         case .microseconds(let value):
             return .microseconds(value * multiple)
