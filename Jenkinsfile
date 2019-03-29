@@ -15,9 +15,6 @@
  */
 
 def buildAndTest(nodeLabel) {
-  def buildAndTestScript = {
-
-  }
   node(nodeLabel) {
     checkout scm
     withCredentials([usernamePassword(credentialsId: 'clientlibs-test', usernameVariable: 'TEST_COUCH_USERNAME', passwordVariable: 'TEST_COUCH_PASSWORD')]) {
