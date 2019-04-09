@@ -3,7 +3,7 @@
 //  SwiftCloudant
 //
 //  Created by Rhys Short on 20/04/2016.
-//  Copyright (c) 2016 IBM Corp.
+//  Copyright © 2016, 2019 IBM Corp. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 //  except in compliance with the License. You may obtain a copy of the License at
@@ -64,7 +64,7 @@ internal extension MangoOperation {
     /**
         Transform an Array of Sort into a Array in the form of Sort Syntax.
     */
-    internal func transform(sortArray: [Sort]) -> [Any] {
+    func transform(sortArray: [Sort]) -> [Any] {
         
         var transformed: [Any] = []
         for s in sortArray {
@@ -82,7 +82,7 @@ internal extension MangoOperation {
     /**
         Transform an array of TextIndexField into an Array in the form of Lucene field definitions.
     */
-    internal func transform(fields: [TextIndexField]) -> [[String:String]] {
+    func transform(fields: [TextIndexField]) -> [[String:String]] {
         var array: [[String:String]] = []
 
         for field in fields {

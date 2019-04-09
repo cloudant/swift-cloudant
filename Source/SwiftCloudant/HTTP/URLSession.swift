@@ -3,7 +3,7 @@
 //  SwiftCloudant
 //
 //  Created by Rhys Short on 28/02/2016.
-//  Copyright (c) 2016 IBM Corp.
+//  Copyright © 2016, 2019 IBM Corp. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 //  except in compliance with the License. You may obtain a copy of the License at
@@ -464,7 +464,7 @@ internal class InterceptableSession: NSObject, URLSessionDelegate, URLSessionTas
 }
 
 fileprivate extension DispatchTimeInterval {
-    static fileprivate func *(interval: DispatchTimeInterval, multiple: Int) -> DispatchTimeInterval {
+    static func *(interval: DispatchTimeInterval, multiple: Int) -> DispatchTimeInterval {
         switch (interval){
         case .microseconds(let value):
             return .microseconds(value * multiple)

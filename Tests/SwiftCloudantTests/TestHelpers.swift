@@ -3,7 +3,7 @@
 //  SwiftCloudant
 //
 //  Created by Rhys Short on 21/04/2016.
-//  Copyright (c) 2016 IBM Corp.
+//  Copyright © 2016, 2019 IBM Corp. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 //  except in compliance with the License. You may obtain a copy of the License at
@@ -195,7 +195,7 @@ extension Array where Element: NSURLQueryItem {
         }
 
         for queryItem in self {
-            if let index = to.index(of: queryItem) {
+            if let index = to.firstIndex(of: queryItem) {
                 to.remove(at: index)
             } else {
                 return false
