@@ -76,9 +76,9 @@ are as follows:
 
 | Property Name | Purpose | Default |
 |---------------|---------|---------|
-| TEST_COUCH_URL | The URL to connect to | http://localhost:5984 |
-| TEST_COUCH_USERNAME | The username to use when accessing the server | `nil` |
-| TEST_COUCH_PASSWORD | The password to use when accessing the server | `nil`|
+| SERVER_URL | The URL to connect to | http://localhost:5984 |
+| SERVER_USER | The username to use when accessing the server | `nil` |
+| SERVER_PASSWORD | The password to use when accessing the server | `nil`|
 
 
 Note: Since the move to using the SwiftPackageManager test configuration options

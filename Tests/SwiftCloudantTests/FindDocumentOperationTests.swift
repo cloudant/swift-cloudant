@@ -53,9 +53,11 @@ class FindDocumentOperationTests: XCTestCase {
         super.setUp()
         dbName = generateDBName()
         client = CouchDBClient(url: URL(string:self.url)!, username: self.username, password: self.password)
+        createDatabase(databaseName: dbName!, client: client!)
     }
     
     override func tearDown() {
+        deleteDatabase(databaseName: dbName!, client: client!)
         super.tearDown()
     }
 
@@ -65,7 +67,7 @@ class FindDocumentOperationTests: XCTestCase {
 
         let expectation = self.expectation(description: "invalidSelector")
         
-        let find = FindDocumentsOperation(selector: ["foo": client!], databaseName: dbName!)
+        let find = FindDocumentsOperation(selector: ["foo": Void.self], databaseName: dbName!)
         { (response, httpInfo, error) in
             XCTAssertNil(response)
             XCTAssertNil(httpInfo)

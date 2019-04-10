@@ -1,0 +1,7 @@
+version: '3'
+services:
+  swift-cloudant:
+    environment:
+      - SERVER_URL
+      - SERVER_USER
+      - SERVER_PASSWORD

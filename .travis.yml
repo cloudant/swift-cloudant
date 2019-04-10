@@ -1,7 +1,5 @@
 language: generic
 
-script:
-  - swift build && swift test
 
 matrix:
   allow_failures:
@@ -10,23 +8,19 @@ matrix:
     - os: linux
       dist: xenial
       sudo: required
-      before_script:
-          - sudo apt-get update
-          - sudo apt-get install -y git wget libatomic1 libbsd0 libcurl3 libxml2 tzdata
-          - wget -q -O - https://swift.org/keys/all-keys.asc | gpg --import -
-          - gpg --keyserver hkp://pool.sks-keyservers.net --refresh-keys Swift
-          - wget https://swift.org/builds/swift-5.0-release/ubuntu1604/swift-5.0-RELEASE/swift-5.0-RELEASE-ubuntu16.04.tar.gz.sig
-          - wget https://swift.org/builds/swift-5.0-release/ubuntu1604/swift-5.0-RELEASE/swift-5.0-RELEASE-ubuntu16.04.tar.gz
-          - gpg --verify swift-5.0-RELEASE-ubuntu16.04.tar.gz.sig
-          - gunzip swift-5.0-RELEASE-ubuntu16.04.tar.gz
-          - tar -xvf swift-5.0-RELEASE-ubuntu16.04.tar
-          - export PATH=${PWD}/swift-5.0-RELEASE-ubuntu16.04/usr/bin:"${PATH}"
+      script:
+        - docker-compose -f couchdb.yml -f swift.yml up --abort-on-container-exit
+      after_script: 
+        - docker-compose -f couchdb.yml -f swift.yml down -v --rmi local
     - os: osx
       language: objective-c
       osx_image: xcode10.2
       before_script:
         - brew install couchdb
         - brew services start couchdb
+      script:
+        - swift build && swift test
 
 services:
     - couchdb
+    - docker
