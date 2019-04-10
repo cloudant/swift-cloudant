@@ -6,7 +6,7 @@
 **Applications use swift-cloudant to store, index and query remote
 JSON data on Cloudant or CouchDB.**
 
-Swift-Cloudant is an [Apache CouchDB&trade;][acdb] client written in Swift 3. It
+Swift-Cloudant is an [Apache CouchDB&trade;][acdb] client written in Swift. It
 is built by [Cloudant](https://cloudant.com) and is available under the
 [Apache 2.0 license][ap2].
 
@@ -38,11 +38,13 @@ on a "best effort" basis.
 
 Currently Swift Cloudant supports:
 
-- macOS
-- Linux (with Swift 4.x); known issues from the Swift Linux runtime:
-    - [issue #176](https://github.com/cloudant/swift-cloudant/issues/176) with `GetChangesOperation`.
-    - [issue #178](https://github.com/cloudant/swift-cloudant/issues/178) authentication fails because cookies are not saved.
+Swift versions
+- Minimum Swift language version 4.2
+- Minimum Swift tools version 5.0
 
+Platforms
+- macOS
+- Linux
 
 Swift Cloudant is unsupported on:
 
