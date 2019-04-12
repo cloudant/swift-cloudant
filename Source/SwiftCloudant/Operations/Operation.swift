@@ -3,7 +3,7 @@
 //  SwiftCloudant
 //
 //  Created by Rhys Short on 03/03/2016.
-//  Copyright (c) 2016 IBM Corp.
+//  Copyright © 2016, 2019 IBM Corp. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
 //  except in compliance with the License. You may obtain a copy of the License at
@@ -25,7 +25,7 @@ public class Operation: Foundation.Operation, HTTPRequestOperation
     /**
      A enum of errors which could be returned.
      */
-    enum Error: Swift.Error {
+    public enum Error: Swift.Error {
         /**
          Validation of operation settings failed.
          */
