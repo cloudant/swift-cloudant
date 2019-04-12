@@ -72,14 +72,19 @@ in your Package.swift:
 import SwiftCloudant
 
 // Create a CouchDBClient
-let cloudantURL = NSURL(string:"https://username.cloudant.com")!
+let cloudantURL = URL(string:"https://username.cloudant.com")!
 let client = CouchDBClient(url:cloudantURL, username:"username", password:"password")
 let dbName = "database"
 
 // Create a document
 let create = PutDocumentOperation(id: "doc1", body: ["hello":"world"], databaseName: dbName) {(response, httpInfo, error) in
-    if let error = error {
-        print("Encountered an error while creating a document. Error:\(error)")
+    if let error = error as? SwiftCloudant.Operation.Error {
+        switch error {
+        case .http(let httpError):
+            print("http error status code: \(httpError.statusCode)  response: \(httpError.response)")
+        default:
+            print("Encountered an error while creating a document. Error:\(error)")
+        }
     } else {
         print("Created document \(response?["id"]) with revision id \(response?["rev"])")
     }
@@ -89,9 +94,9 @@ client.add(operation:create)
 // create an attachment
 let attachment = "This is my awesome essay attachment for my document"
 let putAttachment = PutAttachmentOperation(name: "myAwesomeAttachment",
-    contentType:"text/plain",
-    data: attachment.data(using: NSUTF8StringEncoding, allowLossyConversion: false),
-    documentID: "doc1"
+    contentType: "text/plain",
+    data: attachment.data(using: String.Encoding.utf8, allowLossyConversion: false)!,
+    documentID: "doc1",
     revision: "1-revisionidhere",
     databaseName: dbName) { (response, info, error) in
         if let error = error {
