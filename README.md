@@ -59,14 +59,24 @@ SwiftCloudant is available using the Swift Package Manager and [CocoaPods](http:
 To use with CocoaPods add the following line to your Podfile:
 
 ```ruby
-pod 'SwiftCloudant', :git => 'https://github.com/cloudant/swift-cloudant.git'
+pod 'SwiftCloudant'
 ```
 
 To use with the swift package manager add the following line to your dependencies
-in your Package.swift:
+in your Package.swift.
+
+For projects using Swift tools up to version 4.2.x:
+
 ```swift
-.Package(url: "https://github.com/cloudant/swift-cloudant.git")
+.package(url: "https://github.com/cloudant/swift-cloudant.git", from: "0.8.0")
 ```
+
+For projects with Swift tools version 5.0:
+
+```swift
+.package(url: "https://github.com/cloudant/swift-cloudant.git", from: "0.9.0")
+```
+
 ## <a name="overview"></a>Overview of the library
 ```swift
 import SwiftCloudant
