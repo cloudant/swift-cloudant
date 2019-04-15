@@ -73,7 +73,7 @@ public class CouchDBClient {
     internal let rootURL: URL
 
     // The version number of swift-cloudant, as a string
-    static let version = "0.8.1-SNAPSHOT"
+    static let version = "0.9.0"
 
     /**
      Creates a CouchDBClient instance.
