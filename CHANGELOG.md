@@ -1,3 +1,6 @@
+# 0.9.1 (2019-04-15)
+- [FIXED] Set the default Swift language version in the SwiftCloudant.podspec to 5.0.
+
 # 0.9.0 (2019-04-15)
 - [FIXED] Fixed scope of `Operation.Error` to be exposed as public.
 - [BREAKING CHANGE] Projects using older Swift tool and language versions will not work with versions newer than 0.8.0.
